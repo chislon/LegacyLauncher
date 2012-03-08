@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<com.wordpress.chislonchow.legacylauncher.DragLayer
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:launcher="http://schemas.android.com/apk/res/com.wordpress.chislonchow.legacylauncher"
+
+    android:id="@+id/drag_layer"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <!-- The workspace contains 5 screens of cells -->
+    <com.wordpress.chislonchow.legacylauncher.Workspace
+        android:id="@+id/workspace"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+
+        launcher:defaultScreen="2">
+
+    </com.wordpress.chislonchow.legacylauncher.Workspace>
+    <ViewStub
+	android:id="@+id/stub_drawer"
+	android:inflatedId="@+id/all_apps_view"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	/> 
+	<LinearLayout
+		android:id="@+id/drawer_toolbar"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:gravity="bottom|center_horizontal"
+		android:layout_gravity="bottom|center_horizontal">
+	    <com.wordpress.chislonchow.legacylauncher.ActionButton
+			android:src="@drawable/ab_empty"
+			android:background="@drawable/lab_bg"
+			android:scaleType="center"
+			android:layout_height="wrap_content"
+			android:id="@+id/btn_lab"
+			launcher:ident="LAB"
+			android:layout_width="64dip"
+			launcher:direction="horizontal" 
+			/>
+	    <com.wordpress.chislonchow.legacylauncher.ActionButton
+			android:src="@drawable/ab_empty"
+			android:background="@drawable/lab2_bg"
+			android:scaleType="center"
+			android:layout_height="wrap_content"
+			android:id="@+id/btn_lab2"
+			launcher:ident="LAB2"
+			android:layout_width="64dip" 
+            launcher:direction="horizontal" 
+			/>
+        <com.wordpress.chislonchow.legacylauncher.ActionButton
+            android:src="@drawable/ab_empty"
+            android:background="@drawable/mab_bg"
+            android:scaleType="center"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_mab"
+            launcher:ident="MAB"
+            android:layout_width="64dip" 
+            launcher:direction="horizontal" 
+            />
+	    <com.wordpress.chislonchow.legacylauncher.ActionButton
+			android:src="@drawable/ab_empty"
+			android:background="@drawable/rab2_bg"
+			android:scaleType="center"
+			android:layout_height="wrap_content"
+			android:id="@+id/btn_rab2"
+			launcher:ident="RAB2"
+			android:layout_width="64dip" 
+            launcher:direction="horizontal" 
+			/>
+	    <com.wordpress.chislonchow.legacylauncher.ActionButton
+			android:src="@drawable/ab_empty"
+			android:background="@drawable/rab_bg"
+			android:scaleType="center"
+			android:layout_height="wrap_content"
+			android:id="@+id/btn_rab"
+			launcher:ident="RAB"
+			android:layout_width="64dip" 
+            launcher:direction="horizontal" 
+			/>
+	</LinearLayout>
+    <ImageView
+     	android:src="@drawable/home_arrows_left"
+		android:layout_height="wrap_content"
+		android:id="@+id/btn_scroll_left"
+		android:layout_width="wrap_content"
+		android:layout_gravity="bottom|left"
+		android:onClick="previousScreen"/>
+	<ImageView
+		android:src="@drawable/home_arrows_right"
+		android:layout_height="wrap_content"
+		android:id="@+id/btn_scroll_right"
+		android:layout_width="wrap_content"
+		android:layout_gravity="bottom|right" 
+		android:onClick="nextScreen"/>
+
+<com.wordpress.chislonchow.legacylauncher.DesktopIndicator
+    android:id="@+id/desktop_indicator"
+    android:visibility="gone"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+/>
+    <com.wordpress.chislonchow.legacylauncher.DeleteZone
+        android:src="@drawable/ic_delete"
+        android:background="@drawable/delete_zone_selector"
+        android:id="@+id/delete_zone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:layout_gravity="bottom|center_horizontal"
+        android:visibility="invisible"
+        launcher:direction="horizontal" />
+</com.wordpress.chislonchow.legacylauncher.DragLayer>

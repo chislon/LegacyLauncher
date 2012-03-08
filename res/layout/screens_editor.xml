@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/screen_holder"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<Gallery android:id="@+id/gallery_screens" android:spacing="15dip"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_centerVertical="true" android:layout_centerHorizontal="true" />
+	<ImageView android:id="@+id/add_right" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:src="@drawable/btn_add_item"
+		android:layout_above="@id/gallery_screens" android:layout_alignRight="@id/gallery_screens" />
+	<ImageView android:id="@+id/add_left" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:src="@drawable/btn_add_item"
+		android:layout_above="@id/gallery_screens" android:layout_alignLeft="@id/gallery_screens" />
+	<ImageView android:id="@+id/delete_screen" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:src="@drawable/btn_delete_item"
+		android:gravity="center" android:layout_below="@id/gallery_screens" android:layout_centerHorizontal="true"/>
+	<ImageView android:id="@+id/swap_right" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:src="@drawable/btn_swap_item"
+		android:layout_below="@id/gallery_screens" android:layout_alignRight="@id/gallery_screens" />
+	<ImageView android:id="@+id/swap_left" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:src="@drawable/btn_swap_item"
+		android:layout_below="@id/gallery_screens" android:layout_alignLeft="@id/gallery_screens" />
+	<ImageView android:id="@+id/set_default" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:src="@drawable/btn_pin_item"
+		android:layout_above="@id/gallery_screens" android:layout_centerHorizontal="true" />
+</RelativeLayout>

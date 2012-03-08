@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+* Copyright (C) 2008 The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- General -->
+    <skip />
+    <!-- Application name -->
+    <string name="application_name">Legacy.Launcher</string>
+    <!-- Default folder name -->
+    <string name="folder_name">Folder</string>
+    <!-- Title of dialog that appears after user selects Wallpaper from menu -->
+    <string name="chooser_wallpaper">Select wallpaper from</string>
+    <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->
+    <string name="wallpaper_instructions">Set wallpaper</string>
+    <!-- Displayed when user selects a shortcut for an app that was uninstalled -->
+    <string name="activity_not_found">Application is not installed on your phone.</string>
+    <!-- List item for configuring the current wallpaper -->
+    <string name="configure_wallpaper">Configure\u2026</string>
+
+    <!-- Folders -->
+    <skip />
+    <!-- Label of Folder name field in Rename folder dialog box -->
+    <string name="rename_folder_label">Folder name</string>
+    <!-- Title of dialog box -->
+    <string name="rename_folder_title">Rename folder</string>
+    <!-- Buttons in Rename folder dialog box -->
+    <string name="rename_action">OK</string>
+    <!-- Buttons in Rename folder dialog box -->
+    <string name="cancel_action">Cancel</string>
+
+    <!-- Shortcuts -->
+    <skip />
+    <!-- Title of dialog box -->
+    <string name="menu_item_add_item">Add to Home screen</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of all apps -->
+    <string name="group_applications">Applications</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of all shortcuts -->
+    <string name="group_shortcuts">Shortcuts</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of all launcher actions -->
+    <string name="launcher_actions">Launcher Actions</string>
+    <!-- Options in "Add to Home" dialog box; Title of the search gadget -->
+    <string name="group_search">Search</string>
+    <!-- Options in "Add to Home" dialog box; Title of the folder gadget -->
+    <string name="group_folder">New folder</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of all live folders -->
+    <string name="group_live_folders">Folders</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of all widgets/gadgets -->
+    <string name="group_widgets">Widgets</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of apps that can set the wallpaper -->
+    <string name="group_wallpapers">Wallpapers</string>
+    <!-- Error message when user has filled a home screen, possibly not used -->
+    <string name="out_of_space">No more room on this Home screen.</string>
+    <!-- Message displayed when a shortcut is created by an external application -->
+    <string name="shortcut_installed">Shortcut \"<xliff:g id="name" example="Browser">%s</xliff:g>\" created.</string>
+    <!-- Message displayed when a shortcut is uninstalled by an external application -->
+    <string name="shortcut_uninstalled">Shortcut \"<xliff:g id="name" example="Browser">%s</xliff:g>\" was removed.</string>
+    <!-- Message displayed when an external application attempts to create a shortcut that already exists -->
+    <string name="shortcut_duplicate">Shortcut \"<xliff:g id="name" example="Browser">%s</xliff:g>\" already exists.</string>
+
+    <!-- Title of dialog when user is selecting shortcut to add to homescreen -->
+    <string name="title_select_shortcut">Select shortcut</string>
+    <!-- Title of dialog when user is selecting live folder to add to homescreen -->
+    <string name="title_select_live_folder">Select folder</string>
+
+    <!-- Permissions: -->
+    <string name="permlab_install_shortcut">install shortcuts</string>
+    <string name="permdesc_install_shortcut">Allows an application to add
+        shortcuts without user intervention.</string>
+    <string name="permlab_uninstall_shortcut">uninstall shortcuts</string>
+    <string name="permdesc_uninstall_shortcut">Allows an application to remove
+        shortcuts without user intervention.</string>
+    <string name="permlab_read_settings">read Home settings and shortcuts</string>
+    <string name="permdesc_read_settings">Allows an application to read the settings and
+        shortcuts in Home.</string>
+    <string name="permlab_write_settings">write Home settings and shortcuts</string>
+    <string name="permdesc_write_settings">Allows an application to change the settings and
+        shortcuts in Home.</string>
+
+    <!-- Widgets: -->
+    <skip />
+
+    <!-- Text to show user in place of a gadget when we can't display it properly -->
+    <string name="gadget_error_text">Problem loading widget</string>
+    <!-- ADW Version Information -->
+    <string name="app_version">0.1 Alpha</string>
+    <!-- ADW Settings -->
+    <string name="pref_label_settings">Launcher settings</string>
+
+    <!-- Workspace preferences -->
+    <string name="pref_title_workspace">Desktop</string>
+    <string name="pref_title_workspace_config_preferences">Desktop Configuration</string>
+    <string name="pref_summary_workspace_config_preferences">Layout, functionality\u2026</string>
+    <string name="pref_title_wallpaper_hack">Wallpaper Hack</string>
+    <string name="pref_summary_wallpaper_hack">Disable this if you get FCs. Leaving it enabled improves the scrolling speed.</string>
+    <string name="pref_title_orientation_sensor">Launcher Orientation</string>
+    <string name="pref_summary_orientation_sensor">Select your desired orientation</string>
+    <string name="pref_title_hide_statusbar">Hide StatusBar</string>
+    <string name="pref_summary_hide_statusbar">Hides the statusbar</string>
+    <string name="pref_title_looping">Screen Loop</string>
+    <string name="pref_summary_looping">Desktop screen looping</string>
+    <string name="pref_title_default_screen">Default Screen</string>
+    <string name="pref_title_desktop_scrolling_speed">Scrolling Time</string>
+    <string name="pref_summary_desktop_scrolling_speed">Set time to complete a scroll across</string>
+    <string name="pref_dialog_desktop_scrolling_speed">The lower the value, the faster flings will be</string>
+    <string name="pref_title_desktop_overshoot">Screen Overshoot</string>
+    <string name="pref_summary_desktop_overshoot">Screen scroll bounce amount</string>
+    <string name="pref_dialog_desktop_overshoot">Set to 0 to disable screen overshoot</string>
+    <string name="pref_title_desktop_transition">Transition Animation</string>
+    <string name="pref_summary_desktop_transition">Animation as desktop screens are change</string>
+    <string name="pref_title_workspace_wallpaper">Wallpaper</string>
+    <string name="pref_title_workspace_appearance">Appearance</string>
+    <string name="pref_title_workspace_functionality_preferences">Desktop Extensions</string>
+    <string name="pref_summary_workspace_functionality_preferences">Desktop extended functionality</string>
+    <string name="pref_title_workspace_appearance_preferences">Desktop Appearance</string>
+    <string name="pref_summary_workspace__preferences">Transitions, indicators, icons</string>
+    <string name="pref_title_enable_previews">Desktop Previews</string>
+    <string name="pref_summary_enable_previews">Use desktop previews</string>
+    <string name="pref_title_spread_previews">Spread Preview Style</string>
+    <string name="pref_summary_spread_previews">Use the spread style desktop preview</string>
+
+    <!-- Drawer preferences -->
+    <string name="pref_title_drawer">App Drawer</string>
+    <string name="pref_title_drawer_settings">Drawer Configuration</string>
+    <string name="pref_summary_drawer_settings">Drawer style, layout</string>
+    <string name="pref_title_drawer_appearance">Drawer Appearance</string>
+    <string name="pref_summary_drawer_appearance">Application drawer visual settings</string>
+    <string name="pref_title_drawer_catalogs_settings">Drawer Catalogs</string>
+    <string name="pref_summary_drawer_catalogs_settings">Applications drawer catalogs preferences</string>
+    <string name="pref_title_animation_speed">Animation Duration</string>
+    <string name="pref_summary_animation_speed">Set the time in milliseconds for the animation</string>
+    <string name="pref_dialog_animation_speed">Set the time in milliseconds for the animation</string>
+    <string name="pref_title_page_horizontal_margin">Page Horizontal Margin</string>
+    <string name="pref_summary_page_horizontal_margin">Set the horizontal margin between each pages of Drawer</string>
+    <string name="pref_dialog_page_horizontal_margin">Set the horizontal margin between each pages of Drawer</string>
+    <string name="pref_title_animated_drawer">Animated Drawer</string>
+    <string name="pref_summary_animated_drawer">Turns whether App Drawer should display animations</string>
+    <string name="pref_title_drawer_columns_portrait">Drawer Columns Portrait</string>
+    <string name="pref_summary_drawer_columns_portrait">Select the number of drawer columns to use on portrait layout</string>
+    <string name="pref_dialog_drawer_columns_portrait">Select the number of drawer columns to use on portrait layout</string>
+    <string name="pref_title_drawer_rows_portrait">Drawer Rows Portrait</string>
+    <string name="pref_summary_drawer_rows_portrait">Select the number of drawer rows to use on portrait layout</string>
+    <string name="pref_dialog_drawer_rows_portrait">Select the number of drawer rows to use on portrait layout</string>
+    <string name="pref_title_drawer_columns_landscape">Drawer Columns Landscape</string>
+    <string name="pref_summary_drawer_columns_landscape">Select the number of drawer columns to use on landscape layout</string>
+    <string name="pref_dialog_drawer_columns_landscape">Select the number of drawer columns to use on landscape layout</string>
+    <string name="pref_title_drawer_rows_landscape">Drawer Rows Landscape</string>
+    <string name="pref_summary_drawer_rows_landscape">Select the number of drawer rows to use on landscape layout</string>
+    <string name="pref_dialog_drawer_rows_landscape">Select the number of drawer rows to use on landscape layout</string>
+    <string name="pref_title_drawer_color">Background color</string>
+    <string name="pref_summary_drawer_color">Set the color for the drawer background</string>
+
+    <!-- Dock Settings -->
+    <string name="pref_title_dock">Dock</string>
+    <string name="pref_title_dock_settings">Dock Configuration</string>
+    <string name="pref_summary_dock_settings">Dock icon count, pagination dots</string>
+    <string name="pref_title_dock_appearance">Dock Appearance</string>
+    <string name="pref_summary_dock_appearance">Icon size, dock background\u2026</string>
+    <string name="pref_title_desktop_dots">Dock pagination dots</string>
+    <string name="pref_summary_desktop_dots">Show/hide dock pagination dots</string>
+    <string name="pref_title_closing_folder">Auto-Close Folders</string>
+    <string name="pref_summary_closing_folder">Auto-close folder after app launch</string>
+    <string name="pref_title_ab_scale_factor">Icon size</string>
+    <string name="pref_summary_ab_scale_factor">Set the scaling size for the icon</string>
+    <string name="pref_dialog_ab_scale_factor">Set the scaling size for the icons</string>
+    <string name="pref_title_hide_ab_bg">Hide dock background</string>
+    <string name="pref_summary_hide_ab_bg">Hide the background in the dock</string>
+    <string name="pref_title_hide_icon_labels">Hide icon labels</string>
+    <string name="pref_summary_hide_icon_labels">Hide desktop icon labels</string>
+    <string name="pref_title_main_dock_style">Number of icons</string>
+    <string name="pref_summary_main_dock_style">Number of configurable icons in dock</string>
+    <string name="pref_title_ab_tint">Dock Icons Tint</string>
+    <string name="pref_summary_ab_tint">Perform graphic tinting to the dock icons</string>
+    <string name="pref_title_ab_tint_color">Tint Color</string>
+    <string name="pref_summary_ab_tint_color">Change the tinting color</string>
+
+    <!-- Button preferences -->
+    <string name="pref_title_workspace_actions">Workspace actions</string>
+    <string name="pref_title_home_button_binding">Home button action</string>
+    <string name="pref_summary_home_button_binding">Select action for home button binding</string>
+    <string name="pref_title_swipedown_actions">Swipe down action</string>
+    <string name="pref_summary_swipedown_actions">Select action for swipe down gesture</string>
+    <string name="pref_title_swipeup_actions">Swipe up action</string>
+    <string name="pref_summary_swipeup_actions">Select action for swipe up gesture</string>
+    <string name="pref_title_doubletap_actions">Double-tap action</string>
+    <string name="pref_summary_doubletap_actions">Select action for double-tap</string>
+
+    <!-- Other preferences -->
+    <string name="pref_title_application_settings">More Settings</string>
+    <string name="pref_title_build_info">Build Information</string>
+    <string name="pref_title_app_version">Version</string>
+    <string name="pref_dialog_title_color_picker">Pick a color.</string>
+    <string name="pref_dialog_message_color_picker">Tap on center color to confirm.\nPress back to cancel.</string>
+    <string name="pref_dialog_color_picker_alpha">alpha</string>
+    <string name="pref_message_restart_normal">Changing this setting will make the Launcher restart itself</string>
+    <string name="pref_message_restart_froyo">Changing this setting will make the Launcher restart itself</string>
+    <string name="drop_to_uninstall">Drop to Uninstall</string>
+    <string name="toast_widgets_not_supported">Widgets not supported\u2026 sorry!</string>
+    <string name="toast_unknown_item">Unknown item. We can\'t add unknown item types!</string>
+    <string name="toast_no_application_def">No application defined yet, drop something here!</string>
+    <string name="title_dialog_xml">Launcher Settings</string>
+    <string name="import_export_sdcard_unmounted">SD card not mounted!</string>
+
+    <!-- XML Import/Export strings -->
+    <string name="message_dialog_export">Backup settings? Any existing file will be overwritten.</string>
+    <string name="xml_export_dialog">Backing up settings\u2026</string>
+    <string name="xml_export_success">Settings backed up successfully!</string>
+    <string name="xml_export_error">Error backing up settings!</string>
+    <string name="message_dialog_import">Restore settings? Launcher will be restarted.</string>
+    <string name="xml_import_dialog">Restoring settings\u2026</string>
+    <string name="xml_file_not_found">Settings backup file not found!</string>
+    <string name="xml_not_readable">Settings backup file exists, but is not readable!</string>
+    <string name="xml_import_success">Settings restored successfully!</string>
+    <string name="xml_import_error">Error restoring settings!</string>
+
+    <!-- Config Import/Export strings -->
+    <string name="message_dialog_export_config">Backup desktop configuration? Any existing file will be overwritten.</string>
+    <string name="dbfile_export_dialog">Backing up desktop configuration\u2026</string>
+    <string name="dbfile_export_success">Configuration backed up successfully!</string>
+    <string name="dbfile_export_error">Error backing up configuration!</string>
+    <string name="message_dialog_import_config">Restore desktop configuration? Launcher will be restarted.</string>
+    <string name="dbfile_import_dialog">Restoring desktop configuration\u2026</string>
+    <string name="dbfile_not_found">Configuration file not found!</string>
+    <string name="dbfile_not_readable">Configuration file exists, but is not readable!</string>
+    <string name="dbfile_import_success">Configuration restored successfully!</string>
+    <string name="dbfile_import_error">Error restoring configuration!</string>
+
+    <!-- Desktop columns/Rows -->
+    <string name="pref_title_desktop_columns">Desktop Columns</string>
+    <string name="pref_summary_desktop_columns">Select the number of columns to use on desktop</string>
+    <string name="pref_dialog_desktop_columns">Select the number of columns to use on desktop</string>
+    <string name="pref_title_desktop_rows">Desktop Rows</string>
+    <string name="pref_summary_desktop_rows">Select the number of rows to use on desktop</string>
+    <string name="pref_dialog_desktop_rows">Select the number of rows to use on desktop</string>
+    <string name="pref_title_autosize_icons">Auto Stretch</string>
+    <string name="pref_summary_autosize_icons">Stretch icons/widgets so they don\'t overlap</string>
+    <string name="pref_title_drawer_labels">Show app labels</string>
+    <string name="pref_summary_drawer_labels">Show the labels on app drawer</string>
+    <string name="pref_title_fade_drawer_labels">Fade app labels</string>
+    <string name="pref_summary_fade_drawer_labels">Label fading effects</string>
+    <string name="widget_config_dialog_title">Widget span config</string>
+    <string name="widget_config_dialog_summary">How many rows/columns will the widget take?</string>
+    <string name="widget_columns">Columns</string>
+    <string name="widget_rows">Rows</string>
+    <string name="pref_title_screen_cache">Scrolling Cache</string>
+    <string name="pref_summary_screen_cache">Improves rendering speed but uses more memory</string>
+    <string name="pref_title_desktop_indicator">Show desktop indicator</string>
+    <string name="pref_summary_desktop_indicator">Show a visual hint on scrolling desktop</string>
+    <string name="pref_title_desktop_indicator_autohide">Autohide desktop indicator</string>
+    <string name="pref_summary_desktop_indicator_autohide">Hide the indicator after a small period</string>
+    <string name="pref_title_desktop_indicator_type">Indicator type</string>
+    <string name="pref_summary_desktop_indicator_type">Select between different indicator styles</string>
+
+    <!-- Category titles -->
+    <string name="pref_title_system_preferences">System</string>
+    <string name="pref_title_screens_layout_preferencecategory">Desktop Layout</string>
+    <string name="pref_title_screens_functionality_preferencecategory">Desktop Functionality</string>
+    <string name="pref_title_drawer_layout_category">Grid Layout</string>
+    <string name="pref_title_highlights_preferencecategory">Icon Highlights</string>
+    <string name="pref_title_indicators_preferencecategory">Screen Indicator</string>
+    <string name="pref_title_system_persistent">System Persistent</string>
+    <string name="pref_summary_system_persistent">Keep launcher in memory preventing unwanted reloads</string>
+    <!-- Theme preferences -->
+    <string name="pref_title_theme_settings">Themes</string>
+    <string name="pref_summary_theme_settings">Select themes for Launcher</string>
+    <string name="pref_title_theme_package">Select your theme</string>
+    <string name="pref_summary_theme_package">Choose your theme for Launcher</string>
+    <string name="pref_title_theme_preview">Theme Preview</string>
+    <string name="pref_summary_theme_preview">Preview of the selected theme</string>
+    <string name="pref_title_theme_icons">Use Theme Icons</string>
+    <string name="pref_summary_theme_icons">Deselect this to use standard OS icons</string>
+    <string name="pref_themes_apply_theme">Apply theme!</string>
+    <string name="pref_themes_get_themes">Get themes!</string>
+    <string name="pref_title_wallpaper_scrolling">Wallpaper Scrolling</string>
+    <string name="pref_summary_wallpaper_scrolling">Allow wallpaper to move while scrolling screens</string>
+    <string name="message_delete_desktop_screen">Remove this screen and all of its content?</string>
+    <string name="message_cannot_delete_desktop_screen">You can\'t delete the last screen</string>
+    <string name="message_cannot_add_desktop_screen">You can\'t add more screens</string>
+    <string name="message_cannot_swap_desktop_screen">You can\'t swap screens</string>
+    <string name="menu_edit">Edit</string>
+    <string name="pref_label_shirtcuts">Custom shortcut</string>
+    <string name="pref_label_activities">Activities</string>
+    <string name="shirtcut_header">Select your desired application activity to launch.\nYou can select a custom icon too.</string>
+    <string name="shirtcut_pick_activity">Pick your activity</string>
+    <string name="shirtcut_label">Label</string>
+    <string name="shirtcuts_select_picture">Select picture</string>
+    <string name="shirtcuts_crop_picture">Select and crop picture</string>
+    <string name="shirtcuts_icon_packs">ADWTheme IconPacks</string>
+    <string name="shirtcuts_select_icon_type">Select the icon type</string>
+    <string name="shirtcuts_select_icon_pack">Select icon pack</string>
+    <string name="shirtcuts_restore_original">Restore Original</string>
+    <string name="selectAll">Select all</string>
+    <string name="AppGroupAll">"All"</string>
+    <string name="AppGroupUn">"Uncataloged"</string>
+    <string name="AppGroupAdd">"New Catalog"</string>
+    <string name="AppGroupDel">"Remove Catalog"</string>
+    <string name="AppGroupDelLong">"Really Remove\nCurrent Catalog?"</string>
+    <string name="AppGroupChoose">"Choose Catalog"</string>
+    <string name="AppGroupConfig">"Setup Catalog"</string>
+    <string name="AppGroupRename">"New Catalog"</string>
+    <string name="AppGroupConfigError">"You can not setup this catalog"</string>
+    <string name="rename_group_title">New Catalog</string>
+    <string name="rename_group_label">Catalog Name</string>
+    <string name="show_catalog">Show Catalog \"%s\"</string>
+    <string name="pref_title_launcher_restart">Restart</string>
+    <string name="pref_summary_launcher_restart">Close and restart Launcher</string>
+    <string name="scrollable_api_required">This widget needs an updated version of Launcher.\nPlease update or contact widget developer</string>
+    <string name="pref_title_drawer_navigate_catalogs">Show navigation buttons</string>
+    <string name="pref_summary_drawer_navigate_catalogs">Show app catalogs navigation buttons</string>
+    <string name="pref_title_drawer_fling_navigate_catalogs">Fling navigation</string>
+    <string name="pref_summary_drawer_fling_navigate_catalogs">Navigate through catalogs by flinging perpendicular to drawer</string>
+    <string name="pref_title_drawer_ungroup_catalog">Show only custom catalogs</string>
+    <string name="pref_summary_drawer_ungroup_catalog">Remove the ALL category and use categories only</string>
+    <string name="pref_title_drawer_show_catalogs">Show titles</string>
+    <string name="pref_summary_drawer_show_catalogs">Show the catalog titles in the drawer</string>
+    <string name="pref_title_drawer_style">App Drawer style</string>
+    <string name="pref_summary_drawer_style">Switch between different drawer implementations</string>
+
+    <!-- Backup and Restore -->
+    <string name="pref_title_import_export">Backup and Restore</string>
+    <string name="pref_summary_import_export">Launcher settings data, desktop icon placement</string>
+    <string name="pref_title_xml">Launcher Settings Data</string>
+    <string name="pref_title_xml_import">Restore settings</string>
+    <string name="pref_summary_xml_import">Restore from /sdcard/legacy_launcher_settings.xml</string>
+    <string name="pref_title_xml_export">Backup settings</string>
+    <string name="pref_summary_xml_export">Backup to /sdcard/legacy_launcher_settings.xml</string>
+    <string name="pref_summary_db_import">Restore from /sdcard/legacy_launcher.db</string>
+    <string name="pref_title_db_export">Backup desktop icon placement</string>
+    <string name="pref_summary_db_export">Backup to /sdcard/legacy_launcher.db</string>
+    <string name="pref_title_db">Desktop Icon Placement</string>
+    <string name="pref_title_db_import">Restore desktop icon placement</string>
+
+    <!-- Other UI preferences -->
+    <string name="pref_title_ui_settings">UI Components</string>
+    <string name="pref_title_notif_receiver">Show notifications</string>
+    <string name="pref_summary_notif_receiver">Enable the global notification counters</string>
+    <string name="pref_title_notif_size">Bubble font size</string>
+    <string name="pref_summary_notif_size">Select the font size for the notification bubbles</string>
+    <string name="pref_dialog_notif_size">Select the font size for the notification bubbles</string>
+    <string name="pref_title_deletezone_preferencecategory">Trash Can</string>
+    <string name="pref_title_deletezone_style">Trash Can Position</string>
+    <string name="pref_summary_deletezone_style">Change the position of the Trash Can</string>
+    <string name="pref_title_icon_highlights">Highlights press color</string>
+    <string name="pref_summary_icon_highlights">Set the color for icon press</string>
+    <string name="pref_title_icon_highlights_focus">Highlights focus color</string>
+    <string name="pref_summary_icon_highlights_focus">Set the color for icon focus</string>
+    <string name="pref_title_new_selectors">Use new icon selectors</string>
+    <string name="pref_summary_new_selectors">Disable this to use the old drawables.</string>
+
+    <!-- Menus items: -->
+    <skip />
+    <!-- Verb, menu item used to add an item on the desktop -->
+    <string name="menu_add">Add</string>
+    <string name="menu_delete">Remove</string>
+    <!-- Noun, menu item used to set the desktop's wallpaper -->
+    <string name="menu_wallpaper">Wallpaper</string>
+    <!-- Verb, menu item used to initiate global search -->
+    <string name="menu_search">Search</string>
+    <!-- Noun, menu item used to show the system settings -->
+    <string name="menu_settings">Settings</string>
+    <string name="menu_launcher_settings">Launcher Preferences</string>
+    <string name="menu_lock">Lock Launcher</string>
+    <string name="menu_unlock">Unlock Launcher</string>
+
+</resources>

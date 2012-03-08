@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:layout_gravity="right"
+        android:background="#AAAAAAAA">
+        
+        <TextView android:text="@string/selectAll" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="right"
+            android:textAppearance="?android:attr/textAppearanceMedium" />    
+        <CheckBox android:id="@+id/checkAll" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            android:layout_weight="0">          
+        </CheckBox>
+        
+    </LinearLayout>
+    
+
+    <ListView android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:transcriptMode="normal" >
+    
+    </ListView>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom">
+        
+        <Button android:text="@android:string/ok" 
+            android:id="@+id/Button_Ok_App" 
+            android:layout_weight="1" 
+            android:layout_width="fill_parent" 
+            android:layout_height="fill_parent">
+        </Button>
+
+    </LinearLayout>
+    
+
+</LinearLayout>
+

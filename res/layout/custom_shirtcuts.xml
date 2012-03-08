@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:padding="10dip">
+  <TextView android:id="@+id/header"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_alignParentTop="true"
+	android:text="@string/shirtcut_header"
+  />
+  <ImageButton android:id="@+id/pick_icon"
+	android:src="@drawable/ic_launcher_shortcut"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_below="@id/header"
+	android:layout_alignParentLeft="true"
+  />
+  <Button android:id="@+id/pick_activity"
+	android:text="@string/shirtcut_pick_activity"
+	android:layout_height="wrap_content"
+	android:layout_width="fill_parent"
+	android:layout_below="@id/header"
+	android:layout_toRightOf="@id/pick_icon"
+  />
+  <EditText android:id="@+id/shirtcut_label"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_below="@id/pick_icon"
+	android:layout_centerHorizontal="true"
+	android:text="@string/shirtcut_label"
+  />
+  <Button android:id="@+id/shirtcut_ok"
+	android:text="@android:string/ok"
+	android:layout_height="wrap_content"
+	android:layout_width="fill_parent"
+	android:layout_below="@id/shirtcut_label"
+	android:layout_centerHorizontal="true"
+  />
+</RelativeLayout>
