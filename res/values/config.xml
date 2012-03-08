@@ -42,7 +42,7 @@
     <bool name="config_drawerAnimated">false</bool>
     <!-- config_desktopScreens min value is 1, so it will add 1 to whatever value you set here -->
     <integer name="config_desktopScreens">2</integer>
-    <integer name="config_defaultScreen">0</integer>
+    <integer name="config_defaultScreen">1</integer>
 
     <bool name="config_hideStatusbar">false</bool>
     <bool name="config_previewsEnable">true</bool>
@@ -51,6 +51,7 @@
     <bool name="config_uiCloseFolder">false</bool>
     <bool name="config_uiABBg">true</bool>
     <!-- config_animation_speed min is 300, so it will add 300 to whatever value you set here -->
+        <bool name="config_drawer_zoom">false</bool>
     <integer name="config_animation_speed">250</integer>
     <!-- config_uiScaleAB is a float value between 0.1 and 1.0. Set here the default .X -->
     <integer name="config_uiScaleAB">7</integer>

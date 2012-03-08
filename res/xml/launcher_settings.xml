@@ -93,8 +93,8 @@
 				android:defaultValue="true" android:summary="@string/pref_summary_enable_previews"
 				android:key="previewsEnable" />
 			<CheckBoxPreference android:title="@string/pref_title_spread_previews"
-				android:defaultValue="true" android:summary="@string/pref_summary_spread_previews"
-				android:key="previewsNew" />
+				android:dependency="previewsEnable" android:defaultValue="true"
+				android:summary="@string/pref_summary_spread_previews" android:key="previewsNew" />
 			<CheckBoxPreference android:title="@string/pref_title_closing_folder"
 				android:defaultValue="false" android:summary="@string/pref_summary_closing_folder"
 				android:key="uiCloseFolder" />
@@ -158,31 +158,42 @@
 		</PreferenceScreen>
 		<PreferenceScreen android:key="drawerAppearancePreferences"
 			android:title="@string/pref_title_drawer_appearance" android:summary="@string/pref_summary_drawer_appearance">
-			<CheckBoxPreference android:title="@string/pref_title_animated_drawer"
-				android:defaultValue="true" android:summary="@string/pref_summary_animated_drawer"
-				android:key="drawerAnimated" />
-			<com.wordpress.chislonchow.legacylauncher.DialogSeekBarPreference
-				android:dependency="drawerAnimated" android:title="@string/pref_title_animation_speed"
-				android:summary="@string/pref_summary_animation_speed"
-				android:dialogMessage="@string/pref_dialog_animation_speed"
-				android:key="animationSpeed" android:defaultValue="@integer/config_animation_speed"
-				android:max="1700" />
-			<CheckBoxPreference android:title="@string/pref_title_drawer_labels"
-				android:defaultValue="@bool/config_drawerLabels" android:summary="@string/pref_summary_drawer_labels"
-				android:key="drawerLabels" />
-			<CheckBoxPreference android:title="@string/pref_title_fade_drawer_labels"
-				android:dependency="drawerLabels" android:defaultValue="@bool/config_fadeDrawerLabels"
-				android:summary="@string/pref_summary_fade_drawer_labels"
-				android:key="fadeDrawerLabels" />
-			<Preference android:key="drawer_color" android:title="@string/pref_title_drawer_color"
-				android:summary="@string/pref_summary_drawer_color"
-				android:defaultValue="-16777216" />
-			<com.wordpress.chislonchow.legacylauncher.DialogSeekBarPreference
-				android:title="@string/pref_title_page_horizontal_margin"
-				android:summary="@string/pref_summary_page_horizontal_margin"
-				android:dialogMessage="@string/pref_dialog_page_horizontal_margin"
-				android:key="pageHorizontalMargin" android:defaultValue="20"
-				android:max="75" />
+			<PreferenceCategory android:title="@string/pref_title_drawer_animation_category">
+
+				<CheckBoxPreference android:title="@string/pref_title_animated_drawer"
+					android:defaultValue="true" android:summary="@string/pref_summary_animated_drawer"
+					android:key="drawerAnimated" />
+				<CheckBoxPreference android:title="@string/pref_title_animated_zoom_drawer"
+					android:dependency="drawerAnimated" android:defaultValue="false"
+					android:summary="@string/pref_summary_animated_zoom_drawer"
+					android:key="drawerZoom" />
+				<com.wordpress.chislonchow.legacylauncher.DialogSeekBarPreference
+					android:dependency="drawerAnimated" android:title="@string/pref_title_animation_speed"
+					android:summary="@string/pref_summary_animation_speed"
+					android:dialogMessage="@string/pref_dialog_animation_speed"
+					android:key="animationSpeed" android:defaultValue="@integer/config_animation_speed"
+					android:max="1700" />
+			</PreferenceCategory>
+			<PreferenceCategory android:title="@string/pref_title_drawer_app_label_category">
+				<CheckBoxPreference android:title="@string/pref_title_drawer_labels"
+					android:defaultValue="@bool/config_drawerLabels" android:summary="@string/pref_summary_drawer_labels"
+					android:key="drawerLabels" />
+				<CheckBoxPreference android:title="@string/pref_title_fade_drawer_labels"
+					android:dependency="drawerLabels" android:defaultValue="@bool/config_fadeDrawerLabels"
+					android:summary="@string/pref_summary_fade_drawer_labels"
+					android:key="fadeDrawerLabels" />
+			</PreferenceCategory>
+			<PreferenceCategory android:title="@string/pref_title_drawer_background_category">
+				<Preference android:key="drawer_color" android:title="@string/pref_title_drawer_color"
+					android:summary="@string/pref_summary_drawer_color"
+					android:defaultValue="-16777216" />
+				<com.wordpress.chislonchow.legacylauncher.DialogSeekBarPreference
+					android:title="@string/pref_title_page_horizontal_margin"
+					android:summary="@string/pref_summary_page_horizontal_margin"
+					android:dialogMessage="@string/pref_dialog_page_horizontal_margin"
+					android:key="pageHorizontalMargin" android:defaultValue="20"
+					android:max="75" />
+			</PreferenceCategory>
 		</PreferenceScreen>
 		<PreferenceScreen android:key="drawerCatalogsPreferences"
 			android:title="@string/pref_title_drawer_catalogs_settings"

@@ -18,13 +18,11 @@ package com.wordpress.chislonchow.legacylauncher;
 
 //import com.wordpress.chislonchow.legacylauncher.catalogue.CataGridView;
 
-import com.wordpress.chislonchow.legacylauncher.AllAppsSlidingView.MyGestureDetector;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppGroupAdapter;
 import com.wordpress.chislonchow.legacylauncher.R;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -35,20 +33,17 @@ import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class AllAppsGridView extends GridView implements
 AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
@@ -75,18 +70,12 @@ DragSource, Drawer {
 	private int mBgColor = 0xFF000000;
 	private boolean mDrawLabels = true;
 	private boolean mFadeDrawLabels = false;
+	private boolean mDrawerZoom = false;
+
 	private float mLabelFactor;
-	//    private int distH;
-	//    private int distV;
-	//    private float x;
-	//    private float y;
-	//    private float width;
-	//    private float height;
+
 	private Rect rl1=new Rect();
 	private Rect rl2=new Rect();
-	//    private float scale;
-	private Rect r3=new Rect();
-	//    private int xx;
 
 	private int mLastIndexDraw = -99;
 	private String mGroupTitle = null;
@@ -132,7 +121,7 @@ DragSource, Drawer {
 		setOnItemLongClickListener(this);
 	}
 
-	public void onItemClick(AdapterView parent, View v, int position, long id) {
+	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 		if ( !mFling )
 		{
 			ApplicationInfo app = (ApplicationInfo) parent
@@ -322,7 +311,12 @@ DragSource, Drawer {
 					- (getWidth() / 2);
 			float distV = (childTop + (child.getHeight() / 2))
 					- (getHeight() / 2);
-			float scaleFactor = mScaleFactor;
+			float scaleFactor;
+			if (mDrawerZoom) {
+				scaleFactor = mScaleFactor;
+			} else {
+				scaleFactor = 1;
+			}
 			float x = childLeft + (distH * (scaleFactor - 1)) * scaleFactor;
 			float y = childTop + (distV * (scaleFactor - 1)) * scaleFactor;
 			float width = childWidth * scaleFactor;
@@ -344,6 +338,7 @@ DragSource, Drawer {
 			int xx = (childWidth / 2) - (tmp[1].getBounds().width() / 2);
 			canvas.translate(x + xx, y + child.getPaddingTop());
 			canvas.scale(scale, scale);
+
 			tmp[1].draw(canvas);
 		} else {
 			int alpha = 255;
@@ -384,11 +379,14 @@ DragSource, Drawer {
 		mDrawLabels = AlmostNexusSettingsHelper.getDrawerLabels(mLauncher);
 		mFadeDrawLabels = AlmostNexusSettingsHelper
 				.getFadeDrawerLabels(mLauncher);
+		mDrawerZoom = AlmostNexusSettingsHelper
+				.getDrawerZoom(mLauncher);
 		if(getAdapter()==null)
 			animate=false;
 		else if(getAdapter().getCount()<=0)
 			animate=false;
 		if (animate) {
+
 			if (mFadeDrawLabels && mDrawLabels) {
 				ListAdapter adapter = getAdapter();
 				if (adapter instanceof ApplicationsAdapter)

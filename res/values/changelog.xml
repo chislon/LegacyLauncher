@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="adw_changelog">
--&lt;b>NOTICE:&lt;/b> If your theme looks ugly, ask your theme developer to update it!!! &lt;br>&lt;br>
--&lt;b>NOTICE:&lt;/b> To add/remove screens press MENU/Edit&lt;br>&lt;br>
--&lt;b>NOTICE:&lt;/b> To enable ORIENTATION, disable PERSISTENCE.&lt;br>&lt;br>
--&lt;b>REMEMBER:&lt;/b> You can hide apps from the drawer by using the custom catalogs (press menu key while the drawer is open) &lt;br>&lt;br>
+<string name="changelog">
+-&lt;b>NOTICE:&lt;/b> This is an alpha release with no support &lt;br>&lt;br>
+-&lt;b>NOTICE:&lt;/b> To add/remove screens press MENU/Edit Desktop&lt;br>&lt;br>
 
 &lt;b>Version 0.1:&lt;/b>&lt;br>
 &lt;b>--------------&lt;/b>&lt;br>
-- Based on free opensource ADW Launcher &lt;br>
-
+- Based on free open-source ADW Launcher &lt;br>&lt;br>&lt;br>
+March 2012, Chislon Chow
 
 </string>
 </resources>

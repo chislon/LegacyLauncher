@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class HolderLayout extends ViewGroup {
+public class AllAppsSlidingViewHolderLayout extends ViewGroup {
     //ADW: Animation vars
 	private final static int CLOSED=1;
 	private final static int OPEN=2;
@@ -32,9 +32,10 @@ public class HolderLayout extends ViewGroup {
 	private int mAnimationDuration=800;
 	private boolean mDrawLabels=true;
 	private boolean mFadeDrawLabels=false;
+	private boolean mDrawerZoom = false;
 	private float mLabelFactor;
 	private long mCurrentTime;
-	private float mPorcentajeScale;
+	private float mPercentageScale;
 	//ADW: listener to dispatch open/close animation events
 	private OnFadingListener mOnFadingListener;
     private int distH;
@@ -48,7 +49,7 @@ public class HolderLayout extends ViewGroup {
     private float scale;
     private Rect r3=new Rect();
     private int xx;
-	public HolderLayout(Context context) {
+	public AllAppsSlidingViewHolderLayout(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
 		mPaint=new Paint();
@@ -59,7 +60,7 @@ public class HolderLayout extends ViewGroup {
         updateLabelVars(context);
 	}
 
-	public HolderLayout(Context context, AttributeSet attrs) {
+	public AllAppsSlidingViewHolderLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
 		mPaint=new Paint();
@@ -70,7 +71,7 @@ public class HolderLayout extends ViewGroup {
         updateLabelVars(context);
 	}
 
-	public HolderLayout(Context context, AttributeSet attrs, int defStyle) {
+	public AllAppsSlidingViewHolderLayout(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		// TODO Auto-generated constructor stub
 		mPaint=new Paint();
@@ -202,15 +203,15 @@ public class HolderLayout extends ViewGroup {
         if(mStatus!=CLOSED){
             shouldDrawLabels = mFadeDrawLabels && mDrawLabels
                     && (mStatus == OPENING || mStatus == CLOSING);
-            mPorcentajeScale = 1.0f;
+            mPercentageScale = 1.0f;
             if (isAnimating) {
-                mPorcentajeScale = 1.0f - ((mScaleFactor - 1) / 3.0f);
-                if (mPorcentajeScale > 0.9f)
-                    mPorcentajeScale = 1f;
-                if (mPorcentajeScale < 0)
-                    mPorcentajeScale = 0;
-                dispatchFadingAlphaEvent(mPorcentajeScale);
-                mBgAlpha = (int) (mPorcentajeScale * 255);
+                mPercentageScale = 1.0f - ((mScaleFactor - 1) / 3.0f);
+                if (mPercentageScale > 0.9f)
+                    mPercentageScale = 1f;
+                if (mPercentageScale < 0)
+                    mPercentageScale = 0;
+                dispatchFadingAlphaEvent(mPercentageScale);
+                mBgAlpha = (int) (mPercentageScale * 255);
             }
             mPaint.setAlpha(mBgAlpha);
             super.draw(canvas);
@@ -231,10 +232,16 @@ public class HolderLayout extends ViewGroup {
 			//float y;
 			distH=(child.getLeft()+(child.getWidth()/2))-(getWidth()/2);
 			distV=(child.getTop()+(child.getHeight()/2))-(getHeight()/2);
-			x=child.getLeft()+(distH*(mScaleFactor-1))*(mScaleFactor);
-			y=child.getTop()+(distV*(mScaleFactor-1))*(mScaleFactor);
-			width=child.getWidth()*mScaleFactor;
-			height=(child.getHeight()-(child.getHeight()-mIconSize))*mScaleFactor;
+			float scaleFactor;
+			if (mDrawerZoom) {
+				scaleFactor = mScaleFactor;
+			} else {
+				scaleFactor = 1;
+			}
+			x=child.getLeft()+(distH*(scaleFactor-1))*(scaleFactor);
+			y=child.getTop()+(distV*(scaleFactor-1))*(scaleFactor);
+			width=child.getWidth()*scaleFactor;
+			height=(child.getHeight()-(child.getHeight()-mIconSize))*scaleFactor;
 			if(shouldDrawLabels) {
                                 child.setDrawingCacheEnabled(true);
                                 child.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
@@ -254,7 +261,8 @@ public class HolderLayout extends ViewGroup {
 			canvas.save();
 			canvas.translate(x+xx, y+child.getPaddingTop());
 			canvas.scale(scale, scale);
-			tmp[1].draw(canvas);
+
+			tmp[1].draw(canvas);			
 			canvas.restore();
 		}else{
 			if(mDrawLabels){
@@ -341,6 +349,7 @@ public class HolderLayout extends ViewGroup {
     public void updateLabelVars(Context context){
     	mDrawLabels=AlmostNexusSettingsHelper.getDrawerLabels(context);
     	mFadeDrawLabels=AlmostNexusSettingsHelper.getFadeDrawerLabels(context);
+		mDrawerZoom = AlmostNexusSettingsHelper.getDrawerZoom(context);
     }
 
     public void setStartTime(long startTime)

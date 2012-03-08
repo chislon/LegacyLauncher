@@ -178,6 +178,11 @@ public final class AlmostNexusSettingsHelper {
 		boolean newD = sp.getBoolean("autosizeIcons", context.getResources().getBoolean(R.bool.config_autosizeIcons));
 		return newD;
 	}
+	public static boolean getDrawerZoom(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("drawerZoom", context.getResources().getBoolean(R.bool.config_drawer_zoom));
+		return newD;
+	}
 	public static boolean getDrawerLabels(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("drawerLabels", context.getResources().getBoolean(R.bool.config_drawerLabels));
@@ -383,7 +388,7 @@ public final class AlmostNexusSettingsHelper {
 		public static AlertDialog create( Context context ) throws NameNotFoundException {
 
 			String aboutTitle = String.format("%s Changelog", context.getString(R.string.app_version));
-			Spanned aboutText = Html.fromHtml(context.getString(R.string.adw_changelog, TextView.BufferType.SPANNABLE));
+			Spanned aboutText = Html.fromHtml(context.getString(R.string.changelog, TextView.BufferType.SPANNABLE));
 
 			// Set up the holder scrollview
 			ScrollView mainView=new ScrollView(context);

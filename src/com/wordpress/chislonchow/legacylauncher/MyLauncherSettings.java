@@ -103,7 +103,7 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
 		doubletap_action.setOnPreferenceChangeListener(this);
 		ListPreference homebutton_binding = (ListPreference) findPreference("homeBinding");
 		homebutton_binding.setOnPreferenceChangeListener(this);
-		
+
 		CheckBoxPreference persist=(CheckBoxPreference)findPreference("systemPersistent");
 		persist.setOnPreferenceChangeListener(this);
 		Preference orientations = findPreference("homeOrientation");
@@ -111,15 +111,6 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
 			orientations.setEnabled(false);
 		} else {
 			orientations.setEnabled(true);
-		}
-		
-		CheckBoxPreference previewsEnable=(CheckBoxPreference)findPreference("previewsEnable");
-		previewsEnable.setOnPreferenceChangeListener(this);
-		CheckBoxPreference previewsNew = (CheckBoxPreference)findPreference("previewsNew");
-		if(AlmostNexusSettingsHelper.getPreviewsEnable(this)){
-			previewsNew.setEnabled(true);
-		} else{
-			previewsNew.setEnabled(false);
 		}
 
 		DialogSeekBarPreference notif_size= (DialogSeekBarPreference) findPreference("notif_size");
@@ -150,13 +141,28 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
 		mContext=this;
 		//ADW: restart and reset preferences
 		Preference restart=findPreference("launcher_restart");
+
 		restart.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
-				shouldRestart=true;
-				finish();
+				AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+				alertDialog.setMessage(getResources().getString(R.string.pref_summary_launcher_restart));
+				alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(android.R.string.ok),
+						new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						shouldRestart=true;
+						finish();
+					}
+				});
+				alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(android.R.string.cancel),
+						new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				});
+				alertDialog.show();
 				return false;
 			}
 		});
+
 		if (IsDebugVersion) {
 			//  Debugging options
 			addPreferencesFromResource(R.xml.debugging_settings);
@@ -499,13 +505,6 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
 				rowsPortrait.setEnabled(false);
 				rowslandscape.setEnabled(false);
 				margin.setEnabled(false);
-			}
-		}else if(preference.getKey().equals("previewsEnable")) {
-			CheckBoxPreference previewsNew = (CheckBoxPreference)findPreference("previewsNew");            
-			if(newValue.equals(true)){
-				previewsNew.setEnabled(true);
-			} else{
-				previewsNew.setEnabled(false);
 			}
 		}
 		return true;

@@ -150,21 +150,26 @@
     <string name="pref_summary_page_horizontal_margin">Set the horizontal margin between each pages of Drawer</string>
     <string name="pref_dialog_page_horizontal_margin">Set the horizontal margin between each pages of Drawer</string>
     <string name="pref_title_animated_drawer">Animated Drawer</string>
-    <string name="pref_summary_animated_drawer">Turns whether App Drawer should display animations</string>
-    <string name="pref_title_drawer_columns_portrait">Drawer Columns Portrait</string>
+    <string name="pref_summary_animated_drawer">Display animations</string>
+    <string name="pref_title_animated_zoom_drawer">Drawer Icon Zoom</string>
+    <string name="pref_summary_animated_zoom_drawer">Zoom animation for icons</string>
+    <string name="pref_title_drawer_columns_portrait">Portrait Columns</string>
     <string name="pref_summary_drawer_columns_portrait">Select the number of drawer columns to use on portrait layout</string>
     <string name="pref_dialog_drawer_columns_portrait">Select the number of drawer columns to use on portrait layout</string>
-    <string name="pref_title_drawer_rows_portrait">Drawer Rows Portrait</string>
+    <string name="pref_title_drawer_rows_portrait">Portrait Rows</string>
     <string name="pref_summary_drawer_rows_portrait">Select the number of drawer rows to use on portrait layout</string>
     <string name="pref_dialog_drawer_rows_portrait">Select the number of drawer rows to use on portrait layout</string>
-    <string name="pref_title_drawer_columns_landscape">Drawer Columns Landscape</string>
+    <string name="pref_title_drawer_columns_landscape">Landscape Columns</string>
     <string name="pref_summary_drawer_columns_landscape">Select the number of drawer columns to use on landscape layout</string>
     <string name="pref_dialog_drawer_columns_landscape">Select the number of drawer columns to use on landscape layout</string>
-    <string name="pref_title_drawer_rows_landscape">Drawer Rows Landscape</string>
+    <string name="pref_title_drawer_rows_landscape">Landscape Rows</string>
     <string name="pref_summary_drawer_rows_landscape">Select the number of drawer rows to use on landscape layout</string>
     <string name="pref_dialog_drawer_rows_landscape">Select the number of drawer rows to use on landscape layout</string>
     <string name="pref_title_drawer_color">Background color</string>
     <string name="pref_summary_drawer_color">Set the color for the drawer background</string>
+    <string name="pref_title_drawer_animation_category">Drawer Animations</string>
+    <string name="pref_title_drawer_app_label_category">Application Labels</string>
+    <string name="pref_title_drawer_background_category">Drawer Background</string>
 
     <!-- Dock Settings -->
     <string name="pref_title_dock">Dock</string>
@@ -202,7 +207,7 @@
     <string name="pref_summary_doubletap_actions">Select action for double-tap</string>
 
     <!-- Other preferences -->
-    <string name="pref_title_application_settings">More Settings</string>
+    <string name="pref_title_application_settings">More</string>
     <string name="pref_title_build_info">Build Information</string>
     <string name="pref_title_app_version">Version</string>
     <string name="pref_dialog_title_color_picker">Pick a color.</string>
@@ -293,7 +298,7 @@
     <string name="message_cannot_delete_desktop_screen">You can\'t delete the last screen</string>
     <string name="message_cannot_add_desktop_screen">You can\'t add more screens</string>
     <string name="message_cannot_swap_desktop_screen">You can\'t swap screens</string>
-    <string name="menu_edit">Edit</string>
+    <string name="menu_edit">Edit Desktop</string>
     <string name="pref_label_shirtcuts">Custom shortcut</string>
     <string name="pref_label_activities">Activities</string>
     <string name="shirtcut_header">Select your desired application activity to launch.\nYou can select a custom icon too.</string>

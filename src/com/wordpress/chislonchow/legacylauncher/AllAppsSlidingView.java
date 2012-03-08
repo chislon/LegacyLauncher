@@ -3,7 +3,7 @@ package com.wordpress.chislonchow.legacylauncher;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wordpress.chislonchow.legacylauncher.HolderLayout.OnFadingListener;
+import com.wordpress.chislonchow.legacylauncher.AllAppsSlidingViewHolderLayout.OnFadingListener;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
 import com.wordpress.chislonchow.legacylauncher.R;
 
@@ -176,8 +176,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private final int mScrollingBounce=50;
 	//ADW:Bg color
 	private int mBgColor=0xFF000000;
-	private int mStatus=HolderLayout.OnFadingListener.CLOSE;
-	private HolderLayout mHolder;
+	private int mStatus=AllAppsSlidingViewHolderLayout.OnFadingListener.CLOSE;
+	private AllAppsSlidingViewHolderLayout mHolder;
 	public AllAppsSlidingView(Context context) {
 		super(context);
 		initWorkspace();
@@ -350,7 +350,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		final RecycleBin recycleBin = mRecycler;
 
 		for (int i = 0; i < getChildCount(); i++) {
-			if(getChildAt(i) instanceof HolderLayout){
+			if(getChildAt(i) instanceof AllAppsSlidingViewHolderLayout){
 				final ViewGroup h=(ViewGroup) getChildAt(i);
 				for(int j=0;j<h.getChildCount();j++){
 					recycleBin.addScrapView(h.getChildAt(j));
@@ -389,8 +389,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		int pos=startPos;
 		int x=marginLeft;
 		int y=marginTop;
-		HolderLayout oldHolder = mHolder;
-		HolderLayout holder = new HolderLayout(getContext());
+		AllAppsSlidingViewHolderLayout oldHolder = mHolder;
+		AllAppsSlidingViewHolderLayout holder = new AllAppsSlidingViewHolderLayout(getContext());
 		mHolder=holder;
 		for(int i=0;i<mNumRows;i++){
 			for(int j=0;j<mNumColumns;j++){
@@ -426,7 +426,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		holder.setOnFadingListener(mFadingListener);
 		addViewInLayout(holder, getChildCount(), holderParams, true);
 		if(pageNum==mCurrentScreen && isAnimating){
-			if(mStatus==HolderLayout.OnFadingListener.OPEN)
+			if(mStatus==AllAppsSlidingViewHolderLayout.OnFadingListener.OPEN)
 				holder.open(isAnimating, mAnimationDuration);
 			else
 				holder.close(isAnimating, mAnimationDuration);
@@ -450,10 +450,10 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			removePage=current-1;
 		}
 		if(removePage>=0 && removePage<mTotalScreens){
-			HolderLayout h=null;
+			AllAppsSlidingViewHolderLayout h=null;
 			for(int i=1;i<getChildCount();i++){
 				if(getChildAt(i).getTag().equals(removePage)){
-					h=(HolderLayout) getChildAt(i);
+					h=(AllAppsSlidingViewHolderLayout) getChildAt(i);
 					break;
 				}
 			}
@@ -711,7 +711,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		case KeyEvent.KEYCODE_ENTER:
 			if (isPressed() && mSelectedPosition >= 0 && mAdapter != null &&
 			mSelectedPosition < mAdapter.getCount()) {
-				final HolderLayout h=(HolderLayout)getChildAt(mCurrentHolder);
+				final AllAppsSlidingViewHolderLayout h=(AllAppsSlidingViewHolderLayout)getChildAt(mCurrentHolder);
 				final View view = h.getChildAt(mSelectedPosition);
 				final int realPosition=getPositionForView(view);
 				performItemClick(view, realPosition, mAdapter.getItemId(realPosition));
@@ -808,7 +808,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		int colPos;
 
 		boolean moved = false;
-		final HolderLayout h=(HolderLayout) getChildAt(mCurrentHolder);
+		final AllAppsSlidingViewHolderLayout h=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
 
 		colPos = (selectedPosition%numColumns);
 		int lastColPos=mNumColumns;//(h.getChildCount()-1)%numColumns;
@@ -875,8 +875,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		if(getChildCount()<=0){
 			return false;
 		}
-		final HolderLayout h=(HolderLayout) getChildAt(mCurrentHolder);
-		if(h!=null && h instanceof HolderLayout){
+		final AllAppsSlidingViewHolderLayout h=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
+		if(h!=null && h instanceof AllAppsSlidingViewHolderLayout){
 			final int childCount = h.getChildCount();
 
 			if (childCount <= 0) {
@@ -900,7 +900,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		}
 		final ViewGroup h=(ViewGroup)getChildAt(realScreen);
 		if(h!=null){
-			if(h instanceof HolderLayout)v=h.getChildAt(position);
+			if(h instanceof AllAppsSlidingViewHolderLayout)v=h.getChildAt(position);
 		}
 		return v;
 	}
@@ -1862,18 +1862,18 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	}
 	public void open(boolean animate) {
 		mHolder=null;
-		mStatus=HolderLayout.OnFadingListener.OPEN;
+		mStatus=AllAppsSlidingViewHolderLayout.OnFadingListener.OPEN;
 		mBgColor=AlmostNexusSettingsHelper.getDrawerColor(mLauncher);
 		mTargetAlpha=Color.alpha(mBgColor);
 		for(int i=0;i<getChildCount();i++){
-			if(getChildAt(i) instanceof HolderLayout){
-				((HolderLayout)getChildAt(i)).updateLabelVars(mLauncher);
+			if(getChildAt(i) instanceof AllAppsSlidingViewHolderLayout){
+				((AllAppsSlidingViewHolderLayout)getChildAt(i)).updateLabelVars(mLauncher);
 			}
 		}
 		mScroller.forceFinished(true);
 		setVisibility(View.VISIBLE);
 		findCurrentHolder();
-		final HolderLayout holder=(HolderLayout) getChildAt(mCurrentHolder);
+		final AllAppsSlidingViewHolderLayout holder=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
 		if(getAdapter()==null)
 			animate=false;
 		else if(getAdapter().getCount()<=0)
@@ -1903,7 +1903,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		mPager.requestLayout();
 	}
 	public void close(boolean animate){
-		mStatus=HolderLayout.OnFadingListener.CLOSE;
+		mStatus=AllAppsSlidingViewHolderLayout.OnFadingListener.CLOSE;
 		setPressed(false);
 		mPager.setVisibility(INVISIBLE);
 		if(getAdapter()==null)
@@ -1912,7 +1912,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			animate=false;
 		if(animate){
 			findCurrentHolder();
-			HolderLayout holder=(HolderLayout) getChildAt(mCurrentHolder);
+			AllAppsSlidingViewHolderLayout holder=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
 			if(holder!=null){
 				isAnimating=true;
 				holder.close(animate, mAnimationDuration);
