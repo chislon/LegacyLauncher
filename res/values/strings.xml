@@ -298,7 +298,8 @@
     <string name="message_cannot_delete_desktop_screen">You can\'t delete the last screen</string>
     <string name="message_cannot_add_desktop_screen">You can\'t add more screens</string>
     <string name="message_cannot_swap_desktop_screen">You can\'t swap screens</string>
-    <string name="menu_edit">Edit Desktop</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_edit_desktop">Edit Desktop</string>
     <string name="pref_label_shirtcuts">Custom shortcut</string>
     <string name="pref_label_activities">Activities</string>
     <string name="shirtcut_header">Select your desired application activity to launch.\nYou can select a custom icon too.</string>

@@ -1580,7 +1580,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		.setIcon(android.R.drawable.ic_menu_add)
 		.setAlphabeticShortcut('A');
 
-		menu.add(MENU_GROUP_ADD, MENU_EDIT, 0, R.string.menu_edit)
+		menu.add(MENU_GROUP_ADD, MENU_EDIT, 0, R.string.menu_edit_desktop)
 		.setIcon(android.R.drawable.ic_menu_edit)
 		.setAlphabeticShortcut('E');
 
