@@ -19,18 +19,10 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wordpress.chislonchow.legacylauncher"
-    android:versionCode="1"
+    android:versionCode="2"
     android:versionName="@string/app_version" >
 
-    <uses-sdk
-        android:maxSdkVersion="10"
-        android:minSdkVersion="6" />
-
-    <supports-screens
-        android:largeScreens="false"
-        android:normalScreens="true"
-        android:smallScreens="true"
-        android:xlargeScreens="false" />
+    <uses-sdk android:minSdkVersion="6" />
 
     <permission
         android:name="com.android.launcher.permission.INSTALL_SHORTCUT"
@@ -111,7 +103,7 @@
         <!-- Intent received used to install shortcuts from other applications -->
         <receiver
             android:name=".InstallShortcutReceiver"
-			android:permission="com.android.launcher.permission.INSTALL_SHORTCUT">
+            android:permission="com.android.launcher.permission.INSTALL_SHORTCUT" >
             <intent-filter>
                 <action android:name="com.wordpress.chislonchow.legacylauncher.action.INSTALL_SHORTCUT" />
             </intent-filter>

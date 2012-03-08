@@ -100,7 +100,7 @@
 
     <integer name="config_ab_tint_color">0xffffffff</integer>
 
-    <bool name="config_wallpaper_scroll">true</bool>
+    <bool name="config_wallpaper_scroll">false</bool>
 
     <string name="config_deletezone_style">1</string>
 

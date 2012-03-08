@@ -99,7 +99,7 @@
     <!-- Text to show user in place of a gadget when we can't display it properly -->
     <string name="gadget_error_text">Problem loading widget</string>
     <!-- ADW Version Information -->
-    <string name="app_version">0.1 Alpha</string>
+    <string name="app_version">0.2 Alpha</string>
     <!-- ADW Settings -->
     <string name="pref_label_settings">Launcher settings</string>
 
@@ -123,7 +123,7 @@
     <string name="pref_summary_desktop_overshoot">Screen scroll bounce amount</string>
     <string name="pref_dialog_desktop_overshoot">Set to 0 to disable screen overshoot</string>
     <string name="pref_title_desktop_transition">Transition Animation</string>
-    <string name="pref_summary_desktop_transition">Animation as desktop screens are change</string>
+    <string name="pref_summary_desktop_transition">Transistion animation for changing screens</string>
     <string name="pref_title_workspace_wallpaper">Wallpaper</string>
     <string name="pref_title_workspace_appearance">Appearance</string>
     <string name="pref_title_workspace_functionality_preferences">Desktop Extensions</string>

@@ -171,7 +171,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 	//And as those devices can perform pretty well without cache... let's add an option... one more...
     	private boolean mTouchedScrollableWidget = false;
 	private int mDesktopCacheType=AlmostNexusSettingsHelper.CACHE_LOW;
-	private boolean mWallpaperScroll=true;
+	private boolean mWallpaperScroll=false;
     //ADW: variable to track the proper Y position to draw the wallpaer when the wallpaper hack is enabled
     //this is to avoid the small vertical position change from the wallpapermanager one.
     private int mWallpaperY;
@@ -2050,8 +2050,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         float newRelativeScale = update.getScale();
         int targetZoom = (int) Math.round(Math.log(newRelativeScale) * ZOOM_LOG_BASE_INV);
         // Only works for pinch in
-        if (targetZoom < 0 && mStatus==SENSE_CLOSED) { // Change to > 0 for pinch out, != 0 for both pinch in and out.
-        	mLauncher.getPreviewsEnable();
+        if (targetZoom < 0 && mStatus==SENSE_CLOSED && mLauncher.getPreviewsEnable()) { // Change to > 0 for pinch out, != 0 for both pinch in and out.
         	mLauncher.showPreviews(mLauncher.getDrawerHandle(), 0, getChildCount());
         	invalidate();
             return true;
