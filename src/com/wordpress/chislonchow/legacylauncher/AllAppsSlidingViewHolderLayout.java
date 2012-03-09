@@ -43,7 +43,6 @@ public class AllAppsSlidingViewHolderLayout extends ViewGroup {
     private float x;
     private float y;
     private float width;
-    private float height;
     private Rect rl1=new Rect();
     private Rect rl2=new Rect();
     private float scale;
@@ -241,7 +240,6 @@ public class AllAppsSlidingViewHolderLayout extends ViewGroup {
 			x=child.getLeft()+(distH*(scaleFactor-1))*(scaleFactor);
 			y=child.getTop()+(distV*(scaleFactor-1))*(scaleFactor);
 			width=child.getWidth()*scaleFactor;
-			height=(child.getHeight()-(child.getHeight()-mIconSize))*scaleFactor;
 			if(shouldDrawLabels) {
                                 child.setDrawingCacheEnabled(true);
                                 child.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
@@ -348,7 +346,6 @@ public class AllAppsSlidingViewHolderLayout extends ViewGroup {
     }
     public void updateLabelVars(Context context){
     	mDrawLabels=AlmostNexusSettingsHelper.getDrawerLabels(context);
-    	mFadeDrawLabels=AlmostNexusSettingsHelper.getFadeDrawerLabels(context);
 		mDrawerZoom = AlmostNexusSettingsHelper.getDrawerZoom(context);
     }
 

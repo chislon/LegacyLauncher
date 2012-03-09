@@ -1775,7 +1775,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		}
 
 		// consume long-press event if locked
-		if (mLauncher.isLauncherIconsLocked()) {
+		if (mLauncher.isLauncherLocked()) {
 			return true;
 		}
 

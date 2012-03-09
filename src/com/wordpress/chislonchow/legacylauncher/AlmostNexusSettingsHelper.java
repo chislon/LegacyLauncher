@@ -188,6 +188,11 @@ public final class AlmostNexusSettingsHelper {
 		boolean newD = sp.getBoolean("drawerLabels", context.getResources().getBoolean(R.bool.config_drawerLabels));
 		return newD;
 	}
+	public static int getDrawerLabelSize(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		int size = sp.getInt("drawerLabelSize", context.getResources().getInteger(R.integer.config_drawerLabelSize)) + 8;
+		return size;
+	}
 	public static boolean getFadeDrawerLabels(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("fadeDrawerLabels", context.getResources().getBoolean(R.bool.config_fadeDrawerLabels));
@@ -470,6 +475,11 @@ public final class AlmostNexusSettingsHelper {
 	public static int getUIABTintColor(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = sp.getInt("uiABTintColor", context.getResources().getInteger(R.integer.config_ab_tint_color));
+		return newD;
+	}
+	public static boolean getLockOptionMenuDeviceSettings(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);;
+		boolean newD = sp.getBoolean("lockOptionMenuDeviceSettings", false);
 		return newD;
 	}
 	public static boolean getDesktopBlocked(Context context) {

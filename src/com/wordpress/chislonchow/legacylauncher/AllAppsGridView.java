@@ -137,7 +137,7 @@ DragSource, Drawer {
 		}
 
 		// consume long-press event if locked
-		if (mLauncher.isLauncherIconsLocked()) {
+		if (mLauncher.isLauncherLocked()) {
 			return true;
 		}
 

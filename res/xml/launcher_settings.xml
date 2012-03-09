@@ -182,6 +182,12 @@
 					android:dependency="drawerLabels" android:defaultValue="@bool/config_fadeDrawerLabels"
 					android:summary="@string/pref_summary_fade_drawer_labels"
 					android:key="fadeDrawerLabels" />
+				<com.wordpress.chislonchow.legacylauncher.DialogSeekBarPreference
+					android:dependency="drawerLabels" android:title="@string/pref_title_drawer_label_size"
+					android:summary="@string/pref_summary_drawer_label_size"
+					android:dialogMessage="@string/pref_dialog_drawer_label_size"
+					android:key="drawerLabelSize" android:defaultValue="@integer/config_drawerLabelSize"
+					android:max="20" />
 			</PreferenceCategory>
 			<PreferenceCategory android:title="@string/pref_title_drawer_background_category">
 				<Preference android:key="drawer_color" android:title="@string/pref_title_drawer_color"
@@ -294,6 +300,20 @@
 			android:defaultValue="@string/config_orientation_default"
 			android:entryValues="@array/home_orientation_values" android:entries="@array/home_orientation_entries" />
 	</PreferenceScreen>
+	<PreferenceScreen android:key="lockPreferences"
+		android:title="@string/pref_title_lock_screen">
+		<CheckBoxPreference android:title="@string/pref_title_lock"
+			android:defaultValue="false" android:summary="@string/pref_summary_lock"
+			android:key="desktopBlocked" />
+		<Preference android:key="lockPassword" android:title="@string/pref_title_lock_password"
+			android:summary="@string/pref_summary_lock_password" />
+		<Preference android:key="lockPasswordClear"
+			android:title="@string/pref_title_lock_password_clear"
+			android:summary="@string/pref_summary_lock_password_clear" />
+		<!-- <CheckBoxPreference android:title="@string/pref_title_lock_option_settings" 
+			android:visibility="invisible" android:defaultValue="false" android:summary="@string/pref_summary_lock_option_settings" 
+			android:key="lockOptionMenuDeviceSettings" /> -->
+	</PreferenceScreen>
 	<PreferenceCategory android:title="@string/pref_title_application_settings">
 		<PreferenceScreen android:key="themePrefences"
 			android:summary="@string/pref_summary_theme_settings" android:title="@string/pref_title_theme_settings">
@@ -305,7 +325,7 @@
 			<com.wordpress.chislonchow.legacylauncher.PreviewPreference
 				android:layout="@layout/theme_preview" android:key="themePreview" />
 		</PreferenceScreen>
-		<Preference android:key="launcher_restart"
+		<Preference android:key="launcherRestart"
 			android:title="@string/pref_title_launcher_restart" android:summary="@string/pref_summary_launcher_restart" />
 	</PreferenceCategory>
 

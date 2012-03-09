@@ -333,7 +333,7 @@ public class ActionButton extends CounterImageView implements DropTarget, DragLi
 
 	@Override
 	public boolean onLongClick(View v) {
-        if (mDragger == null || !v.isInTouchMode() || mCurrentInfo == null || specialMode || mLauncher.isLauncherIconsLocked()) {
+        if (mDragger == null || !v.isInTouchMode() || mCurrentInfo == null || specialMode || mLauncher.isLauncherLocked()) {
             return false;
         }
         mLauncher.showActions(mCurrentInfo, v, new PopupWindow.OnDismissListener()

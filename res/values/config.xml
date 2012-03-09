@@ -51,7 +51,8 @@
     <bool name="config_uiCloseFolder">false</bool>
     <bool name="config_uiABBg">true</bool>
     <!-- config_animation_speed min is 300, so it will add 300 to whatever value you set here -->
-        <bool name="config_drawer_zoom">false</bool>
+    <bool name="config_drawer_zoom">false</bool>
+
     <integer name="config_animation_speed">250</integer>
     <!-- config_uiScaleAB is a float value between 0.1 and 1.0. Set here the default .X -->
     <integer name="config_uiScaleAB">7</integer>
@@ -71,6 +72,10 @@
 
     <bool name="config_autosizeIcons">false</bool>
     <bool name="config_drawerLabels">true</bool>
+
+    <!-- config min value is 8, so it will add 8 to whatever value you set here -->
+    <integer name="config_drawerLabelSize">6</integer>
+
     <bool name="config_fadeDrawerLabels">false</bool>
     <bool name="config_desktop_indicator">true</bool>
     <bool name="config_desktop_indicator_autohide">false</bool>

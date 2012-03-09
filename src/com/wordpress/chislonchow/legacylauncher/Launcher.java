@@ -91,8 +91,11 @@ import android.os.MessageQueue;
 import android.os.Parcelable;
 import android.provider.LiveFolders;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.InputFilter;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.TextKeyListener;
 import android.util.Log;
@@ -309,16 +312,18 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 	protected int mTransitionStyle = 1;
 	private int appDrawerPadding = -1;
 
+	private boolean mLauncherLocked = false;
+	private boolean mLockOptionMenuDeviceSettings = false;
+
 	public boolean getPreviewsEnable() {
 		return mPreviewsEnable;
 	}
-	
+
 	// lockdown entire launcher from layout changes
-	public boolean isLauncherIconsLocked() {
-		return mLauncherIconsLocked;
+	public boolean isLauncherLocked() {
+		return mLauncherLocked;
 	}
-	
-	private boolean mLauncherIconsLocked = true;
+
 	/**
 	 * ADW: Home binding constants
 	 */
@@ -410,7 +415,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 					AlmostNexusSettingsHelper.getDesktopOrientation(this),
 					false);
 		}
-		mLauncherIconsLocked = AlmostNexusSettingsHelper.getDesktopBlocked(this);
 		super.onCreate(savedInstanceState);
 		mInflater = getLayoutInflater();
 
@@ -640,6 +644,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		super.onResume();
 		if (shouldRestart())
 			return;
+
 		// ADW: Use custom settings to set the rotation
 		/*
 		 * this.setRequestedOrientation(
@@ -1135,20 +1140,20 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 				appWidgetInfo.minHeight);
 		final CellLayout.CellInfo cInfo = cellInfo;
 		AlertDialog.Builder builder;
-		AlertDialog alertDialog;
+		final AlertDialog alertDialog;
 
-		final View dlg_layout = View.inflate(Launcher.this,
+		final View span_dlg_layout = View.inflate(Launcher.this,
 				R.layout.widget_span_setup, null);
-		final NumberPicker ncols = (NumberPicker) dlg_layout
+		final NumberPicker ncols = (NumberPicker) span_dlg_layout
 				.findViewById(R.id.widget_columns_span);
 		ncols.setRange(1, mWorkspace.currentDesktopColumns());
 		ncols.setCurrent(spans[0]);
-		final NumberPicker nrows = (NumberPicker) dlg_layout
+		final NumberPicker nrows = (NumberPicker) span_dlg_layout
 				.findViewById(R.id.widget_rows_span);
 		nrows.setRange(1, mWorkspace.currentDesktopRows());
 		nrows.setCurrent(spans[1]);
 		builder = new AlertDialog.Builder(Launcher.this);
-		builder.setView(dlg_layout);
+		builder.setView(span_dlg_layout);
 		alertDialog = builder.create();
 		alertDialog.setTitle(getResources().getString(
 				R.string.widget_config_dialog_title));
@@ -1164,6 +1169,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 						insertAtFirst);
 			}
 		});
+		alertDialog.setCanceledOnTouchOutside(true);
+		alertDialog.setCancelable(true);
 		alertDialog.show();
 	}
 
@@ -1674,14 +1681,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 					R.string.rom_mod_string).toLowerCase())
 					|| !mIsDefaultLauncher;
 		}
+
 		if (allAppsOpen)
 			showmenu = false;
-		menu.setGroupVisible(MENU_GROUP_ALMOSTNEXUS, showmenu);
-		menu.setGroupVisible(MENU_GROUP_ADD, !allAppsOpen  && !mLauncherIconsLocked);
-		menu.setGroupVisible(MENU_GROUP_NORMAL, !allAppsOpen);
 
-		menu.setGroupVisible(MENU_GROUP_CATALOGUE, allAppsOpen && !mLauncherIconsLocked);
-		if (mLauncherIconsLocked) {
+		menu.setGroupVisible(MENU_GROUP_ALMOSTNEXUS, showmenu && !mLauncherLocked);
+		menu.setGroupVisible(MENU_GROUP_ADD, !allAppsOpen  && !mLauncherLocked);		
+		menu.setGroupVisible(MENU_GROUP_NORMAL, !allAppsOpen);
+		menu.findItem(MENU_SETTINGS).setVisible(!(mLockOptionMenuDeviceSettings && mLauncherLocked));
+		menu.setGroupVisible(MENU_GROUP_CATALOGUE, allAppsOpen && !mLauncherLocked);
+		if (mLauncherLocked) {
 			menu.findItem(MENU_LOCK_DESKTOP).setTitle(R.string.menu_unlock);
 		} else {
 			menu.findItem(MENU_LOCK_DESKTOP).setTitle(R.string.menu_lock);
@@ -1724,8 +1733,59 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		case MENU_APP_DELETE_GRP:
 			showDeleteGrpDialog();
 		case MENU_LOCK_DESKTOP:
-			mLauncherIconsLocked = !mLauncherIconsLocked;
-			AlmostNexusSettingsHelper.setDesktopBlocked(this, mLauncherIconsLocked);
+			// toggle icons locked
+
+			if (mLauncherLocked) {
+				final ObscuredSharedPreferences oPrefs = new ObscuredSharedPreferences( 
+						this, this.getSharedPreferences("secure", Context.MODE_PRIVATE) );
+
+				final String passSecure = oPrefs.getString("pw", null);
+				if (passSecure != null && passSecure.length() > 0) {
+
+					// ask for the password securely
+					final EditText input = new EditText(this);
+					input.setMaxLines(1);
+					final int maxLength = 32;  
+					InputFilter[] FilterArray = new InputFilter[2];  
+					FilterArray[0] = new InputFilter.LengthFilter(maxLength);  
+					FilterArray[1] = new InputFilter() { 
+						@Override
+						public CharSequence filter(CharSequence source, int start,
+								int end, Spanned dest, int dstart, int dend) {
+							for (int i = start; i < end; i++) { 
+								if (Character.isWhitespace((source.charAt(i)))) { 
+									return ""; 
+								}
+							} 
+							return null; 
+						}
+					}; 
+					input.setFilters(FilterArray); 
+					new AlertDialog.Builder(this)
+					.setMessage(R.string.dialog_lock_password_get)
+					.setView(input)
+					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							Editable value = input.getText(); 
+							Log.d(LOG_TAG, value.toString() + " and " + passSecure);
+
+							if (value.toString().equals(passSecure)) {
+								mLauncherLocked = false;
+							} else {
+								Toast.makeText(Launcher.this, getString(R.string.lock_password_invalid), Toast.LENGTH_SHORT).show();
+							}
+						}
+					}).setNegativeButton(android.R.string.cancel, null).show();
+				} else {
+					// no password was set, so unlock right away
+					mLauncherLocked = false;
+				}
+			} else {
+				// lock if unlocked
+				mLauncherLocked = true;
+			}
+
+			AlmostNexusSettingsHelper.setDesktopBlocked(this, mLauncherLocked);
 			// Recreate options menu to suit lock
 
 
@@ -2651,7 +2711,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 			return true;
 		}
 
-		if (mWorkspace.allowLongPress() && !mLauncherIconsLocked) {
+		if (mWorkspace.allowLongPress() && !mLauncherLocked) {
 			if (cellInfo.cell == null) {
 				if (cellInfo.valid) {
 					// User long pressed on empty space
@@ -4120,6 +4180,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 			allAppsOpen = false;
 			mWorkspace.unlock();
 			// mDesktopLocked=false;
+			mWorkspace.setVisibility(View.VISIBLE);
 			mWorkspace.invalidate();
 			mLAB.setSpecialMode(false);
 			mRAB.setSpecialMode(false);
@@ -4519,6 +4580,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		// if(currentOrientation!=savedOrientation){
 		// mShouldRestart=true;
 		// }
+
+		// update locked variables
+		mLauncherLocked = AlmostNexusSettingsHelper.getDesktopBlocked(this);
+		mLockOptionMenuDeviceSettings = AlmostNexusSettingsHelper.getLockOptionMenuDeviceSettings(this);
 	}
 
 	@Override
@@ -5625,6 +5690,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 
 	protected boolean getUseDrawerCatalogFlingNavigation() {
 		return mUseDrawerCatalogFlingNavigation;
-
 	}
+
+	// Apps Watcher
+	public void drawerOpacity(int bgAlpha) {
+		if (bgAlpha >= 255) {
+			mWorkspace.setVisibility(View.GONE);
+		}
+	}
+
 }

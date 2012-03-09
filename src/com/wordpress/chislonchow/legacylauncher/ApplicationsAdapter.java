@@ -45,15 +45,16 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 	private final LayoutInflater mInflater;
 	private Drawable mBackground;
 	private int mTextColor = 0;
+	private int mTextSize = 14;
 	private boolean useThemeTextColor = false;
-    private Typeface themeFont=null;
+	private Typeface themeFont=null;
 	// TODO: Check if allItems is used somewhere else!
 	public static ArrayList<ApplicationInfo> allItems = new ArrayList<ApplicationInfo>();
 	private static HashMap<ApplicationInfo, View> viewCache = new HashMap<ApplicationInfo, View>();
 	private CatalogueFilter filter;
-    private static final Collator sCollator = Collator.getInstance();
-    private AppCatalogueFilter mCatalogueFilter;
-    private boolean mWithDrawingCache = false;
+	private static final Collator sCollator = Collator.getInstance();
+	private AppCatalogueFilter mCatalogueFilter;
+	private boolean mWithDrawingCache = false;
 
 	public ApplicationsAdapter(Context context, ArrayList<ApplicationInfo> apps, AppCatalogueFilter filter) {
 		super(context, 0, apps);
@@ -61,6 +62,10 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 		mCatalogueFilter = filter;
 
 		mInflater = LayoutInflater.from(context);
+
+		final float scale = context.getResources().getDisplayMetrics().density;
+		mTextSize = (int) (AlmostNexusSettingsHelper.getDrawerLabelSize(context) * scale + 0.5f);
+
 		// ADW: Load textcolor and bubble color from theme
 		String themePackage = AlmostNexusSettingsHelper.getThemePackageName(
 				getContext(), Launcher.THEME_DEFAULT);
@@ -81,22 +86,22 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 				}
 				mBackground = IconHighlights.getDrawable(getContext(),
 						IconHighlights.TYPE_DRAWER);
-    			try{
-    				themeFont=Typeface.createFromAsset(themeResources.getAssets(), "themefont.ttf");
-    			}catch (RuntimeException e) {
+				try{
+					themeFont=Typeface.createFromAsset(themeResources.getAssets(), "themefont.ttf");
+				}catch (RuntimeException e) {
 					// TODO: handle exception
 				}
 			}
 		}
 	}
-	
+
 	public void buildViewCache(ViewGroup parent) {
 		for(int i = 0; i < getCount(); i++) {
 			final ApplicationInfo info = getItem(i);	
 			addToViewCache(parent, info);
 		}
 	}
-	
+
 	private void addToViewCache(ViewGroup parent, ApplicationInfo info) {
 		if (!info.filtered) {
 			info.icon = Utilities.createIconThumbnail(info.icon, getContext());
@@ -112,23 +117,25 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 		if (useThemeTextColor) {
 			textView.setTextColor(mTextColor);
 		}
+
+		textView.setTextSize(mTextSize);
 		//ADW: Custom font
 		if(themeFont!=null) textView.setTypeface(themeFont);
 		// so i'd better not use it, sorry themers
 		if (mBackground != null)
 			convertView.setBackgroundDrawable(mBackground);
 	}
-	
+
 	public void setChildDrawingCacheEnabled(boolean aValue) {
 		if (mWithDrawingCache != aValue) {
 			mWithDrawingCache = aValue;
 			for(View v : viewCache.values()) {
 				v.setDrawingCacheEnabled(aValue);
 				if(aValue) {
-				    v.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
-				    v.buildDrawingCache();
+					v.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
+					v.buildDrawingCache();
 				} else
-				    v.destroyDrawingCache();
+					v.destroyDrawingCache();
 			}
 		}
 	}
@@ -141,8 +148,8 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 		if (!viewCache.containsKey(info))
 			addToViewCache(parent, info);
 		View result = viewCache.get(info);
-        //ADW:Counters
-        ((CounterTextView)result).setCounter(info.counter, info.counterColor);
+		//ADW:Counters
+		((CounterTextView)result).setCounter(info.counter, info.counterColor);
 		return result; 
 	}
 
@@ -240,9 +247,9 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 		}
 	}
 	//filter,sort,update
-    public void updateDataSet()
+	public void updateDataSet()
 	{
-        getFilter().filter(null);
+		getFilter().filter(null);
 	}
 
 	@Override
@@ -266,54 +273,54 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 
 
 	public class CatalogueFilter extends Filter {
-        public boolean isEmpty()
-        {
-            ArrayList<ApplicationInfo> filt = new ArrayList<ApplicationInfo>();
+		public boolean isEmpty()
+		{
+			ArrayList<ApplicationInfo> filt = new ArrayList<ApplicationInfo>();
 
-            synchronized (allItems) {
-                filterApps(filt, allItems);
-            }
-            
-            return filt.size() == 0;
-        }
-        
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
+			synchronized (allItems) {
+				filterApps(filt, allItems);
+			}
 
-                FilterResults result = new FilterResults();
-                ArrayList<ApplicationInfo> filt = new ArrayList<ApplicationInfo>();
+			return filt.size() == 0;
+		}
 
-                synchronized (allItems) {
-                        filterApps(filt, allItems);
-                }
+		@Override
+		protected FilterResults performFiltering(CharSequence constraint) {
 
-                result.values = filt;
-                result.count = filt.size();
-                return result;
-        }
+			FilterResults result = new FilterResults();
+			ArrayList<ApplicationInfo> filt = new ArrayList<ApplicationInfo>();
 
-        @SuppressWarnings("unchecked")
-        @Override
-        protected void publishResults(CharSequence constraint,
-                        FilterResults results) {
-                // NOTE: this function is *always* called from the UI thread.
-                ArrayList<ApplicationInfo> localFiltered =(ArrayList<ApplicationInfo>) results.values;
+			synchronized (allItems) {
+				filterApps(filt, allItems);
+			}
 
-                setNotifyOnChange(false);
-                superClear();
-                // there could be a serious sync issue.
-                // very bad
-                for (int i = 0;i < results.count; i++) {
-                    superAdd(localFiltered.get(i));
-                }
+			result.values = filt;
+			result.count = filt.size();
+			return result;
+		}
 
-                notifyDataSetChanged();
+		@SuppressWarnings("unchecked")
+		@Override
+		protected void publishResults(CharSequence constraint,
+				FilterResults results) {
+			// NOTE: this function is *always* called from the UI thread.
+			ArrayList<ApplicationInfo> localFiltered =(ArrayList<ApplicationInfo>) results.values;
 
-        }
+			setNotifyOnChange(false);
+			superClear();
+			// there could be a serious sync issue.
+			// very bad
+			for (int i = 0;i < results.count; i++) {
+				superAdd(localFiltered.get(i));
+			}
+
+			notifyDataSetChanged();
+
+		}
 	}
-    static class ApplicationInfoComparator implements Comparator<ApplicationInfo> {
-        public final int compare(ApplicationInfo a, ApplicationInfo b) {
-            return sCollator.compare(a.title.toString(), b.title.toString());
-        }
-    }
+	static class ApplicationInfoComparator implements Comparator<ApplicationInfo> {
+		public final int compare(ApplicationInfo a, ApplicationInfo b) {
+			return sCollator.compare(a.title.toString(), b.title.toString());
+		}
+	}
 }
