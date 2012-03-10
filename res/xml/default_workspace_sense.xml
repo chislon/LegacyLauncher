@@ -11,13 +11,13 @@
 	xmlns:launcher="http://schemas.android.com/apk/res/com.wordpress.chislonchow.legacylauncher">
 
 	<!-- LAB -->
-	<favorite launcher:packageName="com.android.contacts"
-		launcher:className="com.sec.android.app.contacts.PhoneBookTopMenuActivity"
+	<favorite launcher:packageName="com.android.htcdialer"
+		launcher:className="com.android.htcdialer.Dialer"
 		launcher:screen="-1" launcher:x="-1" launcher:y="-1"
 		launcher:container="-300" />
 	<!-- LAB2 -->
-	<favorite launcher:packageName="com.android.contacts"
-        launcher:className=" com.sec.android.app.contacts.ContactsEntryActivity"
+	<favorite launcher:packageName="com.android.htccontacts"
+        launcher:className="com.android.htccontacts.BrowseContactsAllActivity"
 		launcher:screen="-1" launcher:x="-1" launcher:y="-1"
 		launcher:container="-500" />
 	<!-- MAB -->
@@ -36,6 +36,4 @@
 		launcher:className="com.android.browser.BrowserActivity"
 		launcher:screen="-1" launcher:x="-1" launcher:y="-1"
 		launcher:container="-400" />
-	<!-- <favorite launcher:packageName="com.android.camera" launcher:className="com.android.camera.Camera" 
-		launcher:screen="1" launcher:x="1" launcher:y="3" /> -->
 </favorites>

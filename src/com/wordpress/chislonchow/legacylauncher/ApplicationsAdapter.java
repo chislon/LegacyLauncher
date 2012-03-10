@@ -30,6 +30,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,8 +66,8 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 
 		mInflater = LayoutInflater.from(context);
 
-		final float scale = context.getResources().getDisplayMetrics().density;
-		mTextSize = (int) (MyLauncherSettingsHelper.getDrawerLabelSize(context) * scale + 0.5f);
+		mTextSize = TypedValue.complexToDimensionPixelSize(
+				MyLauncherSettingsHelper.getDrawerLabelSize(context), context.getResources().getDisplayMetrics());
 		mTextBold = MyLauncherSettingsHelper.getDrawerLabelBold(context);
 
 		// ADW: Load textcolor and bubble color from theme

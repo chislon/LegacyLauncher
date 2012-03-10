@@ -560,31 +560,32 @@ public class LauncherProvider extends ContentProvider {
 			PackageManager packageManager = mContext.getPackageManager();
 			int i = 0;
 			try {
-				XmlResourceParser parser;
+				XmlResourceParser parser = null;
 
 				boolean isHTC = false;
 				boolean isSony = false;
 				boolean isSamsung = false;
 
-				final String HTC_PACKAGE_NAME = "com.htc.launcher.Launcher";
-				final String SONY_PACKAGE_NAME = "com.sonyericsson.android.socialphonebook";
-				final String SAMSUNG_PACKAGE_NAME = "com.sonyericsson.home.HomeActivity";
+				final String HTC_ACTIVITY_HOME = "com.htc.launcher.Launcher";
+				final String SONY_ACTIVITY_HOME = "com.sonyericsson.home.HomeActivity";
+				final String SAMSUNG_ACTIVITY_HOME = "com.sec.android.app.twlauncher.Launcher";
 				Intent intentTmp = new Intent(Intent.ACTION_MAIN);
 				intentTmp.addCategory(Intent.CATEGORY_HOME);
 				List<ResolveInfo> list = packageManager.queryIntentActivities(
 						intentTmp, PackageManager.MATCH_DEFAULT_ONLY);
 				for (ResolveInfo info : list) {
 					if (info.activityInfo != null) {
-						if (HTC_PACKAGE_NAME
-								.equals(info.activityInfo.name)) {
+						String activityName = info.activityInfo.name;
+						if (HTC_ACTIVITY_HOME
+								.equals(activityName)) {
 							isHTC = true;
 							break;
-						} else if (SONY_PACKAGE_NAME
-								.equals(info.activityInfo.name)) {
+						} else if (SONY_ACTIVITY_HOME
+								.equals(activityName)) {
 							isSony = true;
 							break;
-						} else if (SAMSUNG_PACKAGE_NAME
-								.equals(info.activityInfo.name)) {
+						} else if (SAMSUNG_ACTIVITY_HOME
+								.equals(activityName)) {
 							isSamsung = true;
 							break;
 						}
@@ -592,12 +593,47 @@ public class LauncherProvider extends ContentProvider {
 				}
 
 				if (isHTC) {
-					parser = mContext.getResources().getXml(R.xml.default_workspace_htc);
+					// figure out which launcher we have
+					intentTmp = new Intent(Intent.ACTION_MAIN);
+					intentTmp.addCategory(Intent.CATEGORY_LAUNCHER);
+					list = packageManager.queryIntentActivities(
+							intentTmp, PackageManager.MATCH_DEFAULT_ONLY);
+					for (ResolveInfo info : list) {
+						if (info.activityInfo != null) {
+							String activityName = info.activityInfo.name;
+							if ("com.android.htccontacts.BrowseLayerCarouselActivity"
+									.equals(activityName)) {
+								// newer sense
+								parser = mContext.getResources().getXml(R.xml.default_workspace_sense2);
+								break;
+
+							} else if ("com.android.htccontacts.BrowseContactsAllActivity"
+									.equals(activityName)) {
+								// older sense
+								parser = mContext.getResources().getXml(R.xml.default_workspace_sense);
+								break;
+							}
+						}
+					}
+
 				} else if (isSony) {
-					parser = mContext.getResources().getXml(R.xml.default_workspace_se);
+					parser = mContext.getResources().getXml(R.xml.default_workspace_xperia);
 				} else if (isSamsung) {
-					parser = mContext.getResources().getXml(R.xml.default_workspace_samsung);
-				} else {
+					parser = mContext.getResources().getXml(R.xml.default_workspace_touchwiz);
+				}
+
+				// initialize to default AOSP workspace
+				if (parser == null) {
+
+					// intent settings for different versions of AOSP
+					final int apiLevel = Build.VERSION.SDK_INT;
+					if (apiLevel < 14) { // below 4.0
+						parser = mContext.getResources().getXml(R.xml.default_workspace);
+
+					} else { // above 4.0
+						parser = mContext.getResources().getXml(R.xml.default_workspace2);
+					}
+
 					parser = mContext.getResources().getXml(R.xml.default_workspace);
 				}
 

@@ -23,6 +23,8 @@
     <skip />
     <!-- Application name -->
     <string name="application_name">Legacy.Launcher</string>
+    <!-- Version Information -->
+    <string name="app_version">0.5 Alpha</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -98,8 +100,7 @@
 
     <!-- Text to show user in place of a gadget when we can't display it properly -->
     <string name="gadget_error_text">Problem loading widget</string>
-    <!-- ADW Version Information -->
-    <string name="app_version">0.3 Alpha</string>
+
     <!-- ADW Settings -->
     <string name="pref_label_settings">Launcher settings</string>
 
@@ -151,7 +152,7 @@
     <string name="pref_dialog_page_horizontal_margin">Set the horizontal margin between each pages of Drawer</string>
     <string name="pref_title_animated_drawer">Animated Drawer</string>
     <string name="pref_summary_animated_drawer">Display animations</string>
-    <string name="pref_title_animated_zoom_drawer">Drawer Icon Zoom</string>
+    <string name="pref_title_animated_zoom_drawer">Animate Icon Zoom</string>
     <string name="pref_summary_animated_zoom_drawer">Zoom animation for icons</string>
     <string name="pref_title_drawer_columns_portrait">Portrait Columns</string>
     <string name="pref_summary_drawer_columns_portrait">Select the number of drawer columns to use on portrait layout</string>

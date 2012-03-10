@@ -11,13 +11,13 @@
 	xmlns:launcher="http://schemas.android.com/apk/res/com.wordpress.chislonchow.legacylauncher">
 
 	<!-- LAB -->
-	<favorite launcher:packageName="com.android.contacts"
-		launcher:className="com.android.contacts.DialtactsActivity"
+	<favorite launcher:packageName="com.android.htcdialer"
+		launcher:className="com.android.htcdialer.Dialer"
 		launcher:screen="-1" launcher:x="-1" launcher:y="-1"
 		launcher:container="-300" />
 	<!-- LAB2 -->
-	<favorite launcher:packageName="com.android.contacts"
-		launcher:className="com.android.contacts.DialtactsContactsEntryActivity"
+	<favorite launcher:packageName="com.android.htccontacts"
+        launcher:className="com.android.htccontacts.BrowseLayerCarouselActivity"
 		launcher:screen="-1" launcher:x="-1" launcher:y="-1"
 		launcher:container="-500" />
 	<!-- MAB -->
@@ -28,7 +28,7 @@
 		launcher:container="-700" />
 	<!-- RAB2 -->
 	<favorite launcher:packageName="com.android.mms"
-		launcher:className="com.android.mms.ui.ConversationList"
+        launcher:className="com.android.mms.ui.ConversationList"
 		launcher:screen="-1" launcher:x="-1" launcher:y="-1"
 		launcher:container="-600" />
 	<!-- RAB -->
