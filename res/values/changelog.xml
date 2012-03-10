@@ -4,11 +4,10 @@
 -&lt;b>NOTICE:&lt;/b> This is an alpha release with no support &lt;br>&lt;br>
 -&lt;b>NOTICE:&lt;/b> To add/remove screens press MENU/Edit Desktop&lt;br>&lt;br>
 &lt;b>--------------&lt;/b>&lt;br>
+&lt;b>Version 0.6:&lt;/b>&lt;br>
+- Modify some strings, other changes&lt;/b>&lt;br>
 &lt;b>Version 0.5:&lt;/b>&lt;br>
-- Fix for drawer text size screen density problems, default workspaces
-&lt;b>Version 0.4:&lt;/b>&lt;br>
-- Emergency fixes for lock function and restart crash in Android 2.1 &lt;br>&lt;br>
-- Based on free open-source ADW Launcher &lt;br>&lt;br>&lt;br>
+- Fix for drawer text size screen density problems, default workspaces:&lt;/b>&lt;br>
 March 2012, Chislon Chow
 
 </string>

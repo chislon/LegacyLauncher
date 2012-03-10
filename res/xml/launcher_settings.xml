@@ -138,6 +138,12 @@
 				android:defaultValue="@string/config_drawer_style"
 				android:entryValues="@array/app_drawer_style_values"
 				android:entries="@array/app_drawer_style_entries" />
+			<com.wordpress.chislonchow.legacylauncher.DialogSeekBarPreference
+				android:title="@string/pref_title_page_horizontal_margin"
+				android:summary="@string/pref_summary_page_horizontal_margin"
+				android:dialogMessage="@string/pref_dialog_page_horizontal_margin"
+				android:key="pageHorizontalMargin" android:defaultValue="20"
+				android:max="75" />
 			<PreferenceCategory android:title="@string/pref_title_drawer_layout_category">
 				<com.wordpress.chislonchow.legacylauncher.DialogSeekBarPreference
 					android:title="@string/pref_title_drawer_columns_portrait"
@@ -167,12 +173,6 @@
 		</PreferenceScreen>
 		<PreferenceScreen android:key="drawerAppearancePreferences"
 			android:title="@string/pref_title_drawer_appearance" android:summary="@string/pref_summary_drawer_appearance">
-			<com.wordpress.chislonchow.legacylauncher.DialogSeekBarPreference
-				android:title="@string/pref_title_page_horizontal_margin"
-				android:summary="@string/pref_summary_page_horizontal_margin"
-				android:dialogMessage="@string/pref_dialog_page_horizontal_margin"
-				android:key="pageHorizontalMargin" android:defaultValue="20"
-				android:max="75" />
 			<PreferenceCategory android:title="@string/pref_title_drawer_animation_category">
 				<CheckBoxPreference android:title="@string/pref_title_animated_drawer"
 					android:defaultValue="true" android:summary="@string/pref_summary_animated_drawer"
