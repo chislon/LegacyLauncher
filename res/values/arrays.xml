@@ -10,7 +10,7 @@
         <item>Show/hide statusbar</item>
         <item>Open/close notifications</item>
         <item>Move to default desktop/Open notifications</item>
-        <item>Open App...</item>
+        <item>Open App</item>
     </string-array>
     <string-array name="desktop_indicator_entries">
         <item>Dot paginator at top</item>

@@ -20,7 +20,6 @@ import static android.util.Log.d;
 import static android.util.Log.e;
 import static android.util.Log.w;
 
-import com.wordpress.chislonchow.legacylauncher.ActionButton.SwipeListener;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilter;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppGroupAdapter;
@@ -132,7 +131,7 @@ import com.devoteam.quickaction.QuickActionWindow;
  * Default launcher application.
  */
 public final class Launcher extends Activity implements View.OnClickListener,
-OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
+OnLongClickListener, OnSharedPreferenceChangeListener {
 	static final String LOG_TAG = "Launcher";
 	static final boolean LOGD = false;
 
@@ -886,12 +885,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		mNextView = (ImageView) findViewById(R.id.btn_scroll_right);
 		mPreviousView.setOnLongClickListener(this);
 		mNextView.setOnLongClickListener(this);
-		// ADW: ActionButtons swipe gestures
-		mHandleView.setSwipeListener(this);
-		mLAB.setSwipeListener(this);
-		mLAB2.setSwipeListener(this);
-		mRAB.setSwipeListener(this);
-		mRAB2.setSwipeListener(this);
 
 		mHandleView.setDragger(dragLayer);
 		mLAB.setDragger(dragLayer);
@@ -1690,9 +1683,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		menu.setGroupVisible(MENU_GROUP_NORMAL, !allAppsOpen);
 		menu.setGroupVisible(MENU_GROUP_CATALOGUE, allAppsOpen && !mLauncherLocked);
 		if (mLauncherLocked) {
-			menu.findItem(MENU_LOCK_DESKTOP).setTitle(R.string.menu_unlock);
+			menu.findItem(MENU_LOCK_DESKTOP)
+			.setTitle(R.string.menu_unlock)
+			.setIcon(R.drawable.ic_menu_unblock);
 		} else {
-			menu.findItem(MENU_LOCK_DESKTOP).setTitle(R.string.menu_lock);
+			menu.findItem(MENU_LOCK_DESKTOP)
+			.setTitle(R.string.menu_lock)
+			.setIcon(R.drawable.ic_menu_block);
 		}
 		return true;
 	}
@@ -4584,7 +4581,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		// }
 
 		// update locked variables
-		mLauncherLocked = MyLauncherSettingsHelper.getlauncherLocked(this);
+		mLauncherLocked = MyLauncherSettingsHelper.getLauncherLocked(this);
 		mLockOptionMenuDeviceSettings = MyLauncherSettingsHelper.getLockOptionMenuDeviceSettings(this);
 	}
 
@@ -5570,11 +5567,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		}
 		// shows the quick action window on the screen
 		qa.show();
-	}
-
-	@Override
-	public void onSwipe() {
-		// TODO: specify different action for each ActionButton?
 	}
 
 	public void setDockPadding(int pad) {

@@ -41,7 +41,7 @@ public interface DragController {
         void onDragStart(View v, DragSource source, Object info, int dragAction);
         
         /**
-         * The drag has eneded
+         * The drag has ended
          */
         void onDragEnd();
     }

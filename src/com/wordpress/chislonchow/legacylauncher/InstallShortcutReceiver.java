@@ -32,7 +32,7 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
     private final int[] mCoordinates = new int[2];
 
     public void onReceive(Context context, Intent data) {
-        if (!ACTION_INSTALL_SHORTCUT.equals(data.getAction()) || MyLauncherSettingsHelper.getlauncherLocked(context)) {
+        if (!ACTION_INSTALL_SHORTCUT.equals(data.getAction()) || MyLauncherSettingsHelper.getLauncherLocked(context)) {
             return;
         }
 

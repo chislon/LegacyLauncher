@@ -34,6 +34,7 @@ import android.os.Debug;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
@@ -423,6 +424,7 @@ public class DragLayer extends FrameLayout implements DragController {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+    	
         if (!mDragging) {
             return false;
         }

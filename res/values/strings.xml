@@ -294,7 +294,7 @@
     <string name="pref_summary_desktop_indicator_color">Choose desktop slide indicator color</string>
 
     <!-- Category titles -->
-    <string name="pref_title_system_preferences">General</string>
+    <string name="pref_title_system_preferences">System</string>
     <string name="pref_title_screens_layout_preferencecategory">Desktop Layout</string>
     <string name="pref_title_screens_functionality_preferencecategory">Desktop Functionality</string>
     <string name="pref_title_drawer_layout_category">Grid Layout</string>

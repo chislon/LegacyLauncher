@@ -522,7 +522,7 @@ public final class MyLauncherSettingsHelper {
 		boolean newD = sp.getBoolean("lockOptionMenuDeviceSettings", false);
 		return newD;
 	}
-	public static boolean getlauncherLocked(Context context) {
+	public static boolean getLauncherLocked(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);;
 		boolean newD = sp.getBoolean("launcherLocked", false);
 		return newD;
