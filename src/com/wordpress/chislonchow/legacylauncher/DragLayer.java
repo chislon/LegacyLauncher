@@ -48,7 +48,7 @@ import android.widget.FrameLayout;
 
 public class DragLayer extends FrameLayout implements DragController {
     private static final int SCROLL_DELAY = 600;
-    private static final int SCROLL_ZONE = 20;
+    private int mScrollZone = 25;	// this determines how easy it is to move from side to side
     private static final int ANIMATION_SCALE_UP_DURATION = 110;
 
     private static final boolean PROFILE_DRAWING_DURING_DRAG = false;
@@ -154,11 +154,13 @@ public class DragLayer extends FrameLayout implements DragController {
      * Used to create a new DragLayer from XML.
      *
      * @param context The application's context.
-     * @param attrs The attribtues set containing the Workspace's customization values.
+     * @param attrs The attributes set containing the Workspace's customization values.
      */
     public DragLayer(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        mScrollZone = context.getResources().getDimensionPixelSize(R.dimen.scroll_zone);       
+        
         final int srcColor = context.getResources().getColor(R.color.delete_color_filter);
         mTrashPaint.setColorFilter(new PorterDuffColorFilter(srcColor, PorterDuff.Mode.SRC_ATOP));
 
@@ -171,7 +173,7 @@ public class DragLayer extends FrameLayout implements DragController {
         mRectPaint=new Paint();
         mRectPaint.setColor(COLOR_NORMAL);
         activityManager =(ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        if (AlmostNexusSettingsHelper.getDebugShowMemUsage(context))
+        if (MyLauncherSettingsHelper.getDebugShowMemUsage(context))
             pids=new int[]{android.os.Process.myPid()};
         else
             pids = new int[]{};
@@ -356,7 +358,7 @@ public class DragLayer extends FrameLayout implements DragController {
                 }
             }
         }
-        if (pids.length > 0 && AlmostNexusSettingsHelper.getDebugShowMemUsage(getContext())) {
+        if (pids.length > 0 && MyLauncherSettingsHelper.getDebugShowMemUsage(getContext())) {
             mRectPaint.setTextSize(debugTextSize);
             mRectPaint.setAntiAlias(true);
             mRectPaint.setColor(0xff000000);
@@ -436,7 +438,7 @@ public class DragLayer extends FrameLayout implements DragController {
             mLastMotionX = x;
             mLastMotionY = y;
 
-            if ((x < SCROLL_ZONE) || (x > getWidth() - SCROLL_ZONE)) {
+            if ((x < mScrollZone) || (x > getWidth() - mScrollZone)) {
                 mScrollState = SCROLL_WAITING_IN_ZONE;
                 postDelayed(mScrollRunnable, SCROLL_DELAY);
             } else {
@@ -504,7 +506,7 @@ public class DragLayer extends FrameLayout implements DragController {
 
             mLastDropTarget = dropTarget;
             if(mTagPopup!=null){
-                if(Math.abs(mOriginalX-mLastMotionX)>SCROLL_ZONE || Math.abs(mOriginalY-mLastMotionY)>SCROLL_ZONE){
+                if(Math.abs(mOriginalX-mLastMotionX)>mScrollZone || Math.abs(mOriginalY-mLastMotionY)>mScrollZone){
                     final QuickActionWindow qa=(QuickActionWindow) mTagPopup;
                     qa.dismiss();
                     mTagPopup=null;
@@ -526,13 +528,13 @@ public class DragLayer extends FrameLayout implements DragController {
                 }
             }
 
-            if (!inDragRegion && x < SCROLL_ZONE) {
+            if (!inDragRegion && x < mScrollZone) {
                 if (mScrollState == SCROLL_OUTSIDE_ZONE) {
                     mScrollState = SCROLL_WAITING_IN_ZONE;
                     mScrollRunnable.setDirection(SCROLL_LEFT);
                     postDelayed(mScrollRunnable, SCROLL_DELAY);
                 }
-            } else if (!inDragRegion && x > getWidth() - SCROLL_ZONE) {
+            } else if (!inDragRegion && x > getWidth() - mScrollZone) {
                 if (mScrollState == SCROLL_OUTSIDE_ZONE) {
                     mScrollState = SCROLL_WAITING_IN_ZONE;
                     mScrollRunnable.setDirection(SCROLL_RIGHT);

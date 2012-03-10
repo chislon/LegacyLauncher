@@ -345,8 +345,8 @@ public class AllAppsSlidingViewHolderLayout extends ViewGroup {
         }
     }
     public void updateLabelVars(Context context){
-    	mDrawLabels=AlmostNexusSettingsHelper.getDrawerLabels(context);
-		mDrawerZoom = AlmostNexusSettingsHelper.getDrawerZoom(context);
+    	mDrawLabels=MyLauncherSettingsHelper.getDrawerLabels(context);
+		mDrawerZoom = MyLauncherSettingsHelper.getDrawerZoom(context);
     }
 
     public void setStartTime(long startTime)

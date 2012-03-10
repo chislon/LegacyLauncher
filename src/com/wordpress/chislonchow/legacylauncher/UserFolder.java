@@ -102,7 +102,7 @@ public class UserFolder extends Folder implements DropTarget {
 			super(context, 0,icons);
 			mInflater=LayoutInflater.from(context);
 			// ADW: Load textcolor and bubble color from theme
-			String themePackage = AlmostNexusSettingsHelper.getThemePackageName(
+			String themePackage = MyLauncherSettingsHelper.getThemePackageName(
 					getContext(), Launcher.THEME_DEFAULT);
 			if (!themePackage.equals(Launcher.THEME_DEFAULT)) {
 				Resources themeResources = null;

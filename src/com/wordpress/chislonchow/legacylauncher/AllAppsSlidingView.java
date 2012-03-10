@@ -1782,7 +1782,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		ApplicationInfo app = (ApplicationInfo) parent.getItemAtPosition(position);
 		app = new ApplicationInfo(app);
 
-		mLauncher.showActions(app, v, new PopupWindow.OnDismissListener()
+		mLauncher.showQuickActionWindow(app, v, new PopupWindow.OnDismissListener()
 		{
 			@Override
 			public void onDismiss()
@@ -1863,7 +1863,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	public void open(boolean animate) {
 		mHolder=null;
 		mStatus=AllAppsSlidingViewHolderLayout.OnFadingListener.OPEN;
-		mBgColor=AlmostNexusSettingsHelper.getDrawerColor(mLauncher);
+		mBgColor=MyLauncherSettingsHelper.getDrawerColor(mLauncher);
 		mTargetAlpha=Color.alpha(mBgColor);
 		for(int i=0;i<getChildCount();i++){
 			if(getChildAt(i) instanceof AllAppsSlidingViewHolderLayout){

@@ -1,104 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-       <string-array name="menu_binding_entries">
-                <item>NONE</item>
-                <item>Move to default desktop</item>
-                <item>Move to default desktop/show previews</item>
-                <item>Show previews</item>
-                <item>Open/close App Drawer</item>
-                <item>Show/hide statusbar</item>
-                <item>Open/close notifications</item>
-                <item>Move to default desktop/Open notifications</item>
-                <item>Open App...</item>
-       </string-array>
-       <string-array name="desktop_indicator_entries">
-                <item>Dot paginator top</item>
-                <item>Sliding paginator top</item>
-                <item>Sliding paginator bottom</item>
-       </string-array>
-       <string-array name="desktop_transition_entries">
-                <item>Normal</item>
-                <item>Rotate</item>
-                <item>Page</item>
-                <item>Cube</item>
-                <item>Scatter</item>
-       </string-array>
-       <string-array name="home_orientation_entries">
-                <item>Auto/sensor</item>
-                <item>Portrait</item>
-                <item>Landscape</item>
-       </string-array>
-       <string-array name="screen_cache_entries">
-                <item>Low quality</item>
-                <item>Auto</item>
-                <item>Disabled</item>
-       </string-array>
-       <string-array name="main_dock_entries">
-                <item>None (expand desktop)</item>
-                <item>3 Icons</item>
-                <item>5 Icons</item>
-                <item>1 Icon</item>
-       </string-array>
-       <string-array name="deletezone_entries">
-                <item>None</item>
-                <item>Top</item>
-                <item>Bottom</item>
-                <item>Top (Shrink desktop)</item>
-                <item>Bottom (Shrink desktop)</item>
-       </string-array>
-       <string-array name="app_drawer_style_entries">
-                <item>Vertical plain</item>
-                <item>Horizontal paginated</item>
-       </string-array>
-       <!-- Do not translate. -->
-       <string-array translatable="false" name="menu_binding_values">
-                <item>0</item>
-                <item>1</item>
-                <item>2</item>
-                <item>3</item>
-                <item>4</item>
-                <item>5</item>
-                <item>6</item>
-                <item>7</item>
-                <item>8</item>
-       </string-array>
-       <string-array translatable="false" name="desktop_indicator_values">
-                <item>1</item>
-                <item>2</item>
-                <item>3</item>
-       </string-array>
-       <string-array translatable="false" name="desktop_transition_values">
-                <item>1</item>
-                <item>2</item>
-                <item>3</item>
-                <item>4</item>
-                <item>5</item>
-       </string-array>
-       <string-array translatable="false" name="home_orientation_values">
-                <item>1</item>
-                <item>2</item>
-                <item>3</item>
-       </string-array>
-       <string-array translatable="false" name="screen_cache_values">
-                <item>1</item>
-                <item>2</item>
-                <item>3</item>
-       </string-array>
-       <string-array translatable="false" name="main_dock_values">
-                <item>0</item>
-                <item>1</item>
-                <item>2</item>
-                <item>3</item>
-       </string-array>
-       <string-array translatable="false" name="deletezone_values">
-                <item>0</item>
-                <item>1</item>
-                <item>2</item>
-                <item>3</item>
-                <item>4</item>
-       </string-array>
-       <string-array translatable="false" name="app_drawer_style_values">
-                <item>0</item>
-                <item>1</item>
-       </string-array>
+
+    <string-array name="menu_binding_entries">
+        <item>No action</item>
+        <item>Move to default desktop</item>
+        <item>Move to default desktop/show previews</item>
+        <item>Show previews</item>
+        <item>Open/close applications drawer</item>
+        <item>Show/hide statusbar</item>
+        <item>Open/close notifications</item>
+        <item>Move to default desktop/Open notifications</item>
+        <item>Open App...</item>
+    </string-array>
+    <string-array name="desktop_indicator_entries">
+        <item>Dot paginator at top</item>
+        <item>Sliding paginator at top</item>
+        <item>Sliding paginator at bottom</item>
+    </string-array>
+    <string-array name="desktop_transition_entries">
+        <item>Normal</item>
+        <item>Rotate</item>
+        <item>Page</item>
+        <item>Cube</item>
+        <item>Scatter</item>
+    </string-array>
+    <string-array name="home_orientation_entries">
+        <item>Auto/sensor</item>
+        <item>Portrait</item>
+        <item>Landscape</item>
+    </string-array>
+    <string-array name="screen_cache_entries">
+        <item>Low quality</item>
+        <item>Auto</item>
+        <item>Disabled</item>
+    </string-array>
+    <string-array name="main_dock_entries">
+        <item>"0 (expand desktop)"</item>
+        <item>"1"</item>
+        <item>"3"</item>
+        <item>"5"</item>
+    </string-array>
+    <string-array name="deletezone_entries">
+        <item>None</item>
+        <item>Top</item>
+        <item>Bottom</item>
+        <item>Top (Shrink desktop)</item>
+        <item>Bottom (Shrink desktop)</item>
+    </string-array>
+    <string-array name="app_drawer_style_entries">
+        <item>Vertical plain</item>
+        <item>Horizontal paginated</item>
+    </string-array>
+    <!-- Do not translate. -->
+    <string-array name="menu_binding_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+    <string-array name="desktop_indicator_values" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="desktop_transition_values" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="home_orientation_values" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="screen_cache_values" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="main_dock_values" translatable="false">
+        <item>0</item>
+        <item>3</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="deletezone_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <string-array name="app_drawer_style_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
 </resources>

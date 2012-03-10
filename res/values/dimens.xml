@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<!--
+     Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,6 +16,8 @@
 -->
 
 <resources>
+
+    <dimen name="scroll_zone">25dp</dimen>
     <dimen name="search_widget_inset">19dip</dimen>
     <dimen name="gesture_thumbnail_inset">8dip</dimen>
     <dimen name="gesture_thumbnail_size">64dip</dimen>
@@ -23,5 +26,6 @@
     <dimen name="desktop_paginator_padding">10dip</dimen>
     <dimen name="color_picker_center">90dip</dimen>
     <dimen name="color_picker_radius">30dip</dimen>
-    <dimen name="counter_circle_padding">3dip</dimen>    
+    <dimen name="counter_circle_padding">3dip</dimen>
+
 </resources>

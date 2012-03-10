@@ -637,8 +637,8 @@ public class LauncherModel {
             boolean loadApplications) {
         if (DEBUG_LOADERS) d(LOG_TAG, "loading user items in " + Thread.currentThread().toString());
         //ADW: load columns/rows settings
-        mDesktopRows=AlmostNexusSettingsHelper.getDesktopRows(launcher);
-        mDesktopColumns=AlmostNexusSettingsHelper.getDesktopColumns(launcher);
+        mDesktopRows=MyLauncherSettingsHelper.getDesktopRows(launcher);
+        mDesktopColumns=MyLauncherSettingsHelper.getDesktopColumns(launcher);
         if (isLaunching && isDesktopLoaded()) {
             if (DEBUG_LOADERS) d(LOG_TAG, "  --> items loaded, return");
             if (loadApplications) startApplicationsLoader(launcher, true);
@@ -1655,14 +1655,14 @@ public class LauncherModel {
      * Accounts for theme and icon shading
      */
     static Drawable getIcon(PackageManager manager, Context context, ActivityInfo activityInfo) {
-        String themePackage=AlmostNexusSettingsHelper.getThemePackageName(context, Launcher.THEME_DEFAULT);
+        String themePackage=MyLauncherSettingsHelper.getThemePackageName(context, Launcher.THEME_DEFAULT);
         Drawable icon = null;
         if(themePackage.equals(Launcher.THEME_DEFAULT)){
             icon = Utilities.createIconThumbnail(activityInfo.loadIcon(manager), context);
         }else{
             // get from theme
             Resources themeResources = null;
-            if(AlmostNexusSettingsHelper.getThemeIcons(context)){
+            if(MyLauncherSettingsHelper.getThemeIcons(context)){
                 activityInfo.name=activityInfo.name.toLowerCase().replace(".", "_");
                 try {
                     themeResources = manager.getResourcesForApplication(themePackage);

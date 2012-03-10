@@ -53,7 +53,7 @@ class ItemInfo {
     long container = NO_ID;
 
     /**
-     * Iindicates the screen in which the shortcut appears.
+     * Indicates the screen in which the shortcut appears.
      */
     int screen = -1;
 

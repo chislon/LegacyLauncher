@@ -11,7 +11,7 @@ import javax.crypto.spec.PBEParameterSpec;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.provider.Settings;
-import android.util.Base64;
+import com.wordpress.chislonchow.legacylauncher.util.Base64;
 
 /**
  * Warning, this gives a false sense of security.  If an attacker has enough access to
@@ -157,7 +157,13 @@ public class ObscuredSharedPreferences implements SharedPreferences {
 			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
 			SecretKey key = keyFactory.generateSecret(new PBEKeySpec(SEKRIT));
 			Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
-			pbeCipher.init(Cipher.ENCRYPT_MODE, key, new PBEParameterSpec(Settings.Secure.getString(context.getContentResolver(),Settings.System.ANDROID_ID).getBytes(UTF8), 20));
+			String uniqueId = Settings.Secure.getString(context.getContentResolver(), Settings.System.ANDROID_ID);
+			// if the id fails to be fetched, just use the default emulator id
+			if (uniqueId == null) {
+				uniqueId = "9774d56d682e549c";
+			}
+			pbeCipher.init(Cipher.ENCRYPT_MODE, key, new PBEParameterSpec(uniqueId.getBytes(UTF8), 20));
+
 			return new String(Base64.encode(pbeCipher.doFinal(bytes), Base64.NO_WRAP),UTF8);
 
 		} catch( Exception e ) {
@@ -172,7 +178,13 @@ public class ObscuredSharedPreferences implements SharedPreferences {
 			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
 			SecretKey key = keyFactory.generateSecret(new PBEKeySpec(SEKRIT));
 			Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
-			pbeCipher.init(Cipher.DECRYPT_MODE, key, new PBEParameterSpec(Settings.Secure.getString(context.getContentResolver(),Settings.System.ANDROID_ID).getBytes(UTF8), 20));
+			
+			String uniqueId = Settings.Secure.getString(context.getContentResolver(), Settings.System.ANDROID_ID);
+			// if the id fails to be fetched, just use the default emulator id
+			if (uniqueId == null) {
+				uniqueId = "9774d56d682e549c";
+			}			
+			pbeCipher.init(Cipher.DECRYPT_MODE, key, new PBEParameterSpec(uniqueId.getBytes(UTF8), 20));
 			return new String(pbeCipher.doFinal(bytes),UTF8);
 
 		} catch( Exception e) {

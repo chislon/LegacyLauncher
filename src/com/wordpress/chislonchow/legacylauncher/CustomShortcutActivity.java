@@ -140,7 +140,7 @@ public class CustomShortcutActivity extends Activity implements OnClickListener 
 			    if ( !folderInfo.customIcon ) // load default icon
 			    {
     	            final Resources resources = getResources();
-    	            String themePackage=AlmostNexusSettingsHelper.getThemePackageName(this, Launcher.THEME_DEFAULT);
+    	            String themePackage=MyLauncherSettingsHelper.getThemePackageName(this, Launcher.THEME_DEFAULT);
     	            if(themePackage.equals(Launcher.THEME_DEFAULT)){
     	                folderInfo.icon = resources.getDrawable(R.drawable.ic_launcher_folder_open);
     	            }else{

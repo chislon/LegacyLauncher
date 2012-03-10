@@ -25,8 +25,8 @@ public class IconHighlights {
 		GradientDrawable mDrawPressed;
 		GradientDrawable mDrawSelected;
 		StateListDrawable drawable=new StateListDrawable();
-		int selectedColor=AlmostNexusSettingsHelper.getHighlightsColorFocus(context);
-		int pressedColor=AlmostNexusSettingsHelper.getHighlightsColor(context);
+		int selectedColor=MyLauncherSettingsHelper.getHighlightsColorFocus(context);
+		int pressedColor=MyLauncherSettingsHelper.getHighlightsColor(context);
 		int stateFocused = android.R.attr.state_focused;
 		int statePressed = android.R.attr.state_pressed;
 		int stateWindowFocused = android.R.attr.state_window_focused;
@@ -50,10 +50,10 @@ public class IconHighlights {
 		return drawable;
 	}
 	private static Drawable oldSelector(Context context, int type){
-		int selectedColor=AlmostNexusSettingsHelper.getHighlightsColorFocus(context);
-		int pressedColor=AlmostNexusSettingsHelper.getHighlightsColor(context);
+		int selectedColor=MyLauncherSettingsHelper.getHighlightsColorFocus(context);
+		int pressedColor=MyLauncherSettingsHelper.getHighlightsColor(context);
 		//ADW: Load the specified theme
-		String themePackage=AlmostNexusSettingsHelper.getThemePackageName(context, Launcher.THEME_DEFAULT);
+		String themePackage=MyLauncherSettingsHelper.getThemePackageName(context, Launcher.THEME_DEFAULT);
 		Resources themeResources=null;
 		if(!themePackage.equals(Launcher.THEME_DEFAULT)){
 			PackageManager pm=context.getPackageManager();
@@ -94,7 +94,7 @@ public class IconHighlights {
 		return drawable;
 	}
 	public static Drawable getDrawable(Context context, int type){
-		if(AlmostNexusSettingsHelper.getUINewSelectors(context)){
+		if(MyLauncherSettingsHelper.getUINewSelectors(context)){
 			return newSelector(context);
 		}else{
 			return oldSelector(context, type);

@@ -55,7 +55,7 @@ public class FolderIcon extends BubbleTextView implements DropTarget {
         if ( dopen == null )
         {
             final Resources resources = launcher.getResources();
-            String themePackage=AlmostNexusSettingsHelper.getThemePackageName(launcher, Launcher.THEME_DEFAULT);
+            String themePackage=MyLauncherSettingsHelper.getThemePackageName(launcher, Launcher.THEME_DEFAULT);
             if(themePackage.equals(Launcher.THEME_DEFAULT)){
             	dclosed = resources.getDrawable(R.drawable.ic_launcher_folder);
             	dopen = resources.getDrawable(R.drawable.ic_launcher_folder_open);
@@ -82,7 +82,7 @@ public class FolderIcon extends BubbleTextView implements DropTarget {
         icon.mCloseIcon = d;
         icon.mOpenIcon = resources.getDrawable(R.drawable.ic_launcher_folder_open);*/
         icon.setCompoundDrawablesWithIntrinsicBounds(null, dclosed, null, null);
-        if(!AlmostNexusSettingsHelper.getUIHideLabels(launcher))icon.setText(folderInfo.title);
+        if(!MyLauncherSettingsHelper.getUIHideLabels(launcher))icon.setText(folderInfo.title);
         icon.setTag(folderInfo);
         icon.setOnClickListener(launcher);
         icon.mInfo = folderInfo;

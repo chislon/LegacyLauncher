@@ -70,7 +70,7 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 		case INDICATOR_TYPE_PAGER:
 			((PreviewPager) mIndicator).setTotalItems(mItems);
 			((PreviewPager) mIndicator).setCurrentItem(mCurrent);
-		break;
+			break;
 		case INDICATOR_TYPE_SLIDER_TOP:
 		case INDICATOR_TYPE_SLIDER_BOTTOM:
 			((SliderIndicator)mIndicator).setTotalItems(mItems);
@@ -84,11 +84,11 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 		switch(mIndicatorType){
 		case INDICATOR_TYPE_PAGER:
 			realHeight=20;
-	        mIndicator.measure(getWidth(), realHeight);
+			mIndicator.measure(getWidth(), realHeight);
 			break;
 		case INDICATOR_TYPE_SLIDER_BOTTOM:
 		case INDICATOR_TYPE_SLIDER_TOP:
-	        mIndicator.measure(getWidth(), realHeight);
+			mIndicator.measure(getWidth(), realHeight);
 			break;
 		}
 		int realHeightMeasurespec=MeasureSpec.makeMeasureSpec(realHeight, MeasureSpec.EXACTLY);
@@ -101,18 +101,18 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 		LinearLayout.LayoutParams params;
 		switch(mIndicatorType){
 		case INDICATOR_TYPE_PAGER:
-	        params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-	        mIndicator.measure(getWidth(), 20);
-	        mIndicator.setLayoutParams(params);
-	        mIndicator.layout(0, 0, getWidth(), 20);
+			params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+			mIndicator.measure(getWidth(), 20);
+			mIndicator.setLayoutParams(params);
+			mIndicator.layout(0, 0, getWidth(), 20);
 			break;
 		case INDICATOR_TYPE_SLIDER_BOTTOM:
 		case INDICATOR_TYPE_SLIDER_TOP:
-	        params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-	        mIndicator.measure(getWidth(), SliderIndicator.INDICATOR_HEIGHT);
-	        mIndicator.setLayoutParams(params);
-	        mIndicator.layout(0, 0, getWidth(), SliderIndicator.INDICATOR_HEIGHT);
-	        break;
+			params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+			mIndicator.measure(getWidth(), SliderIndicator.INDICATOR_HEIGHT);
+			mIndicator.setLayoutParams(params);
+			mIndicator.layout(0, 0, getWidth(), SliderIndicator.INDICATOR_HEIGHT);
+			break;
 		}
 	}
 	public void indicate(float percent){
@@ -128,9 +128,9 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 			((SliderIndicator)mIndicator).setOffset(offset);
 			mIndicator.invalidate();
 		}
-        mHandler.removeCallbacks(mAutoHide);
-        if(mVisibleTime>0)
-        	mHandler.postDelayed(mAutoHide, mVisibleTime);
+		mHandler.removeCallbacks(mAutoHide);
+		if(mVisibleTime>0)
+			mHandler.postDelayed(mAutoHide, mVisibleTime);
 		mCurrent=position;
 	}
 	public void fullIndicate(int position){
@@ -142,10 +142,10 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 		case INDICATOR_TYPE_SLIDER_BOTTOM:
 		case INDICATOR_TYPE_SLIDER_TOP:
 		}
-        mHandler.removeCallbacks(mAutoHide);
-        if(mVisibleTime>0)
-        	mHandler.postDelayed(mAutoHide, mVisibleTime);
-        mCurrent=position;
+		mHandler.removeCallbacks(mAutoHide);
+		if(mVisibleTime>0)
+			mHandler.postDelayed(mAutoHide, mVisibleTime);
+		mCurrent=position;
 	}
 	public void setType(int type){
 		if(type!=mIndicatorType){
@@ -171,22 +171,22 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 		}
 	}
 	private Runnable mAutoHide = new Runnable() {
-		   public void run() {
-			   if(mAnimation==null){
-				   mAnimation=AnimationUtils.loadAnimation(getContext(), R.anim.fade_out_fast);
-				   mAnimation.setAnimationListener(DesktopIndicator.this);
-			   }else{
-				   try{
-					   //This little thing seems to be making some androids piss off
-					   if(!mAnimation.hasEnded())mAnimation.cancel();
-				   }catch (NoSuchMethodError e) {
-				   }
-			   }
-			   startAnimation(mAnimation);				   
-		   }
-		};	
-	
-	
+		public void run() {
+			if(mAnimation==null){
+				mAnimation=AnimationUtils.loadAnimation(getContext(), R.anim.fade_out_fast);
+				mAnimation.setAnimationListener(DesktopIndicator.this);
+			}else{
+				try{
+					//This little thing seems to be making some androids piss off
+					if(!mAnimation.hasEnded())mAnimation.cancel();
+				}catch (NoSuchMethodError e) {
+				}
+			}
+			startAnimation(mAnimation);				   
+		}
+	};	
+
+
 	/**
 	 * Simple line Indicator for desktop scrolling
 	 * @author adw
@@ -240,20 +240,25 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 		}
 	}
 	private void loadThemeColors(Context context){
-    	//ADW: Load the specified theme
-    	String themePackage=AlmostNexusSettingsHelper.getThemePackageName(context, Launcher.THEME_DEFAULT);
-    	Resources themeResources=null;
-    	if(!themePackage.equals(Launcher.THEME_DEFAULT)){
-        	PackageManager pm=context.getPackageManager();
-	    	try {
-				themeResources=pm.getResourcesForApplication(themePackage);
-				int desktop_indicator_color_id=themeResources.getIdentifier("desktop_indicator_color", "color", themePackage);
-				if(desktop_indicator_color_id!=0){
-					mIndicatorColor=themeResources.getColor(desktop_indicator_color_id);
+		//ADW: Load the specified theme
+		String themePackage=MyLauncherSettingsHelper.getThemePackageName(context, Launcher.THEME_DEFAULT);
+
+		if(MyLauncherSettingsHelper.getDesktopIndicatorColorAllow(context)) {
+			mIndicatorColor = MyLauncherSettingsHelper.getDesktopIndicatorColor(context);
+		} else {
+			Resources themeResources=null;
+			if(!themePackage.equals(Launcher.THEME_DEFAULT)){
+				PackageManager pm=context.getPackageManager();
+				try {
+					themeResources=pm.getResourcesForApplication(themePackage);
+					int desktop_indicator_color_id=themeResources.getIdentifier("desktop_indicator_color", "color", themePackage);
+					if(desktop_indicator_color_id!=0){
+						mIndicatorColor=themeResources.getColor(desktop_indicator_color_id);
+					}
+				} catch (NameNotFoundException e) {
+					// TODO Auto-generated catch block
 				}
-			} catch (NameNotFoundException e) {
-				// TODO Auto-generated catch block
 			}
-    	}
+		}
 	}
 }

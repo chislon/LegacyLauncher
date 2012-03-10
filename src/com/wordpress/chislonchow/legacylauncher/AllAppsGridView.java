@@ -145,7 +145,7 @@ DragSource, Drawer {
 				.getItemAtPosition(position);
 		app = new ApplicationInfo(app);
 
-		mLauncher.showActions(app, view, new PopupWindow.OnDismissListener()
+		mLauncher.showQuickActionWindow(app, view, new PopupWindow.OnDismissListener()
 		{
 			@Override
 			public void onDismiss()
@@ -374,12 +374,12 @@ DragSource, Drawer {
 	 */
 	public void open(boolean animate) {
 		mLastIndexDraw = -99;
-		mBgColor = AlmostNexusSettingsHelper.getDrawerColor(mLauncher);
+		mBgColor = MyLauncherSettingsHelper.getDrawerColor(mLauncher);
 		mTargetAlpha = Color.alpha(mBgColor);
-		mDrawLabels = AlmostNexusSettingsHelper.getDrawerLabels(mLauncher);
-		mFadeDrawLabels = AlmostNexusSettingsHelper
+		mDrawLabels = MyLauncherSettingsHelper.getDrawerLabels(mLauncher);
+		mFadeDrawLabels = MyLauncherSettingsHelper
 				.getFadeDrawerLabels(mLauncher);
-		mDrawerZoom = AlmostNexusSettingsHelper
+		mDrawerZoom = MyLauncherSettingsHelper
 				.getDrawerZoom(mLauncher);
 		if(getAdapter()==null)
 			animate=false;

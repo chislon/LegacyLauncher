@@ -76,11 +76,16 @@
     <!-- config min value is 8, so it will add 8 to whatever value you set here -->
     <integer name="config_drawerLabelSize">6</integer>
 
+    <bool name="config_drawerLabelBold">false</bool>
     <bool name="config_fadeDrawerLabels">false</bool>
     <bool name="config_desktop_indicator">true</bool>
     <bool name="config_desktop_indicator_autohide">false</bool>
+    <bool name="config_desktop_indicator_color_allow">false</bool>
+
+    <integer name="config_desktop_indicator_color">0x99FFFFFF</integer>
+
     <!-- 1=top dots, 2=top slider, 3=bottom slider -->
-    <string name="config_desktop_indicator_type">1</string>
+    <string name="config_desktop_indicator_type">3</string>
     <string name="config_desktop_transition">1</string>
 
     <bool name="config_system_persistent">false</bool>
@@ -99,6 +104,9 @@
     <integer name="config_notif_size">4</integer>
 
     <string name="config_main_dock_style">2</string>
+
+    <bool name="config_mainDockLockMAB">true</bool>
+
     <string name="config_drawer_style">1</string>
 
     <bool name="config_ab_tint">false</bool>

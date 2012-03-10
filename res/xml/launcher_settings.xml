@@ -64,16 +64,25 @@
 					android:title="@string/pref_title_desktop_indicator"
 					android:summary="@string/pref_summary_desktop_indicator"
 					android:defaultValue="@bool/config_desktop_indicator" />
-				<CheckBoxPreference android:key="uiDesktopIndicatorAutohide"
-					android:dependency="uiDesktopIndicator" android:title="@string/pref_title_desktop_indicator_autohide"
-					android:summary="@string/pref_summary_desktop_indicator_autohide"
-					android:defaultValue="@bool/config_desktop_indicator_autohide" />
 				<ListPreference android:key="uiDesktopIndicatorType"
 					android:dependency="uiDesktopIndicator" android:title="@string/pref_title_desktop_indicator_type"
 					android:summary="@string/pref_summary_desktop_indicator_type"
 					android:defaultValue="@string/config_desktop_indicator_type"
 					android:entryValues="@array/desktop_indicator_values"
 					android:entries="@array/desktop_indicator_entries" />
+				<CheckBoxPreference android:key="uiDesktopIndicatorAutohide"
+					android:dependency="uiDesktopIndicator" android:title="@string/pref_title_desktop_indicator_autohide"
+					android:summary="@string/pref_summary_desktop_indicator_autohide"
+					android:defaultValue="@bool/config_desktop_indicator_autohide" />
+				<CheckBoxPreference android:key="uiDesktopIndicatorColorAllow"
+					android:dependency="uiDesktopIndicator"
+					android:title="@string/pref_title_desktop_indicator_color_allow"
+					android:summary="@string/pref_summary_desktop_indicator_color_allow"
+					android:defaultValue="@bool/config_desktop_indicator_color_allow" />
+				<Preference android:dependency="uiDesktopIndicatorColorAllow"
+					android:key="uiDesktopIndicatorColor" android:title="@string/pref_title_desktop_indicator_color"
+					android:summary="@string/pref_summary_desktop_indicator_color"
+					android:defaultValue="-16777216" />
 			</PreferenceCategory>
 			<PreferenceCategory android:title="@string/pref_title_workspace_wallpaper">
 				<CheckBoxPreference android:title="@string/pref_title_wallpaper_scrolling"
@@ -158,8 +167,13 @@
 		</PreferenceScreen>
 		<PreferenceScreen android:key="drawerAppearancePreferences"
 			android:title="@string/pref_title_drawer_appearance" android:summary="@string/pref_summary_drawer_appearance">
+			<com.wordpress.chislonchow.legacylauncher.DialogSeekBarPreference
+				android:title="@string/pref_title_page_horizontal_margin"
+				android:summary="@string/pref_summary_page_horizontal_margin"
+				android:dialogMessage="@string/pref_dialog_page_horizontal_margin"
+				android:key="pageHorizontalMargin" android:defaultValue="20"
+				android:max="75" />
 			<PreferenceCategory android:title="@string/pref_title_drawer_animation_category">
-
 				<CheckBoxPreference android:title="@string/pref_title_animated_drawer"
 					android:defaultValue="true" android:summary="@string/pref_summary_animated_drawer"
 					android:key="drawerAnimated" />
@@ -188,17 +202,15 @@
 					android:dialogMessage="@string/pref_dialog_drawer_label_size"
 					android:key="drawerLabelSize" android:defaultValue="@integer/config_drawerLabelSize"
 					android:max="20" />
+				<CheckBoxPreference android:title="@string/pref_title_drawer_label_bold"
+					android:dependency="drawerLabels" android:defaultValue="@bool/config_drawerLabelBold"
+					android:summary="@string/pref_summary_drawer_label_bold"
+					android:key="drawerLabelBold" />
 			</PreferenceCategory>
 			<PreferenceCategory android:title="@string/pref_title_drawer_background_category">
 				<Preference android:key="drawer_color" android:title="@string/pref_title_drawer_color"
 					android:summary="@string/pref_summary_drawer_color"
 					android:defaultValue="-16777216" />
-				<com.wordpress.chislonchow.legacylauncher.DialogSeekBarPreference
-					android:title="@string/pref_title_page_horizontal_margin"
-					android:summary="@string/pref_summary_page_horizontal_margin"
-					android:dialogMessage="@string/pref_dialog_page_horizontal_margin"
-					android:key="pageHorizontalMargin" android:defaultValue="20"
-					android:max="75" />
 			</PreferenceCategory>
 		</PreferenceScreen>
 		<PreferenceScreen android:key="drawerCatalogsPreferences"
@@ -231,6 +243,9 @@
 				android:title="@string/pref_title_main_dock_style" android:summary="@string/pref_summary_main_dock_style"
 				android:defaultValue="@string/config_main_dock_style"
 				android:entryValues="@array/main_dock_values" android:entries="@array/main_dock_entries" />
+			<CheckBoxPreference android:title="@string/pref_title_main_dock_lock_mab"
+				android:defaultValue="true" android:summary="@string/pref_summary_main_dock_lock_mab"
+				android:key="mainDockLockMAB" />
 			<CheckBoxPreference android:title="@string/pref_title_desktop_dots"
 				android:defaultValue="true" android:summary="@string/pref_summary_desktop_dots"
 				android:key="uiDots" />
@@ -304,7 +319,7 @@
 		android:title="@string/pref_title_lock_screen">
 		<CheckBoxPreference android:title="@string/pref_title_lock"
 			android:defaultValue="false" android:summary="@string/pref_summary_lock"
-			android:key="desktopBlocked" />
+			android:key="launcherLocked" />
 		<Preference android:key="lockPassword" android:title="@string/pref_title_lock_password"
 			android:summary="@string/pref_summary_lock_password" />
 		<Preference android:key="lockPasswordClear"

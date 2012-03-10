@@ -11,7 +11,7 @@ import android.text.Spanned;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-public final class AlmostNexusSettingsHelper {
+public final class MyLauncherSettingsHelper {
 	public static final int ORIENTATION_SENSOR=1;
 	public static final int ORIENTATION_PORTRAIT=2;
 	public static final int ORIENTATION_LANDSCAPE=3;
@@ -21,12 +21,32 @@ public final class AlmostNexusSettingsHelper {
 	public static final int CACHE_DISABLED=3;
 
 	private static final String ALMOSTNEXUS_PREFERENCES = "launcher.preferences.almostnexus";
-	private static final String[] restart_keys={"drawerNew","uiHideLabels","highlights_color",
-		"highlights_color_focus","uiNewSelectors","desktopRows","desktopColumns","autosizeIcons","uiDesktopIndicatorType",
-		"screenCache","uiDesktopIndicator","themePackageName","themeIcons", "notif_size","drawer_style"};
+
+	// modification of these keys cause restart 
+	private static final String[] restart_keys = {
+		"drawerNew",
+		"uiHideLabels",
+		"highlights_color",
+		"highlights_color_focus",
+		"uiNewSelectors",
+		"desktopRows",
+		"desktopColumns",
+		"autosizeIcons",
+		"uiDesktopIndicatorType",
+		"screenCache",
+		"uiDesktopIndicator",
+		"themePackageName",
+		"themeIcons", 
+		"notif_size",
+		"drawer_style", 
+		"drawerLabelSize",
+		"drawerLabelBold",
+		"uiDesktopIndicatorColor",
+		"uiDesktopIndicator"
+	};
 
 	public static boolean needsRestart(String key){
-		for(int i=0;i<restart_keys.length;i++){
+		for(int i=0;i<restart_keys.length;i++) {
 			if(restart_keys[i].equals(key))
 				return true;
 		}
@@ -193,6 +213,11 @@ public final class AlmostNexusSettingsHelper {
 		int size = sp.getInt("drawerLabelSize", context.getResources().getInteger(R.integer.config_drawerLabelSize)) + 8;
 		return size;
 	}
+	public static boolean getDrawerLabelBold(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("drawerLabelBold", context.getResources().getBoolean(R.bool.config_drawerLabelBold));
+		return newD;
+	}
 	public static boolean getFadeDrawerLabels(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("fadeDrawerLabels", context.getResources().getBoolean(R.bool.config_fadeDrawerLabels));
@@ -216,6 +241,16 @@ public final class AlmostNexusSettingsHelper {
 	public static int getDesktopIndicatorType(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("uiDesktopIndicatorType", context.getResources().getString(R.string.config_desktop_indicator_type)));
+		return newD;
+	}
+	public static boolean getDesktopIndicatorColorAllow(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("uiDesktopIndicatorColorAllow", context.getResources().getBoolean(R.bool.config_desktop_indicator_color_allow));
+		return newD;
+	}
+	public static int getDesktopIndicatorColor(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = sp.getInt("uiDesktopIndicatorColor", context.getResources().getInteger(R.integer.config_desktop_indicator_color));
 		return newD;
 	}
 	public static boolean getSystemPersistent(Context context) {
@@ -452,9 +487,14 @@ public final class AlmostNexusSettingsHelper {
 		int def_screen = sp.getInt("notif_size", context.getResources().getInteger(R.integer.config_notif_size))+10;
 		return def_screen;
 	}
-	public static int getmainDockStyle(Context context) {
+	public static int getDockStyle(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("main_dock_style", context.getResources().getString(R.string.config_main_dock_style)));
+		return newD;
+	}
+	public static boolean getDockLockMAB(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("mainDockLockMAB", true);
 		return newD;
 	}
 	public static int getDrawerStyle(Context context) {
@@ -482,15 +522,15 @@ public final class AlmostNexusSettingsHelper {
 		boolean newD = sp.getBoolean("lockOptionMenuDeviceSettings", false);
 		return newD;
 	}
-	public static boolean getDesktopBlocked(Context context) {
+	public static boolean getlauncherLocked(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);;
-		boolean newD = sp.getBoolean("desktopBlocked", false);
+		boolean newD = sp.getBoolean("launcherLocked", false);
 		return newD;
 	}
-	public static void setDesktopBlocked(Context context,boolean block) {
+	public static void setlauncherLocked(Context context,boolean block) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);;
 		SharedPreferences.Editor editor = sp.edit();
-		editor.putBoolean("desktopBlocked", block);
+		editor.putBoolean("launcherLocked", block);
 		editor.commit();
 	}
 	public static int getDesktopTransitionStyle(Context context)    {

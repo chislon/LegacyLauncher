@@ -58,7 +58,6 @@ OnPreferenceChangeListener {
 	public static final boolean IsDebugVersion = false;
 	private static final String ALMOSTNEXUS_PREFERENCES = "launcher.preferences.almostnexus";
 	private boolean shouldRestart = false;
-	private String mMsg;
 	private Context mContext;
 
 	private static final String PREF_BACKUP_FILENAME = "legacy_launcher_settings.xml";
@@ -78,10 +77,6 @@ OnPreferenceChangeListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO: ADW should i read stored values after
 		// addPreferencesFromResource?
-		if (Build.VERSION.SDK_INT >= 8)
-			mMsg = getString(R.string.pref_message_restart_froyo);
-		else
-			mMsg = getString(R.string.pref_message_restart_normal);
 		super.onCreate(savedInstanceState);
 		getPreferenceManager()
 		.setSharedPreferencesName(ALMOSTNEXUS_PREFERENCES);
@@ -122,7 +117,7 @@ OnPreferenceChangeListener {
 		CheckBoxPreference persist = (CheckBoxPreference) findPreference("systemPersistent");
 		persist.setOnPreferenceChangeListener(this);
 		Preference orientations = findPreference("homeOrientation");
-		if (AlmostNexusSettingsHelper.getSystemPersistent(this)) {
+		if (MyLauncherSettingsHelper.getSystemPersistent(this)) {
 			orientations.setEnabled(false);
 		} else {
 			orientations.setEnabled(true);
@@ -130,6 +125,19 @@ OnPreferenceChangeListener {
 
 		DialogSeekBarPreference notif_size = (DialogSeekBarPreference) findPreference("notif_size");
 		notif_size.setMin(10);
+
+		ListPreference desktopIndicator = (ListPreference) findPreference("uiDesktopIndicatorType");
+		desktopIndicator.setOnPreferenceChangeListener(this);
+
+		// enable/disable slider color customization based on indicator type
+		if (Integer.valueOf(desktopIndicator.getValue()) > 1) {
+			(findPreference("uiDesktopIndicatorColorAllow")).setEnabled(true);
+			(findPreference("uiDesktopIndicatorColor")).setEnabled(true);
+		} else {
+			(findPreference("uiDesktopIndicatorColorAllow")).setEnabled(false);
+			(findPreference("uiDesktopIndicatorColor")).setEnabled(false);
+		}
+
 		ListPreference dock_style = (ListPreference) findPreference("main_dock_style");
 		dock_style.setOnPreferenceChangeListener(this);
 		int val = Integer.valueOf(dock_style.getValue());
@@ -139,6 +147,12 @@ OnPreferenceChangeListener {
 			dots.setEnabled(false);
 		} else {
 			dots.setEnabled(true);
+		}
+		CheckBoxPreference lockMAB = (CheckBoxPreference) findPreference("mainDockLockMAB");
+		if (val == Launcher.DOCK_STYLE_NONE) {
+			lockMAB.setEnabled(false);
+		} else {
+			lockMAB.setEnabled(true);
 		}
 		ListPreference drawerStyle = (ListPreference) findPreference("drawer_style");
 		drawerStyle.setOnPreferenceChangeListener(this);
@@ -259,7 +273,7 @@ OnPreferenceChangeListener {
 		.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 				try {
-					AlertDialog builder = AlmostNexusSettingsHelper.ChangelogDialogBuilder
+					AlertDialog builder = MyLauncherSettingsHelper.ChangelogDialogBuilder
 							.create(mContext);
 					builder.show();
 				} catch (Exception e) {
@@ -569,6 +583,8 @@ OnPreferenceChangeListener {
 	@Override
 	protected void onPause() {
 		if (shouldRestart) {
+			// this just force closes all the time, because Android 2.1 doesn't even support killBackgroundProcesses
+			/*
 			if (Build.VERSION.SDK_INT <= 7) {
 				Intent intent = new Intent(getApplicationContext(),
 						Launcher.class);
@@ -586,7 +602,9 @@ OnPreferenceChangeListener {
 						sender);
 				ActivityManager acm = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 				acm.killBackgroundProcesses("com.wordpress.chislonchow.legacylauncher");
-			} else {
+			} else 
+			 */
+			{
 				android.os.Process.killProcess(android.os.Process.myPid());
 			}
 		}
@@ -661,6 +679,12 @@ OnPreferenceChangeListener {
 			} else {
 				dots.setEnabled(true);
 			}
+			CheckBoxPreference lockMAB = (CheckBoxPreference) findPreference("mainDockLockMAB");
+			if (val == Launcher.DOCK_STYLE_NONE) {
+				lockMAB.setEnabled(false);
+			} else {
+				lockMAB.setEnabled(true);
+			}
 		} else if (preference.getKey().equals("drawer_style")) {
 			Preference rowsPortrait = findPreference("drawerRowsPortrait");
 			Preference rowslandscape = findPreference("drawerRowsLandscape");
@@ -675,8 +699,15 @@ OnPreferenceChangeListener {
 				rowslandscape.setEnabled(false);
 				margin.setEnabled(false);
 			}
-		} else if (preference.getKey().equals("drawerLabelSize")) {
-			shouldRestart = true;
+		} else if (preference.getKey().equals("uiDesktopIndicatorType")) {
+			// enable/disable slider color customization based on indicator type
+			if (Integer.valueOf(newValue.toString()) > 1) {
+				(findPreference("uiDesktopIndicatorColorAllow")).setEnabled(true);
+				(findPreference("uiDesktopIndicatorColor")).setEnabled(true);
+			} else {
+				(findPreference("uiDesktopIndicatorColorAllow")).setEnabled(false);
+				(findPreference("uiDesktopIndicatorColor")).setEnabled(false);
+			}
 		}
 		return true;
 	}
@@ -688,19 +719,19 @@ OnPreferenceChangeListener {
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
 			case REQUEST_SWIPE_DOWN_APP_CHOOSER:
-				AlmostNexusSettingsHelper.setSwipeDownAppToLaunch(this,
+				MyLauncherSettingsHelper.setSwipeDownAppToLaunch(this,
 						infoFromApplicationIntent(this, data));
 				break;
 			case REQUEST_HOME_BINDING_APP_CHOOSER:
-				AlmostNexusSettingsHelper.setHomeBindingAppToLaunch(this,
+				MyLauncherSettingsHelper.setHomeBindingAppToLaunch(this,
 						infoFromApplicationIntent(this, data));
 				break;
 			case REQUEST_SWIPE_UP_APP_CHOOSER:
-				AlmostNexusSettingsHelper.setSwipeUpAppToLaunch(this,
+				MyLauncherSettingsHelper.setSwipeUpAppToLaunch(this,
 						infoFromApplicationIntent(this, data));
 				break;
 			case REQUEST_DOUBLE_TAP_APP_CHOOSER:
-				AlmostNexusSettingsHelper.setDoubleTapAppToLaunch(this,
+				MyLauncherSettingsHelper.setDoubleTapAppToLaunch(this,
 						infoFromApplicationIntent(this, data));
 				break;
 			}
@@ -756,14 +787,19 @@ OnPreferenceChangeListener {
 		} else if (preference.getKey().equals("uiABTintColor")) {
 			ColorPickerDialog cp = new ColorPickerDialog(this,
 					mABTintColorListener,
-					AlmostNexusSettingsHelper.getUIABTintColor(this));
+					MyLauncherSettingsHelper.getUIABTintColor(this));
+			cp.show();
+		} else if (preference.getKey().equals("uiDesktopIndicatorColor")) {
+			ColorPickerDialog cp = new ColorPickerDialog(this,
+					mDesktopIndicatorColorListener,
+					MyLauncherSettingsHelper.getDesktopIndicatorColor(this));
 			cp.show();
 		}
 		return false;
 	}
 
 	private int readHighlightsColor() {
-		return AlmostNexusSettingsHelper.getHighlightsColor(this);
+		return MyLauncherSettingsHelper.getHighlightsColor(this);
 	}
 
 	ColorPickerDialog.OnColorChangedListener mHighlightsColorListener = new ColorPickerDialog.OnColorChangedListener() {
@@ -774,7 +810,7 @@ OnPreferenceChangeListener {
 	};
 
 	private int readHighlightsColorFocus() {
-		return AlmostNexusSettingsHelper.getHighlightsColorFocus(this);
+		return MyLauncherSettingsHelper.getHighlightsColorFocus(this);
 	}
 
 	ColorPickerDialog.OnColorChangedListener mHighlightsColorFocusListener = new ColorPickerDialog.OnColorChangedListener() {
@@ -785,7 +821,7 @@ OnPreferenceChangeListener {
 	};
 
 	private int readDrawerColor() {
-		return AlmostNexusSettingsHelper.getDrawerColor(this);
+		return MyLauncherSettingsHelper.getDrawerColor(this);
 	}
 
 	ColorPickerDialog.OnColorChangedListener mDrawerColorListener = new ColorPickerDialog.OnColorChangedListener() {
@@ -798,6 +834,12 @@ OnPreferenceChangeListener {
 		public void colorChanged(int color) {
 			getPreferenceManager().getSharedPreferences().edit()
 			.putInt("uiABTintColor", color).commit();
+		}
+	};
+	ColorPickerDialog.OnColorChangedListener mDesktopIndicatorColorListener = new ColorPickerDialog.OnColorChangedListener() {
+		public void colorChanged(int color) {
+			getPreferenceManager().getSharedPreferences().edit()
+			.putInt("uiDesktopIndicatorColor", color).commit();
 		}
 	};
 

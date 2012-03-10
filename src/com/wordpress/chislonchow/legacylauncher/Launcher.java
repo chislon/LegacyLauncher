@@ -405,14 +405,14 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		mMessWithPersistence = AlmostNexusSettingsHelper
+		mMessWithPersistence = MyLauncherSettingsHelper
 				.getSystemPersistent(this);
 		if (mMessWithPersistence) {
 			changeOrientation(
-					AlmostNexusSettingsHelper.getDesktopOrientation(this), true);
+					MyLauncherSettingsHelper.getDesktopOrientation(this), true);
 		} else {
 			changeOrientation(
-					AlmostNexusSettingsHelper.getDesktopOrientation(this),
+					MyLauncherSettingsHelper.getDesktopOrientation(this),
 					false);
 		}
 		super.onCreate(savedInstanceState);
@@ -614,7 +614,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 				completeAddShortcut(data, mAddItemCellInfo, !mDesktopLocked);
 				break;
 			case REQUEST_EDIT_SHIRTCUT:
-				completeEditShirtcut(data);
+				completeEditShortcut(data);
 				break;
 			}
 		} else if (resultCode == RESULT_OK) {
@@ -625,7 +625,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 			}
 			break;
 			case REQUEST_EDIT_SHIRTCUT:
-				completeEditShirtcut(data);
+				completeEditShortcut(data);
 				break;
 			}
 		} else if ((requestCode == REQUEST_PICK_APPWIDGET || requestCode == REQUEST_CREATE_APPWIDGET)
@@ -656,16 +656,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		// SlidingGrid) depending on phone rotation
 		int orientation = getResources().getConfiguration().orientation;
 		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-			mAllAppsGrid.setNumColumns(AlmostNexusSettingsHelper
+			mAllAppsGrid.setNumColumns(MyLauncherSettingsHelper
 					.getColumnsPortrait(Launcher.this));
-			mAllAppsGrid.setNumRows(AlmostNexusSettingsHelper
+			mAllAppsGrid.setNumRows(MyLauncherSettingsHelper
 					.getRowsPortrait(Launcher.this));
-			mAllAppsGrid.setPageHorizontalMargin(AlmostNexusSettingsHelper
+			mAllAppsGrid.setPageHorizontalMargin(MyLauncherSettingsHelper
 					.getPageHorizontalMargin(Launcher.this));
 		} else {
-			mAllAppsGrid.setNumColumns(AlmostNexusSettingsHelper
+			mAllAppsGrid.setNumColumns(MyLauncherSettingsHelper
 					.getColumnsLandscape(Launcher.this));
-			mAllAppsGrid.setNumRows(AlmostNexusSettingsHelper
+			mAllAppsGrid.setNumRows(MyLauncherSettingsHelper
 					.getRowsLandscape(Launcher.this));
 		}
 		mWorkspace.setWallpaper(false);
@@ -827,7 +827,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		// ADW: The app drawer is now a ViewStub and we load the resource
 		// depending on custom settings
 		ViewStub tmp = (ViewStub) dragLayer.findViewById(R.id.stub_drawer);
-		int drawerStyle = AlmostNexusSettingsHelper.getDrawerStyle(this);
+		int drawerStyle = MyLauncherSettingsHelper.getDrawerStyle(this);
 		tmp.setLayoutResource(mDrawerStyles[drawerStyle]);
 		mAllAppsGrid = (Drawer) tmp.inflate();
 		mDeleteZone = (DeleteZone) dragLayer.findViewById(R.id.delete_zone);
@@ -912,7 +912,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		mRAB2.setNextFocusUpId(R.id.drag_layer);
 		mRAB2.setNextFocusLeftId(R.id.drag_layer);
 
-		if (AlmostNexusSettingsHelper.getDesktopIndicator(this)) {
+		if (MyLauncherSettingsHelper.getDesktopIndicator(this)) {
 			mDesktopIndicator = (DesktopIndicator) (findViewById(R.id.desktop_indicator));
 		}
 		// ADW: Add focusability to screen items
@@ -924,7 +924,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		mNextView.setFocusable(true);
 
 		// ADW: Load the specified theme
-		String themePackage = AlmostNexusSettingsHelper.getThemePackageName(
+		String themePackage = MyLauncherSettingsHelper.getThemePackageName(
 				this, THEME_DEFAULT);
 		PackageManager pm = getPackageManager();
 		Resources themeResources = null;
@@ -934,7 +934,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 			} catch (NameNotFoundException e) {
 				// ADW The saved theme was uninstalled so we save the default
 				// one
-				AlmostNexusSettingsHelper.setThemePackageName(this,
+				MyLauncherSettingsHelper.setThemePackageName(this,
 						Launcher.THEME_DEFAULT);
 			}
 		}
@@ -1517,7 +1517,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 			super.startActivityForResult(intent, requestCode);
 		} catch (Exception e) {
 			Toast.makeText(this, R.string.activity_not_found,
-					Toast.LENGTH_SHORT);
+					Toast.LENGTH_SHORT).show();;
 		}
 	}
 
@@ -1688,7 +1688,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		menu.setGroupVisible(MENU_GROUP_ALMOSTNEXUS, showmenu && !mLauncherLocked);
 		menu.setGroupVisible(MENU_GROUP_ADD, !allAppsOpen  && !mLauncherLocked);		
 		menu.setGroupVisible(MENU_GROUP_NORMAL, !allAppsOpen);
-		menu.findItem(MENU_SETTINGS).setVisible(!(mLockOptionMenuDeviceSettings && mLauncherLocked));
 		menu.setGroupVisible(MENU_GROUP_CATALOGUE, allAppsOpen && !mLauncherLocked);
 		if (mLauncherLocked) {
 			menu.findItem(MENU_LOCK_DESKTOP).setTitle(R.string.menu_unlock);
@@ -1769,7 +1768,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 							Editable value = input.getText(); 
 							Log.d(LOG_TAG, value.toString() + " and " + passSecure);
 
+							// pasword valid unlock
 							if (value.toString().equals(passSecure)) {
+								Toast.makeText(Launcher.this, R.string.toast_launcher_unlock, Toast.LENGTH_SHORT).show();
 								mLauncherLocked = false;
 							} else {
 								Toast.makeText(Launcher.this, getString(R.string.lock_password_invalid), Toast.LENGTH_SHORT).show();
@@ -1778,16 +1779,17 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 					}).setNegativeButton(android.R.string.cancel, null).show();
 				} else {
 					// no password was set, so unlock right away
+					Toast.makeText(this, R.string.toast_launcher_unlock, Toast.LENGTH_SHORT).show();
 					mLauncherLocked = false;
 				}
 			} else {
 				// lock if unlocked
+				Toast.makeText(this, R.string.toast_launcher_lock, Toast.LENGTH_SHORT).show();
 				mLauncherLocked = true;
 			}
 
-			AlmostNexusSettingsHelper.setDesktopBlocked(this, mLauncherLocked);
-			// Recreate options menu to suit lock
-
+			// commit setting
+			MyLauncherSettingsHelper.setlauncherLocked(this, mLauncherLocked);
 
 			return true;
 		}
@@ -2151,7 +2153,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 	 * wallpaper.
 	 */
 	private void registerIntentReceivers() {
-		boolean useNotifReceiver = AlmostNexusSettingsHelper
+		boolean useNotifReceiver = MyLauncherSettingsHelper
 				.getNotifReceiver(this);
 		if (useNotifReceiver && mCounterReceiver == null) {
 			mCounterReceiver = new CounterReceiver(this);
@@ -2475,9 +2477,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 
 		mDesktopLocked = false;
 		// ADW: Show the changelog screen if needed
-		if (AlmostNexusSettingsHelper.shouldShowChangelog(this)) {
+		if (MyLauncherSettingsHelper.shouldShowChangelog(this)) {
 			try {
-				AlertDialog builder = AlmostNexusSettingsHelper.ChangelogDialogBuilder
+				AlertDialog builder = MyLauncherSettingsHelper.ChangelogDialogBuilder
 						.create(this);
 				builder.show();
 			} catch (Exception e) {
@@ -2489,7 +2491,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 
 	private void bindDrawer(Launcher.DesktopBinder binder,
 			ApplicationsAdapter drawerAdapter) {
-		int currCatalog = AlmostNexusSettingsHelper.getCurrentAppCatalog(this);
+		int currCatalog = MyLauncherSettingsHelper.getCurrentAppCatalog(this);
 		AppCatalogueFilters.getInstance().getDrawerFilter()
 		.setCurrentGroupIndex(currCatalog);
 		drawerAdapter.buildViewCache((ViewGroup) mAllAppsGrid);
@@ -2999,7 +3001,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 			} else {
 				sModel.getApplicationsAdapter().getCatalogueFilter()
 				.setCurrentGroupIndex(action);
-				AlmostNexusSettingsHelper.setCurrentAppCatalog(Launcher.this,
+				MyLauncherSettingsHelper.setCurrentAppCatalog(Launcher.this,
 						action);
 				mAllAppsGrid.updateAppGrp();
 				checkActionButtonsSpecialMode();
@@ -3065,7 +3067,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 				// Make sure we have the right folder info
 				int which = AppCatalogueFilters.getInstance().createNewGroup(
 						name);
-				AlmostNexusSettingsHelper.setCurrentAppCatalog(Launcher.this,
+				MyLauncherSettingsHelper.setCurrentAppCatalog(Launcher.this,
 						which);
 				sModel.getApplicationsAdapter().getCatalogueFilter()
 				.setCurrentGroupIndex(which);
@@ -3506,46 +3508,46 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 	}
 
 	private void updateAlmostNexusVars() {
-		allowDrawerAnimations = AlmostNexusSettingsHelper
+		allowDrawerAnimations = MyLauncherSettingsHelper
 				.getDrawerAnimated(Launcher.this);
-		mPreviewsNew = AlmostNexusSettingsHelper.getPreviewsNew(this);
-		mPreviewsEnable = AlmostNexusSettingsHelper.getPreviewsEnable(this);
-		mHomeBinding = AlmostNexusSettingsHelper.getHomeBinding(this);
-		mSwipedownAction = AlmostNexusSettingsHelper.getSwipeDownActions(this);
-		mSwipeupAction = AlmostNexusSettingsHelper.getSwipeUpActions(this);
-		mDoubletapAction = AlmostNexusSettingsHelper.getDoubleTapActions(this);
-		mHideStatusBar = AlmostNexusSettingsHelper.getHideStatusbar(this);
-		mShowDots = AlmostNexusSettingsHelper.getUIDots(this);
-		mDockStyle = AlmostNexusSettingsHelper.getmainDockStyle(this);
-		mAutoCloseFolder = AlmostNexusSettingsHelper.getUICloseFolder(this);
-		mHideABBg = AlmostNexusSettingsHelper.getUIABBg(this);
-		mUiHideLabels = AlmostNexusSettingsHelper.getUIHideLabels(this);
+		mPreviewsNew = MyLauncherSettingsHelper.getPreviewsNew(this);
+		mPreviewsEnable = MyLauncherSettingsHelper.getPreviewsEnable(this);
+		mHomeBinding = MyLauncherSettingsHelper.getHomeBinding(this);
+		mSwipedownAction = MyLauncherSettingsHelper.getSwipeDownActions(this);
+		mSwipeupAction = MyLauncherSettingsHelper.getSwipeUpActions(this);
+		mDoubletapAction = MyLauncherSettingsHelper.getDoubleTapActions(this);
+		mHideStatusBar = MyLauncherSettingsHelper.getHideStatusbar(this);
+		mShowDots = MyLauncherSettingsHelper.getUIDots(this);
+		mDockStyle = MyLauncherSettingsHelper.getDockStyle(this);
+		mAutoCloseFolder = MyLauncherSettingsHelper.getUICloseFolder(this);
+		mHideABBg = MyLauncherSettingsHelper.getUIABBg(this);
+		mUiHideLabels = MyLauncherSettingsHelper.getUIHideLabels(this);
 		if (mWorkspace != null) {
 			mWorkspace
-			.setSpeed(AlmostNexusSettingsHelper.getDesktopSpeed(this));
-			mWorkspace.setBounceAmount(AlmostNexusSettingsHelper
+			.setSpeed(MyLauncherSettingsHelper.getDesktopSpeed(this));
+			mWorkspace.setBounceAmount(MyLauncherSettingsHelper
 					.getDesktopBounce(this));
-			mWorkspace.setDesktopLooping(AlmostNexusSettingsHelper
+			mWorkspace.setDesktopLooping(MyLauncherSettingsHelper
 					.getDesktopLooping(this));
-			mWorkspace.setDefaultScreen(AlmostNexusSettingsHelper
+			mWorkspace.setDefaultScreen(MyLauncherSettingsHelper
 					.getDefaultScreen(this));
-			mWorkspace.setWallpaperScroll(AlmostNexusSettingsHelper
+			mWorkspace.setWallpaperScroll(MyLauncherSettingsHelper
 					.getWallpaperScrolling(this));
 		}
-		int animationSpeed = AlmostNexusSettingsHelper.getAnimationSpeed(this);
+		int animationSpeed = MyLauncherSettingsHelper.getAnimationSpeed(this);
 		if (mAllAppsGrid != null) {
 			mAllAppsGrid.setAnimationSpeed(animationSpeed);
 		}
-		mWallpaperHack = AlmostNexusSettingsHelper.getWallpaperHack(this);
-		mUseDrawerCatalogNavigation = AlmostNexusSettingsHelper
+		mWallpaperHack = MyLauncherSettingsHelper.getWallpaperHack(this);
+		mUseDrawerCatalogNavigation = MyLauncherSettingsHelper
 				.getDrawerCatalogsNavigation(this);
-		mUseDrawerCatalogFlingNavigation = AlmostNexusSettingsHelper
+		mUseDrawerCatalogFlingNavigation = MyLauncherSettingsHelper
 				.getDrawerCatalogsFlingNavigation(this);
-		mUseDrawerUngroupCatalog = AlmostNexusSettingsHelper
+		mUseDrawerUngroupCatalog = MyLauncherSettingsHelper
 				.getDrawerUngroupCatalog(this);
-		mUseDrawerTitleCatalog = AlmostNexusSettingsHelper
+		mUseDrawerTitleCatalog = MyLauncherSettingsHelper
 				.getDrawerTitleCatalogs(this);
-		mTransitionStyle = AlmostNexusSettingsHelper
+		mTransitionStyle = MyLauncherSettingsHelper
 				.getDesktopTransitionStyle(this);
 	}
 
@@ -3556,9 +3558,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		if (mIsEditMode || mIsWidgetEditMode)
 			return;
 		updateAlmostNexusVars();
-		float scale = AlmostNexusSettingsHelper.getuiScaleAB(this);
-		boolean tint = AlmostNexusSettingsHelper.getUIABTint(this);
-		int tintcolor = AlmostNexusSettingsHelper.getUIABTintColor(this);
+		float scale = MyLauncherSettingsHelper.getuiScaleAB(this);
+		boolean tint = MyLauncherSettingsHelper.getUIABTint(this);
+		int tintcolor = MyLauncherSettingsHelper.getUIABTintColor(this);
 		if (scale != mUiScaleAB || tint != mUiABTint
 				|| tintcolor != mUiABTintColor) {
 			mUiScaleAB = scale;
@@ -3618,9 +3620,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 			mWorkspace.setWallpaperHack(mWallpaperHack);
 		}
 		if (mDesktopIndicator != null) {
-			mDesktopIndicator.setType(AlmostNexusSettingsHelper
+			mDesktopIndicator.setType(MyLauncherSettingsHelper
 					.getDesktopIndicatorType(this));
-			mDesktopIndicator.setAutoHide(AlmostNexusSettingsHelper
+			mDesktopIndicator.setAutoHide(MyLauncherSettingsHelper
 					.getDesktopIndicatorAutohide(this));
 			if (mWorkspace != null) {
 				mDesktopIndicator.setItems(mWorkspace.getChildCount());
@@ -3673,8 +3675,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		final Resources resources = getResources();
 		// Drawable d = resources.getDrawable(R.drawable.ic_launcher_folder);
 		Drawable d = null;
-		if (AlmostNexusSettingsHelper.getThemeIcons(this)) {
-			String packageName = AlmostNexusSettingsHelper.getThemePackageName(
+		if (MyLauncherSettingsHelper.getThemeIcons(this)) {
+			String packageName = MyLauncherSettingsHelper.getThemePackageName(
 					this, THEME_DEFAULT);
 			if (packageName.equals(THEME_DEFAULT)) {
 				d = resources.getDrawable(R.drawable.ic_launcher_folder);
@@ -3711,10 +3713,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		final Resources resources = getResources();
 		Drawable d = info.icon;
 		if (d == null) {
-			if (AlmostNexusSettingsHelper.getThemeIcons(this)) {
+			if (MyLauncherSettingsHelper.getThemeIcons(this)) {
 				// Drawable d =
 				// resources.getDrawable(R.drawable.ic_launcher_folder);
-				String packageName = AlmostNexusSettingsHelper
+				String packageName = MyLauncherSettingsHelper
 						.getThemePackageName(this, THEME_DEFAULT);
 				if (packageName.equals(THEME_DEFAULT)) {
 					d = resources.getDrawable(R.drawable.ic_launcher_folder);
@@ -3760,11 +3762,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 			} else if (info instanceof LiveFolderInfo) {
 				d = ((LiveFolderInfo) info).icon;
 				if (d == null) {
-					if (AlmostNexusSettingsHelper.getThemeIcons(this)) {
+					if (MyLauncherSettingsHelper.getThemeIcons(this)) {
 						// d =
 						// Utilities.createIconThumbnail(resources.getDrawable(R.drawable.ic_launcher_folder),
 						// this);
-						String packageName = AlmostNexusSettingsHelper
+						String packageName = MyLauncherSettingsHelper
 								.getThemePackageName(this, THEME_DEFAULT);
 						if (!packageName.equals(THEME_DEFAULT)) {
 							d = FolderIcon.loadFolderFromTheme(this,
@@ -3785,9 +3787,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 					((LiveFolderInfo) info).filtered = true;
 				}
 			} else if (info instanceof UserFolderInfo) {
-				if (AlmostNexusSettingsHelper.getThemeIcons(this)) {
+				if (MyLauncherSettingsHelper.getThemeIcons(this)) {
 					// d = resources.getDrawable(R.drawable.ic_launcher_folder);
-					String packageName = AlmostNexusSettingsHelper
+					String packageName = MyLauncherSettingsHelper
 							.getThemePackageName(this, THEME_DEFAULT);
 					if (!packageName.equals(THEME_DEFAULT)) {
 						d = FolderIcon.loadFolderFromTheme(this,
@@ -4278,7 +4280,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 
 	public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
 		// ADW: Try to add the restart flag here instead on preferences activity
-		if (AlmostNexusSettingsHelper.needsRestart(key)) {
+		if (MyLauncherSettingsHelper.needsRestart(key)) {
 			mShouldRestart = true;
 		} else {
 			// TODO: ADW Move here all the updates instead on
@@ -4286,31 +4288,31 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 			if (key.equals("homeOrientation")) {
 				if (!mMessWithPersistence) {
 					changeOrientation(
-							AlmostNexusSettingsHelper
+							MyLauncherSettingsHelper
 							.getDesktopOrientation(this),
 							false);
 				} else {
 					changeOrientation(
-							AlmostNexusSettingsHelper
+							MyLauncherSettingsHelper
 							.getDesktopOrientation(this),
 							true);
 				}
 			} else if (key.equals("systemPersistent")) {
-				mMessWithPersistence = AlmostNexusSettingsHelper
+				mMessWithPersistence = MyLauncherSettingsHelper
 						.getSystemPersistent(this);
 				if (mMessWithPersistence) {
 					changeOrientation(
-							AlmostNexusSettingsHelper
+							MyLauncherSettingsHelper
 							.getDesktopOrientation(this),
 							true);
 				} else {
 					changeOrientation(
-							AlmostNexusSettingsHelper
+							MyLauncherSettingsHelper
 							.getDesktopOrientation(this),
 							false);
 				}
 			} else if (key.equals("notif_receiver")) {
-				boolean useNotifReceiver = AlmostNexusSettingsHelper
+				boolean useNotifReceiver = MyLauncherSettingsHelper
 						.getNotifReceiver(this);
 				if (!useNotifReceiver) {
 					if (mCounterReceiver != null)
@@ -4332,15 +4334,15 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 							mCounterReceiver.getFilter());
 				}
 			} else if (key.equals("main_dock_style")) {
-				int dockstyle = AlmostNexusSettingsHelper
-						.getmainDockStyle(this);
+				int dockstyle = MyLauncherSettingsHelper
+						.getDockStyle(this);
 				if (dockstyle == DOCK_STYLE_NONE) {
 					mShouldRestart = true;
 				} else if (mDockStyle == DOCK_STYLE_NONE) {
 					mShouldRestart = true;
 				}
 			} else if (key.equals("deletezone_style")) {
-				int dz = AlmostNexusSettingsHelper.getDeletezoneStyle(this);
+				int dz = MyLauncherSettingsHelper.getDeletezoneStyle(this);
 				if (mDeleteZone != null)
 					mDeleteZone.setPosition(dz);
 			}
@@ -4439,27 +4441,27 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 			String name = "";
 			switch (type) {
 			case 1:
-				package_name = AlmostNexusSettingsHelper
+				package_name = MyLauncherSettingsHelper
 				.getHomeBindingAppToLaunchPackageName(this);
-				name = AlmostNexusSettingsHelper
+				name = MyLauncherSettingsHelper
 						.getHomeBindingAppToLaunchName(this);
 				break;
 			case 2:
-				package_name = AlmostNexusSettingsHelper
+				package_name = MyLauncherSettingsHelper
 				.getSwipeUpAppToLaunchPackageName(this);
-				name = AlmostNexusSettingsHelper
+				name = MyLauncherSettingsHelper
 						.getSwipeUpAppToLaunchName(this);
 				break;
 			case 3:
-				package_name = AlmostNexusSettingsHelper
+				package_name = MyLauncherSettingsHelper
 				.getSwipeDownAppToLaunchPackageName(this);
-				name = AlmostNexusSettingsHelper
+				name = MyLauncherSettingsHelper
 						.getSwipeDownAppToLaunchName(this);
 				break;
 			case 4:
-				package_name = AlmostNexusSettingsHelper
+				package_name = MyLauncherSettingsHelper
 				.getDoubleTapAppToLaunchPackageName(this);
-				name = AlmostNexusSettingsHelper
+				name = MyLauncherSettingsHelper
 						.getDoubleTapAppToLaunchName(this);
 				break;
 			default:
@@ -4564,7 +4566,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 	 * mWorkspace.addInCurrentScreen(view, xy[0], xy[1], spanX, spanY); }
 	 */
 	public static int getScreenCount(Context context) {
-		return AlmostNexusSettingsHelper.getDesktopScreens(context);
+		return MyLauncherSettingsHelper.getDesktopScreens(context);
 	}
 
 	public DesktopIndicator getDesktopIndicator() {
@@ -4582,8 +4584,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		// }
 
 		// update locked variables
-		mLauncherLocked = AlmostNexusSettingsHelper.getDesktopBlocked(this);
-		mLockOptionMenuDeviceSettings = AlmostNexusSettingsHelper.getLockOptionMenuDeviceSettings(this);
+		mLauncherLocked = MyLauncherSettingsHelper.getlauncherLocked(this);
+		mLockOptionMenuDeviceSettings = MyLauncherSettingsHelper.getLockOptionMenuDeviceSettings(this);
 	}
 
 	@Override
@@ -4594,6 +4596,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		// }
 		// TODO Auto-generated method stub
 		super.onStop();
+		dismissQuickActionWindow();
 	}
 
 	private boolean checkDefaultLauncher() {
@@ -4674,13 +4677,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 	private void changeOrientation(int type, boolean persistence) {
 		if (!persistence) {
 			switch (type) {
-			case AlmostNexusSettingsHelper.ORIENTATION_SENSOR:
+			case MyLauncherSettingsHelper.ORIENTATION_SENSOR:
 				this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
 				break;
-			case AlmostNexusSettingsHelper.ORIENTATION_PORTRAIT:
+			case MyLauncherSettingsHelper.ORIENTATION_PORTRAIT:
 				this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 				break;
-			case AlmostNexusSettingsHelper.ORIENTATION_LANDSCAPE:
+			case MyLauncherSettingsHelper.ORIENTATION_LANDSCAPE:
 				this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 				break;
 			default:
@@ -4698,7 +4701,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		startActivityForResult(edit, REQUEST_EDIT_SHIRTCUT);
 	}
 
-	private void completeEditShirtcut(Intent data) {
+	private void completeEditShortcut(Intent data) {
 		if (!data.hasExtra(CustomShortcutActivity.EXTRA_APPLICATIONINFO))
 			return;
 		long appInfoId = data.getLongExtra(
@@ -4849,12 +4852,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 								});
 						alertDialog.show();
 					} else {
-						Toast t = Toast
-								.makeText(
-										Launcher.this,
-										R.string.message_cannot_delete_desktop_screen,
-										Toast.LENGTH_LONG);
-						t.show();
+						Toast.makeText(
+								Launcher.this,
+								R.string.message_cannot_delete_desktop_screen,
+								Toast.LENGTH_LONG).show();
 					}
 
 				}
@@ -4952,7 +4953,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 					int currentScreen = gal.getSelectedItemPosition();
 					if (currentScreen < mWorkspace.getChildCount()) {
 						mWorkspace.setDefaultScreen(currentScreen);
-						AlmostNexusSettingsHelper.setDefaultScreen(
+						MyLauncherSettingsHelper.setDefaultScreen(
 								Launcher.this, currentScreen);
 						Toast t = Toast.makeText(Launcher.this,
 								R.string.pref_title_default_screen,
@@ -5200,7 +5201,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 						filter.setCurrentGroupIndex(setIndex);
 						if (filter == AppCatalogueFilters.getInstance()
 								.getDrawerFilter())
-							AlmostNexusSettingsHelper.setCurrentAppCatalog(
+							MyLauncherSettingsHelper.setCurrentAppCatalog(
 									Launcher.this, setIndex);
 
 						mAllAppsGrid.updateAppGrp();
@@ -5280,7 +5281,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		}
 	}
 
-	public void showActions(final ItemInfo info, final View view,
+	QuickActionWindow mQaw;
+
+	public void dismissQuickActionWindow() {
+		if (mQaw != null && mQaw.isShowing()) {
+			mQaw.dismiss();
+			mQaw = null;
+		}
+	}
+
+	public void showQuickActionWindow(final ItemInfo info, final View view,
 			PopupWindow.OnDismissListener onDismissListener) {
 		QuickActionWindow existingQA = (QuickActionWindow) view
 				.getTag(R.id.TAG_PREVIEW);
@@ -5297,6 +5307,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 		// a new QuickActionWindow object
 		final QuickActionWindow qa = new QuickActionWindow(this, view, rect);
 		view.setTag(R.id.TAG_PREVIEW, qa);
+		mQaw = qa;
 
 		if (onDismissListener != null) {
 			qa.setOnDismissListener(onDismissListener);
@@ -5367,6 +5378,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 							}
 
 							qa.dismiss();
+							mQaw = null;
 						}
 					});
 
@@ -5378,6 +5390,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 							public void onClick(View v) {
 								editShortcut((ApplicationInfo) info);
 								qa.dismiss();
+								mQaw = null;
 							}
 						});
 			} else if (info instanceof LauncherAppWidgetInfo) {
@@ -5388,6 +5401,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 							public void onClick(View v) {
 								editWidget(view);
 								qa.dismiss();
+								mQaw = null;
 							}
 						});
 			}
@@ -5406,6 +5420,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 								editShortcut(info);
 							}
 							qa.dismiss();
+							mQaw = null;
 						}
 					});
 			if (info instanceof LiveFolderInfo) {
@@ -5455,6 +5470,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 								R.string.AppGroupChoose, new OnClickListener() {
 							public void onClick(View v) {
 								qa.dismiss();
+								mQaw = null;
 								mPickGroupInfo = (ApplicationInfo) info;
 								mWaitingForResult = true;
 								showDialog(DIALOG_PICK_GROUPS);
@@ -5487,6 +5503,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 								mAppInfoLabel, new OnClickListener() {
 							public void onClick(View v) {
 								qa.dismiss();
+								mQaw = null;
 								try {
 									Intent intent = new Intent();
 									final int apiLevel = Build.VERSION.SDK_INT;
@@ -5536,6 +5553,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener, SwipeListener {
 						new OnClickListener() {
 					public void onClick(View v) {
 						qa.dismiss();
+						mQaw = null;
 						try {
 							Intent intent = new Intent(
 									Intent.ACTION_VIEW);

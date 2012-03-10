@@ -41,7 +41,7 @@ public class CounterTextView extends TextView {
     }
     private void init(){
         final float scale =getResources().getDisplayMetrics().density;
-        final int fontSize = (int)(AlmostNexusSettingsHelper.getNotifSize(getContext()) * scale + 0.5f);
+        final int fontSize = (int)(MyLauncherSettingsHelper.getNotifSize(getContext()) * scale + 0.5f);
 
         mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

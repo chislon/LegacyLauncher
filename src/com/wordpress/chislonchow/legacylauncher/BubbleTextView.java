@@ -70,7 +70,7 @@ public class BubbleTextView extends CounterTextView {
         setBackgroundDrawable(null);
         mBackground.setCallback(this);
         //ADW: Load textcolor and bubble color from theme
-        String themePackage=AlmostNexusSettingsHelper.getThemePackageName(getContext(), Launcher.THEME_DEFAULT);
+        String themePackage=MyLauncherSettingsHelper.getThemePackageName(getContext(), Launcher.THEME_DEFAULT);
         int color=getContext().getResources().getColor(R.color.bubble_dark_background);
         if(!themePackage.equals(Launcher.THEME_DEFAULT)){
         	Resources themeResources=null;

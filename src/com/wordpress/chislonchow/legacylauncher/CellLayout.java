@@ -72,7 +72,7 @@ public class CellLayout extends WidgetCellLayout {
 	private int mRows;
 	private int mColumns;
 	private int mPaginatorPadding;
-	private int mDesktopCacheType=AlmostNexusSettingsHelper.CACHE_LOW;
+	private int mDesktopCacheType=MyLauncherSettingsHelper.CACHE_LOW;
 
 	// used for transitions
 	protected static float mTransitionAmount;
@@ -94,7 +94,7 @@ public class CellLayout extends WidgetCellLayout {
 
 		mCellWidth = a.getDimensionPixelSize(R.styleable.CellLayout_cellWidth, 10);
 		mCellHeight = a.getDimensionPixelSize(R.styleable.CellLayout_cellHeight, 10);
-		if(AlmostNexusSettingsHelper.getmainDockStyle(context)!=Launcher.DOCK_STYLE_NONE){
+		if(MyLauncherSettingsHelper.getDockStyle(context)!=Launcher.DOCK_STYLE_NONE){
 			mLongAxisStartPadding = 
 					a.getDimensionPixelSize(R.styleable.CellLayout_longAxisStartPadding, 10);
 			mLongAxisEndPadding = 
@@ -104,8 +104,8 @@ public class CellLayout extends WidgetCellLayout {
 			mShortAxisEndPadding = 
 					a.getDimensionPixelSize(R.styleable.CellLayout_shortAxisEndPadding, 10);
 		}
-		mRows=AlmostNexusSettingsHelper.getDesktopRows(context);
-		mColumns=AlmostNexusSettingsHelper.getDesktopColumns(context);
+		mRows=MyLauncherSettingsHelper.getDesktopRows(context);
+		mColumns=MyLauncherSettingsHelper.getDesktopColumns(context);
 		mLongAxisStartPaddingOrg=mLongAxisStartPadding;
 		mShortAxisStartPaddingOrg=mShortAxisStartPadding;
 		mPaginatorPadding=getResources().getDimensionPixelSize(R.dimen.desktop_paginator_padding);
@@ -125,7 +125,7 @@ public class CellLayout extends WidgetCellLayout {
         }*/
 
 		mWallpaperManager = WallpaperManager.getInstance(getContext());
-		mDesktopCacheType=AlmostNexusSettingsHelper.getScreenCache(context);
+		mDesktopCacheType=MyLauncherSettingsHelper.getScreenCache(context);
 	}
 
 	@Override
@@ -613,7 +613,7 @@ public class CellLayout extends WidgetCellLayout {
 		int tmpCellH=mCellHeight;
 		//ADW: add padding if using top paginator dots AND indicator is enabled
 		int topExtra=0;
-		if(AlmostNexusSettingsHelper.getDesktopIndicator(getContext()) && AlmostNexusSettingsHelper.getDesktopIndicatorType(getContext())==DesktopIndicator.INDICATOR_TYPE_PAGER){
+		if(MyLauncherSettingsHelper.getDesktopIndicator(getContext()) && MyLauncherSettingsHelper.getDesktopIndicatorType(getContext())==DesktopIndicator.INDICATOR_TYPE_PAGER){
 			topExtra=mPaginatorPadding;
 		}
 		if(mPortrait){
@@ -631,7 +631,7 @@ public class CellLayout extends WidgetCellLayout {
 			tmpCellW=(widthSpecSize-mLongAxisStartPadding-mLongAxisEndPadding)/mColumns;
 			tmpCellH=(heightSpecSize-mShortAxisStartPadding-mShortAxisEndPadding)/mRows;
 		}
-		if(AlmostNexusSettingsHelper.getAutosizeIcons(getContext())){
+		if(MyLauncherSettingsHelper.getAutosizeIcons(getContext())){
 			mCellWidth=tmpCellW;
 			mCellHeight=tmpCellH;
 		}
@@ -690,10 +690,10 @@ public class CellLayout extends WidgetCellLayout {
 
 			if (mPortrait) {
 				lp.setup(cellWidth, cellHeight, mWidthGap, mHeightGap, shortAxisStartPadding,
-						longAxisStartPadding,AlmostNexusSettingsHelper.getAutosizeIcons(getContext()));
+						longAxisStartPadding,MyLauncherSettingsHelper.getAutosizeIcons(getContext()));
 			} else {
 				lp.setup(cellWidth, cellHeight, mWidthGap, mHeightGap, longAxisStartPadding,
-						shortAxisStartPadding,AlmostNexusSettingsHelper.getAutosizeIcons(getContext()));
+						shortAxisStartPadding,MyLauncherSettingsHelper.getAutosizeIcons(getContext()));
 			}
 
 			if (lp.regenerateId) {
@@ -739,11 +739,11 @@ public class CellLayout extends WidgetCellLayout {
 
 	@Override
 	protected void setChildrenDrawingCacheEnabled(boolean enabled) {
-		if(mDesktopCacheType!=AlmostNexusSettingsHelper.CACHE_DISABLED){
+		if(mDesktopCacheType!=MyLauncherSettingsHelper.CACHE_DISABLED){
 			final int count = getChildCount();
 			for (int i = 0; i < count; i++) {
 				final View view = getChildAt(i);
-				if(mDesktopCacheType==AlmostNexusSettingsHelper.CACHE_LOW)
+				if(mDesktopCacheType==MyLauncherSettingsHelper.CACHE_LOW)
 					view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
 				else
 					view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);

@@ -46,6 +46,8 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 	private Drawable mBackground;
 	private int mTextColor = 0;
 	private int mTextSize = 14;
+	private boolean mTextBold = false;
+
 	private boolean useThemeTextColor = false;
 	private Typeface themeFont=null;
 	// TODO: Check if allItems is used somewhere else!
@@ -64,10 +66,11 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 		mInflater = LayoutInflater.from(context);
 
 		final float scale = context.getResources().getDisplayMetrics().density;
-		mTextSize = (int) (AlmostNexusSettingsHelper.getDrawerLabelSize(context) * scale + 0.5f);
+		mTextSize = (int) (MyLauncherSettingsHelper.getDrawerLabelSize(context) * scale + 0.5f);
+		mTextBold = MyLauncherSettingsHelper.getDrawerLabelBold(context);
 
 		// ADW: Load textcolor and bubble color from theme
-		String themePackage = AlmostNexusSettingsHelper.getThemePackageName(
+		String themePackage = MyLauncherSettingsHelper.getThemePackageName(
 				getContext(), Launcher.THEME_DEFAULT);
 		if (!themePackage.equals(Launcher.THEME_DEFAULT)) {
 			Resources themeResources = null;
@@ -117,8 +120,11 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 		if (useThemeTextColor) {
 			textView.setTextColor(mTextColor);
 		}
-
 		textView.setTextSize(mTextSize);
+		if (mTextBold) {
+			textView.setTypeface(null, Typeface.BOLD);
+		}
+
 		//ADW: Custom font
 		if(themeFont!=null) textView.setTypeface(themeFont);
 		// so i'd better not use it, sorry themers
