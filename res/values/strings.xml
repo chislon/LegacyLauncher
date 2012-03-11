@@ -22,7 +22,7 @@
     <!-- General -->
     <skip />
     <!-- Application name -->
-    <string name="application_name">Legacy.Launcher</string>
+    <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
     <string name="app_version">0.6 Alpha</string>
     <!-- Default folder name -->
@@ -102,8 +102,7 @@
     <string name="gadget_error_text">Problem loading widget</string>
 
     <!-- ADW Settings -->
-    <string name="launcher_label_settings">Legacy Launcher</string>
-    <string name="pref_label_settings">Legacy Launcher Setup</string>
+    <string name="launcher_label_settings">Legacy Launcher Setup</string>
 
     <!-- Workspace preferences -->
     <string name="pref_title_workspace">Desktop</string>
