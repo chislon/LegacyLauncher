@@ -12,7 +12,6 @@ import android.graphics.Typeface;
 import android.graphics.Paint.FontMetrics;
 import android.graphics.Shader.TileMode;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.widget.ImageView;
 
 public class CounterImageView extends ImageView {

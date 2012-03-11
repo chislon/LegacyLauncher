@@ -1,10 +1,5 @@
 package com.wordpress.chislonchow.legacylauncher;
 
-import android.util.DisplayMetrics;
-import android.view.GestureDetector;
-import android.view.View;
-
-
 public interface Drawer {
 
 	public int getVisibility();

@@ -58,7 +58,7 @@ OnPreferenceChangeListener {
 	static final String ANDROID_SETTINGS_PACKAGE = "com.android.settings";
 
 	private static final String PREF_BACKUP_FILENAME = "legacy_launcher_settings.xml";
-	private static final String CONFIG_BACKUP_FILENAME = "legacy_launcher_launcher.db";
+	private static final String CONFIG_BACKUP_FILENAME = "legacy_launcher.db";
 	private static final String NAMESPACE = "com.wordpress.chislonchow.legacylauncher";
 	private static final String LAUNCHER_DB_BASE = "/data/" + NAMESPACE
 			+ "/databases/launcher.db";
@@ -136,14 +136,9 @@ OnPreferenceChangeListener {
 		listPref.setOnPreferenceChangeListener(this);
 		listPref.setSummary(listPref.getEntry());
 
-		listPref = (ListPreference) findPreference("homeOrientation");
-		listPref.setOnPreferenceChangeListener(this);
-		listPref.setSummary(listPref.getEntry());
-
 		listPref = (ListPreference) findPreference("desktopTransitionStyle");
 		listPref.setOnPreferenceChangeListener(this);
 		listPref.setSummary(listPref.getEntry());
-
 
 		// wjax. Listen for changes in those ListPreference as if their values
 		// are BINDING_APP, then an app shall be selected via
@@ -165,24 +160,39 @@ OnPreferenceChangeListener {
 		dockStyle.setOnPreferenceChangeListener(this);
 		dockStyle.setSummary(dockStyle.getEntry());
 		int val = Integer.valueOf(dockStyle.getValue());
-		CheckBoxPreference dots = (CheckBoxPreference) findPreference("uiDots");
+
+		CheckBoxPreference checkBoxPref;
+		checkBoxPref = (CheckBoxPreference) findPreference("uiDots");
 		if (val == Launcher.DOCK_STYLE_5 || val == Launcher.DOCK_STYLE_NONE) {
-			dots.setChecked(false);
-			dots.setEnabled(false);
+			checkBoxPref.setChecked(false);
+			checkBoxPref.setEnabled(false);
 		} else {
-			dots.setEnabled(true);
+			checkBoxPref.setEnabled(true);
 		}
-		CheckBoxPreference lockMAB = (CheckBoxPreference) findPreference("mainDockLockMAB");
+
+		checkBoxPref = (CheckBoxPreference) findPreference("mainDockLockMAB");
 		if (val == Launcher.DOCK_STYLE_NONE) {
-			lockMAB.setEnabled(false);
+			checkBoxPref.setEnabled(false);
 		} else {
-			lockMAB.setEnabled(true);
+			checkBoxPref.setEnabled(true);
 		}
-		ListPreference drawerStyle = (ListPreference) findPreference("drawerStyle");
-		drawerStyle.setOnPreferenceChangeListener(this);
-		drawerStyle.setSummary(drawerStyle.getEntry());
+		checkBoxPref = (CheckBoxPreference) findPreference("systemPersistent");
+		checkBoxPref.setOnPreferenceChangeListener(this);
+
+		listPref = (ListPreference) findPreference("homeOrientation");
+		listPref.setOnPreferenceChangeListener(this);
+		if (checkBoxPref.isChecked()) {
+			CharSequence[] entries = listPref.getEntries();
+			listPref.setSummary(entries[1]);	// XXX: launcher orientation portrait hard-coded in
+		} else {
+			listPref.setSummary(listPref.getEntry());
+		}
+
+		listPref = (ListPreference) findPreference("drawerStyle");
+		listPref.setOnPreferenceChangeListener(this);
+		listPref.setSummary(listPref.getEntry());
 		Preference margin = findPreference("pageHorizontalMargin");
-		val = Integer.valueOf(drawerStyle.getValue());
+		val = Integer.valueOf(listPref.getValue());
 		if (val == 1) {
 			rowsPortrait.setEnabled(true);
 			rowsLandscape.setEnabled(true);
@@ -514,12 +524,12 @@ OnPreferenceChangeListener {
 				// e.printStackTrace();
 			}
 			if (themeResources != null) {
-				int config_uiABBgId = themeResources.getIdentifier(
-						"config_uiABBg", "bool", packageName.toString());
-				if (config_uiABBgId != 0) {
-					boolean config_uiABBg = themeResources
-							.getBoolean(config_uiABBgId);
-					editor.putBoolean("uiABBg", config_uiABBg);
+				int config_ui_ab_hide_bgId = themeResources.getIdentifier(
+						"config_ui_ab_hide_bg", "bool", packageName.toString());
+				if (config_ui_ab_hide_bgId != 0) {
+					boolean config_ui_ab_hide_bg = themeResources
+							.getBoolean(config_ui_ab_hide_bgId);
+					editor.putBoolean("uiABBg", config_ui_ab_hide_bg);
 				}
 				int config_new_selectorsId = themeResources.getIdentifier(
 						"config_new_selectors", "bool", packageName.toString());
@@ -528,21 +538,21 @@ OnPreferenceChangeListener {
 							.getBoolean(config_new_selectorsId);
 					editor.putBoolean("uiNewSelectors", config_new_selectors);
 				}
-				int config_drawerLabelsId = themeResources.getIdentifier(
-						"config_drawerLabels", "bool", packageName.toString());
-				if (config_drawerLabelsId != 0) {
-					boolean config_drawerLabels = themeResources
-							.getBoolean(config_drawerLabelsId);
-					editor.putBoolean("drawerLabels", config_drawerLabels);
+				int config_drawer_labelsId = themeResources.getIdentifier(
+						"config_drawer_labels", "bool", packageName.toString());
+				if (config_drawer_labelsId != 0) {
+					boolean config_drawer_labels = themeResources
+							.getBoolean(config_drawer_labelsId);
+					editor.putBoolean("drawerLabels", config_drawer_labels);
 				}
-				int config_fadeDrawerLabelsId = themeResources.getIdentifier(
-						"config_fadeDrawerLabels", "bool",
+				int config_fade_drawer_labelsId = themeResources.getIdentifier(
+						"config_fade_drawer_labels", "bool",
 						packageName.toString());
-				if (config_fadeDrawerLabelsId != 0) {
-					boolean config_fadeDrawerLabels = themeResources
-							.getBoolean(config_fadeDrawerLabelsId);
+				if (config_fade_drawer_labelsId != 0) {
+					boolean config_fade_drawer_labels = themeResources
+							.getBoolean(config_fade_drawer_labelsId);
 					editor.putBoolean("fadeDrawerLabels",
-							config_fadeDrawerLabels);
+							config_fade_drawer_labels);
 				}
 				int config_desktop_indicatorId = themeResources.getIdentifier(
 						"config_desktop_indicator", "bool",
@@ -667,12 +677,13 @@ OnPreferenceChangeListener {
 	}
 
 	public boolean onPreferenceChange(Preference preference, Object newValue) {		
-		if (preference.getKey().equals("themePackageName")) {
+		final String key = preference.getKey();
+		if (key.equals("themePackageName")) {
 			PreviewPreference themePreview = (PreviewPreference) findPreference("themePreview");
 			themePreview.setTheme(newValue.toString());
 			preference.setSummary(themePreview.getThemeName());
 			return false;
-		} else if (preference.getKey().equals("swipedownActions")) {
+		} else if (key.equals("swipedownActions")) {
 			// lets launch app picker if the user selected to launch an app on
 			// gesture
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
@@ -686,7 +697,7 @@ OnPreferenceChangeListener {
 				startActivityForResult(pickIntent,
 						REQUEST_SWIPE_DOWN_APP_CHOOSER);
 			}
-		} else if (preference.getKey().equals("homeBinding")) {
+		} else if (key.equals("homeBinding")) {
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 			// lets launch app picker if the user selected to launch an app on
@@ -700,7 +711,7 @@ OnPreferenceChangeListener {
 				startActivityForResult(pickIntent,
 						REQUEST_HOME_BINDING_APP_CHOOSER);
 			}
-		} else if (preference.getKey().equals("swipeupActions")) {
+		} else if (key.equals("swipeupActions")) {
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 			// lets launch app picker if the user selected to launch an app on
@@ -713,7 +724,7 @@ OnPreferenceChangeListener {
 				pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
 				startActivityForResult(pickIntent, REQUEST_SWIPE_UP_APP_CHOOSER);
 			}
-		} else if (preference.getKey().equals("doubletapActions")) {
+		} else if (key.equals("doubletapActions")) {
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 			// lets launch app picker if the user selected to launch an app on
@@ -727,7 +738,7 @@ OnPreferenceChangeListener {
 				startActivityForResult(pickIntent,
 						REQUEST_DOUBLE_TAP_APP_CHOOSER);
 			}
-		} else if (preference.getKey().equals("main_dock_style")) {
+		} else if (key.equals("main_dock_style")) {
 			CheckBoxPreference dots = (CheckBoxPreference) findPreference("uiDots");
 			int val = Integer.valueOf(newValue.toString());
 			if (val == Launcher.DOCK_STYLE_5 || val == Launcher.DOCK_STYLE_NONE) {
@@ -744,7 +755,7 @@ OnPreferenceChangeListener {
 			}
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
-		} else if (preference.getKey().equals("drawerStyle")) {
+		} else if (key.equals("drawerStyle")) {
 			Preference rowsPortrait = findPreference("drawerRowsPortrait");
 			Preference rowslandscape = findPreference("drawerRowsLandscape");
 			Preference margin = findPreference("pageHorizontalMargin");
@@ -760,7 +771,7 @@ OnPreferenceChangeListener {
 			}
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
-		} else if (preference.getKey().equals("uiDesktopIndicatorType")) {
+		} else if (key.equals("uiDesktopIndicatorType")) {
 			// enable/disable slider color customization based on indicator type
 			int val = Integer.valueOf(newValue.toString());
 			if (val > 1) {
@@ -772,12 +783,21 @@ OnPreferenceChangeListener {
 			}
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
-		} else if (preference.getKey().equals("deletezone_style") || 
-				preference.getKey().equals("desktopTransitionStyle") || 
-				preference.getKey().equals("homeOrientation")) {
+		} else if (key.equals("deletezone_style") || 
+				key.equals("desktopTransitionStyle") || 
+				key.equals("homeOrientation")) {
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
-		}		
+		} else if (key.equals("systemPersistent")) {
+			// system persistent updates orientation
+			ListPreference listPref = (ListPreference) findPreference("homeOrientation");
+			CharSequence[] entries = listPref.getEntries();
+			if (Boolean.parseBoolean(newValue.toString())) {
+				listPref.setSummary(entries[1]);	// XXX: launcher orientation portrait hard-coded in
+			} else {
+				listPref.setSummary(listPref.getEntry());
+			}
+		}
 		return true;
 	}
 

@@ -17,9 +17,6 @@
 package com.wordpress.chislonchow.legacylauncher.ui;
 
 import com.wordpress.chislonchow.legacylauncher.R;
-import com.wordpress.chislonchow.legacylauncher.R.id;
-import com.wordpress.chislonchow.legacylauncher.R.layout;
-
 import android.content.Context;
 import android.os.Handler;
 import android.text.InputFilter;
@@ -27,7 +24,6 @@ import android.text.InputType;
 import android.text.Spanned;
 import android.text.method.NumberKeyListener;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;

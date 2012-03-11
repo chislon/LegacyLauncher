@@ -25,7 +25,7 @@
         <item>Scatter</item>
     </string-array>
     <string-array name="home_orientation_entries">
-        <item>Auto/sensor</item>
+        <item>Sensor</item>
         <item>Portrait</item>
         <item>Landscape</item>
     </string-array>

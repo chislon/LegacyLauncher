@@ -1,9 +1,6 @@
 package com.wordpress.chislonchow.legacylauncher.ui;
 
 import com.wordpress.chislonchow.legacylauncher.R;
-import com.wordpress.chislonchow.legacylauncher.R.id;
-import com.wordpress.chislonchow.legacylauncher.R.layout;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -23,6 +20,8 @@ SeekBar.OnSeekBarChangeListener {
 	private TextView mValueText;
 
 	private String mSuffix;
+
+	private View mView;
 
 	private int mMax, mMin, mValue = 0;
 
@@ -79,6 +78,7 @@ SeekBar.OnSeekBarChangeListener {
 			int value = mSeekBar.getProgress();
 			if (callChangeListener(value)) {
 				setValue(value);
+				updateWidgetFrameView(mView);
 			}
 		}
 	}
@@ -144,31 +144,40 @@ SeekBar.OnSeekBarChangeListener {
 	@Override
 	protected void onBindView(View view) {
 		super.onBindView(view);
-		
+		updateWidgetFrameView(view);
+	}
+
+	private void updateWidgetFrameView(View view) {
 		if (view == null) return;
+		mView = view;
 
-		// custom widget frame
-		TextView textView = new TextView(getContext());
-		textView.setText(Integer.toString(mValue + mMin));
-		textView.setTextAppearance(getContext(), android.R.style.TextAppearance_Medium);
-		textView.setTypeface(null, Typeface.BOLD);
-
+		// prepare widget frame
 		LinearLayout widgetFrameView = ((LinearLayout)view.findViewById(android.R.id.widget_frame));
 		if (widgetFrameView == null) return;
-		widgetFrameView.setVisibility(View.VISIBLE);
-		final boolean preApi14 = android.os.Build.VERSION.SDK_INT < 14;
-		final int rightPadding = (int) (getContext().getResources().getDisplayMetrics().density * (preApi14 ? 8 : 5));
-		widgetFrameView.setPadding(
-				widgetFrameView.getPaddingLeft(),
-				widgetFrameView.getPaddingTop(),
-				rightPadding,
-				widgetFrameView.getPaddingBottom()
-				);
-		// remove already created widget
+
+		// remove already created widgets
 		int count = widgetFrameView.getChildCount();
 		if (count > 0) {
 			widgetFrameView.removeViews(0, count);
 		}
-		widgetFrameView.addView(textView);
+
+		// add our view only if the preference is active
+		if (isEnabled()) {
+			widgetFrameView.setVisibility(View.VISIBLE);
+			final boolean preApi14 = android.os.Build.VERSION.SDK_INT < 14;
+			final int rightPadding = (int) (getContext().getResources().getDisplayMetrics().density * (preApi14 ? 10 : 7));
+			widgetFrameView.setPadding(
+					widgetFrameView.getPaddingLeft(),
+					widgetFrameView.getPaddingTop(),
+					rightPadding,
+					widgetFrameView.getPaddingBottom()
+					);
+
+			TextView textView = new TextView(getContext());
+			textView.setText(Integer.toString(mValue + mMin));
+			textView.setTextAppearance(getContext(), android.R.style.TextAppearance_Medium);
+			textView.setTypeface(null, Typeface.BOLD);
+			widgetFrameView.addView(textView);
+		}
 	}
 }

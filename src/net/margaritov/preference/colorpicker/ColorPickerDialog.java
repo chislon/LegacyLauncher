@@ -23,14 +23,15 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.LinearLayout;
 
 public class ColorPickerDialog 
-	extends 
-		Dialog 
-	implements
-		ColorPickerView.OnColorChangedListener,
-		View.OnClickListener {
+extends 
+Dialog 
+implements
+ColorPickerView.OnColorChangedListener,
+View.OnClickListener {
 
 	private ColorPickerView mColorPicker;
 
@@ -42,42 +43,39 @@ public class ColorPickerDialog
 	public interface OnColorChangedListener {
 		public void onColorChanged(int color);
 	}
-	
+
 	public ColorPickerDialog(Context context, int initialColor) {
 		super(context);
-
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		init(initialColor);
 	}
 
 	private void init(int color) {
 		// To fight color branding.
 		getWindow().setFormat(PixelFormat.RGBA_8888);
-
 		setUp(color);
-
 	}
 
 	private void setUp(int color) {
-		
+
 		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
+
 		View layout = inflater.inflate(R.layout.dialog_color_picker, null);
 
 		setContentView(layout);
+		setTitle(null);
 
-		setTitle(R.string.dialog_color_picker);
-		
 		mColorPicker = (ColorPickerView) layout.findViewById(R.id.color_picker_view);
 		mOldColor = (ColorPickerPanelView) layout.findViewById(R.id.old_color_panel);
 		mNewColor = (ColorPickerPanelView) layout.findViewById(R.id.new_color_panel);
-		
+
 		((LinearLayout) mOldColor.getParent()).setPadding(
-			Math.round(mColorPicker.getDrawingOffset()), 
-			0, 
-			Math.round(mColorPicker.getDrawingOffset()), 
-			0
-		);	
-		
+				Math.round(mColorPicker.getDrawingOffset()), 
+				0, 
+				Math.round(mColorPicker.getDrawingOffset()), 
+				0
+				);	
+
 		mOldColor.setOnClickListener(this);
 		mNewColor.setOnClickListener(this);
 		mColorPicker.setOnColorChangedListener(this);
@@ -95,14 +93,14 @@ public class ColorPickerDialog
 		if (mListener != null) {
 			mListener.onColorChanged(color);
 		}
-		*/
+		 */
 
 	}
 
 	public void setAlphaSliderVisible(boolean visible) {
 		mColorPicker.setAlphaSliderVisible(visible);
 	}
-	
+
 	/**
 	 * Set a OnColorChangedListener to get notified when the color
 	 * selected by the user has changed.
@@ -125,5 +123,5 @@ public class ColorPickerDialog
 		}
 		dismiss();
 	}
-	
+
 }

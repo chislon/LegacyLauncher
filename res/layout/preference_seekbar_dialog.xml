@@ -38,7 +38,7 @@
             android:layout_below="@android:id/myBar"
             android:layout_centerHorizontal="true"
             android:maxLines="1"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </RelativeLayout>
 
 </LinearLayout>

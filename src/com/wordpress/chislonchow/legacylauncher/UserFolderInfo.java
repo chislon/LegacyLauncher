@@ -16,8 +16,6 @@
 
 package com.wordpress.chislonchow.legacylauncher;
 
-import android.content.ContentValues;
-
 import java.util.ArrayList;
 
 /**

@@ -66,8 +66,7 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 
 		mInflater = LayoutInflater.from(context);
 
-		mTextSize = TypedValue.complexToDimensionPixelSize(
-				MyLauncherSettingsHelper.getDrawerLabelSize(context), context.getResources().getDisplayMetrics());
+		mTextSize = MyLauncherSettingsHelper.getDrawerLabelSize(context);
 		mTextBold = MyLauncherSettingsHelper.getDrawerLabelBold(context);
 
 		// ADW: Load textcolor and bubble color from theme
@@ -121,7 +120,7 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 		if (useThemeTextColor) {
 			textView.setTextColor(mTextColor);
 		}
-		textView.setTextSize(mTextSize);
+		textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTextSize);
 		if (mTextBold) {
 			textView.setTypeface(null, Typeface.BOLD);
 		}

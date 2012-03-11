@@ -13,8 +13,6 @@ import android.graphics.Typeface;
 import android.graphics.Paint.FontMetrics;
 import android.graphics.Shader.TileMode;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.widget.TextView;
 
 public class CounterTextView extends TextView {
@@ -45,10 +43,8 @@ public class CounterTextView extends TextView {
 	private void init(){
 		Context context = getContext();
 		Resources res = context.getResources();
-		DisplayMetrics dm = res.getDisplayMetrics();
-		// px conversion
-		final int fontSize = TypedValue.complexToDimensionPixelSize(
-				MyLauncherSettingsHelper.getNotifSize(context), dm);
+		final float scale = res.getDisplayMetrics().density;		// px conversion
+		final int fontSize = (int)(MyLauncherSettingsHelper.getNotifSize(getContext()) * scale + 0.5f);
 
 		mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

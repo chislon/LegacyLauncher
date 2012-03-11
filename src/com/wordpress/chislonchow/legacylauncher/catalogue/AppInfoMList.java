@@ -21,7 +21,6 @@ import java.util.List;
 
 import com.wordpress.chislonchow.legacylauncher.ApplicationInfo;
 import com.wordpress.chislonchow.legacylauncher.ApplicationsAdapter;
-import com.wordpress.chislonchow.legacylauncher.LauncherModel;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters.Catalogue;
 import com.wordpress.chislonchow.legacylauncher.R;
 
@@ -29,7 +28,6 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;

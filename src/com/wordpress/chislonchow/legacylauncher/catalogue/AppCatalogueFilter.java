@@ -2,7 +2,6 @@ package com.wordpress.chislonchow.legacylauncher.catalogue;
 
 import java.util.List;
 
-import com.wordpress.chislonchow.legacylauncher.ApplicationsAdapter;
 import com.wordpress.chislonchow.legacylauncher.Launcher;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters.Catalogue;
 

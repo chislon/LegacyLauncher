@@ -16,20 +16,15 @@
 
 package com.wordpress.chislonchow.legacylauncher;
 
-import com.wordpress.chislonchow.legacylauncher.R;
-
 import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.TypedValue;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
+import android.util.AttributeSet;
 
 /**
  * TextView that draws a bubble behind the text. We cannot use a LineBackgroundSpan
@@ -37,138 +32,164 @@ import android.text.Layout;
  * too aggressive.
  */
 public class BubbleTextView extends CounterTextView {
-    //private static final float CORNER_RADIUS = 8.0f;
-    private static final float PADDING_H = 5.0f;
-    private static final float PADDING_V = 1.0f;
+	//private static final float CORNER_RADIUS = 8.0f;
 
-    private final RectF mRect = new RectF();
-    private Paint mPaint;
+	private final RectF mRect = new RectF();
+	private Paint mPaint;
 
-    private boolean mBackgroundSizeChanged;
-    private Drawable mBackground;
-    private float mCornerRadius;
-    private float mPaddingH;
-    private float mPaddingV;
-    //adw custom corner radius themable
-    private float mCustomCornerRadius=8.0f;
-    public BubbleTextView(Context context) {
-        super(context);
-        init();
-    }
+	private boolean mBackgroundSizeChanged;
+	private Drawable mBackground;
+	private float mCornerRadius;
+	private float mPaddingH;
+	private float mPaddingV;
+	//adw custom corner radius themable
+	public BubbleTextView(Context context) {
+		super(context);
+		init();
+	}
 
-    public BubbleTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
+	public BubbleTextView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init();
+	}
 
-    public BubbleTextView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init();
-    }
+	public BubbleTextView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		init();
+	}
 
-    private void init() {
+	private void init() {
 		Context context = getContext();
-    	
-        setFocusable(true);
-        //mBackground = getBackground();
-        mBackground=IconHighlights.getDrawable(context, IconHighlights.TYPE_DESKTOP);
-        setBackgroundDrawable(null);
-        mBackground.setCallback(this);
-        //ADW: Load textcolor and bubble color from theme
-        String themePackage=MyLauncherSettingsHelper.getThemePackageName(context, Launcher.THEME_DEFAULT);
-        int color=context.getResources().getColor(R.color.bubble_dark_background);
-        if(!themePackage.equals(Launcher.THEME_DEFAULT)){
-        	Resources themeResources=null;
-        	try {
-    			themeResources=context.getPackageManager().getResourcesForApplication(themePackage);
-    		} catch (NameNotFoundException e) {
-    			//e.printStackTrace();
-    		}
-    		if(themeResources!=null){
-    			int resourceId=themeResources.getIdentifier("bubble_color", "color", themePackage);
-    			if(resourceId!=0){
-    				color=themeResources.getColor(resourceId);
-    			}
-    			int textColorId=themeResources.getIdentifier("bubble_text_color", "color", themePackage);
-    			if(textColorId!=0){
-    				setTextColor(themeResources.getColor(textColorId));
-    			}
-    			int cornerId=themeResources.getIdentifier("bubble_radius", "integer", themePackage);
-    			if(cornerId!=0){
-    				mCustomCornerRadius=(float)themeResources.getInteger(cornerId);
-    			}
-    		}
-        }
-        
-		// text size customization
-        setTextSize(MyLauncherSettingsHelper.getDesktopLabelSize(context));
-        
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        //mPaint.setColor(getContext().getResources().getColor(R.color.bubble_dark_background));
-        mPaint.setColor(color);
-        final float scale = getContext().getResources().getDisplayMetrics().density;
-        //mCornerRadius = CORNER_RADIUS * scale;
-        mCornerRadius = mCustomCornerRadius * scale;
-        mPaddingH = PADDING_H * scale;
-        //noinspection PointlessArithmeticExpression
-        mPaddingV = PADDING_V * scale;
-    }
 
-    @Override
-    protected boolean setFrame(int left, int top, int right, int bottom) {
-        if (mLeft != left || mRight != right || mTop != top || mBottom != bottom) {
-            mBackgroundSizeChanged = true;
-        }
-        return super.setFrame(left, top, right, bottom);
-    }
+		setFocusable(true);
+		//mBackground = getBackground();
+		mBackground = IconHighlights.getDrawable(context, IconHighlights.TYPE_DESKTOP);
+		setBackgroundDrawable(null);
+		mBackground.setCallback(this);
 
-    @Override
-    protected boolean verifyDrawable(Drawable who) {
-        return who == mBackground || super.verifyDrawable(who);
-    }
+		int colorBg;
+		boolean overrideColor = MyLauncherSettingsHelper.getDesktopLabelColorOverride(context);
+		boolean overridePadding = MyLauncherSettingsHelper.getDesktopLabelPaddingOverride(context);
 
-    @Override
-    protected void drawableStateChanged() {
-        Drawable d = mBackground;
-        if (d != null && d.isStateful()) {
-            d.setState(getDrawableState());
-        }
-        super.drawableStateChanged();
-    }
+		//ADW: Load textcolor and bubble color from theme
+		String themePackage = MyLauncherSettingsHelper.getThemePackageName(context, Launcher.THEME_DEFAULT);
+		
+		// load theme padding and colors 
+		if(!themePackage.equals(Launcher.THEME_DEFAULT)){
+			Resources themeResources = null;
+			try {
+				themeResources=context.getPackageManager().getResourcesForApplication(themePackage);
+			} catch (NameNotFoundException e) {
+				//e.printStackTrace();
+			}
+			if (themeResources != null) {
+				if (!overrideColor) {
+					int resourceId=themeResources.getIdentifier("bubble_color", "color", themePackage);
+					if (resourceId != 0){
+						colorBg = themeResources.getColor(resourceId);
+					}
+					int textColorId = themeResources.getIdentifier("bubble_text_color", "color", themePackage);
+					if (textColorId != 0){
+						setTextColor(themeResources.getColor(textColorId));
+					}
+				}
+				if (!overridePadding) {
+					int cornerId=themeResources.getIdentifier("bubble_radius", "integer", themePackage);
+					if (cornerId != 0){
+						mCornerRadius = (float)themeResources.getInteger(cornerId);
+					}
+				}
+			}
+		}
 
-    @Override
-    public void draw(Canvas canvas) {
-        final Drawable background = mBackground;
-        if (background != null) {
-            final int scrollX = mScrollX;
-            final int scrollY = mScrollY;
+		// text size customization. no scaling because the entire canvas is scaled. 
+		setTextSize(MyLauncherSettingsHelper.getDesktopLabelSize(context));
 
-            if (mBackgroundSizeChanged) {
-                background.setBounds(0, 0,  mRight - mLeft, mBottom - mTop);
-                mBackgroundSizeChanged = false;
-            }
+		// retrieve overridden or default values
+		if (overrideColor) {
+			colorBg = MyLauncherSettingsHelper.getDesktopLabelColorBg(context);	// set later in code
+			setTextColor(MyLauncherSettingsHelper.getDesktopLabelColorText(context));
+		} else {
+			colorBg = context.getResources().getInteger(R.integer.config_desktop_label_color_bg);
+		}
+		
+		if (overridePadding) {
+			mCornerRadius = MyLauncherSettingsHelper.getDesktopLabelPaddingRadius(context);
+			mPaddingH = MyLauncherSettingsHelper.getDesktopLabelPaddingH(context);
+			mPaddingV = MyLauncherSettingsHelper.getDesktopLabelPaddingV(context);
+		} else {
+			mCornerRadius = context.getResources().getInteger(R.integer.config_desktop_label_padding_radius);
+			mPaddingH = context.getResources().getInteger(R.integer.config_desktop_label_padding_h);
+			mPaddingV = context.getResources().getInteger(R.integer.config_desktop_label_padding_v);
 
-            if ((scrollX | scrollY) == 0) {
-                background.draw(canvas);
-            } else {
-                canvas.translate(scrollX, scrollY);
-                background.draw(canvas);
-                canvas.translate(-scrollX, -scrollY);
-            }
-        }
-
-        if(getText().length()>0){
-	        final Layout layout = getLayout();
-	        final RectF rect = mRect;
-	        final int left = getCompoundPaddingLeft();
-	        final int top = getExtendedPaddingTop();
+		}
+		
+		// scale padding to display 
+		final float scale = context.getResources().getDisplayMetrics().density;
+		mCornerRadius *= scale;
+		mPaddingH *= scale;
+		mPaddingV *= scale;
 	
-	        rect.set(left + layout.getLineLeft(0) - mPaddingH,
-	                top + layout.getLineTop(0) -  mPaddingV,
-	                Math.min(left + layout.getLineRight(0) + mPaddingH, getScrollX() + getRight() - getLeft()),
-	                top + layout.getLineBottom(0) + mPaddingV);
-	        canvas.drawRoundRect(rect, mCornerRadius, mCornerRadius, mPaint);
-        }
-        super.draw(canvas);
-    }
+		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		//mPaint.setColor(getContext().getResources().getColor(R.color.bubble_dark_background));
+		mPaint.setColor(colorBg);
+	}
+
+	@Override
+	protected boolean setFrame(int left, int top, int right, int bottom) {
+		if (mLeft != left || mRight != right || mTop != top || mBottom != bottom) {
+			mBackgroundSizeChanged = true;
+		}
+		return super.setFrame(left, top, right, bottom);
+	}
+
+	@Override
+	protected boolean verifyDrawable(Drawable who) {
+		return who == mBackground || super.verifyDrawable(who);
+	}
+
+	@Override
+	protected void drawableStateChanged() {
+		Drawable d = mBackground;
+		if (d != null && d.isStateful()) {
+			d.setState(getDrawableState());
+		}
+		super.drawableStateChanged();
+	}
+
+	@Override
+	public void draw(Canvas canvas) {
+		final Drawable background = mBackground;
+		if (background != null) {
+			final int scrollX = mScrollX;
+			final int scrollY = mScrollY;
+
+			if (mBackgroundSizeChanged) {
+				background.setBounds(0, 0,  mRight - mLeft, mBottom - mTop);
+				mBackgroundSizeChanged = false;
+			}
+
+			if ((scrollX | scrollY) == 0) {
+				background.draw(canvas);
+			} else {
+				canvas.translate(scrollX, scrollY);
+				background.draw(canvas);
+				canvas.translate(-scrollX, -scrollY);
+			}
+		}
+
+		if(getText().length()>0){
+			final Layout layout = getLayout();
+			final RectF rect = mRect;
+			final int left = getCompoundPaddingLeft();
+			final int top = getExtendedPaddingTop();
+
+			rect.set(left + layout.getLineLeft(0) - mPaddingH,
+					top + layout.getLineTop(0) -  mPaddingV,
+					Math.min(left + layout.getLineRight(0) + mPaddingH, getScrollX() + getRight() - getLeft()),
+					top + layout.getLineBottom(0) + mPaddingV);
+			canvas.drawRoundRect(rect, mCornerRadius, mCornerRadius, mPaint);
+		}
+		super.draw(canvas);
+	}
 }

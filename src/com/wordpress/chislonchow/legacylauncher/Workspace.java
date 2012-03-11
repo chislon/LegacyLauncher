@@ -135,9 +135,9 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 	private boolean wallpaperHack=true;
 	private BitmapDrawable mWallpaperDrawable;
 	//ADW: speed for desktop transitions
-	private int mScrollingSpeed=600;
+	private int mScrollingSpeed=500;
 	//ADW: bounce scroll
-	private int mScrollingBounce=50;
+	private int mScrollingBounce=0;
 	private boolean mScrollingLoop=false;
 	//ADW: sense zoom constants
 	private static final int SENSE_OPENING = 1;

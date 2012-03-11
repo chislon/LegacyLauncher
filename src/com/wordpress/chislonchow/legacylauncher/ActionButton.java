@@ -56,6 +56,15 @@ DragListener, OnLongClickListener, DragSource {
 
 	public boolean acceptDrop(DragSource source, int x, int y, int xOffset,
 			int yOffset, Object dragInfo) {
+
+		// launcher lock do nothing if locked
+		if (mCurrentInfo != null) {
+			if (LauncherSettings.Favorites.CONTAINER_MAB == mCurrentInfo.container && 
+					MyLauncherSettingsHelper.getDockLockMAB(mLauncher)) {
+				return false;
+			}
+		}
+
 		return !specialMode;
 	}
 
@@ -83,16 +92,6 @@ DragListener, OnLongClickListener, DragSource {
 
 		// default value
 		boolean accept = true;
-
-		// launcher lock do nothing if locked
-		if (mCurrentInfo != null) {
-			if (MyLauncherSettingsHelper.getLauncherLocked(mLauncher)) {
-				accept = false;
-			} else if (LauncherSettings.Favorites.CONTAINER_MAB == mCurrentInfo.container
-					&& MyLauncherSettingsHelper.getDockLockMAB(mLauncher)) {
-				accept = false;
-			}
-		}
 
 		ItemInfo info = (ItemInfo) dragInfo;
 		switch (info.itemType) {

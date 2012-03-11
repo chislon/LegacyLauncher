@@ -93,7 +93,7 @@
         <attr name="texture" format="reference" />
     </declare-styleable>
 
-    <!-- XML attributes used by default_workspace.xml -->
+    <!-- XML attributes used by default_desktop.xml -->
     <declare-styleable name="Favorite">
         <attr name="className" format="string" />
         <attr name="packageName" format="string" />

@@ -20,30 +20,37 @@ public final class MyLauncherSettingsHelper {
 	public static final int CACHE_AUTO=2;
 	public static final int CACHE_DISABLED=3;
 
-	private static final String ALMOSTNEXUS_PREFERENCES = "launcher.preferences.almostnexus";
+	private static final String LEGACY_PREFERENCES = "legacy.launcher.preferences";
 
 	// modification of these keys cause restart 
 	private static final String[] restart_keys = {
-		"drawerNew",
-		"uiHideLabels",
 		"highlights_color",
 		"highlights_color_focus",
 		"uiNewSelectors",
-		"desktopRows",
-		"desktopColumns",
-		"autosizeIcons",
 		"uiDesktopIndicatorType",
 		"screenCache",
 		"uiDesktopIndicator",
 		"themePackageName",
 		"themeIcons", 
 		"notif_size",
+		"drawerNew",
 		"drawerStyle", 
 		"drawerLabelSize",
 		"drawerLabelBold",
 		"uiDesktopIndicatorColor",
 		"uiDesktopIndicator",
-		"desktopLabelSize"
+		"desktopRows",
+		"desktopColumns",
+		"autosizeIcons",
+		"uiHideLabels",
+		"desktopLabelSize",
+		"desktopLabelPaddingOverride",
+		"desktopLabelPaddingH",
+		"desktopLabelPaddingV",
+		"desktopLabelPaddingRadius",
+		"desktopLabelColorOverride",
+		"desktopLabelColorText",
+		"desktopLabelColorBg"
 	};
 
 	public static boolean needsRestart(String key){
@@ -54,259 +61,296 @@ public final class MyLauncherSettingsHelper {
 		return false;
 	}
 	public static int getDesktopScreens(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int screens = sp.getInt("desktopScreens", context.getResources().getInteger(R.integer.config_desktopScreens))+1;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int screens = sp.getInt("desktopScreens", context.getResources().getInteger(R.integer.config_desktop_screens))+1;
 		return screens;
 	}
 	public static int getDefaultScreen(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int def_screen = sp.getInt("defaultScreen", context.getResources().getInteger(R.integer.config_defaultScreen));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int def_screen = sp.getInt("defaultScreen", context.getResources().getInteger(R.integer.config_default_screen));
 		return def_screen;
 	}
 	public static int getPageHorizontalMargin(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int newD = sp.getInt("pageHorizontalMargin", context.getResources().getInteger(R.integer.config_pageHorizontalMargin));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = sp.getInt("pageHorizontalMargin", context.getResources().getInteger(R.integer.config_page_horizontal_margin));
 		return newD;
 	}
 	public static int getColumnsPortrait(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int screens = sp.getInt("drawerColumnsPortrait", context.getResources().getInteger(R.integer.config_drawerColumnsPortrait))+1;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int screens = sp.getInt("drawerColumnsPortrait", context.getResources().getInteger(R.integer.config_drawer_columns_portrait))+1;
 		return screens;
 	}
 	public static int getRowsPortrait(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int screens = sp.getInt("drawerRowsPortrait", context.getResources().getInteger(R.integer.config_drawerRowsPortrait))+1;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int screens = sp.getInt("drawerRowsPortrait", context.getResources().getInteger(R.integer.config_drawer_rows_portrait))+1;
 		return screens;
 	}
 	public static int getColumnsLandscape(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int screens = sp.getInt("drawerColumnsLandscape", context.getResources().getInteger(R.integer.config_drawerColumnsLandscape))+1;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int screens = sp.getInt("drawerColumnsLandscape", context.getResources().getInteger(R.integer.config_drawer_columns_landscape))+1;
 		return screens;
 	}
 	public static int getRowsLandscape(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int screens = sp.getInt("drawerRowsLandscape", context.getResources().getInteger(R.integer.config_drawerRowsLandscape))+1;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int screens = sp.getInt("drawerRowsLandscape", context.getResources().getInteger(R.integer.config_drawer_rows_landscape))+1;
 		return screens;
 	}
 	public static boolean getDrawerAnimated(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean animated = sp.getBoolean("drawerAnimated", context.getResources().getBoolean(R.bool.config_drawerAnimated));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean animated = sp.getBoolean("drawerAnimated", context.getResources().getBoolean(R.bool.config_drawer_animated));
 		return animated;
 	}
 	public static boolean getHideStatusbar(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("hideStatusbar", context.getResources().getBoolean(R.bool.config_hideStatusbar));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("hideStatusbar", context.getResources().getBoolean(R.bool.config_hide_statusbar));
 		return newD;
 	}
 	public static boolean getPreviewsEnable(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("previewsEnable", context.getResources().getBoolean(R.bool.config_previewsEnable));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("previewsEnable", context.getResources().getBoolean(R.bool.config_previews_enable));
 		return newD;
 	}
 	public static boolean getPreviewsNew(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("previewsNew", context.getResources().getBoolean(R.bool.config_previewsNew));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("previewsNew", context.getResources().getBoolean(R.bool.config_previews_spread));
 		return newD;
 	}
 	public static int getHomeBinding(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int newD = Integer.valueOf(sp.getString("homeBinding", context.getResources().getString(R.string.config_homeBinding)));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = Integer.valueOf(sp.getString("homeBinding", context.getResources().getString(R.string.config_home_binding_actions)));
 		return newD;
 	}
 	public static boolean getUIDots(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("uiDots", context.getResources().getBoolean(R.bool.config_uiDots));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("uiDots", context.getResources().getBoolean(R.bool.config_ui_dots));
 		return newD;
 	}
 	public static boolean getUICloseFolder(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("uiCloseFolder", context.getResources().getBoolean(R.bool.config_uiCloseFolder));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("uiCloseFolder", context.getResources().getBoolean(R.bool.config_ui_close_folder));
 		return newD;
 	}
 	public static int getDesktopSpeed(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int newD = sp.getInt("desktopSpeed", context.getResources().getInteger(R.integer.config_desktopSpeed));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = sp.getInt("desktopSpeed", context.getResources().getInteger(R.integer.config_desktop_speed));
 		return newD;
 	}
 	public static int getDesktopBounce(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int newD = sp.getInt("desktopBounce", context.getResources().getInteger(R.integer.config_desktopBounce));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = sp.getInt("desktopBounce", context.getResources().getInteger(R.integer.config_desktop_bounce));
 		return newD;
 	}
 	public static boolean getDesktopLooping(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("desktopLooping", context.getResources().getBoolean(R.bool.config_desktopLooping));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("desktopLooping", context.getResources().getBoolean(R.bool.config_desktop_looping));
 		return newD;
 	}
 	public static boolean getUIABBg(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("uiABBg", context.getResources().getBoolean(R.bool.config_uiABBg));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("uiABBg", context.getResources().getBoolean(R.bool.config_ui_ab_hide_bg));
 		return newD;
 	}
 	public static int getAnimationSpeed(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = sp.getInt("animationSpeed", context.getResources().getInteger(R.integer.config_animation_speed))+300;
 		return newD;
 	}
 	public static float getuiScaleAB(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int newD = sp.getInt("uiScaleAB", context.getResources().getInteger(R.integer.config_uiScaleAB))+1;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = sp.getInt("uiScaleAB", context.getResources().getInteger(R.integer.config_ui_ab_scale))+1;
 		float scale=newD/10f;
 		return scale;
 	}
 	public static boolean getUIHideLabels(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("uiHideLabels", context.getResources().getBoolean(R.bool.config_uiHideLabels));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("uiHideLabels", context.getResources().getBoolean(R.bool.config_ui_hide_labels));
 		return newD;
 	}
 	public static boolean getWallpaperHack(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("wallpaperHack", context.getResources().getBoolean(R.bool.config_wallpaperHack));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("wallpaperHack", context.getResources().getBoolean(R.bool.config_wallpaper_hack));
 		return newD;
 	}
 	public static int getHighlightsColor(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = sp.getInt("highlights_color", context.getResources().getInteger(R.integer.config_highlights_color));
 		return newD;
 	}
 	public static int getHighlightsColorFocus(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = sp.getInt("highlights_color_focus", context.getResources().getInteger(R.integer.config_highlights_color_focus));
 		return newD;
 	}
 	public static boolean getUINewSelectors(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("uiNewSelectors", context.getResources().getBoolean(R.bool.config_new_selectors));
 		return newD;
 	}
 	public static int getDrawerColor(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = sp.getInt("drawer_color", context.getResources().getInteger(R.integer.config_drawer_color));
 		return newD;
 	}
 	public static int getDesktopColumns(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int screens = sp.getInt("desktopColumns", context.getResources().getInteger(R.integer.config_desktopColumns))+3;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int screens = sp.getInt("desktopColumns", context.getResources().getInteger(R.integer.config_desktop_columns))+3;
 		return screens;
 	}
 	public static int getDesktopRows(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int screens = sp.getInt("desktopRows", context.getResources().getInteger(R.integer.config_desktopRows))+3;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int screens = sp.getInt("desktopRows", context.getResources().getInteger(R.integer.config_desktop_rows))+3;
 		return screens;
 	}
 	public static int getDesktopLabelSize(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int value = sp.getInt("desktopLabelSize", context.getResources().getInteger(R.integer.config_desktop_label_size))+8;
 		return value;
 	}
+
+	public static boolean getDesktopLabelPaddingOverride(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("desktopLabelPaddingOverride", context.getResources().getBoolean(R.bool.config_desktop_label_padding_override));
+		return newD;
+	}
+	public static int getDesktopLabelPaddingRadius(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int value = sp.getInt("desktopLabelPaddingRadius", context.getResources().getInteger(R.integer.config_desktop_label_padding_radius));
+		return value;
+	}
+	public static int getDesktopLabelPaddingH(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int value = sp.getInt("desktopLabelPaddingH", context.getResources().getInteger(R.integer.config_desktop_label_padding_h));
+		return value;
+	}
+	public static int getDesktopLabelPaddingV(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int value = sp.getInt("desktopLabelPaddingV", context.getResources().getInteger(R.integer.config_desktop_label_padding_v));
+		return value;
+	}
+	public static boolean getDesktopLabelColorOverride(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("desktopLabelColorOverride", context.getResources().getBoolean(R.bool.config_desktop_label_color_override));
+		return newD;
+	}
+	public static int getDesktopLabelColorText(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int value = sp.getInt("desktopLabelColorText", context.getResources().getInteger(R.integer.config_desktop_label_color_text));
+		return value;
+	}
+	public static int getDesktopLabelColorBg(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int value = sp.getInt("desktopLabelColorBg", context.getResources().getInteger(R.integer.config_desktop_label_color_bg));
+		return value;
+	}
+
 	public static boolean getAutosizeIcons(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("autosizeIcons", context.getResources().getBoolean(R.bool.config_autosizeIcons));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("autosizeIcons", context.getResources().getBoolean(R.bool.config_autosize_icons));
 		return newD;
 	}
 	public static boolean getDrawerZoom(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("drawerZoom", context.getResources().getBoolean(R.bool.config_drawer_zoom));
 		return newD;
 	}
 	public static boolean getDrawerLabels(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("drawerLabels", context.getResources().getBoolean(R.bool.config_drawerLabels));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("drawerLabels", context.getResources().getBoolean(R.bool.config_drawer_labels));
 		return newD;
 	}
 	public static int getDrawerLabelSize(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int size = sp.getInt("drawerLabelSize", context.getResources().getInteger(R.integer.config_drawerLabelSize)) + 8;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int size = sp.getInt("drawerLabelSize", context.getResources().getInteger(R.integer.config_drawer_label_size)) + 8;
 		return size;
 	}
 	public static boolean getDrawerLabelBold(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("drawerLabelBold", context.getResources().getBoolean(R.bool.config_drawer_label_bold));
 		return newD;
 	}
 	public static boolean getFadeDrawerLabels(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("fadeDrawerLabels", context.getResources().getBoolean(R.bool.config_fadeDrawerLabels));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("fadeDrawerLabels", context.getResources().getBoolean(R.bool.config_fade_drawer_labels));
 		return newD;
 	}
 	public static int getScreenCache(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int newD = Integer.valueOf(sp.getString("screenCache", context.getResources().getString(R.string.config_screenCache)));
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = Integer.valueOf(sp.getString("screenCache", context.getResources().getString(R.string.config_screen_cache)));
 		return newD;
 	}
 	public static boolean getDesktopIndicator(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("uiDesktopIndicator", context.getResources().getBoolean(R.bool.config_desktop_indicator));
 		return newD;
 	}
 	public static boolean getDesktopIndicatorAutohide(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("uiDesktopIndicatorAutohide", context.getResources().getBoolean(R.bool.config_desktop_indicator_autohide));
 		return newD;
 	}
 	public static int getDesktopIndicatorType(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("uiDesktopIndicatorType", context.getResources().getString(R.string.config_desktop_indicator_type)));
 		return newD;
 	}
 	public static boolean getDesktopIndicatorColorAllow(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("uiDesktopIndicatorColorAllow", context.getResources().getBoolean(R.bool.config_desktop_indicator_color_allow));
 		return newD;
 	}
 	public static int getDesktopIndicatorColor(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = sp.getInt("uiDesktopIndicatorColor", context.getResources().getInteger(R.integer.config_desktop_indicator_color));
 		return newD;
 	}
 	public static boolean getSystemPersistent(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("systemPersistent", context.getResources().getBoolean(R.bool.config_system_persistent));
 		return newD;
 	}
 	public static String getSwipeDownAppToLaunchPackageName(Context context)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		return sp.getString("swipeDownAppToLaunchPackageName", "");
 	}
 	public static String getDoubleTapAppToLaunchPackageName(Context context)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		return sp.getString("doubleTapAppToLaunchPackageName", "");
 	}
 	public static String getSwipeUpAppToLaunchPackageName(Context context)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		return sp.getString("swipeUpAppToLaunchPackageName", "");
 	}
 	public static String getHomeBindingAppToLaunchPackageName(Context context)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		return sp.getString("homeBindingAppToLaunchPackageName", "");
 	}
 	public static String getSwipeDownAppToLaunchName(Context context)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		return sp.getString("swipeDownAppToLaunchName", "");
 	}
 	public static String getSwipeUpAppToLaunchName(Context context)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		return sp.getString("swipeUpAppToLaunchName", "");
 	}
 	public static String getDoubleTapAppToLaunchName(Context context)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		return sp.getString("doubleTapAppToLaunchName", "");
 	}
 	public static String getHomeBindingAppToLaunchName(Context context)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		return sp.getString("homeBindingAppToLaunchName", "");
 	}
 	public static void setSwipeDownAppToLaunch(Context context, ApplicationInfo info)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString("swipeDownAppToLaunchPackageName", info.intent.getComponent().getPackageName());
 		editor.putString("swipeDownAppToLaunchName", info.intent.getComponent().getClassName());
@@ -314,7 +358,7 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static void setSwipeUpAppToLaunch(Context context, ApplicationInfo info)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString("swipeUpAppToLaunchPackageName", info.intent.getComponent().getPackageName());
 		editor.putString("swipeUpAppToLaunchName", info.intent.getComponent().getClassName());
@@ -322,7 +366,7 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static void setDoubleTapAppToLaunch(Context context, ApplicationInfo info)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString("doubleTapAppToLaunchPackageName", info.intent.getComponent().getPackageName());
 		editor.putString("doubleTapAppToLaunchName", info.intent.getComponent().getClassName());
@@ -330,89 +374,89 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static void setHomeBindingAppToLaunch(Context context, ApplicationInfo info)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString("homeBindingAppToLaunchPackageName", info.intent.getComponent().getPackageName());
 		editor.putString("homeBindingAppToLaunchName", info.intent.getComponent().getClassName());
 		editor.commit();
 	}
 	public static int getSwipeDownActions(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("swipedownActions", context.getResources().getString(R.string.config_swipedown_actions)));
 		return newD;
 	}
 	public static int getSwipeUpActions(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("swipeupActions", context.getResources().getString(R.string.config_swipeup_actions)));
 		return newD;
 	}
 	public static int getDoubleTapActions(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("doubletapActions", context.getResources().getString(R.string.config_doubletap_actions)));
 		return newD;
 	}
 	public static String getThemePackageName(Context context, String default_theme)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		return sp.getString("themePackageName", default_theme);
 	}
 	public static void setThemePackageName(Context context, String packageName)
 	{
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString("themePackageName", packageName);
 		editor.commit();
 	}
 	public static boolean getThemeIcons(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("themeIcons", true);
 		return newD;
 	}
 	public static int getDesktopOrientation(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("homeOrientation", context.getResources().getString(R.string.config_orientation_default)));
 		return newD;
 	}
 	public static boolean getWallpaperScrolling(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("wallpaper_scrolling", context.getResources().getBoolean(R.bool.config_wallpaper_scroll));
 		return newD;
 	}
 	public static void setDesktopScreens(Context context,int screens) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putInt("desktopScreens", screens-1);
 		editor.commit();
 	}
 	public static void setDefaultScreen(Context context,int screens) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putInt("defaultScreen", screens);
 		editor.commit();
 	}
 
 	public static int getCurrentAppCatalog(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = sp.getInt("currentAppCatalog", -1);
 		return newD;
 	}
 	public static void setCurrentAppCatalog(Context context, int group) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putInt("currentAppCatalog", group);
 		editor.commit();
 	}
 
 	public static void setChangelogVersion(Context context,String version) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString("changelogReadVersion", version);
 		editor.commit();
 	}
 	public static boolean shouldShowChangelog(Context context) {
-		Boolean config=context.getResources().getBoolean(R.bool.config_nagScreen);
+		Boolean config=context.getResources().getBoolean(R.bool.config_nag_screen);
 		if(config){
-			SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+			SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 			String readV = sp.getString("changelogReadVersion", "0");
 			String actualV=context.getString(R.string.app_version);
 			boolean ret=!readV.equals(actualV);
@@ -456,7 +500,7 @@ public final class MyLauncherSettingsHelper {
 
 	public static boolean getDebugShowMemUsage(Context context) {
 		if(MyLauncherSettings.IsDebugVersion){
-			SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+			SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 			boolean newD = sp.getBoolean("dbg_show_mem", false);
 			return newD;
 		}else{
@@ -464,83 +508,83 @@ public final class MyLauncherSettingsHelper {
 		}
 	}
 	public static boolean getDrawerCatalogsNavigation(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("drawer_navigate_catalogs", context.getResources().getBoolean(R.bool.config_drawer_navigate_catalogs));
 		return newD;
 	}
 	public static boolean getDrawerCatalogsFlingNavigation(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("drawer_fling_navigate_catalogs", context.getResources().getBoolean(R.bool.config_drawer_fling_navigate_catalogs));
 		return newD;
 	}
 	public static boolean getDrawerUngroupCatalog(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("drawer_ungroup_catalog", context.getResources().getBoolean(R.bool.config_drawer_ungroup_catalog));
 		return newD;
 	}
 	public static boolean getDrawerTitleCatalogs(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("drawer_show_catalogs", context.getResources().getBoolean(R.bool.config_drawer_title_catalogs));
 		return newD;
 	}
 	public static boolean getNotifReceiver(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("notif_receiver", context.getResources().getBoolean(R.bool.config_notif_receiver));
 		return newD;
 	}
 	public static int getNotifSize(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int def_screen = sp.getInt("notif_size", context.getResources().getInteger(R.integer.config_notif_size))+10;
 		return def_screen;
 	}
 	public static int getDockStyle(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("main_dock_style", context.getResources().getString(R.string.config_main_dock_style)));
 		return newD;
 	}
 	public static boolean getDockLockMAB(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("mainDockLockMAB", true);
 		return newD;
 	}
 	public static int getDrawerStyle(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("drawerStyle", context.getResources().getString(R.string.config_drawer_style)));
 		return newD;
 	}
 	public static int getDeletezoneStyle(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("deletezone_style", context.getResources().getString(R.string.config_deletezone_style)));
 		return newD;
 	}
 	public static boolean getUIABTint(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("uiABTint", context.getResources().getBoolean(R.bool.config_ab_tint));
 		return newD;
 	}
 	public static int getUIABTintColor(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = sp.getInt("uiABTintColor", context.getResources().getInteger(R.integer.config_ab_tint_color));
 		return newD;
 	}
 	public static boolean getLockOptionMenuDeviceSettings(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);;
 		boolean newD = sp.getBoolean("lockOptionMenuDeviceSettings", false);
 		return newD;
 	}
 	public static boolean getLauncherLocked(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);;
 		boolean newD = sp.getBoolean("launcherLocked", false);
 		return newD;
 	}
-	public static void setlauncherLocked(Context context,boolean block) {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);;
+	public static void setlauncherLocked(Context context, boolean block) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);;
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putBoolean("launcherLocked", block);
 		editor.commit();
 	}
 	public static int getDesktopTransitionStyle(Context context)    {
-		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		return Integer.valueOf( sp.getString("desktopTransitionStyle", context.getResources().getString(R.string.config_desktop_transition)));
 	}
 }

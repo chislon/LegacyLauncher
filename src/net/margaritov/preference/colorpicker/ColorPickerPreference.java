@@ -32,11 +32,11 @@ import android.widget.LinearLayout;
  * @author Sergey Margaritov
  */
 public class ColorPickerPreference
-	extends
-		Preference
-	implements
-		Preference.OnPreferenceClickListener,
-		ColorPickerDialog.OnColorChangedListener {
+extends
+Preference
+implements
+Preference.OnPreferenceClickListener,
+ColorPickerDialog.OnColorChangedListener {
 
 	View mView;
 	int mDefaultValue = Color.BLACK;
@@ -60,7 +60,7 @@ public class ColorPickerPreference
 		super(context, attrs, defStyle);
 		init(context, attrs);
 	}
-	
+
 	@Override
 	protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
 		onColorChanged(restoreValue ? getValue() : (Integer) defaultValue);
@@ -98,24 +98,29 @@ public class ColorPickerPreference
 
 	private void setPreviewColor() {
 		if (mView == null) return;
-		ImageView iView = new ImageView(getContext());
 		LinearLayout widgetFrameView = ((LinearLayout)mView.findViewById(android.R.id.widget_frame));
 		if (widgetFrameView == null) return;
-		widgetFrameView.setVisibility(View.VISIBLE);
-		widgetFrameView.setPadding(
-			widgetFrameView.getPaddingLeft(),
-			widgetFrameView.getPaddingTop(),
-			(int)(mDensity * 8),
-			widgetFrameView.getPaddingBottom()
-		);
-		// remove already create preview image
+
+		// remove existing widget children
 		int count = widgetFrameView.getChildCount();
 		if (count > 0) {
 			widgetFrameView.removeViews(0, count);
 		}
-		widgetFrameView.addView(iView);
-		iView.setBackgroundDrawable(new AlphaPatternDrawable((int)(5 * mDensity)));
-		iView.setImageBitmap(getPreviewBitmap());
+		// add our view only if the preference is active
+		if (isEnabled()) {
+			widgetFrameView.setVisibility(View.VISIBLE);
+			widgetFrameView.setPadding(
+					widgetFrameView.getPaddingLeft(),
+					widgetFrameView.getPaddingTop(),
+					(int)(mDensity * 8),
+					widgetFrameView.getPaddingBottom()
+					);
+
+			ImageView iView = new ImageView(getContext());
+			iView.setBackgroundDrawable(new AlphaPatternDrawable((int)(5 * mDensity)));
+			iView.setImageBitmap(getPreviewBitmap());
+			widgetFrameView.addView(iView);
+		}
 	}
 
 	private Bitmap getPreviewBitmap() {
@@ -188,59 +193,59 @@ public class ColorPickerPreference
 	 * @param color
 	 * @author Unknown
 	 */
-    public static String convertToARGB(int color) {
-        String alpha = Integer.toHexString(Color.alpha(color));
-        String red = Integer.toHexString(Color.red(color));
-        String green = Integer.toHexString(Color.green(color));
-        String blue = Integer.toHexString(Color.blue(color));
+	public static String convertToARGB(int color) {
+		String alpha = Integer.toHexString(Color.alpha(color));
+		String red = Integer.toHexString(Color.red(color));
+		String green = Integer.toHexString(Color.green(color));
+		String blue = Integer.toHexString(Color.blue(color));
 
-        if (alpha.length() == 1) {
-            alpha = "0" + alpha;
-        }
+		if (alpha.length() == 1) {
+			alpha = "0" + alpha;
+		}
 
-        if (red.length() == 1) {
-            red = "0" + red;
-        }
+		if (red.length() == 1) {
+			red = "0" + red;
+		}
 
-        if (green.length() == 1) {
-            green = "0" + green;
-        }
+		if (green.length() == 1) {
+			green = "0" + green;
+		}
 
-        if (blue.length() == 1) {
-            blue = "0" + blue;
-        }
+		if (blue.length() == 1) {
+			blue = "0" + blue;
+		}
 
-        return "#" + alpha + red + green + blue;
-    }
+		return "#" + alpha + red + green + blue;
+	}
 
-    /**
-     * For custom purposes. Not used by ColorPickerPreferrence
-     * @param argb
-     * @throws NumberFormatException
-     * @author Unknown
-     */
-    public static int convertToColorInt(String argb) throws NumberFormatException {
+	/**
+	 * For custom purposes. Not used by ColorPickerPreferrence
+	 * @param argb
+	 * @throws NumberFormatException
+	 * @author Unknown
+	 */
+	public static int convertToColorInt(String argb) throws NumberFormatException {
 
-    	if (argb.startsWith("#")) {
-    		argb = argb.replace("#", "");
-    	}
+		if (argb.startsWith("#")) {
+			argb = argb.replace("#", "");
+		}
 
-        int alpha = -1, red = -1, green = -1, blue = -1;
+		int alpha = -1, red = -1, green = -1, blue = -1;
 
-        if (argb.length() == 8) {
-            alpha = Integer.parseInt(argb.substring(0, 2), 16);
-            red = Integer.parseInt(argb.substring(2, 4), 16);
-            green = Integer.parseInt(argb.substring(4, 6), 16);
-            blue = Integer.parseInt(argb.substring(6, 8), 16);
-        }
-        else if (argb.length() == 6) {
-            alpha = 255;
-            red = Integer.parseInt(argb.substring(0, 2), 16);
-            green = Integer.parseInt(argb.substring(2, 4), 16);
-            blue = Integer.parseInt(argb.substring(4, 6), 16);
-        }
+		if (argb.length() == 8) {
+			alpha = Integer.parseInt(argb.substring(0, 2), 16);
+			red = Integer.parseInt(argb.substring(2, 4), 16);
+			green = Integer.parseInt(argb.substring(4, 6), 16);
+			blue = Integer.parseInt(argb.substring(6, 8), 16);
+		}
+		else if (argb.length() == 6) {
+			alpha = 255;
+			red = Integer.parseInt(argb.substring(0, 2), 16);
+			green = Integer.parseInt(argb.substring(2, 4), 16);
+			blue = Integer.parseInt(argb.substring(4, 6), 16);
+		}
 
-        return Color.argb(alpha, red, green, blue);
-    }
+		return Color.argb(alpha, red, green, blue);
+	}
 
 }

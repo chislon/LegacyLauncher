@@ -4,21 +4,21 @@
 		break in word processing). Like for other preference types, we assign a key 
 		here so it is able to save and restore its instance state. -->
 	<PreferenceScreen android:key="desktopPreferences"
-		android:title="@string/pref_title_workspace">
+		android:title="@string/pref_title_desktop">
 		<PreferenceScreen android:key="workspaceConfigurationPreferences"
-			android:title="@string/pref_title_workspace_config_preferences"
-			android:summary="@string/pref_summary_workspace_config_preferences">
+			android:title="@string/pref_title_desktop_config_preferences"
+			android:summary="@string/pref_summary_desktop_config_preferences">
 			<PreferenceCategory
 				android:title="@string/pref_title_screens_layout_preferencecategory">
 				<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
 					android:title="@string/pref_title_desktop_columns" android:summary="@string/pref_summary_desktop_columns"
 					android:dialogMessage="@string/pref_dialog_desktop_columns"
-					android:key="desktopColumns" android:defaultValue="@integer/config_desktopColumns"
+					android:key="desktopColumns" android:defaultValue="@integer/config_desktop_columns"
 					android:max="5" />
 				<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
 					android:title="@string/pref_title_desktop_rows" android:summary="@string/pref_summary_desktop_rows"
 					android:dialogMessage="@string/pref_dialog_desktop_rows"
-					android:key="desktopRows" android:defaultValue="@integer/config_desktopRows"
+					android:key="desktopRows" android:defaultValue="@integer/config_desktop_rows"
 					android:max="5" />
 			</PreferenceCategory>
 			<PreferenceCategory
@@ -27,43 +27,36 @@
 					android:title="@string/pref_title_desktop_scrolling_speed"
 					android:summary="@string/pref_summary_desktop_scrolling_speed"
 					android:dialogMessage="@string/pref_dialog_desktop_scrolling_speed"
-					android:key="desktopSpeed" android:defaultValue="@integer/config_desktopSpeed"
+					android:key="desktopSpeed" android:defaultValue="@integer/config_desktop_speed"
 					android:max="1000" />
 				<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
 					android:title="@string/pref_title_desktop_overshoot"
 					android:summary="@string/pref_summary_desktop_overshoot"
 					android:dialogMessage="@string/pref_dialog_desktop_overshoot"
-					android:key="desktopBounce" android:defaultValue="@integer/config_desktopBounce"
+					android:key="desktopBounce" android:defaultValue="@integer/config_desktop_bounce"
 					android:max="100" />
 				<CheckBoxPreference android:title="@string/pref_title_looping"
-					android:defaultValue="false" android:summary="@string/pref_summary_looping"
+					android:defaultValue="@bool/config_desktop_looping" android:summary="@string/pref_summary_looping"
 					android:key="desktopLooping" />
 			</PreferenceCategory>
 		</PreferenceScreen>
 		<PreferenceScreen android:key="workspaceAppearancePreferences"
-			android:title="@string/pref_title_workspace_appearance_preferences"
-			android:summary="@string/pref_summary_workspace__preferences">
+			android:title="@string/pref_title_desktop_appearance_preferences"
+			android:summary="@string/pref_summary_desktop__preferences">
 			<ListPreference android:key="desktopTransitionStyle"
 				android:title="@string/pref_title_desktop_transition"
 				android:summary="@string/pref_summary_desktop_transition"
 				android:defaultValue="@string/config_desktop_transition"
 				android:entryValues="@array/desktop_transition_values"
 				android:entries="@array/desktop_transition_entries" />
-			<PreferenceCategory android:title="@string/pref_title_desktop_icon_widget_category">
-				<CheckBoxPreference android:title="@string/pref_title_autosize_icons"
-					android:defaultValue="false" android:summary="@string/pref_summary_autosize_icons"
-					android:key="autosizeIcons" />
-				<CheckBoxPreference android:key="uiHideLabels"
-					android:disableDependentsState="true"
-					android:title="@string/pref_title_hide_icon_labels"
-					android:summary="@string/pref_summary_hide_icon_labels"
-					android:defaultValue="false" />
-				<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
-					android:dependency="uiHideLabels" android:title="@string/pref_title_desktop_label_size"
-					android:summary="@string/pref_summary_desktop_label_size"
-					android:dialogMessage="@string/pref_dialog_desktop_label_size"
-					android:key="desktopLabelSize" android:defaultValue="@integer/config_desktop_label_size"
-					android:max="16" />
+			<PreferenceCategory android:title="@string/pref_title_desktop_wallpaper">
+				<CheckBoxPreference android:title="@string/pref_title_wallpaper_scrolling"
+					android:defaultValue="@bool/config_wallpaper_scroll"
+					android:summary="@string/pref_summary_wallpaper_scrolling"
+					android:key="wallpaper_scrolling" />
+				<CheckBoxPreference android:title="@string/pref_title_wallpaper_hack"
+					android:defaultValue="true" android:summary="@string/pref_summary_wallpaper_hack"
+					android:key="wallpaperHack" />
 			</PreferenceCategory>
 			<PreferenceCategory
 				android:title="@string/pref_title_indicators_preferencecategory">
@@ -92,20 +85,77 @@
 					android:defaultValue="@integer/config_desktop_indicator_color"
 					alphaSlider="true" />
 			</PreferenceCategory>
-			<PreferenceCategory android:title="@string/pref_title_workspace_wallpaper">
-				<CheckBoxPreference android:title="@string/pref_title_wallpaper_scrolling"
-					android:defaultValue="@bool/config_wallpaper_scroll"
-					android:summary="@string/pref_summary_wallpaper_scrolling"
-					android:key="wallpaper_scrolling" />
-				<CheckBoxPreference android:title="@string/pref_title_wallpaper_hack"
-					android:defaultValue="true" android:summary="@string/pref_summary_wallpaper_hack"
-					android:key="wallpaperHack" />
+		</PreferenceScreen>
+		<PreferenceScreen android:key="iconWidgetPreferences"
+			android:title="@string/pref_title_desktop_icon_widget_preferences"
+			android:summary="@string/pref_summary_desktop_icon_widget_preferences">
+			<CheckBoxPreference android:title="@string/pref_title_autosize_icons"
+				android:defaultValue="@bool/config_autosize_icons" android:summary="@string/pref_summary_autosize_icons"
+				android:key="autosizeIcons" />
+			<PreferenceCategory android:title="@string/pref_title_desktop_icon_label_category">
+				<CheckBoxPreference android:key="uiHideLabels"
+					android:disableDependentsState="true"
+					android:title="@string/pref_title_hide_icon_labels"
+					android:summary="@string/pref_summary_hide_icon_labels"
+					android:defaultValue="@bool/config_ui_hide_labels" />
+				<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
+					android:dependency="uiHideLabels" android:title="@string/pref_title_desktop_label_size"
+					android:summary="@string/pref_summary_desktop_label_size"
+					android:dialogMessage="@string/pref_dialog_desktop_label_size"
+					android:key="desktopLabelSize" android:defaultValue="@integer/config_desktop_label_size"
+					android:max="16" />
+
+				<CheckBoxPreference android:dependency="uiHideLabels"
+					android:key="desktopLabelColorOverride" android:title="@string/pref_title_desktop_label_color_override"
+					android:summary="@string/pref_summary_desktop_label_color_override"
+					android:defaultValue="@bool/config_desktop_label_color_override" />
+				<net.margaritov.preference.colorpicker.ColorPickerPreference
+					android:dependency="desktopLabelColorOverride" android:key="desktopLabelColorText"
+					android:title="@string/pref_title_desktop_label_color_text"
+					android:summary="@string/pref_summary_desktop_label_color_text"
+					android:defaultValue="@integer/config_desktop_label_color_text"
+					alphaSlider="false" />
+				<net.margaritov.preference.colorpicker.ColorPickerPreference
+					android:dependency="desktopLabelColorOverride" android:key="desktopLabelColorBg"
+					android:title="@string/pref_title_desktop_label_color_bg"
+					android:summary="@string/pref_summary_desktop_label_color_bg"
+					android:defaultValue="@integer/config_desktop_label_color_bg"
+					alphaSlider="true" />
+			</PreferenceCategory>
+
+			<PreferenceCategory
+				android:title="@string/pref_title_desktop_icon_label_padding_category">
+				<CheckBoxPreference android:key="desktopLabelPaddingOverride"
+					android:dependency="uiHideLabels"
+					android:title="@string/pref_title_desktop_label_padding_override"
+					android:summary="@string/pref_summary_desktop_label_padding_override"
+					android:defaultValue="@bool/config_desktop_label_padding_override" />
+				<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
+					android:dependency="desktopLabelPaddingOverride"
+					android:title="@string/pref_title_desktop_label_padding_radius_size"
+					android:summary="@string/pref_summary_desktop_label_padding_radius_size"
+					android:dialogMessage="@string/pref_dialog_desktop_label_padding_radius_size"
+					android:key="desktopLabelPaddingRadius" android:defaultValue="@integer/config_desktop_label_padding_radius"
+					android:max="20" />
+				<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
+					android:dependency="desktopLabelPaddingOverride"
+					android:title="@string/pref_title_desktop_label_padding_horizontal"
+					android:summary="@string/pref_summary_desktop_label_padding_horizontal"
+					android:dialogMessage="@string/pref_dialog_desktop_label_padding_horizontal"
+					android:key="desktopLabelPaddingH" android:defaultValue="@integer/config_desktop_label_padding_h"
+					android:max="10" />
+				<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
+					android:dependency="desktopLabelPaddingOverride"
+					android:title="@string/pref_title_desktop_label_padding_vertical"
+					android:summary="@string/pref_summary_desktop_label_padding_vertical"
+					android:dialogMessage="@string/pref_dialog_desktop_label_padding_vertical"
+					android:key="desktopLabelPaddingV" android:defaultValue="@integer/config_desktop_label_padding_v"
+					android:max="10" />
 			</PreferenceCategory>
 		</PreferenceScreen>
-
 		<PreferenceScreen android:key="workspaceBehaviorPreferences"
-			android:summary="@string/pref_summary_workspace_functionality_preferences"
-			android:title="@string/pref_title_workspace_functionality_preferences">
+			android:summary="@string/pref_summary_desktop_functionality_preferences"
+			android:title="@string/pref_title_desktop_functionality_preferences">
 			<CheckBoxPreference android:title="@string/pref_title_enable_previews"
 				android:defaultValue="true" android:summary="@string/pref_summary_enable_previews"
 				android:key="previewsEnable" />
@@ -113,14 +163,14 @@
 				android:dependency="previewsEnable" android:defaultValue="true"
 				android:summary="@string/pref_summary_spread_previews" android:key="previewsNew" />
 			<CheckBoxPreference android:title="@string/pref_title_closing_folder"
-				android:defaultValue="false" android:summary="@string/pref_summary_closing_folder"
+				android:defaultValue="@bool/config_ui_close_folder" android:summary="@string/pref_summary_closing_folder"
 				android:key="uiCloseFolder" />
 		</PreferenceScreen>
 		<PreferenceScreen android:key="desktopActions"
 			android:title="@string/pref_title_desktop_actions" android:summary="@string/pref_summary_desktop_actions">
 			<ListPreference android:key="homeBinding"
 				android:title="@string/pref_title_home_button_binding"
-				android:defaultValue="@string/config_homeBinding"
+				android:defaultValue="@string/config_home_binding_actions"
 				android:entryValues="@array/menu_binding_values" android:entries="@array/menu_binding_entries" />
 			<ListPreference android:key="swipedownActions"
 				android:title="@string/pref_title_swipedown_actions"
@@ -156,25 +206,25 @@
 					android:title="@string/pref_title_drawer_columns_portrait"
 					android:summary="@string/pref_summary_drawer_columns_portrait"
 					android:dialogMessage="@string/pref_dialog_drawer_columns_portrait"
-					android:key="drawerColumnsPortrait" android:defaultValue="@integer/config_drawerColumnsPortrait"
+					android:key="drawerColumnsPortrait" android:defaultValue="@integer/config_drawer_columns_portrait"
 					android:max="5" />
 				<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
 					android:title="@string/pref_title_drawer_rows_portrait"
 					android:summary="@string/pref_summary_drawer_rows_portrait"
 					android:dialogMessage="@string/pref_dialog_drawer_rows_portrait"
-					android:key="drawerRowsPortrait" android:defaultValue="@integer/config_drawerRowsPortrait"
+					android:key="drawerRowsPortrait" android:defaultValue="@integer/config_drawer_rows_portrait"
 					android:max="5" />
 				<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
 					android:title="@string/pref_title_drawer_columns_landscape"
 					android:summary="@string/pref_summary_drawer_columns_landscape"
 					android:dialogMessage="@string/pref_dialog_drawer_columns_landscape"
-					android:key="drawerColumnsLandscape" android:defaultValue="@integer/config_drawerColumnsLandscape"
+					android:key="drawerColumnsLandscape" android:defaultValue="@integer/config_drawer_columns_landscape"
 					android:max="7" />
 				<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
 					android:title="@string/pref_title_drawer_rows_landscape"
 					android:summary="@string/pref_summary_drawer_rows_landscape"
 					android:dialogMessage="@string/pref_dialog_drawer_rows_landscape"
-					android:key="drawerRowsLandscape" android:defaultValue="@integer/config_drawerRowsLandscape"
+					android:key="drawerRowsLandscape" android:defaultValue="@integer/config_drawer_rows_landscape"
 					android:max="4" />
 			</PreferenceCategory>
 		</PreferenceScreen>
@@ -182,8 +232,8 @@
 			android:title="@string/pref_title_drawer_appearance" android:summary="@string/pref_summary_drawer_appearance">
 			<PreferenceCategory android:title="@string/pref_title_drawer_animation_category">
 				<CheckBoxPreference android:title="@string/pref_title_animated_drawer"
-					android:defaultValue="@bool/config_drawerAnimated" android:summary="@string/pref_summary_animated_drawer"
-					android:key="drawerAnimated" />
+					android:defaultValue="@bool/config_drawer_animated"
+					android:summary="@string/pref_summary_animated_drawer" android:key="drawerAnimated" />
 				<CheckBoxPreference android:title="@string/pref_title_animated_zoom_drawer"
 					android:dependency="drawerAnimated" android:defaultValue="@bool/config_drawer_zoom"
 					android:summary="@string/pref_summary_animated_zoom_drawer"
@@ -197,17 +247,17 @@
 			</PreferenceCategory>
 			<PreferenceCategory android:title="@string/pref_title_drawer_app_label_category">
 				<CheckBoxPreference android:title="@string/pref_title_drawer_labels"
-					android:defaultValue="@bool/config_drawerLabels" android:summary="@string/pref_summary_drawer_labels"
+					android:defaultValue="@bool/config_drawer_labels" android:summary="@string/pref_summary_drawer_labels"
 					android:key="drawerLabels" />
 				<CheckBoxPreference android:title="@string/pref_title_fade_drawer_labels"
-					android:dependency="drawerLabels" android:defaultValue="@bool/config_fadeDrawerLabels"
+					android:dependency="drawerLabels" android:defaultValue="@bool/config_fade_drawer_labels"
 					android:summary="@string/pref_summary_fade_drawer_labels"
 					android:key="fadeDrawerLabels" />
 				<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
 					android:dependency="drawerLabels" android:title="@string/pref_title_drawer_label_size"
 					android:summary="@string/pref_summary_drawer_label_size"
 					android:dialogMessage="@string/pref_dialog_drawer_label_size"
-					android:key="drawerLabelSize" android:defaultValue="@integer/config_drawerLabelSize"
+					android:key="drawerLabelSize" android:defaultValue="@integer/config_drawer_label_size"
 					android:max="16" />
 				<CheckBoxPreference android:title="@string/pref_title_drawer_label_bold"
 					android:dependency="drawerLabels" android:defaultValue="@bool/config_drawer_label_bold"
@@ -266,7 +316,7 @@
 				android:dialogMessage="@string/pref_dialog_ab_scale_factor"
 				android:key="uiScaleAB" android:defaultValue="7" android:max="9" />
 			<CheckBoxPreference android:title="@string/pref_title_hide_ab_bg"
-				android:defaultValue="false" android:summary="@string/pref_summary_hide_ab_bg"
+				android:defaultValue="@bool/config_ui_ab_hide_bg" android:summary="@string/pref_summary_hide_ab_bg"
 				android:key="uiABBg" />
 			<CheckBoxPreference android:title="@string/pref_title_ab_tint"
 				android:defaultValue="@bool/config_ab_tint" android:summary="@string/pref_summary_ab_tint"
@@ -312,11 +362,11 @@
 	<PreferenceScreen android:key="systemPreferences"
 		android:title="@string/pref_title_system_preferences">
 		<CheckBoxPreference android:title="@string/pref_title_hide_statusbar"
-			android:defaultValue="false" android:summary="@string/pref_summary_hide_statusbar"
+			android:defaultValue="@bool/config_hide_statusbar" android:summary="@string/pref_summary_hide_statusbar"
 			android:key="hideStatusbar" />
 		<ListPreference android:key="screenCache"
 			android:title="@string/pref_title_screen_cache" android:summary="@string/pref_summary_screen_cache"
-			android:defaultValue="@string/config_screenCache"
+			android:defaultValue="@string/config_screen_cache"
 			android:entryValues="@array/screen_cache_values" android:entries="@array/screen_cache_entries" />
 		<CheckBoxPreference android:key="systemPersistent"
 			android:disableDependentsState="true" android:title="@string/pref_title_system_persistent"

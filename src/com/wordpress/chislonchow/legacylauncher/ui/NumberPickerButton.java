@@ -17,8 +17,6 @@
 package com.wordpress.chislonchow.legacylauncher.ui;
 
 import com.wordpress.chislonchow.legacylauncher.R;
-import com.wordpress.chislonchow.legacylauncher.R.id;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;

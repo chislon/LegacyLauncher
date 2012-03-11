@@ -1,8 +1,6 @@
 package com.wordpress.chislonchow.legacylauncher;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import com.wordpress.chislonchow.legacylauncher.R;
 
 import android.content.Context;

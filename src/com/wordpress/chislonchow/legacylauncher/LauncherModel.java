@@ -804,11 +804,11 @@ public class LauncherModel {
 
         public void run() {
             assert(!mFinished); // can only run once
-            load_workspace();
+            load_desktop();
             mFinished = true;
         }
 
-        private void load_workspace() {
+        private void load_desktop() {
             if (DEBUG_LOADERS) d(LOG_TAG, "  ----> running workspace loader (" + mId + ")");
 
             android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);

@@ -67,7 +67,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
-import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -90,7 +89,6 @@ import android.os.Message;
 import android.os.MessageQueue;
 import android.os.Parcelable;
 import android.provider.LiveFolders;
-import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Selection;
@@ -109,11 +107,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -1600,13 +1596,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				.setAlphabeticShortcut('X');
 
 
-		menu.add(MENU_GROUP_NORMAL, MENU_SEARCH, 0, R.string.menu_search)
-		.setIcon(android.R.drawable.ic_search_category_default)
-		.setAlphabeticShortcut(SearchManager.MENU_KEY);
-
 		menu.add(MENU_GROUP_NORMAL, MENU_LOCK_DESKTOP, 0, R.string.menu_lock)
 		.setIcon(R.drawable.ic_menu_block).setAlphabeticShortcut('X');
 
+		menu.add(MENU_GROUP_NORMAL, MENU_SEARCH, 0, R.string.menu_search)
+		.setIcon(android.R.drawable.ic_search_category_default)
+		.setAlphabeticShortcut(SearchManager.MENU_KEY);
+		
 		final Intent settings = new Intent(
 				android.provider.Settings.ACTION_SETTINGS);
 		settings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -1663,20 +1659,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		boolean showmenu = true;
 		if (!forceHidden) {
 			// //ADW: Check if this is the default launcher
-			mIsDefaultLauncher = checkDefaultLauncher();
-			// //ADW: Check if we're running on the specified mod rom
-			String mod = android.os.SystemProperties
-					.get("ro.modversion", "adw").toLowerCase();
-			if (LOGD)
-				Log.d(LOG_TAG, "System version=" + mod);
-			if (LOGD)
-				Log.d(LOG_TAG,
-						"System version contains rom_mod_version?"
-								+ (mod.contains(getResources().getString(
-										R.string.rom_mod_string).toLowerCase())));
-			showmenu = !mod.contains(getResources().getString(
-					R.string.rom_mod_string).toLowerCase())
-					|| !mIsDefaultLauncher;
+			mIsDefaultLauncher = checkDefaultLauncher();			
 		}
 
 		if (allAppsOpen)
