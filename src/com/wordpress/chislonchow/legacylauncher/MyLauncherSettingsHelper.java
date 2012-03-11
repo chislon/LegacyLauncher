@@ -38,11 +38,12 @@ public final class MyLauncherSettingsHelper {
 		"themePackageName",
 		"themeIcons", 
 		"notif_size",
-		"drawer_style", 
+		"drawerStyle", 
 		"drawerLabelSize",
 		"drawerLabelBold",
 		"uiDesktopIndicatorColor",
-		"uiDesktopIndicator"
+		"uiDesktopIndicator",
+		"desktopLabelSize"
 	};
 
 	public static boolean needsRestart(String key){
@@ -193,6 +194,11 @@ public final class MyLauncherSettingsHelper {
 		int screens = sp.getInt("desktopRows", context.getResources().getInteger(R.integer.config_desktopRows))+3;
 		return screens;
 	}
+	public static int getDesktopLabelSize(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		int value = sp.getInt("desktopLabelSize", context.getResources().getInteger(R.integer.config_desktop_label_size))+8;
+		return value;
+	}
 	public static boolean getAutosizeIcons(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("autosizeIcons", context.getResources().getBoolean(R.bool.config_autosizeIcons));
@@ -215,7 +221,7 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static boolean getDrawerLabelBold(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("drawerLabelBold", context.getResources().getBoolean(R.bool.config_drawerLabelBold));
+		boolean newD = sp.getBoolean("drawerLabelBold", context.getResources().getBoolean(R.bool.config_drawer_label_bold));
 		return newD;
 	}
 	public static boolean getFadeDrawerLabels(Context context) {
@@ -499,7 +505,7 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static int getDrawerStyle(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		int newD = Integer.valueOf(sp.getString("drawer_style", context.getResources().getString(R.string.config_drawer_style)));
+		int newD = Integer.valueOf(sp.getString("drawerStyle", context.getResources().getString(R.string.config_drawer_style)));
 		return newD;
 	}
 	public static int getDeletezoneStyle(Context context) {
@@ -535,6 +541,6 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static int getDesktopTransitionStyle(Context context)    {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
-		return Integer.valueOf( sp.getString("desktop_transition_style", context.getResources().getString(R.string.config_desktop_transition)));
+		return Integer.valueOf( sp.getString("desktopTransitionStyle", context.getResources().getString(R.string.config_desktop_transition)));
 	}
 }

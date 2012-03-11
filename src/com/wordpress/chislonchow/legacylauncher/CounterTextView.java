@@ -46,6 +46,7 @@ public class CounterTextView extends TextView {
 		Context context = getContext();
 		Resources res = context.getResources();
 		DisplayMetrics dm = res.getDisplayMetrics();
+		// px conversion
 		final int fontSize = TypedValue.complexToDimensionPixelSize(
 				MyLauncherSettingsHelper.getNotifSize(context), dm);
 

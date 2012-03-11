@@ -22,8 +22,11 @@
     <bool name="force_hidden_settings">false</bool>
     <bool name="config_desktopRotation">true</bool>
 
-    <integer name="config_desktopSpeed">450</integer>
+    <integer name="config_desktopSpeed">50</integer>
     <integer name="config_desktopBounce">40</integer>
+
+    <!-- config_desktop_label_size min is 8, so it will add 8 to whatever value you set here -->
+    <integer name="config_desktop_label_size">6</integer>
 
     <bool name="config_desktopLooping">false</bool>
 
@@ -76,7 +79,7 @@
     <!-- config min value is 8, so it will add 8 to whatever value you set here -->
     <integer name="config_drawerLabelSize">6</integer>
 
-    <bool name="config_drawerLabelBold">false</bool>
+    <bool name="config_drawer_label_bold">false</bool>
     <bool name="config_fadeDrawerLabels">false</bool>
     <bool name="config_desktop_indicator">true</bool>
     <bool name="config_desktop_indicator_autohide">false</bool>
@@ -105,7 +108,7 @@
 
     <string name="config_main_dock_style">2</string>
 
-    <bool name="config_mainDockLockMAB">true</bool>
+    <bool name="config_main_dock_lock_MAB">true</bool>
 
     <string name="config_drawer_style">1</string>
 
@@ -118,5 +121,4 @@
     <string name="config_deletezone_style">1</string>
 
     <bool name="config_close_apps_dockbar">true</bool>
-
 </resources>

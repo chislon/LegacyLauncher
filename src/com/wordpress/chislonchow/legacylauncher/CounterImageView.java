@@ -41,8 +41,7 @@ public class CounterImageView extends ImageView {
 		init();
 	}
 	private void init(){
-		final int fontSize = TypedValue.complexToDimensionPixelSize(
-				MyLauncherSettingsHelper.getNotifSize(getContext()), getContext().getResources().getDisplayMetrics());
+		final int fontSize = MyLauncherSettingsHelper.getNotifSize(getContext());
 
 		mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

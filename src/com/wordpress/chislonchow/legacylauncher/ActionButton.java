@@ -10,17 +10,13 @@ import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.HapticFeedbackConstants;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnLongClickListener;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
 public class ActionButton extends CounterImageView implements DropTarget,
-		DragListener, OnLongClickListener, DragSource {
+DragListener, OnLongClickListener, DragSource {
 	private Launcher mLauncher;
 	private int mIdent = LauncherSettings.Favorites.CONTAINER_LAB;
 	private ItemInfo mCurrentInfo;
@@ -33,8 +29,6 @@ public class ActionButton extends CounterImageView implements DropTarget,
 	private boolean hiddenBg = false;
 	private int specialAction = 0;
 	public boolean mInterceptClicks = false;
-	private static final int ORIENTATION_HORIZONTAL = 1;
-	private int mOrientation = ORIENTATION_HORIZONTAL;
 	private DragController mDragger;
 
 	public ActionButton(Context context) {
@@ -54,9 +48,6 @@ public class ActionButton extends CounterImageView implements DropTarget,
 		TypedArray a = context.obtainStyledAttributes(attrs,
 				R.styleable.ActionButton, defStyle, 0);
 		mIdent = a.getInt(R.styleable.ActionButton_ident, mIdent);
-		mOrientation = a.getInt(R.styleable.ActionButton_direction,
-				ORIENTATION_HORIZONTAL);
-		// bgResource=a.getDrawable(R.styleable.ActionButton_background);
 		bgEmpty = context.getResources().getDrawable(
 				R.drawable.lab_rab_empty_bg);
 		a.recycle();
@@ -135,7 +126,7 @@ public class ActionButton extends CounterImageView implements DropTarget,
 					.getAppWidgetHost();
 			if (appWidgetHost != null) {
 				appWidgetHost
-						.deleteAppWidgetId(launcherAppWidgetInfo.appWidgetId);
+				.deleteAppWidgetId(launcherAppWidgetInfo.appWidgetId);
 			}
 		}
 
@@ -372,12 +363,12 @@ public class ActionButton extends CounterImageView implements DropTarget,
 
 		mLauncher.showQuickActionWindow(mCurrentInfo, v,
 				new PopupWindow.OnDismissListener() {
-					@Override
-					public void onDismiss() {
-						// Close Drawer if it is open...
-						mLauncher.closeAllApplications();
-					}
-				});
+			@Override
+			public void onDismiss() {
+				// Close Drawer if it is open...
+				mLauncher.closeAllApplications();
+			}
+		});
 		mDragger.startDrag(v, this, mCurrentInfo,
 				DragController.DRAG_ACTION_COPY);
 		UpdateLaunchInfo(null);

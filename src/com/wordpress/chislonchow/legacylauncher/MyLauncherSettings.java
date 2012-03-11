@@ -10,15 +10,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.util.Calendar;
 import java.util.List;
 
 import com.wordpress.chislonchow.legacylauncher.R;
+import com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference;
 
-import android.app.ActivityManager;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.app.WallpaperManager;
@@ -30,7 +27,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -45,7 +41,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.view.View;
@@ -59,6 +54,8 @@ OnPreferenceChangeListener {
 	private static final String ALMOSTNEXUS_PREFERENCES = "launcher.preferences.almostnexus";
 	private boolean shouldRestart = false;
 	private Context mContext;
+
+	static final String ANDROID_SETTINGS_PACKAGE = "com.android.settings";
 
 	private static final String PREF_BACKUP_FILENAME = "legacy_launcher_settings.xml";
 	private static final String CONFIG_BACKUP_FILENAME = "legacy_launcher_launcher.db";
@@ -80,55 +77,52 @@ OnPreferenceChangeListener {
 		super.onCreate(savedInstanceState);
 		getPreferenceManager()
 		.setSharedPreferencesName(ALMOSTNEXUS_PREFERENCES);
+
 		addPreferencesFromResource(R.xml.launcher_settings);
-		DialogSeekBarPreference dialogSeekBarPref = (DialogSeekBarPreference) findPreference("desktopColumns");
+
+		// Icon preferences
+		/*
+		IconPreferenceScreen icPref;
+		icPref = (IconPreferenceScreen) findPreference("desktopPreferences");
+		icPref.setIcon(getResources().getDrawable(R.drawable.ic_settings_desktop));
+		 */
+		// dialog seek bar preferences
+		PersistentDialogSeekBarPreference dialogSeekBarPref = (PersistentDialogSeekBarPreference) findPreference("desktopColumns");
 		dialogSeekBarPref.setMin(3);
-		dialogSeekBarPref = (DialogSeekBarPreference) findPreference("desktopRows");
+		dialogSeekBarPref = (PersistentDialogSeekBarPreference) findPreference("desktopRows");
 		dialogSeekBarPref.setMin(3);
-		dialogSeekBarPref = (DialogSeekBarPreference) findPreference("drawerColumnsPortrait");
+		dialogSeekBarPref = (PersistentDialogSeekBarPreference) findPreference("drawerColumnsPortrait");
 		dialogSeekBarPref.setMin(1);
-		dialogSeekBarPref = (DialogSeekBarPreference) findPreference("animationSpeed");
-		dialogSeekBarPref.setMin(300);
-		dialogSeekBarPref = (DialogSeekBarPreference) findPreference("drawerLabelSize");
-		dialogSeekBarPref.setMin(8);
-		dialogSeekBarPref.setOnPreferenceChangeListener(this);
 
-		DialogSeekBarPreference rowsPortrait = (DialogSeekBarPreference) findPreference("drawerRowsPortrait");
+		PersistentDialogSeekBarPreference rowsPortrait = (PersistentDialogSeekBarPreference) findPreference("drawerRowsPortrait");
 		rowsPortrait.setMin(1);
-		DialogSeekBarPreference columnsLandscape = (DialogSeekBarPreference) findPreference("drawerColumnsLandscape");
+		PersistentDialogSeekBarPreference columnsLandscape = (PersistentDialogSeekBarPreference) findPreference("drawerColumnsLandscape");
 		columnsLandscape.setMin(1);
-		DialogSeekBarPreference rowsLandscape = (DialogSeekBarPreference) findPreference("drawerRowsLandscape");
+		PersistentDialogSeekBarPreference rowsLandscape = (PersistentDialogSeekBarPreference) findPreference("drawerRowsLandscape");
 		rowsLandscape.setMin(1);
-		DialogSeekBarPreference uiScaleAB = (DialogSeekBarPreference) findPreference("uiScaleAB");
-		uiScaleAB.setMin(1);
 
-		// wjax. Listen for changes in those ListPreference as if their values
-		// are BINDING_APP, then an app shall be selected via
-		// startActivityForResult
-		ListPreference swipedown_action = (ListPreference) findPreference("swipedownActions");
-		swipedown_action.setOnPreferenceChangeListener(this);
-		ListPreference swipeup_action = (ListPreference) findPreference("swipeupActions");
-		swipeup_action.setOnPreferenceChangeListener(this);
-		ListPreference doubletap_action = (ListPreference) findPreference("doubletapActions");
-		doubletap_action.setOnPreferenceChangeListener(this);
-		ListPreference homebutton_binding = (ListPreference) findPreference("homeBinding");
-		homebutton_binding.setOnPreferenceChangeListener(this);
-
-		CheckBoxPreference persist = (CheckBoxPreference) findPreference("systemPersistent");
-		persist.setOnPreferenceChangeListener(this);
-		Preference orientations = findPreference("homeOrientation");
-		if (MyLauncherSettingsHelper.getSystemPersistent(this)) {
-			orientations.setEnabled(false);
-		} else {
-			orientations.setEnabled(true);
-		}
-
-		DialogSeekBarPreference notif_size = (DialogSeekBarPreference) findPreference("notif_size");
-		notif_size.setMin(10);
+		PersistentDialogSeekBarPreference dSPref;
+		dSPref = (PersistentDialogSeekBarPreference) findPreference("animationSpeed");
+		dSPref.setMin(300);
+		dSPref.setInterval(100);
+		dSPref =  (PersistentDialogSeekBarPreference) findPreference("drawerLabelSize");
+		dSPref.setMin(8);
+		dSPref = (PersistentDialogSeekBarPreference) findPreference("desktopLabelSize");
+		dSPref.setMin(8);
+		dSPref = (PersistentDialogSeekBarPreference) findPreference("desktopSpeed");
+		dSPref.setInterval(50);
+		dSPref = (PersistentDialogSeekBarPreference) findPreference("desktopBounce");
+		dSPref.setInterval(10);
+		dSPref = (PersistentDialogSeekBarPreference) findPreference("pageHorizontalMargin");
+		dSPref.setInterval(5);
+		dSPref = (PersistentDialogSeekBarPreference) findPreference("notif_size");
+		dSPref.setMin(10);
+		dSPref = (PersistentDialogSeekBarPreference) findPreference("uiScaleAB");
+		dSPref.setMin(1);
 
 		ListPreference desktopIndicator = (ListPreference) findPreference("uiDesktopIndicatorType");
 		desktopIndicator.setOnPreferenceChangeListener(this);
-
+		desktopIndicator.setSummary(desktopIndicator.getEntry());
 		// enable/disable slider color customization based on indicator type
 		if (Integer.valueOf(desktopIndicator.getValue()) > 1) {
 			(findPreference("uiDesktopIndicatorColorAllow")).setEnabled(true);
@@ -138,9 +132,39 @@ OnPreferenceChangeListener {
 			(findPreference("uiDesktopIndicatorColor")).setEnabled(false);
 		}
 
-		ListPreference dock_style = (ListPreference) findPreference("main_dock_style");
-		dock_style.setOnPreferenceChangeListener(this);
-		int val = Integer.valueOf(dock_style.getValue());
+		ListPreference listPref = (ListPreference) findPreference("deletezone_style");
+		listPref.setOnPreferenceChangeListener(this);
+		listPref.setSummary(listPref.getEntry());
+
+		listPref = (ListPreference) findPreference("homeOrientation");
+		listPref.setOnPreferenceChangeListener(this);
+		listPref.setSummary(listPref.getEntry());
+
+		listPref = (ListPreference) findPreference("desktopTransitionStyle");
+		listPref.setOnPreferenceChangeListener(this);
+		listPref.setSummary(listPref.getEntry());
+
+
+		// wjax. Listen for changes in those ListPreference as if their values
+		// are BINDING_APP, then an app shall be selected via
+		// startActivityForResult
+		listPref = (ListPreference) findPreference("swipedownActions");
+		listPref.setOnPreferenceChangeListener(this);
+		listPref.setSummary(listPref.getEntry());
+		listPref = (ListPreference) findPreference("swipeupActions");
+		listPref.setOnPreferenceChangeListener(this);
+		listPref.setSummary(listPref.getEntry());
+		listPref = (ListPreference) findPreference("doubletapActions");
+		listPref.setOnPreferenceChangeListener(this);
+		listPref.setSummary(listPref.getEntry());
+		listPref = (ListPreference) findPreference("homeBinding");
+		listPref.setOnPreferenceChangeListener(this);
+		listPref.setSummary(listPref.getEntry());
+
+		ListPreference dockStyle = (ListPreference) findPreference("main_dock_style");
+		dockStyle.setOnPreferenceChangeListener(this);
+		dockStyle.setSummary(dockStyle.getEntry());
+		int val = Integer.valueOf(dockStyle.getValue());
 		CheckBoxPreference dots = (CheckBoxPreference) findPreference("uiDots");
 		if (val == Launcher.DOCK_STYLE_5 || val == Launcher.DOCK_STYLE_NONE) {
 			dots.setChecked(false);
@@ -154,8 +178,9 @@ OnPreferenceChangeListener {
 		} else {
 			lockMAB.setEnabled(true);
 		}
-		ListPreference drawerStyle = (ListPreference) findPreference("drawer_style");
+		ListPreference drawerStyle = (ListPreference) findPreference("drawerStyle");
 		drawerStyle.setOnPreferenceChangeListener(this);
+		drawerStyle.setSummary(drawerStyle.getEntry());
 		Preference margin = findPreference("pageHorizontalMargin");
 		val = Integer.valueOf(drawerStyle.getValue());
 		if (val == 1) {
@@ -262,6 +287,36 @@ OnPreferenceChangeListener {
 			}
 		});
 
+		Preference launcherManage = findPreference("launcherManage");
+		launcherManage.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference preference) {
+				try {
+					String appPackage = getApplicationContext().getPackageName();
+					Intent intent = new Intent();
+					final int apiLevel = Build.VERSION.SDK_INT;
+					if (apiLevel >= 9) { // above 2.3
+						intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+						Uri uri = Uri.fromParts("package",
+								appPackage, null);
+						intent.setData(uri);
+					} else { // below 2.3
+						final String appPkgName = (apiLevel == 8 ? "pkg"
+								: "com.android.settings.ApplicationPkgName");
+						intent.setAction(Intent.ACTION_VIEW);
+						intent.setClassName(
+								ANDROID_SETTINGS_PACKAGE,
+								"com.android.settings.InstalledAppDetails");
+						intent.putExtra(appPkgName, appPackage);
+					}
+					mContext.startActivity(intent);
+				} catch (Exception e) {
+					// failed to start app info
+				}
+				return false;
+			}
+		});
+
+
 		if (IsDebugVersion) {
 			// Debugging options
 			addPreferencesFromResource(R.xml.debugging_settings);
@@ -289,8 +344,7 @@ OnPreferenceChangeListener {
 			public boolean onPreferenceClick(Preference preference) {
 				AlertDialog alertDialog = new AlertDialog.Builder(
 						mContext).create();
-				alertDialog.setTitle(getResources().getString(
-						R.string.title_dialog_xml));
+				alertDialog.setTitle(R.string.title_dialog_xml);
 				alertDialog.setMessage(getResources().getString(
 						R.string.message_dialog_export));
 				alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
@@ -418,8 +472,8 @@ OnPreferenceChangeListener {
 		SharedPreferences sp = getPreferenceManager().getSharedPreferences();
 		final String themePackage = sp.getString("themePackageName",
 				Launcher.THEME_DEFAULT);
-		ListPreference lp = (ListPreference) findPreference("themePackageName");
-		lp.setOnPreferenceChangeListener(this);
+		ListPreference themeListPref = (ListPreference) findPreference("themePackageName");
+		themeListPref.setOnPreferenceChangeListener(this);
 		Intent intent = new Intent("org.adw.launcher.THEMES");
 		intent.addCategory("android.intent.category.DEFAULT");
 		PackageManager pm = getPackageManager();
@@ -435,10 +489,11 @@ OnPreferenceChangeListener {
 			entries[i + 1] = themeName;
 			values[i + 1] = appPackageName;
 		}
-		lp.setEntries(entries);
-		lp.setEntryValues(values);
+		themeListPref.setEntries(entries);
+		themeListPref.setEntryValues(values);
 		PreviewPreference themePreview = (PreviewPreference) findPreference("themePreview");
 		themePreview.setTheme(themePackage);
+		themeListPref.setSummary(themePreview.getThemeName());
 	}
 
 	public void applyTheme(View v) {
@@ -611,14 +666,17 @@ OnPreferenceChangeListener {
 		super.onPause();
 	}
 
-	public boolean onPreferenceChange(Preference preference, Object newValue) {
+	public boolean onPreferenceChange(Preference preference, Object newValue) {		
 		if (preference.getKey().equals("themePackageName")) {
 			PreviewPreference themePreview = (PreviewPreference) findPreference("themePreview");
 			themePreview.setTheme(newValue.toString());
+			preference.setSummary(themePreview.getThemeName());
 			return false;
 		} else if (preference.getKey().equals("swipedownActions")) {
 			// lets launch app picker if the user selected to launch an app on
 			// gesture
+			CharSequence[] entries = ((ListPreference)preference).getEntries();
+			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 			if (newValue.equals(String.valueOf(Launcher.BIND_APP_LAUNCHER))) {
 				Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
 				mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -629,6 +687,8 @@ OnPreferenceChangeListener {
 						REQUEST_SWIPE_DOWN_APP_CHOOSER);
 			}
 		} else if (preference.getKey().equals("homeBinding")) {
+			CharSequence[] entries = ((ListPreference)preference).getEntries();
+			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 			// lets launch app picker if the user selected to launch an app on
 			// gesture
 			if (newValue.equals(String.valueOf(Launcher.BIND_APP_LAUNCHER))) {
@@ -641,6 +701,8 @@ OnPreferenceChangeListener {
 						REQUEST_HOME_BINDING_APP_CHOOSER);
 			}
 		} else if (preference.getKey().equals("swipeupActions")) {
+			CharSequence[] entries = ((ListPreference)preference).getEntries();
+			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 			// lets launch app picker if the user selected to launch an app on
 			// gesture
 			if (newValue.equals(String.valueOf(Launcher.BIND_APP_LAUNCHER))) {
@@ -652,6 +714,8 @@ OnPreferenceChangeListener {
 				startActivityForResult(pickIntent, REQUEST_SWIPE_UP_APP_CHOOSER);
 			}
 		} else if (preference.getKey().equals("doubletapActions")) {
+			CharSequence[] entries = ((ListPreference)preference).getEntries();
+			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 			// lets launch app picker if the user selected to launch an app on
 			// gesture
 			if (newValue.equals(String.valueOf(Launcher.BIND_APP_LAUNCHER))) {
@@ -662,13 +726,6 @@ OnPreferenceChangeListener {
 				pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
 				startActivityForResult(pickIntent,
 						REQUEST_DOUBLE_TAP_APP_CHOOSER);
-			}
-		} else if (preference.getKey().equals("systemPersistent")) {
-			Preference orientations = findPreference("homeOrientation");
-			if (newValue.equals(true)) {
-				orientations.setEnabled(false);
-			} else {
-				orientations.setEnabled(true);
 			}
 		} else if (preference.getKey().equals("main_dock_style")) {
 			CheckBoxPreference dots = (CheckBoxPreference) findPreference("uiDots");
@@ -685,7 +742,9 @@ OnPreferenceChangeListener {
 			} else {
 				lockMAB.setEnabled(true);
 			}
-		} else if (preference.getKey().equals("drawer_style")) {
+			CharSequence[] entries = ((ListPreference)preference).getEntries();
+			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
+		} else if (preference.getKey().equals("drawerStyle")) {
 			Preference rowsPortrait = findPreference("drawerRowsPortrait");
 			Preference rowslandscape = findPreference("drawerRowsLandscape");
 			Preference margin = findPreference("pageHorizontalMargin");
@@ -699,16 +758,26 @@ OnPreferenceChangeListener {
 				rowslandscape.setEnabled(false);
 				margin.setEnabled(false);
 			}
+			CharSequence[] entries = ((ListPreference)preference).getEntries();
+			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 		} else if (preference.getKey().equals("uiDesktopIndicatorType")) {
 			// enable/disable slider color customization based on indicator type
-			if (Integer.valueOf(newValue.toString()) > 1) {
+			int val = Integer.valueOf(newValue.toString());
+			if (val > 1) {
 				(findPreference("uiDesktopIndicatorColorAllow")).setEnabled(true);
 				(findPreference("uiDesktopIndicatorColor")).setEnabled(true);
 			} else {
 				(findPreference("uiDesktopIndicatorColorAllow")).setEnabled(false);
 				(findPreference("uiDesktopIndicatorColor")).setEnabled(false);
 			}
-		}
+			CharSequence[] entries = ((ListPreference)preference).getEntries();
+			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
+		} else if (preference.getKey().equals("deletezone_style") || 
+				preference.getKey().equals("desktopTransitionStyle") || 
+				preference.getKey().equals("homeOrientation")) {
+			CharSequence[] entries = ((ListPreference)preference).getEntries();
+			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
+		}		
 		return true;
 	}
 
@@ -769,79 +838,6 @@ OnPreferenceChangeListener {
 		}
 		return null;
 	}
-
-	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
-			Preference preference) {
-		if (preference.getKey().equals("highlights_color")) {
-			ColorPickerDialog cp = new ColorPickerDialog(this,
-					mHighlightsColorListener, readHighlightsColor());
-			cp.show();
-		} else if (preference.getKey().equals("highlights_color_focus")) {
-			ColorPickerDialog cp = new ColorPickerDialog(this,
-					mHighlightsColorFocusListener, readHighlightsColorFocus());
-			cp.show();
-		} else if (preference.getKey().equals("drawer_color")) {
-			ColorPickerDialog cp = new ColorPickerDialog(this,
-					mDrawerColorListener, readDrawerColor());
-			cp.show();
-		} else if (preference.getKey().equals("uiABTintColor")) {
-			ColorPickerDialog cp = new ColorPickerDialog(this,
-					mABTintColorListener,
-					MyLauncherSettingsHelper.getUIABTintColor(this));
-			cp.show();
-		} else if (preference.getKey().equals("uiDesktopIndicatorColor")) {
-			ColorPickerDialog cp = new ColorPickerDialog(this,
-					mDesktopIndicatorColorListener,
-					MyLauncherSettingsHelper.getDesktopIndicatorColor(this));
-			cp.show();
-		}
-		return false;
-	}
-
-	private int readHighlightsColor() {
-		return MyLauncherSettingsHelper.getHighlightsColor(this);
-	}
-
-	ColorPickerDialog.OnColorChangedListener mHighlightsColorListener = new ColorPickerDialog.OnColorChangedListener() {
-		public void colorChanged(int color) {
-			getPreferenceManager().getSharedPreferences().edit()
-			.putInt("highlights_color", color).commit();
-		}
-	};
-
-	private int readHighlightsColorFocus() {
-		return MyLauncherSettingsHelper.getHighlightsColorFocus(this);
-	}
-
-	ColorPickerDialog.OnColorChangedListener mHighlightsColorFocusListener = new ColorPickerDialog.OnColorChangedListener() {
-		public void colorChanged(int color) {
-			getPreferenceManager().getSharedPreferences().edit()
-			.putInt("highlights_color_focus", color).commit();
-		}
-	};
-
-	private int readDrawerColor() {
-		return MyLauncherSettingsHelper.getDrawerColor(this);
-	}
-
-	ColorPickerDialog.OnColorChangedListener mDrawerColorListener = new ColorPickerDialog.OnColorChangedListener() {
-		public void colorChanged(int color) {
-			getPreferenceManager().getSharedPreferences().edit()
-			.putInt("drawer_color", color).commit();
-		}
-	};
-	ColorPickerDialog.OnColorChangedListener mABTintColorListener = new ColorPickerDialog.OnColorChangedListener() {
-		public void colorChanged(int color) {
-			getPreferenceManager().getSharedPreferences().edit()
-			.putInt("uiABTintColor", color).commit();
-		}
-	};
-	ColorPickerDialog.OnColorChangedListener mDesktopIndicatorColorListener = new ColorPickerDialog.OnColorChangedListener() {
-		public void colorChanged(int color) {
-			getPreferenceManager().getSharedPreferences().edit()
-			.putInt("uiDesktopIndicatorColor", color).commit();
-		}
-	};
 
 	// Wysie: Adapted from
 	// http://code.google.com/p/and-examples/source/browse/#svn/trunk/database/src/com/totsp/database

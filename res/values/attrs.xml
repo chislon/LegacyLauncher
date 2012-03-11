@@ -17,8 +17,10 @@
 -->
 
 <resources>
+
     <!-- Orientation of a widget. -->
     <attr name="direction">
+
         <!-- Vertical widget. -->
         <enum name="vertical" value="0" />
         <!-- Horizontal widget. -->
@@ -27,53 +29,68 @@
 
     <skip />
 
-    <!-- Workspace specific attributes. These attributes are used to customize
-         the workspace in XML files. -->
+    <!--
+         Workspace specific attributes. These attributes are used to customize
+         the workspace in XML files.
+    -->
     <declare-styleable name="Workspace">
+
         <!-- The first screen the workspace should display. -->
-        <attr name="defaultScreen" format="integer"  />
+        <attr name="defaultScreen" format="integer" />
     </declare-styleable>
-    
-    <!-- CellLayout specific attributes. These attributes are used to customize
-         a CellLayout view in XML files. -->
+
+    <!--
+         CellLayout specific attributes. These attributes are used to customize
+         a CellLayout view in XML files.
+    -->
     <declare-styleable name="CellLayout">
+
         <!-- The width of a single cell -->
-        <attr name="cellWidth" format="dimension"  />
+        <attr name="cellWidth" format="dimension" />
         <!-- The height of a single cell -->
-        <attr name="cellHeight" format="dimension"  />
+        <attr name="cellHeight" format="dimension" />
         <!-- Padding to apply at the start of the long axis -->
-        <attr name="longAxisStartPadding" format="dimension"  />
+        <attr name="longAxisStartPadding" format="dimension" />
         <!-- Padding to apply at the end of the long axis -->
-        <attr name="longAxisEndPadding" format="dimension"  />
+        <attr name="longAxisEndPadding" format="dimension" />
         <!-- Padding to apply at the start of the short axis -->
-        <attr name="shortAxisStartPadding" format="dimension"  />
+        <attr name="shortAxisStartPadding" format="dimension" />
         <!-- Padding to apply at the end of the short axis -->
-        <attr name="shortAxisEndPadding" format="dimension"  />
+        <attr name="shortAxisEndPadding" format="dimension" />
         <!-- Number of cells on the short axis of the CellLayout -->
         <attr name="shortAxisCells" format="integer" />
         <!-- Number of cells on the long axis of the CellLayout -->
         <attr name="longAxisCells" format="integer" />
     </declare-styleable>
 
-    <!-- DeleteZone specific attributes. These attributes are used to customize
-         a DeleteZone view in XML files. -->
+    <!--
+         DeleteZone specific attributes. These attributes are used to customize
+         a DeleteZone view in XML files.
+    -->
     <declare-styleable name="DeleteZone">
+
         <!-- Orientation of the delete zone. -->
         <attr name="direction" />
     </declare-styleable>
 
-    <!-- HandleView specific attributes. These attributes are used to customize
-         a HandleView view in XML files. -->
+    <!--
+         HandleView specific attributes. These attributes are used to customize
+         a HandleView view in XML files.
+    -->
     <declare-styleable name="HandleView">
+
         <!-- Orientation of the handle. -->
         <attr name="direction" />
     </declare-styleable>
 
-    <!-- AllAppsGridView specific attributes. These attributes are used to customize
-         the list of all apps in XML files. -->
+    <!--
+         AllAppsGridView specific attributes. These attributes are used to customize
+         the list of all apps in XML files.
+    -->
     <declare-styleable name="AllAppsGridView">
+
         <!-- The background texture. -->
-        <attr name="texture" format="reference"  />
+        <attr name="texture" format="reference" />
     </declare-styleable>
 
     <!-- XML attributes used by default_workspace.xml -->
@@ -85,7 +102,7 @@
         <attr name="y" format="string" />
         <attr name="spanX" format="string" />
         <attr name="spanY" format="string" />
-        <attr name="icon" format="reference" />  
+        <attr name="icon" format="reference" />
         <attr name="title" format="reference" />
         <attr name="uri" format="string" />
         <attr name="container" format="string" />
@@ -93,11 +110,11 @@
     <declare-styleable name="AllAppsSlidingView">
         <attr name="texture" />
         <attr name="pager_height" format="dimension" />
-        <attr name="listSelector" format="reference"  />
+        <attr name="listSelector" format="reference" />
     </declare-styleable>
     <declare-styleable name="DockBar">
-        <attr name="handle" format="reference"  />
-        <attr name="content" format="reference"  />
+        <attr name="handle" format="reference" />
+        <attr name="content" format="reference" />
         <attr name="position">
             <enum name="top" value="0" />
             <enum name="bottom" value="1" />
@@ -122,8 +139,7 @@
             <enum name="RAB2" value="-600" />
             <enum name="MAB" value="-700" />
         </attr>
-        <attr name="background" format="reference"  />
-        <attr name="direction"/>
+        <attr name="background" format="reference" />
+        <attr name="direction" />
     </declare-styleable>
-
 </resources>

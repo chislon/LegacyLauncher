@@ -52,12 +52,12 @@
 		android:padding="10dp"
 		android:layout_weight="1.0"
 		>
-	    <com.wordpress.chislonchow.legacylauncher.NumberPicker
+	    <com.wordpress.chislonchow.legacylauncher.ui.NumberPicker
 	        android:id="@+id/widget_columns_span"
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent" 
 	        android:layout_weight="1.0"/>
-	    <com.wordpress.chislonchow.legacylauncher.NumberPicker
+	    <com.wordpress.chislonchow.legacylauncher.ui.NumberPicker
 	        android:id="@+id/widget_rows_span"
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"

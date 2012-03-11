@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2008 The Android Open Source Project
+<!--
+     Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,20 +15,19 @@
      limitations under the License.
 -->
 
-<com.wordpress.chislonchow.legacylauncher.AllAppsSlidingView 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.wordpress.chislonchow.legacylauncher.AllAppsSlidingView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:launcher="http://schemas.android.com/apk/res/com.wordpress.chislonchow.legacylauncher"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:scrollbarStyle="insideInset"
     android:drawSelectorOnTop="false"
     launcher:listSelector="@drawable/grid_selector"
-    android:nextFocusRight="@id/btn_mab"
     android:nextFocusDown="@id/all_apps_view"
-    android:nextFocusUp="@id/all_apps_view"
     android:nextFocusLeft="@id/all_apps_view"
-    android:paddingRight="50dip"
-    android:visibility="gone"
-    android:verticalSpacing="10dip"
+    android:nextFocusRight="@id/btn_mab"
+    android:nextFocusUp="@id/all_apps_view"
     android:numColumns="5"
-    launcher:pager_height="15dip" />
+    android:paddingRight="50dip"
+    launcher:pager_height="15dip"
+    android:scrollbarStyle="insideInset"
+    android:verticalSpacing="10dip"
+    android:visibility="gone" />

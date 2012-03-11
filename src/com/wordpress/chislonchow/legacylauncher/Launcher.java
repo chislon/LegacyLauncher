@@ -25,6 +25,7 @@ import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppGroupAdapter;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppInfoMList;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters.Catalogue;
+import com.wordpress.chislonchow.legacylauncher.ui.NumberPicker;
 import com.wordpress.chislonchow.legacylauncher.R;
 
 import java.io.DataInputStream;
@@ -1592,6 +1593,20 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		 */
 		// CCHOW CHANGE END
 
+		// ADW: add custom settings
+		menu.add(MENU_GROUP_ALMOSTNEXUS, MENU_ALMOSTNEXUS, 0,
+				R.string.menu_launcher_settings)
+				.setIcon(R.drawable.ic_menu_launcher_settings)
+				.setAlphabeticShortcut('X');
+
+
+		menu.add(MENU_GROUP_NORMAL, MENU_SEARCH, 0, R.string.menu_search)
+		.setIcon(android.R.drawable.ic_search_category_default)
+		.setAlphabeticShortcut(SearchManager.MENU_KEY);
+
+		menu.add(MENU_GROUP_NORMAL, MENU_LOCK_DESKTOP, 0, R.string.menu_lock)
+		.setIcon(R.drawable.ic_menu_block).setAlphabeticShortcut('X');
+
 		final Intent settings = new Intent(
 				android.provider.Settings.ACTION_SETTINGS);
 		settings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -1599,15 +1614,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		menu.add(MENU_GROUP_NORMAL, MENU_SETTINGS, 0, R.string.menu_settings)
 		.setIcon(android.R.drawable.ic_menu_preferences)
 		.setAlphabeticShortcut('P').setIntent(settings);
-
-		// ADW: add custom settings
-		menu.add(MENU_GROUP_ALMOSTNEXUS, MENU_ALMOSTNEXUS, 0,
-				R.string.menu_launcher_settings)
-				.setIcon(R.drawable.ic_menu_launcher_settings)
-				.setAlphabeticShortcut('X');
-		menu.add(MENU_GROUP_NORMAL, MENU_SEARCH, 0, R.string.menu_search)
-		.setIcon(android.R.drawable.ic_search_category_default)
-		.setAlphabeticShortcut(SearchManager.MENU_KEY);
 		// CCHOW CHANGE START
 		// disable wallpaper menu item
 		/*
@@ -1616,8 +1622,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		 * .setAlphabeticShortcut('W');
 		 */
 		// CCHOW CHANGE END
-		menu.add(MENU_GROUP_NORMAL, MENU_LOCK_DESKTOP, 0, R.string.menu_lock)
-		.setIcon(R.drawable.ic_menu_block).setAlphabeticShortcut('X');
 
 		// drawer options
 		menu.add(MENU_GROUP_CATALOGUE, MENU_APP_GRP_CONFIG, 0,
@@ -4102,13 +4106,19 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							mAllAppsGrid.setPadding(0, 0, appDrawerPadding, 0);
 						}
 						mHandleView.setNextFocusUpId(R.id.drag_layer);
-						mHandleView.setNextFocusLeftId(R.id.all_apps_view);
+						//XXX
+						//mHandleView.setNextFocusLeftId(R.id.all_apps_view);
+						mHandleView.setNextFocusLeftId(R.id.drag_layer);
+
 						mLAB.setNextFocusUpId(R.id.drag_layer);
 						mLAB.setNextFocusLeftId(R.id.all_apps_view);
+
 						mRAB.setNextFocusUpId(R.id.drag_layer);
 						mRAB.setNextFocusLeftId(R.id.all_apps_view);
+
 						mLAB2.setNextFocusUpId(R.id.drag_layer);
 						mLAB2.setNextFocusLeftId(R.id.all_apps_view);
+
 						mRAB2.setNextFocusUpId(R.id.drag_layer);
 						mRAB2.setNextFocusLeftId(R.id.all_apps_view);
 			} else {
@@ -4120,12 +4130,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						}
 						mHandleView.setNextFocusUpId(R.id.all_apps_view);
 						mHandleView.setNextFocusLeftId(R.id.drag_layer);
+
 						mLAB.setNextFocusUpId(R.id.all_apps_view);
 						mLAB.setNextFocusLeftId(R.id.drag_layer);
+
 						mRAB.setNextFocusUpId(R.id.all_apps_view);
 						mRAB.setNextFocusLeftId(R.id.drag_layer);
+
 						mLAB2.setNextFocusUpId(R.id.all_apps_view);
 						mLAB2.setNextFocusLeftId(R.id.drag_layer);
+
 						mRAB2.setNextFocusUpId(R.id.all_apps_view);
 						mRAB2.setNextFocusLeftId(R.id.drag_layer);
 			}

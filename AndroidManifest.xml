@@ -87,7 +87,7 @@
         <activity
             android:name="MyLauncherSettings"
             android:configChanges="orientation|keyboardHidden|keyboard"
-            android:label="@string/pref_label_settings" />
+            android:label="@string/launcher_label_settings" />
         <activity
             android:name="ActivityPickerActivity"
             android:label="@string/pref_label_activities" />

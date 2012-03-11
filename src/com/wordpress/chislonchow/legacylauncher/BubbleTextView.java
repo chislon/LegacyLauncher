@@ -22,6 +22,9 @@ import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.TypedValue;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -64,18 +67,20 @@ public class BubbleTextView extends CounterTextView {
     }
 
     private void init() {
+		Context context = getContext();
+    	
         setFocusable(true);
         //mBackground = getBackground();
-        mBackground=IconHighlights.getDrawable(getContext(),IconHighlights.TYPE_DESKTOP);
+        mBackground=IconHighlights.getDrawable(context, IconHighlights.TYPE_DESKTOP);
         setBackgroundDrawable(null);
         mBackground.setCallback(this);
         //ADW: Load textcolor and bubble color from theme
-        String themePackage=MyLauncherSettingsHelper.getThemePackageName(getContext(), Launcher.THEME_DEFAULT);
-        int color=getContext().getResources().getColor(R.color.bubble_dark_background);
+        String themePackage=MyLauncherSettingsHelper.getThemePackageName(context, Launcher.THEME_DEFAULT);
+        int color=context.getResources().getColor(R.color.bubble_dark_background);
         if(!themePackage.equals(Launcher.THEME_DEFAULT)){
         	Resources themeResources=null;
         	try {
-    			themeResources=getContext().getPackageManager().getResourcesForApplication(themePackage);
+    			themeResources=context.getPackageManager().getResourcesForApplication(themePackage);
     		} catch (NameNotFoundException e) {
     			//e.printStackTrace();
     		}
@@ -94,6 +99,9 @@ public class BubbleTextView extends CounterTextView {
     			}
     		}
         }
+        
+		// text size customization
+        setTextSize(MyLauncherSettingsHelper.getDesktopLabelSize(context));
         
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         //mPaint.setColor(getContext().getResources().getColor(R.color.bubble_dark_background));

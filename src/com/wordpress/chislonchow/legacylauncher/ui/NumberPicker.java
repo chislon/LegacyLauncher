@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package com.wordpress.chislonchow.legacylauncher;
+package com.wordpress.chislonchow.legacylauncher.ui;
 
 import com.wordpress.chislonchow.legacylauncher.R;
+import com.wordpress.chislonchow.legacylauncher.R.id;
+import com.wordpress.chislonchow.legacylauncher.R.layout;
 
 import android.content.Context;
 import android.os.Handler;
