@@ -94,12 +94,16 @@ public class UserFolder extends Folder implements DropTarget {
 		private LayoutInflater mInflater;
 		private Drawable mBackground;
 		private int mTextColor = 0;
+		private int mTextSize;
 		private boolean useThemeTextColor = false;
 		private Typeface themeFont=null;
 
 		public FolderAdapter(Context context, ArrayList<ApplicationInfo> icons) {
 			super(context, 0,icons);
 			mInflater=LayoutInflater.from(context);
+			// custom text size
+			mTextSize = (int)(MyLauncherSettingsHelper.getFolderTextSize(getContext()));
+
 			// ADW: Load textcolor and bubble color from theme
 			String themePackage = MyLauncherSettingsHelper.getThemePackageName(
 					getContext(), Launcher.THEME_DEFAULT);
@@ -156,7 +160,7 @@ public class UserFolder extends Folder implements DropTarget {
 				convertView.setBackgroundDrawable(mBackground);
 
 			// custom text size
-			textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MyLauncherSettingsHelper.getFolderTextSize(getContext()));
+			textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTextSize);
 			return convertView;
 		}
 
