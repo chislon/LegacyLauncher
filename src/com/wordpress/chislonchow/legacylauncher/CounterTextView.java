@@ -44,13 +44,13 @@ public class CounterTextView extends TextView {
 		Context context = getContext();
 		Resources res = context.getResources();
 		final float scale = res.getDisplayMetrics().density;		// px conversion
-		final int fontSize = (int)(MyLauncherSettingsHelper.getNotifSize(getContext()) * scale + 0.5f);
+		final int textSize = (int)(MyLauncherSettingsHelper.getNotifSize(getContext()) * scale + 0.5f);
 
 		mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mTextPaint.setARGB(255, 255, 255, 255);
 		mTextPaint.setTextAlign(Paint.Align.CENTER);
-		mTextPaint.setTextSize(fontSize);
+		mTextPaint.setTextSize(textSize);
 		mTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
 		mTextPaint.setShadowLayer(2f, 1, 1, 0xFF000000);
 		fm=mTextPaint.getFontMetrics();

@@ -1602,7 +1602,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		menu.add(MENU_GROUP_NORMAL, MENU_SEARCH, 0, R.string.menu_search)
 		.setIcon(android.R.drawable.ic_search_category_default)
 		.setAlphabeticShortcut(SearchManager.MENU_KEY);
-		
+
 		final Intent settings = new Intent(
 				android.provider.Settings.ACTION_SETTINGS);
 		settings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -1648,12 +1648,15 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		super.onPrepareOptionsMenu(menu);
 		if (mIsEditMode || mIsWidgetEditMode)
 			return false;
+		// CCHOW let's not care about whether or not the workspace is empty
+		/*
 		// We can't trust the view state here since views we may not be done
 		// binding.
 		// Get the vacancy state from the model instead.
 		mMenuAddInfo = mWorkspace.findAllVacantCellsFromModel();
 		menu.setGroupEnabled(MENU_GROUP_ADD, mMenuAddInfo != null
 				&& mMenuAddInfo.valid);
+		 */
 		boolean forceHidden = getResources().getBoolean(
 				R.bool.force_hidden_settings);
 		boolean showmenu = true;

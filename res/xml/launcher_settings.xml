@@ -36,8 +36,8 @@
 					android:key="desktopBounce" android:defaultValue="@integer/config_desktop_bounce"
 					android:max="100" />
 				<CheckBoxPreference android:title="@string/pref_title_looping"
-					android:defaultValue="@bool/config_desktop_looping" android:summary="@string/pref_summary_looping"
-					android:key="desktopLooping" />
+					android:defaultValue="@bool/config_desktop_looping"
+					android:summary="@string/pref_summary_looping" android:key="desktopLooping" />
 			</PreferenceCategory>
 		</PreferenceScreen>
 		<PreferenceScreen android:key="workspaceAppearancePreferences"
@@ -102,7 +102,7 @@
 					android:dependency="uiHideLabels" android:title="@string/pref_title_desktop_label_size"
 					android:summary="@string/pref_summary_desktop_label_size"
 					android:dialogMessage="@string/pref_dialog_desktop_label_size"
-					android:key="desktopLabelSize" android:defaultValue="@integer/config_desktop_label_size"
+					android:key="desktopLabelSize" android:defaultValue="@integer/config_desktop_label_text_size"
 					android:max="16" />
 
 				<CheckBoxPreference android:dependency="uiHideLabels"
@@ -165,8 +165,14 @@
 			<CheckBoxPreference android:title="@string/pref_title_closing_folder"
 				android:defaultValue="@bool/config_ui_close_folder" android:summary="@string/pref_summary_closing_folder"
 				android:key="uiCloseFolder" />
+			<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
+				android:title="@string/pref_title_folder_text_size" android:summary="@string/pref_summary_folder_text_size"
+				android:dialogMessage="@string/pref_dialog_folder_text_size"
+				android:key="folderTextSize" android:defaultValue="@integer/config_folder_text_size"
+				android:max="16" />
 		</PreferenceScreen>
-		<PreferenceScreen android:key="desktopActions"
+		<PreferenceScreen android:key="
+				desktopActions "
 			android:title="@string/pref_title_desktop_actions" android:summary="@string/pref_summary_desktop_actions">
 			<ListPreference android:key="homeBinding"
 				android:title="@string/pref_title_home_button_binding"
@@ -257,7 +263,7 @@
 					android:dependency="drawerLabels" android:title="@string/pref_title_drawer_label_size"
 					android:summary="@string/pref_summary_drawer_label_size"
 					android:dialogMessage="@string/pref_dialog_drawer_label_size"
-					android:key="drawerLabelSize" android:defaultValue="@integer/config_drawer_label_size"
+					android:key="drawerLabelTextSize" android:defaultValue="@integer/config_drawer_label_size"
 					android:max="16" />
 				<CheckBoxPreference android:title="@string/pref_title_drawer_label_bold"
 					android:dependency="drawerLabels" android:defaultValue="@bool/config_drawer_label_bold"
@@ -336,7 +342,7 @@
 		<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
 			android:title="@string/pref_title_notif_size" android:summary="@string/pref_summary_notif_size"
 			android:dialogMessage="@string/pref_dialog_notif_size" android:key="notif_size"
-			android:defaultValue="@integer/config_notif_size" android:max="14" />
+			android:defaultValue="@integer/config_notif_text_size" android:max="14" />
 		<PreferenceCategory android:title="@string/pref_title_highlights_preferencecategory">
 			<CheckBoxPreference android:key="uiNewSelectors"
 				android:title="@string/pref_title_new_selectors" android:summary="@string/pref_summary_new_selectors"

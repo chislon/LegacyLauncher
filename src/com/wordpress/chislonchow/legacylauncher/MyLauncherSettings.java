@@ -51,7 +51,7 @@ public class MyLauncherSettings extends PreferenceActivity implements
 OnPreferenceChangeListener {
 
 	public static final boolean IsDebugVersion = false;
-	private static final String ALMOSTNEXUS_PREFERENCES = "launcher.preferences.almostnexus";
+	private static final String LEGACY_PREFERENCES = "launcher.preferences.almostnexus";
 	private boolean shouldRestart = false;
 	private Context mContext;
 
@@ -76,7 +76,7 @@ OnPreferenceChangeListener {
 		// addPreferencesFromResource?
 		super.onCreate(savedInstanceState);
 		getPreferenceManager()
-		.setSharedPreferencesName(ALMOSTNEXUS_PREFERENCES);
+		.setSharedPreferencesName(LEGACY_PREFERENCES);
 
 		addPreferencesFromResource(R.xml.launcher_settings);
 
@@ -105,7 +105,7 @@ OnPreferenceChangeListener {
 		dSPref = (PersistentDialogSeekBarPreference) findPreference("animationSpeed");
 		dSPref.setMin(300);
 		dSPref.setInterval(100);
-		dSPref =  (PersistentDialogSeekBarPreference) findPreference("drawerLabelSize");
+		dSPref =  (PersistentDialogSeekBarPreference) findPreference("drawerLabelTextSize");
 		dSPref.setMin(8);
 		dSPref = (PersistentDialogSeekBarPreference) findPreference("desktopLabelSize");
 		dSPref.setMin(8);
@@ -119,6 +119,8 @@ OnPreferenceChangeListener {
 		dSPref.setMin(10);
 		dSPref = (PersistentDialogSeekBarPreference) findPreference("uiScaleAB");
 		dSPref.setMin(1);
+		dSPref = (PersistentDialogSeekBarPreference) findPreference("folderTextSize");
+		dSPref.setMin(8);
 
 		ListPreference desktopIndicator = (ListPreference) findPreference("uiDesktopIndicatorType");
 		desktopIndicator.setOnPreferenceChangeListener(this);

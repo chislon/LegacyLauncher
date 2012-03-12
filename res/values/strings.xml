@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.7 Alpha</string>
+    <string name="app_version">0.11 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -139,10 +139,8 @@
     <string name="pref_title_desktop_label_size">Text size</string>
     <string name="pref_summary_desktop_label_size">Select text size for labels</string>
     <string name="pref_dialog_desktop_label_size">Select text size for labels</string>
-    
-    <string name="pref_title_desktop_label_padding_override">Override radius</string>
-    <string name="pref_summary_desktop_label_padding_override">Select to override padding corner radius</string>
-    
+    <string name="pref_title_desktop_label_padding_override">Override padding</string>
+    <string name="pref_summary_desktop_label_padding_override">Select to override label padding</string>
     <string name="pref_title_desktop_label_padding_radius_size">Background radius</string>
     <string name="pref_summary_desktop_label_padding_radius_size">Label background corner radius</string>
     <string name="pref_dialog_desktop_label_padding_radius_size">Label background corner radius</string>
@@ -159,7 +157,14 @@
     <string name="pref_title_desktop_label_color_bg">Label background color</string>
     <string name="pref_summary_desktop_label_color_bg">Select background color of labels</string>
     <string name="pref_title_desktop_icon_label_category">Icon Labels</string>
-        <string name="pref_title_desktop_icon_label_padding_category">Icon Label Background Padding</string>
+    <string name="pref_title_desktop_icon_label_padding_category">Icon Label Background Padding</string>
+
+    <!-- Folder preferences -->
+    <string name="pref_title_closing_folder">Auto-close folders</string>
+    <string name="pref_summary_closing_folder">Auto-close folder after app launch</string>
+    <string name="pref_title_folder_text_size">Folder text size</string>
+    <string name="pref_summary_folder_text_size">Set folder text size</string>
+    <string name="pref_dialog_folder_text_size">Set folder text size</string>
 
     <!-- Desktop action preferences -->
     <string name="pref_title_desktop_actions">Desktop Actions</string>
@@ -227,8 +232,6 @@
     <string name="pref_summary_dock_appearance">Icon size, dock background\u2026</string>
     <string name="pref_title_desktop_dots">Dock pagination dots</string>
     <string name="pref_summary_desktop_dots">Show/hide dock pagination dots</string>
-    <string name="pref_title_closing_folder">Auto-close folders</string>
-    <string name="pref_summary_closing_folder">Auto-close folder after app launch</string>
     <string name="pref_title_ab_scale_factor">Icon size</string>
     <string name="pref_summary_ab_scale_factor">Set the scaling size for the icon</string>
     <string name="pref_dialog_ab_scale_factor">Set the scaling size for the icons</string>
@@ -370,7 +373,7 @@
     <string name="pref_title_lock">Enable Lock</string>
     <string name="pref_summary_lock">Lockdown launcher</string>
     <string name="pref_title_lock_password">Setup lock password</string>
-    <string name="pref_summary_lock_password">Set a launcher lock password</string>
+    <string name="pref_summary_lock_password">Set a new launcher lock password</string>
     <string name="pref_title_lock_password_clear">Clear lock password</string>
     <string name="pref_summary_lock_password_clear">Remove launcher lock password</string>
     <string name="pref_title_lock_option_settings">Hide \'Settings\' Option</string>
@@ -426,7 +429,7 @@
     <string name="menu_search">Search</string>
     <!-- Noun, menu item used to show the system settings -->
     <string name="menu_settings">Settings</string>
-    <string name="menu_launcher_settings">Launcher Setup</string>
+    <string name="menu_launcher_settings">Setup Launcher</string>
     <string name="menu_lock">Lock Launcher</string>
     <string name="menu_unlock">Unlock Launcher</string>
 

@@ -20,7 +20,7 @@ public final class MyLauncherSettingsHelper {
 	public static final int CACHE_AUTO=2;
 	public static final int CACHE_DISABLED=3;
 
-	private static final String LEGACY_PREFERENCES = "legacy.launcher.preferences";
+	private static final String LEGACY_PREFERENCES = "launcher.preferences.almostnexus";
 
 	// modification of these keys cause restart 
 	private static final String[] restart_keys = {
@@ -35,7 +35,7 @@ public final class MyLauncherSettingsHelper {
 		"notif_size",
 		"drawerNew",
 		"drawerStyle", 
-		"drawerLabelSize",
+		"drawerLabelTextSize",
 		"drawerLabelBold",
 		"uiDesktopIndicatorColor",
 		"uiDesktopIndicator",
@@ -50,7 +50,8 @@ public final class MyLauncherSettingsHelper {
 		"desktopLabelPaddingRadius",
 		"desktopLabelColorOverride",
 		"desktopLabelColorText",
-		"desktopLabelColorBg"
+		"desktopLabelColorBg",
+		"folderTextSize"
 	};
 
 	public static boolean needsRestart(String key){
@@ -130,6 +131,12 @@ public final class MyLauncherSettingsHelper {
 		boolean newD = sp.getBoolean("uiCloseFolder", context.getResources().getBoolean(R.bool.config_ui_close_folder));
 		return newD;
 	}
+	public static int getFolderTextSize(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = sp.getInt("folderTextSize", context.getResources().getInteger(R.integer.config_folder_text_size))+8;
+		return newD;
+	}
+
 	public static int getDesktopSpeed(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = sp.getInt("desktopSpeed", context.getResources().getInteger(R.integer.config_desktop_speed));
@@ -203,7 +210,7 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static int getDesktopLabelSize(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		int value = sp.getInt("desktopLabelSize", context.getResources().getInteger(R.integer.config_desktop_label_size))+8;
+		int value = sp.getInt("desktopLabelSize", context.getResources().getInteger(R.integer.config_desktop_label_text_size))+8;
 		return value;
 	}
 
@@ -260,7 +267,7 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static int getDrawerLabelSize(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		int size = sp.getInt("drawerLabelSize", context.getResources().getInteger(R.integer.config_drawer_label_size)) + 8;
+		int size = sp.getInt("drawerLabelTextSize", context.getResources().getInteger(R.integer.config_drawer_label_size)) + 8;
 		return size;
 	}
 	public static boolean getDrawerLabelBold(Context context) {
@@ -534,7 +541,7 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static int getNotifSize(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		int def_screen = sp.getInt("notif_size", context.getResources().getInteger(R.integer.config_notif_size))+10;
+		int def_screen = sp.getInt("notif_size", context.getResources().getInteger(R.integer.config_notif_text_size))+10;
 		return def_screen;
 	}
 	public static int getDockStyle(Context context) {

@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,81 +22,81 @@ import android.widget.TextView;
  *
  */
 public class UserFolder extends Folder implements DropTarget {
-    public UserFolder(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-    
-    /**
-     * Creates a new UserFolder, inflated from R.layout.user_folder.
-     *
-     * @param context The application's context.
-     *
-     * @return A new UserFolder.
-     */
-    static UserFolder fromXml(Context context) {
-        return (UserFolder) LayoutInflater.from(context).inflate(R.layout.user_folder, null);
-    }
+	public UserFolder(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
 
-    public boolean acceptDrop(DragSource source, int x, int y, int xOffset, int yOffset,
-            Object dragInfo) {
-        final ItemInfo item = (ItemInfo) dragInfo;
-        final int itemType = item.itemType;
-        return (itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION ||
-                itemType == LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT) && item.container != mInfo.id;
-    }
-    
-    public Rect estimateDropLocation(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo, Rect recycle) {
-        return null;
-    }
+	/**
+	 * Creates a new UserFolder, inflated from R.layout.user_folder.
+	 *
+	 * @param context The application's context.
+	 *
+	 * @return A new UserFolder.
+	 */
+	static UserFolder fromXml(Context context) {
+		return (UserFolder) LayoutInflater.from(context).inflate(R.layout.user_folder, null);
+	}
 
-    @SuppressWarnings("unchecked")
-    public void onDrop(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo) {
-        final ApplicationInfo item = (ApplicationInfo) dragInfo;
-        //noinspection unchecked
-        ((ArrayAdapter<ApplicationInfo>) mContent.getAdapter()).add((ApplicationInfo) dragInfo);
-        LauncherModel.addOrMoveItemInDatabase(mLauncher, item, mInfo.id, 0, 0, 0);
-    }
+	public boolean acceptDrop(DragSource source, int x, int y, int xOffset, int yOffset,
+			Object dragInfo) {
+		final ItemInfo item = (ItemInfo) dragInfo;
+		final int itemType = item.itemType;
+		return (itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION ||
+				itemType == LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT) && item.container != mInfo.id;
+	}
 
-    public void onDragEnter(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo) {
-    }
+	public Rect estimateDropLocation(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo, Rect recycle) {
+		return null;
+	}
 
-    public void onDragOver(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo) {
-    }
+	@SuppressWarnings("unchecked")
+	public void onDrop(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo) {
+		final ApplicationInfo item = (ApplicationInfo) dragInfo;
+		//noinspection unchecked
+		((ArrayAdapter<ApplicationInfo>) mContent.getAdapter()).add((ApplicationInfo) dragInfo);
+		LauncherModel.addOrMoveItemInDatabase(mLauncher, item, mInfo.id, 0, 0, 0);
+	}
 
-    public void onDragExit(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo) {
-    }
+	public void onDragEnter(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo) {
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void onDropCompleted(View target, boolean success) {
-        if (success) {
-            //noinspection unchecked
-            ArrayAdapter<ApplicationInfo> adapter =
-                    (ArrayAdapter<ApplicationInfo>) mContent.getAdapter();
-            adapter.remove(mDragItem);
-        }
-    }
+	public void onDragOver(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo) {
+	}
 
-    void bind(FolderInfo info) {
-        super.bind(info);
-        //setContentAdapter(new ApplicationsAdapter(mContext, ((UserFolderInfo) info).contents));
-        setContentAdapter(new FolderAdapter(mContext, ((UserFolderInfo) info).contents));
-    }
+	public void onDragExit(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo) {
+	}
 
-    // When the folder opens, we need to refresh the GridView's selection by
-    // forcing a layout
-    @Override
-    void onOpen() {
-        super.onOpen();
-        requestFocus();
-    }
-    private class FolderAdapter extends ArrayAdapter<ApplicationInfo> {
-    	private LayoutInflater mInflater;
-    	private Drawable mBackground;
-    	private int mTextColor = 0;
-    	private boolean useThemeTextColor = false;
-        private Typeface themeFont=null;
-    	
+	@Override
+	@SuppressWarnings("unchecked")
+	public void onDropCompleted(View target, boolean success) {
+		if (success) {
+			//noinspection unchecked
+			ArrayAdapter<ApplicationInfo> adapter =
+					(ArrayAdapter<ApplicationInfo>) mContent.getAdapter();
+			adapter.remove(mDragItem);
+		}
+	}
+
+	void bind(FolderInfo info) {
+		super.bind(info);
+		//setContentAdapter(new ApplicationsAdapter(mContext, ((UserFolderInfo) info).contents));
+		setContentAdapter(new FolderAdapter(mContext, ((UserFolderInfo) info).contents));
+	}
+
+	// When the folder opens, we need to refresh the GridView's selection by
+	// forcing a layout
+	@Override
+	void onOpen() {
+		super.onOpen();
+		requestFocus();
+	}
+	private class FolderAdapter extends ArrayAdapter<ApplicationInfo> {
+		private LayoutInflater mInflater;
+		private Drawable mBackground;
+		private int mTextColor = 0;
+		private boolean useThemeTextColor = false;
+		private Typeface themeFont=null;
+
 		public FolderAdapter(Context context, ArrayList<ApplicationInfo> icons) {
 			super(context, 0,icons);
 			mInflater=LayoutInflater.from(context);
@@ -119,9 +120,9 @@ public class UserFolder extends Folder implements DropTarget {
 					}
 					mBackground = IconHighlights.getDrawable(getContext(),
 							IconHighlights.TYPE_DRAWER);
-	    			try{
-	    				themeFont=Typeface.createFromAsset(themeResources.getAssets(), "themefont.ttf");
-	    			}catch (RuntimeException e) {
+					try{
+						themeFont=Typeface.createFromAsset(themeResources.getAssets(), "themefont.ttf");
+					}catch (RuntimeException e) {
 						// TODO: handle exception
 					}
 				}
@@ -153,8 +154,11 @@ public class UserFolder extends Folder implements DropTarget {
 			// so i'd better not use it, sorry themers
 			if (mBackground != null)
 				convertView.setBackgroundDrawable(mBackground);
+
+			// custom text size
+			textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MyLauncherSettingsHelper.getFolderTextSize(getContext()));
 			return convertView;
 		}
-    	
-    }
+
+	}
 }

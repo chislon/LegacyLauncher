@@ -23,8 +23,8 @@
     <integer name="config_desktop_speed">500</integer>
     <integer name="config_desktop_bounce">0</integer>
 
-    <!-- config_desktop_label_size min is 8, so it will add 8 to whatever value you set here -->
-    <integer name="config_desktop_label_size">6</integer>
+    <!-- config_desktop_label_text_size min is 8, so it will add 8 to whatever value you set here -->
+    <integer name="config_desktop_label_text_size">6</integer>
 
     <bool name="config_desktop_label_padding_override">false</bool>
 
@@ -61,6 +61,10 @@
     <bool name="config_previews_spread">true</bool>
     <bool name="config_ui_dots">false</bool>
     <bool name="config_ui_close_folder">false</bool>
+
+    <!-- config_ui_close_folder min is 10, so it will add 10 to whatever value you set here -->
+    <integer name="config_folder_text_size">4</integer>
+
     <bool name="config_ui_ab_hide_bg">true</bool>
     <!-- config_animation_speed min is 300, so it will add 300 to whatever value you set here -->
     <bool name="config_drawer_zoom">false</bool>
@@ -112,8 +116,8 @@
     <bool name="config_drawer_ungroup_catalog">false</bool>
     <bool name="config_drawer_title_catalogs">true</bool>
     <bool name="config_notif_receiver">false</bool>
-    <!-- config_notif_size min is 10, so it will add 10 to whatever value you set here -->
-    <integer name="config_notif_size">4</integer>
+    <!-- config_notif_text_size min is 10, so it will add 10 to whatever value you set here -->
+    <integer name="config_notif_text_size">4</integer>
 
     <string name="config_main_dock_style">2</string>
 
