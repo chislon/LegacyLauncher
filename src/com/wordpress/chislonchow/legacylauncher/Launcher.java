@@ -1646,7 +1646,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-		if (mIsEditMode || mIsWidgetEditMode)
+		if (mIsEditMode || mIsWidgetEditMode || showingPreviews)
 			return false;
 		// CCHOW let's not care about whether or not the workspace is empty
 		/*
@@ -3846,7 +3846,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mDesktopIndicator.hide();
 			mNextView.setVisibility(View.INVISIBLE);
 			mPreviousView.setVisibility(View.INVISIBLE);
-			mDrawerToolbar.setVisibility(View.GONE);
+			mDrawerToolbar.setVisibility(View.INVISIBLE);
 		} else {
 			if (mDesktopIndicator != null)
 				mDesktopIndicator.show();

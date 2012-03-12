@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.11 Beta</string>
+    <string name="app_version">0.12 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->

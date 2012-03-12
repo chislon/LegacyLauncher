@@ -151,7 +151,7 @@ OnItemClickListener, OnClickListener, View.OnLongClickListener {
 	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 		if (!view.isInTouchMode()) {
 			return false;
-		} else if (!mLauncher.isLauncherLocked()) {
+		} else if (mLauncher.isLauncherLocked()) {
 			return true;	// consume event if launcher is locked
 		}
 
