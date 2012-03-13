@@ -45,7 +45,7 @@ public abstract class WidgetSpace extends ViewGroup {
 
     private static final String TAG = "WidgetSpace";
 
-    private static final boolean LOGD = true;
+    private static final boolean LOGD = false;
 
     private static final boolean CLEAR_DATA_CACHE = true;
 

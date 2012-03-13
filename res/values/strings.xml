@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.12 Beta</string>
+    <string name="app_version">0.13 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -107,27 +107,30 @@
     <!-- Desktop preferences -->
     <string name="pref_title_desktop">Desktop</string>
     <string name="pref_title_desktop_config_preferences">Desktop Configuration</string>
-    <string name="pref_summary_desktop_config_preferences">Layout, functionality\u2026</string>
-    <string name="pref_title_desktop_functionality_preferences">Desktop Extensions</string>
-    <string name="pref_summary_desktop_functionality_preferences">Desktop extended functionality</string>
+    <string name="pref_summary_desktop_config_preferences">Layout, response</string>
+    <string name="pref_title_desktop_extended_preferences">Desktop Extensions</string>
+    <string name="pref_summary_desktop_extended_preferences">Desktop extended functionality</string>
     <string name="pref_title_desktop_appearance_preferences">Desktop Appearance</string>
     <string name="pref_summary_desktop__preferences">Transitions, indicators, icons</string>
     <string name="pref_title_desktop_icon_widget_preferences">Desktop Icons and Widgets</string>
-    <string name="pref_summary_desktop_icon_widget_preferences">Customize icons and widgets</string>
+    <string name="pref_summary_desktop_icon_widget_preferences">Customize icons and widgets, labels</string>
     <string name="pref_title_wallpaper_hack">Wallpaper Hack</string>
     <string name="pref_summary_wallpaper_hack">Turn off if launcher becomes unstable. Enabling improves scrolling speed.</string>
     <string name="pref_title_orientation_sensor">Launcher Orientation</string>
     <string name="pref_title_hide_statusbar">Hide StatusBar</string>
     <string name="pref_summary_hide_statusbar">Hides the statusbar</string>
     <string name="pref_title_looping">Screen Loop</string>
-    <string name="pref_summary_looping">Desktop screen looping</string>
+    <string name="pref_summary_looping">Screen looping (has visual side-effects)</string>
     <string name="pref_title_default_screen">Default Screen</string>
-    <string name="pref_title_desktop_scrolling_speed">Scrolling Time</string>
-    <string name="pref_summary_desktop_scrolling_speed">Set time to complete a scroll across</string>
+    <string name="pref_title_desktop_scrolling_speed">Scrolling time</string>
+    <string name="pref_summary_desktop_scrolling_speed">Time to scroll across</string>
     <string name="pref_dialog_desktop_scrolling_speed">The lower the value, the faster flings will be</string>
-    <string name="pref_title_desktop_overshoot">Screen Overshoot</string>
+    <string name="pref_title_desktop_overshoot">Scroll overshoot bounce</string>
     <string name="pref_summary_desktop_overshoot">Screen scroll bounce amount</string>
-    <string name="pref_dialog_desktop_overshoot">Set to 0 to turn off screen overshoot</string>
+    <string name="pref_dialog_desktop_overshoot">Set to 0 to turn off scroll overshoot</string>
+    <string name="pref_title_desktop_snap">Scroll snap time</string>
+    <string name="pref_summary_desktop_snap">Time to snap to screen when scroll ends</string>
+    <string name="pref_dialog_desktop_snap">Speed up snap time by decreasing value</string>
     <string name="pref_title_desktop_transition">Transition Animation</string>
     <string name="pref_summary_desktop_transition">Transistion animation for changing screens</string>
     <string name="pref_title_desktop_wallpaper">Wallpaper</string>
@@ -177,7 +180,7 @@
     <!-- Drawer preferences -->
     <string name="pref_title_drawer">Applications Tray</string>
     <string name="pref_title_drawer_settings">Tray Configuration</string>
-    <string name="pref_summary_drawer_settings">Tray style, layout</string>
+    <string name="pref_summary_drawer_settings">Tray style, layout, response</string>
     <string name="pref_title_drawer_appearance">Tray Appearance</string>
     <string name="pref_summary_drawer_appearance">Application tray visual settings</string>
     <string name="pref_title_drawer_catalogs_settings">Tray Catalogs</string>
@@ -185,23 +188,23 @@
     <string name="pref_title_animation_speed">Animation duration</string>
     <string name="pref_summary_animation_speed">Set animation time in milliseconds </string>
     <string name="pref_dialog_animation_speed">Set animation time in milliseconds</string>
-    <string name="pref_title_page_horizontal_margin">Horizontal page margin</string>
-    <string name="pref_summary_page_horizontal_margin">Horizontal margin between pages</string>
-    <string name="pref_dialog_page_horizontal_margin">Horizontal margin between pages</string>
+    <string name="pref_title_page_horizontal_margin">Horizontal drawer margin</string>
+    <string name="pref_summary_page_horizontal_margin">Side margin width of horizontal drawer</string>
+    <string name="pref_dialog_page_horizontal_margin">Side margin width of horizontal drawer</string>
     <string name="pref_title_animated_drawer">Animated tray</string>
     <string name="pref_summary_animated_drawer">Display animations</string>
     <string name="pref_title_animated_zoom_drawer">Animate icon zoom</string>
     <string name="pref_summary_animated_zoom_drawer">Zoom animation for icons</string>
-    <string name="pref_title_drawer_columns_portrait">Portrait Columns</string>
+    <string name="pref_title_drawer_columns_portrait">Portrait columns</string>
     <string name="pref_summary_drawer_columns_portrait">Number of columns in portrait</string>
     <string name="pref_dialog_drawer_columns_portrait">Number of columns in portrait</string>
-    <string name="pref_title_drawer_rows_portrait">Portrait Rows</string>
+    <string name="pref_title_drawer_rows_portrait">Portrait rows</string>
     <string name="pref_summary_drawer_rows_portrait">Number of rows in portrait</string>
     <string name="pref_dialog_drawer_rows_portrait">Number of rows in portrait</string>
-    <string name="pref_title_drawer_columns_landscape">Landscape Columns</string>
+    <string name="pref_title_drawer_columns_landscape">Landscape columns</string>
     <string name="pref_summary_drawer_columns_landscape">Number of columns in landscape</string>
     <string name="pref_dialog_drawer_columns_landscape">Number of columns in landscape</string>
-    <string name="pref_title_drawer_rows_landscape">Landscape Rows</string>
+    <string name="pref_title_drawer_rows_landscape">Landscape rows</string>
     <string name="pref_summary_drawer_rows_landscape">Number of rows in landscape</string>
     <string name="pref_dialog_drawer_rows_landscape">Number of rows in landscape</string>
     <string name="pref_title_drawer_color">Background color</string>
@@ -216,20 +219,28 @@
     <string name="pref_summary_drawer_label_bold">Application label bold text style</string>
     <string name="pref_title_drawer_navigate_catalogs">Navigation buttons</string>
     <string name="pref_summary_drawer_navigate_catalogs">Show catalog navigation buttons</string>
-    <string name="pref_title_drawer_fling_navigate_catalogs">Fling navigation</string>
-    <string name="pref_summary_drawer_fling_navigate_catalogs">Navigate catalogs by flinging perpendicular to tray scroll</string>
+    <string name="pref_title_drawer_catalog_fling_navigate">Fling navigation</string>
+    <string name="pref_summary_drawer_catalog_fling_navigate">Navigate catalogs by flinging perpendicular to tray scroll</string>
     <string name="pref_title_drawer_ungroup_catalog">Only custom catalogs</string>
     <string name="pref_summary_drawer_ungroup_catalog">Hide \'All\' catalog</string>
     <string name="pref_title_drawer_show_catalogs">Show titles</string>
     <string name="pref_summary_drawer_show_catalogs">Show the catalog titles in tray</string>
     <string name="pref_title_drawer_style">Applications tray style</string>
+    <string name="pref_title_drawer_layout_category">Tray Grid Layout</string>
+    <string name="pref_title_drawer_functionality_category">Tray Functionality</string>
+    <string name="pref_title_drawer_scrolling_speed">Scrolling time</string>
+    <string name="pref_summary_drawer_scrolling_speed">Time to scroll across</string>
+    <string name="pref_dialog_drawer_scrolling_speed">Speed up flinging by decreasing value</string>
+    <string name="pref_title_drawer_snap">Scroll snap time</string>
+    <string name="pref_summary_drawer_snap">Time to snap to screen when scroll ends</string>
+    <string name="pref_dialog_drawer_snap">Speed up snap time by decreasing value</string>
 
     <!-- Dock Settings -->
     <string name="pref_title_dock">Dock</string>
     <string name="pref_title_dock_settings">Dock Configuration</string>
     <string name="pref_summary_dock_settings">Dock icon count, pagination dots</string>
     <string name="pref_title_dock_appearance">Dock Appearance</string>
-    <string name="pref_summary_dock_appearance">Icon size, dock background\u2026</string>
+    <string name="pref_summary_dock_appearance">Icon size, dock background</string>
     <string name="pref_title_desktop_dots">Dock pagination dots</string>
     <string name="pref_summary_desktop_dots">Show/hide dock pagination dots</string>
     <string name="pref_title_ab_scale_factor">Icon size</string>
@@ -285,6 +296,8 @@
     <string name="dbfile_import_error">Error restoring configuration!</string>
 
     <!-- Desktop columns/Rows -->
+    <string name="pref_title_desktop_layout_category">Desktop Grid Layout</string>
+    <string name="pref_title_desktop_functionality_category">Desktop Functionality</string>
     <string name="pref_title_desktop_columns">Desktop Columns</string>
     <string name="pref_summary_desktop_columns">Number of columns in desktop</string>
     <string name="pref_dialog_desktop_columns">Number of columns in desktop</string>
@@ -315,11 +328,8 @@
 
     <!-- Category titles -->
     <string name="pref_title_system_preferences">System</string>
-    <string name="pref_title_screens_layout_preferencecategory">Desktop Layout</string>
-    <string name="pref_title_screens_functionality_preferencecategory">Desktop Functionality</string>
-    <string name="pref_title_drawer_layout_category">Grid Layout</string>
-    <string name="pref_title_highlights_preferencecategory">Icon Highlights</string>
-    <string name="pref_title_indicators_preferencecategory">Screen Indicator</string>
+    <string name="pref_title_highlights_category">Icon Highlights</string>
+    <string name="pref_title_indicators_category">Screen Indicator</string>
     <string name="pref_title_system_persistent">System Persistent</string>
     <string name="pref_summary_system_persistent">Keep launcher in memory and avoid system Launcher restarts</string>
     <!-- Theme preferences -->
@@ -409,7 +419,7 @@
     <string name="pref_title_notif_size">Bubble text size</string>
     <string name="pref_summary_notif_size">Select text size for notification bubbles</string>
     <string name="pref_dialog_notif_size">Select text size for notification bubbles</string>
-    <string name="pref_title_deletezone_preferencecategory">Trash Can</string>
+    <string name="pref_title_deletezone_category">Trash Can</string>
     <string name="pref_title_deletezone_style">Trash can position</string>
     <string name="pref_title_icon_highlights">Highlights press color</string>
     <string name="pref_summary_icon_highlights">Set color for icon press</string>

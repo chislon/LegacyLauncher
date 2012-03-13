@@ -22,6 +22,9 @@
 
     <integer name="config_desktop_speed">500</integer>
     <integer name="config_desktop_bounce">0</integer>
+    <integer name="config_desktop_snap">250</integer>
+    <integer name="config_drawer_speed">500</integer>
+    <integer name="config_drawer_snap">250</integer>
 
     <!-- config_desktop_label_text_size min is 8, so it will add 8 to whatever value you set here -->
     <integer name="config_desktop_label_text_size">6</integer>
@@ -111,7 +114,7 @@
     <string name="config_screen_cache">2</string>
 
     <bool name="config_nag_screen">true</bool>
-    <bool name="config_drawer_fling_navigate_catalogs">false</bool>
+    <bool name="config_drawerCatalogFlingNavigate">false</bool>
     <bool name="config_drawer_navigate_catalogs">true</bool>
     <bool name="config_drawer_ungroup_catalog">false</bool>
     <bool name="config_drawer_title_catalogs">true</bool>

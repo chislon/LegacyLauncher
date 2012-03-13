@@ -113,9 +113,12 @@ OnPreferenceChangeListener {
 		dSPref.setInterval(50);
 		dSPref = (PersistentDialogSeekBarPreference) findPreference("desktopBounce");
 		dSPref.setInterval(10);
+		dSPref = (PersistentDialogSeekBarPreference) findPreference("desktopSnap");
+		dSPref.setInterval(50);
+
 		dSPref = (PersistentDialogSeekBarPreference) findPreference("pageHorizontalMargin");
 		dSPref.setInterval(5);
-		dSPref = (PersistentDialogSeekBarPreference) findPreference("notif_size");
+		dSPref = (PersistentDialogSeekBarPreference) findPreference("notifSize");
 		dSPref.setMin(10);
 		dSPref = (PersistentDialogSeekBarPreference) findPreference("uiScaleAB");
 		dSPref.setMin(1);
@@ -134,7 +137,7 @@ OnPreferenceChangeListener {
 			(findPreference("uiDesktopIndicatorColor")).setEnabled(false);
 		}
 
-		ListPreference listPref = (ListPreference) findPreference("deletezone_style");
+		ListPreference listPref = (ListPreference) findPreference("deleteZoneLocation");
 		listPref.setOnPreferenceChangeListener(this);
 		listPref.setSummary(listPref.getEntry());
 
@@ -199,10 +202,22 @@ OnPreferenceChangeListener {
 			rowsPortrait.setEnabled(true);
 			rowsLandscape.setEnabled(true);
 			margin.setEnabled(true);
+			dSPref = (PersistentDialogSeekBarPreference) findPreference("drawerSpeed");
+			dSPref.setInterval(50);
+			dSPref.setEnabled(true);
+			dSPref = (PersistentDialogSeekBarPreference) findPreference("drawerSnap");
+			dSPref.setEnabled(true);
+			dSPref.setInterval(50);
 		} else {
 			rowsPortrait.setEnabled(false);
 			rowsLandscape.setEnabled(false);
 			margin.setEnabled(false);
+			dSPref = (PersistentDialogSeekBarPreference) findPreference("drawerSpeed");
+			dSPref.setInterval(50);
+			dSPref.setEnabled(false);
+			dSPref = (PersistentDialogSeekBarPreference) findPreference("drawerSnap");
+			dSPref.setEnabled(false);
+			dSPref.setInterval(50);
 		}
 		mContext = this;
 		/*
@@ -221,8 +236,8 @@ OnPreferenceChangeListener {
 				});
 		 */
 		// launcher lock password implementation
-		Preference lockPassword = findPreference("lockPassword");
-		lockPassword.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+		Preference launcherLockPassword = findPreference("launcherLockPassword");
+		launcherLockPassword.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 				final EditText input = new EditText(mContext);
 				input.setMaxLines(1);
@@ -268,8 +283,8 @@ OnPreferenceChangeListener {
 		});
 
 		// launcher lock password implementation
-		Preference lockPasswordClear = findPreference("lockPasswordClear");
-		lockPasswordClear.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+		Preference launcherLockPasswordClear = findPreference("launcherLockPasswordClear");
+		launcherLockPasswordClear.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 				final ObscuredSharedPreferences oPrefs = new ObscuredSharedPreferences( 
 						mContext, mContext.getSharedPreferences("secure", Context.MODE_PRIVATE) );
@@ -758,19 +773,24 @@ OnPreferenceChangeListener {
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 		} else if (key.equals("drawerStyle")) {
-			Preference rowsPortrait = findPreference("drawerRowsPortrait");
-			Preference rowslandscape = findPreference("drawerRowsLandscape");
-			Preference margin = findPreference("pageHorizontalMargin");
-			int val = Integer.valueOf(newValue.toString());
-			if (val == 1) {
-				rowsPortrait.setEnabled(true);
-				rowslandscape.setEnabled(true);
-				margin.setEnabled(true);
-			} else {
-				rowsPortrait.setEnabled(false);
-				rowslandscape.setEnabled(false);
-				margin.setEnabled(false);
-			}
+			boolean drawerHorizontal = (Integer.valueOf(newValue.toString()) == 1);
+			Preference pref;
+
+			pref= findPreference("drawerRowsPortrait");
+			pref.setEnabled(drawerHorizontal);
+
+			pref = findPreference("drawerRowsLandscape");
+			pref.setEnabled(drawerHorizontal);
+
+			pref = findPreference("pageHorizontalMargin");
+			pref.setEnabled(drawerHorizontal);
+
+			pref = findPreference("drawerSpeed");
+			pref.setEnabled(drawerHorizontal);
+
+			pref = findPreference("drawerSnap");
+			pref.setEnabled(drawerHorizontal);
+
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 		} else if (key.equals("uiDesktopIndicatorType")) {
@@ -785,7 +805,7 @@ OnPreferenceChangeListener {
 			}
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
-		} else if (key.equals("deletezone_style") || 
+		} else if (key.equals("deleteZoneLocation") || 
 				key.equals("desktopTransitionStyle") || 
 				key.equals("homeOrientation")) {
 			CharSequence[] entries = ((ListPreference)preference).getEntries();

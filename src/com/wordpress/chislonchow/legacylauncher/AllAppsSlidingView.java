@@ -41,7 +41,10 @@ import android.widget.AdapterView.OnItemLongClickListener;
 public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> implements OnItemClickListener, OnItemLongClickListener, DragSource, Drawer{// implements DragScroller{
 	private static final int DEFAULT_SCREEN = 0;
 	private static final int INVALID_SCREEN = -1;
-	private static final int SNAP_VELOCITY = 1000;
+
+	private static final int SNAP_VELOCITY = 600;
+	private static final int SCROLLING_OVERSHOOT = 50;	// pixels
+	private int mScaledSnapVelocity = SNAP_VELOCITY;
 
 	private int mCurrentScreen;
 	private int mTotalScreens;
@@ -57,7 +60,6 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	static final int TOUCH_STATE_DOWN = 3;
 	static final int TOUCH_STATE_TAP = 4;
 	static final int TOUCH_STATE_DONE_WAITING = 5;
-
 
 	private final static int TOUCH_STATE_REST = 0;
 	private final static int TOUCH_STATE_SCROLLING = 1;
@@ -168,20 +170,24 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private int mTargetAlpha=255;
 	private int mAnimationDuration=800;
 	//ADW: speed for new scrolling transitions
-	private final int mScrollingSpeed=600;
-	//ADW: bounce scroll
-	private final int mScrollingBounce=50;
+	private int mScrollingSpeed=500;
+	//ADW: overshoot pixels scroll
+	private int mScaledScrollingOvershoot=50;
+	//CCHOW: Snap to original screen speed
+	//XXX: make this configurable
+	private int mScrollingSnap = 250;
+
 	//ADW:Bg color
 	private int mBgColor=0xFF000000;
 	private int mStatus=AllAppsSlidingViewHolderLayout.OnFadingListener.CLOSE;
 	private AllAppsSlidingViewHolderLayout mHolder;
 	public AllAppsSlidingView(Context context) {
 		super(context);
-		initWorkspace();
+		initView();
 	}
 	public AllAppsSlidingView(Context context, AttributeSet attrs) {
 		this(context, attrs, android.R.style.Widget_AbsListView);
-		initWorkspace();
+		initView();
 
 	}
 	public AllAppsSlidingView(Context context, AttributeSet attrs, int defStyle) {
@@ -197,7 +203,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		mDrawSelectorOnTop = true;
 		paginatorSpace=a.getDimensionPixelSize(R.styleable.AllAppsSlidingView_pager_height, paginatorSpace);
 		a.recycle();
-		initWorkspace();
+		initView();
 	}
 	@Override
 	public boolean isOpaque() {
@@ -205,8 +211,14 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		else return false;
 	}
 
-	private void initWorkspace() {
-		setupGestures();
+	private void initView() {
+		final float scale = getContext().getResources().getDisplayMetrics().density;
+		mScaledSnapVelocity = (int) (scale * SNAP_VELOCITY);
+		mScaledScrollingOvershoot = (int) (scale * SCROLLING_OVERSHOOT);
+
+		if (MyLauncherSettingsHelper.getDrawerCatalogsFlingNavigation(getContext())) {
+			setupGestures();
+		}
 		setVerticalScrollBarEnabled(false);
 		setHorizontalScrollBarEnabled(false);
 		mDrawSelectorOnTop = false;
@@ -255,6 +267,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		mLauncher = launcher;
 		setSelector(IconHighlights.getDrawable(mLauncher,IconHighlights.TYPE_DESKTOP));
 	}
+
 	@Override
 	protected void onScrollChanged(int l, int t, int oldl, int oldt) {
 		super.onScrollChanged(l, t, oldl, oldt);
@@ -583,11 +596,11 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 					mLastMotionX = x;
 
 					if (deltaX < 0) {
-						if (getScrollX() > -mScrollingBounce) {
-							scrollBy(Math.min(deltaX,mScrollingBounce), 0);
+						if (getScrollX() > -mScaledScrollingOvershoot) {
+							scrollBy(Math.min(deltaX,mScaledScrollingOvershoot), 0);
 						}
 					} else if (deltaX > 0) {
-						final int availableToScroll = ((mTotalScreens)*mPageWidth)-getScrollX()-mPageWidth+mScrollingBounce;
+						final int availableToScroll = ((mTotalScreens)*mPageWidth)-getScrollX()-mPageWidth+mScaledScrollingOvershoot;
 						if (availableToScroll > 0) {
 							scrollBy(deltaX, 0);
 						}
@@ -610,14 +623,15 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
                 if(destinationScreen<0) destinationScreen=0;
                 if(destinationScreen>mTotalScreens-1)destinationScreen=mTotalScreens-1;*/
 
-				if (velocityX > SNAP_VELOCITY && mCurrentScreen > 0) {
+				final int currentScreen = mCurrentScreen;
+				if (velocityX > mScaledSnapVelocity && currentScreen > 0) {
 					// Fling hard enough to move left
 					//snapToScreen(destinationScreen);
-					snapToScreen(mCurrentScreen-1);
-				} else if (velocityX < -SNAP_VELOCITY && mCurrentScreen < (mTotalScreens - 1)) {
+					snapToScreen(currentScreen-1);
+				} else if (velocityX < -mScaledSnapVelocity && currentScreen < (mTotalScreens - 1)) {
 					// Fling hard enough to move right
 					//snapToScreen(destinationScreen);
-					snapToScreen(mCurrentScreen+1);
+					snapToScreen(currentScreen + 1);
 				} else {
 					snapToDestination();
 				}
@@ -964,18 +978,23 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			focusedChild.clearFocus();
 		}
 
+		final int newX = whichScreen * mPageWidth;
+		final int delta = newX - getScrollX();
 
 		int durationOffset = 1;
 		// Faruq: Added to allow easing even when Screen doesn't changed (when revert happens)
 		if (screenDelta == 0) {
-			durationOffset = 200;
+			durationOffset = mScrollingSnap;
+			final int duration = mScrollingSpeed + durationOffset;
+			mScroller.startScroll(getScrollX(), 0, delta, 0, duration);
+		} else {
+			// scale down the velocities a bit
+			final int duration = screenDelta * (mScrollingSpeed + durationOffset);
+			mScroller.startScroll(getScrollX(), 0, delta, 0, duration);
 		}
-		final int duration = mScrollingSpeed + durationOffset;
-		final int newX = whichScreen * mPageWidth;
-		final int delta = newX - getScrollX();
-		mScroller.startScroll(getScrollX(), 0, delta, 0, duration);
 		invalidate();
 	}
+
 	@Override
 	public ApplicationsAdapter getAdapter() {
 		// TODO Auto-generated method stub
@@ -1178,36 +1197,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	public int getCacheColorHint() {
 		return mCacheColorHint;
 	}
-	//TODO: ADW Recycle Bin
-	private void RecycleOuterViews(int screen){
-		final int startPos=(screen*mNumColumns*mNumRows);//-mFirstPosition;
-		final int endPos=startPos+(mNumColumns*mNumRows)-1;
-		final int childCount=getChildCount();
-		int recycledCount=0;
-		for(int i=childCount-1;i>=0;i--){
-			if(i<startPos || i>endPos){
-				View child=getChildAt(i);
-				mRecycler.addScrapView(child);
-				detachViewFromParent(child);
-				recycledCount++;
-			}
-		}
-		mLayoutMode=LAYOUT_NORMAL;
-	}
-	/**
-	 * Sets the recycler listener to be notified whenever a View is set aside in
-	 * the recycler for later reuse. This listener can be used to free resources
-	 * associated to the View.
-	 *
-	 * @param listener The recycler listener to be notified of views set aside
-	 *        in the recycler.
-	 *
-	 * @see android.widget.AbsListView.RecycleBin
-	 * @see android.widget.AbsListView.RecyclerListener
-	 */
-	public void setRecyclerListener(RecyclerListener listener) {
-		mRecycler.mRecyclerListener = listener;
-	}
+
 	/**
 	 * A RecyclerListener is used to receive a notification whenever a View is placed
 	 * inside the RecycleBin's scrap heap. This listener is used to free resources
@@ -2093,14 +2083,12 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			try {
 				// not right left swipe
 				if (Math.abs(e1.getX() - e2.getX()) <= SWIPE_MAX_OFF_PATH) {
-					if (mLauncher.getUseDrawerCatalogFlingNavigation()) {
-						if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
-							mLauncher.navigateCatalogs(Launcher.ACTION_CATALOG_NEXT);
-						}
-						else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY)
-						{
-							mLauncher.navigateCatalogs(Launcher.ACTION_CATALOG_PREV);
-						}
+					if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+						mLauncher.navigateCatalogs(Launcher.ACTION_CATALOG_NEXT);
+					}
+					else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY)
+					{
+						mLauncher.navigateCatalogs(Launcher.ACTION_CATALOG_PREV);
 					}
 				}
 
@@ -2111,9 +2099,15 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		}
 	}
 
-	@Override
-	public void setUngroupMode(boolean setUngroupMode)
-	{
+	public void setUngroupMode(boolean setUngroupMode) {
 		mPager.setUngroupMode( setUngroupMode );
+	}
+
+	public void setSpeed(int value) {
+		mScrollingSpeed = value;
+	}
+
+	public void setSnap(int value) {
+		mScrollingSnap = value;
 	}
 }

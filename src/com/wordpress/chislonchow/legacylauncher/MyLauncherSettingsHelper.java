@@ -32,7 +32,7 @@ public final class MyLauncherSettingsHelper {
 		"uiDesktopIndicator",
 		"themePackageName",
 		"themeIcons", 
-		"notif_size",
+		"notifSize",
 		"drawerNew",
 		"drawerStyle", 
 		"drawerLabelTextSize",
@@ -51,7 +51,8 @@ public final class MyLauncherSettingsHelper {
 		"desktopLabelColorOverride",
 		"desktopLabelColorText",
 		"desktopLabelColorBg",
-		"folderTextSize"
+		"folderTextSize",
+		"drawerCatalogFlingNavigate"
 	};
 
 	public static boolean needsRestart(String key){
@@ -147,6 +148,12 @@ public final class MyLauncherSettingsHelper {
 		int newD = sp.getInt("desktopBounce", context.getResources().getInteger(R.integer.config_desktop_bounce));
 		return newD;
 	}
+	public static int getDesktopSnap(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = sp.getInt("desktopSnap", context.getResources().getInteger(R.integer.config_desktop_snap));
+		return newD;
+	}
+
 	public static boolean getDesktopLooping(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("desktopLooping", context.getResources().getBoolean(R.bool.config_desktop_looping));
@@ -157,6 +164,18 @@ public final class MyLauncherSettingsHelper {
 		boolean newD = sp.getBoolean("uiABBg", context.getResources().getBoolean(R.bool.config_ui_ab_hide_bg));
 		return newD;
 	}
+
+	public static int getDrawerSpeed(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = sp.getInt("drawerSpeed", context.getResources().getInteger(R.integer.config_drawer_speed));
+		return newD;
+	}
+	public static int getDrawerSnap(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = sp.getInt("drawerSnap", context.getResources().getInteger(R.integer.config_drawer_snap));
+		return newD;
+	}
+
 	public static int getAnimationSpeed(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = sp.getInt("animationSpeed", context.getResources().getInteger(R.integer.config_animation_speed))+300;
@@ -496,7 +515,8 @@ public final class MyLauncherSettingsHelper {
 			//final SpannableString s = new SpannableString(aboutText);
 
 			// Set some padding
-			message.setPadding(5, 5, 5, 5);
+			final int padding = (int) (5 * context.getResources().getDisplayMetrics().density);
+			message.setPadding(padding, padding, padding, padding);
 			// Set up the final string
 			message.setText(aboutText);
 
@@ -516,32 +536,32 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static boolean getDrawerCatalogsNavigation(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("drawer_navigate_catalogs", context.getResources().getBoolean(R.bool.config_drawer_navigate_catalogs));
+		boolean newD = sp.getBoolean("drawerCatalogNavigate", context.getResources().getBoolean(R.bool.config_drawer_navigate_catalogs));
 		return newD;
 	}
 	public static boolean getDrawerCatalogsFlingNavigation(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("drawer_fling_navigate_catalogs", context.getResources().getBoolean(R.bool.config_drawer_fling_navigate_catalogs));
+		boolean newD = sp.getBoolean("drawerCatalogFlingNavigate", context.getResources().getBoolean(R.bool.config_drawerCatalogFlingNavigate));
 		return newD;
 	}
 	public static boolean getDrawerUngroupCatalog(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("drawer_ungroup_catalog", context.getResources().getBoolean(R.bool.config_drawer_ungroup_catalog));
+		boolean newD = sp.getBoolean("drawerCatalogUngroup", context.getResources().getBoolean(R.bool.config_drawer_ungroup_catalog));
 		return newD;
 	}
 	public static boolean getDrawerTitleCatalogs(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("drawer_show_catalogs", context.getResources().getBoolean(R.bool.config_drawer_title_catalogs));
+		boolean newD = sp.getBoolean("drawerCatalogShow", context.getResources().getBoolean(R.bool.config_drawer_title_catalogs));
 		return newD;
 	}
 	public static boolean getNotifReceiver(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("notif_receiver", context.getResources().getBoolean(R.bool.config_notif_receiver));
+		boolean newD = sp.getBoolean("notifReceiver", context.getResources().getBoolean(R.bool.config_notif_receiver));
 		return newD;
 	}
 	public static int getNotifSize(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		int def_screen = sp.getInt("notif_size", context.getResources().getInteger(R.integer.config_notif_text_size))+10;
+		int def_screen = sp.getInt("notifSize", context.getResources().getInteger(R.integer.config_notif_text_size))+10;
 		return def_screen;
 	}
 	public static int getDockStyle(Context context) {
@@ -561,7 +581,7 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static int getDeletezoneStyle(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		int newD = Integer.valueOf(sp.getString("deletezone_style", context.getResources().getString(R.string.config_deletezone_style)));
+		int newD = Integer.valueOf(sp.getString("deleteZoneLocation", context.getResources().getString(R.string.config_deletezone_style)));
 		return newD;
 	}
 	public static boolean getUIABTint(Context context) {
@@ -584,10 +604,10 @@ public final class MyLauncherSettingsHelper {
 		boolean newD = sp.getBoolean("launcherLocked", false);
 		return newD;
 	}
-	public static void setlauncherLocked(Context context, boolean block) {
+	public static void setLauncherLocked(Context context, boolean lock) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);;
 		SharedPreferences.Editor editor = sp.edit();
-		editor.putBoolean("launcherLocked", block);
+		editor.putBoolean("launcherLocked", lock);
 		editor.commit();
 	}
 	public static int getDesktopTransitionStyle(Context context)    {

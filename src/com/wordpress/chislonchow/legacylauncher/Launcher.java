@@ -302,7 +302,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private boolean mWallpaperHack = true;
 	private DesktopIndicator mDesktopIndicator;
 	private boolean mUseDrawerCatalogNavigation = true;
-	private boolean mUseDrawerCatalogFlingNavigation = false;
 	public boolean mUseDrawerUngroupCatalog = false;
 	protected boolean mUseDrawerTitleCatalog = false;
 	protected int mTransitionStyle = 1;
@@ -383,8 +382,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	protected static final int DOCK_STYLE_1 = 3;
 	private int mDockStyle = DOCK_STYLE_5;
 	// DRAWER STYLES
-	private final int[] mDrawerStyles = { R.layout.old_drawer,
-			R.layout.new_drawer };
+	private final int[] mDrawerStyles = { 
+			R.layout.old_drawer,
+			R.layout.new_drawer 
+	};
+	private int mDrawerStyle = 1;
 
 	// Quick Action Options
 	static final String ANDROID_MARKET_PACKAGE = "com.android.vending";
@@ -664,6 +666,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mAllAppsGrid.setNumRows(MyLauncherSettingsHelper
 					.getRowsLandscape(Launcher.this));
 		}
+
+		if (mDrawerStyle == 1) {
+			//mAllAppsGrid.se
+		}
+
 		mWorkspace.setWallpaper(false);
 		if (mRestoring) {
 			startLoaders();
@@ -823,8 +830,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// ADW: The app drawer is now a ViewStub and we load the resource
 		// depending on custom settings
 		ViewStub tmp = (ViewStub) dragLayer.findViewById(R.id.stub_drawer);
-		int drawerStyle = MyLauncherSettingsHelper.getDrawerStyle(this);
-		tmp.setLayoutResource(mDrawerStyles[drawerStyle]);
+		mDrawerStyle = MyLauncherSettingsHelper.getDrawerStyle(this);
+		tmp.setLayoutResource(mDrawerStyles[mDrawerStyle]);
 		mAllAppsGrid = (Drawer) tmp.inflate();
 		mDeleteZone = (DeleteZone) dragLayer.findViewById(R.id.delete_zone);
 
@@ -1720,7 +1727,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			showDeleteGrpDialog();
 		case MENU_LOCK_DESKTOP:
 			// toggle icons locked
-
 			if (mLauncherLocked) {
 				final ObscuredSharedPreferences oPrefs = new ObscuredSharedPreferences( 
 						this, this.getSharedPreferences("secure", Context.MODE_PRIVATE) );
@@ -1753,12 +1759,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							Editable value = input.getText(); 
-							Log.d(LOG_TAG, value.toString() + " and " + passSecure);
 
-							// pasword valid unlock
+							// password valid unlock
 							if (value.toString().equals(passSecure)) {
 								Toast.makeText(Launcher.this, R.string.toast_launcher_unlock, Toast.LENGTH_SHORT).show();
 								mLauncherLocked = false;
+								// commit setting
+								MyLauncherSettingsHelper.setLauncherLocked(Launcher.this, mLauncherLocked);
 							} else {
 								Toast.makeText(Launcher.this, getString(R.string.lock_password_invalid), Toast.LENGTH_SHORT).show();
 							}
@@ -1768,16 +1775,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					// no password was set, so unlock right away
 					Toast.makeText(this, R.string.toast_launcher_unlock, Toast.LENGTH_SHORT).show();
 					mLauncherLocked = false;
+					// commit setting
+					MyLauncherSettingsHelper.setLauncherLocked(this, mLauncherLocked);
 				}
 			} else {
 				// lock if unlocked
 				Toast.makeText(this, R.string.toast_launcher_lock, Toast.LENGTH_SHORT).show();
 				mLauncherLocked = true;
+				// commit setting
+				MyLauncherSettingsHelper.setLauncherLocked(this, mLauncherLocked);
 			}
-
-			// commit setting
-			MyLauncherSettingsHelper.setlauncherLocked(this, mLauncherLocked);
-
 			return true;
 		}
 
@@ -3494,6 +3501,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		startActivity(launchPreferencesIntent);
 	}
 
+	/**
+	 * Update variables
+	 */
 	private void updateAlmostNexusVars() {
 		allowDrawerAnimations = MyLauncherSettingsHelper
 				.getDrawerAnimated(Launcher.this);
@@ -3514,6 +3524,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			.setSpeed(MyLauncherSettingsHelper.getDesktopSpeed(this));
 			mWorkspace.setBounceAmount(MyLauncherSettingsHelper
 					.getDesktopBounce(this));
+			mWorkspace.setSnapAmount(MyLauncherSettingsHelper
+					.getDesktopSnap(this));
 			mWorkspace.setDesktopLooping(MyLauncherSettingsHelper
 					.getDesktopLooping(this));
 			mWorkspace.setDefaultScreen(MyLauncherSettingsHelper
@@ -3524,12 +3536,14 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		int animationSpeed = MyLauncherSettingsHelper.getAnimationSpeed(this);
 		if (mAllAppsGrid != null) {
 			mAllAppsGrid.setAnimationSpeed(animationSpeed);
+			if (mDrawerStyle == 1) {
+				mAllAppsGrid.setSpeed(MyLauncherSettingsHelper.getDrawerSpeed(this));
+				mAllAppsGrid.setSnap(MyLauncherSettingsHelper.getDrawerSnap(this));
+			}
 		}
 		mWallpaperHack = MyLauncherSettingsHelper.getWallpaperHack(this);
 		mUseDrawerCatalogNavigation = MyLauncherSettingsHelper
 				.getDrawerCatalogsNavigation(this);
-		mUseDrawerCatalogFlingNavigation = MyLauncherSettingsHelper
-				.getDrawerCatalogsFlingNavigation(this);
 		mUseDrawerUngroupCatalog = MyLauncherSettingsHelper
 				.getDrawerUngroupCatalog(this);
 		mUseDrawerTitleCatalog = MyLauncherSettingsHelper
@@ -4308,7 +4322,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							.getDesktopOrientation(this),
 							false);
 				}
-			} else if (key.equals("notif_receiver")) {
+			} else if (key.equals("notifReceiver")) {
 				boolean useNotifReceiver = MyLauncherSettingsHelper
 						.getNotifReceiver(this);
 				if (!useNotifReceiver) {
@@ -4338,12 +4352,12 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				} else if (mDockStyle == DOCK_STYLE_NONE) {
 					mShouldRestart = true;
 				}
-			} else if (key.equals("deletezone_style")) {
+			} else if (key.equals("deleteZoneLocation")) {
 				int dz = MyLauncherSettingsHelper.getDeletezoneStyle(this);
 				if (mDeleteZone != null)
 					mDeleteZone.setPosition(dz);
 			}
-			updateAlmostNexusUI();
+			updateAlmostNexusUI();	// call rest
 		}
 	}
 
@@ -5696,10 +5710,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		public void onClick(DialogInterface arg0, int which, boolean checked) {
 			inGroup[which] = checked;
 		}
-	}
-
-	protected boolean getUseDrawerCatalogFlingNavigation() {
-		return mUseDrawerCatalogFlingNavigation;
 	}
 
 	// Apps Watcher

@@ -26,6 +26,9 @@ public interface Drawer {
 	public void close(boolean animate);
 	public void setPadding(int left, int top, int right, int bottom);
 	
+	public void setSpeed(int value);
+	public void setSnap(int value);
+
 	public void switchGroups(Runnable switchGroups);
 	
 	public void setUngroupMode( boolean setUngroupMode );

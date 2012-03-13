@@ -566,15 +566,10 @@ DragSource, Drawer {
 	protected void onLayout(boolean changed, int l, int t, int r, int b)
 	{
 		super.onLayout(changed, l, t, r, b);
+		
+		if (MyLauncherSettingsHelper.getDrawerCatalogsFlingNavigation(getContext())) {
+			setupGestures();
 
-		setupGestures();
-
-		this.setOnTouchListener(gestureListener);
-
-		final int count = getChildCount();
-		for (int i = 0; i < count; i++) {
-			final View child = getChildAt(i);
-			child.setOnTouchListener(gestureListener);
 		}
 	}
 
@@ -593,6 +588,14 @@ DragSource, Drawer {
 				return false;
 			}
 		};
+
+		this.setOnTouchListener(gestureListener);
+
+		final int count = getChildCount();
+		for (int i = 0; i < count; i++) {
+			final View child = getChildAt(i);
+			child.setOnTouchListener(gestureListener);
+		}
 	}
 
 	class MyGestureDetector extends SimpleOnGestureListener
@@ -629,16 +632,13 @@ DragSource, Drawer {
 			try {
 				// not up down swipe
 				if (Math.abs(e1.getY() - e2.getY()) <= SWIPE_MAX_OFF_PATH) {
-					if (mLauncher.getUseDrawerCatalogFlingNavigation()) {
-
-						if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY)
-						{
-							mLauncher.navigateCatalogs(Launcher.ACTION_CATALOG_PREV);
-						}
-						else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY)
-						{
-							mLauncher.navigateCatalogs(Launcher.ACTION_CATALOG_NEXT);
-						}
+					if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY)
+					{
+						mLauncher.navigateCatalogs(Launcher.ACTION_CATALOG_PREV);
+					}
+					else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY)
+					{
+						mLauncher.navigateCatalogs(Launcher.ACTION_CATALOG_NEXT);
 					}
 				}
 			} catch (Exception e) {
@@ -649,8 +649,22 @@ DragSource, Drawer {
 	}
 
 	@Override
-	public void setUngroupMode(boolean setUngroupMode)
-	{
+	public void setUngroupMode(boolean setUngroupMode) {
 		isUngroupMode = setUngroupMode;
+	}
+
+	public void setSpeed(int value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setOvershoot(int value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setSnap(int value) {
+		// TODO Auto-generated method stub
+
 	}
 }

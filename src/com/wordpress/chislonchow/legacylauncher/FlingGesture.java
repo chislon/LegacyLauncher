@@ -14,7 +14,8 @@ public class FlingGesture {
     /**
      * The velocity at which a fling gesture will cause us to snap to the next screen
      */
-    private static final int SNAP_VELOCITY = 500;
+    private static final int SNAP_VELOCITY = 400;
+    private int mScaledSnapVelocity = SNAP_VELOCITY;
 
     public static final int FLING_NONE = 0;
     public static final int FLING_LEFT = 1;
@@ -28,6 +29,8 @@ public class FlingGesture {
 
 	public FlingGesture(Context context) {
 		mMaximumVelocity = ViewConfiguration.get(context).getScaledMaximumFlingVelocity();
+		final float scale = context.getResources().getDisplayMetrics().density;
+		mScaledSnapVelocity = (int) (scale * SNAP_VELOCITY);
 	}
 
 	public void setListener(FlingListener aListener) {
@@ -47,13 +50,13 @@ public class FlingGesture {
 
             if (mListener != null) {
             	int Direction = FLING_NONE;
-	            if (velocityX > SNAP_VELOCITY) {
+	            if (velocityX > mScaledSnapVelocity) {
 	            	Direction = FLING_LEFT;
-	            } else if (velocityX < -SNAP_VELOCITY) {
+	            } else if (velocityX < -mScaledSnapVelocity) {
 	            	Direction = FLING_RIGHT;
-	            } else if (velocityY > SNAP_VELOCITY) {
+	            } else if (velocityY > mScaledSnapVelocity) {
 	            	Direction = FLING_DOWN;
-	            } else if (velocityY < -SNAP_VELOCITY) {
+	            } else if (velocityY < -mScaledSnapVelocity) {
 	            	Direction = FLING_UP;
 	            }
 	            mListener.OnFling(Direction);
