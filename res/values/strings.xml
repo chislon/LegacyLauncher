@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.13 Beta</string>
+    <string name="app_version">0.14 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -155,8 +155,10 @@
     <string name="pref_dialog_desktop_label_padding_vertical">Label background vertical padding</string>
     <string name="pref_title_desktop_label_color_override">Override colors</string>
     <string name="pref_summary_desktop_label_color_override">Select to override label colors</string>
-    <string name="pref_title_desktop_label_color_text">Label text color</string>
+    <string name="pref_title_desktop_label_color_text">Text color</string>
     <string name="pref_summary_desktop_label_color_text">Select text color of labels</string>
+    <string name="pref_title_desktop_label_bold_text">Text bold</string>
+    <string name="pref_summary_desktop_label_bold_text">Select text bold style of labels</string>
     <string name="pref_title_desktop_label_color_bg">Label background color</string>
     <string name="pref_summary_desktop_label_color_bg">Select background color of labels</string>
     <string name="pref_title_desktop_icon_label_category">Icon Labels</string>
@@ -185,8 +187,8 @@
     <string name="pref_summary_drawer_appearance">Application tray visual settings</string>
     <string name="pref_title_drawer_catalogs_settings">Tray Catalogs</string>
     <string name="pref_summary_drawer_catalogs_settings">Applications tray catalogs preferences</string>
-    <string name="pref_title_animation_speed">Animation duration</string>
-    <string name="pref_summary_animation_speed">Set animation time in milliseconds </string>
+    <string name="pref_title_drawer_animation_speed">Animation duration</string>
+    <string name="pref_summary_drawer_animation_speed">Set animation time in milliseconds </string>
     <string name="pref_dialog_animation_speed">Set animation time in milliseconds</string>
     <string name="pref_title_page_horizontal_margin">Horizontal drawer margin</string>
     <string name="pref_summary_page_horizontal_margin">Side margin width of horizontal drawer</string>
@@ -234,6 +236,8 @@
     <string name="pref_title_drawer_snap">Scroll snap time</string>
     <string name="pref_summary_drawer_snap">Time to snap to screen when scroll ends</string>
     <string name="pref_dialog_drawer_snap">Speed up snap time by decreasing value</string>
+    <string name="pref_title_drawer_overshoot">Overshoot</string>
+    <string name="pref_summary_drawer_overshoot">Overshoot effect in horizontal drawer</string>
 
     <!-- Dock Settings -->
     <string name="pref_title_dock">Dock</string>

@@ -20,15 +20,18 @@
     <bool name="force_hidden_settings">false</bool>
     <bool name="config_desktop_rotation">true</bool>
 
-    <integer name="config_desktop_speed">500</integer>
+    <integer name="config_desktop_speed">400</integer>
     <integer name="config_desktop_bounce">0</integer>
-    <integer name="config_desktop_snap">250</integer>
-    <integer name="config_drawer_speed">500</integer>
-    <integer name="config_drawer_snap">250</integer>
+    <integer name="config_desktop_snap">50</integer>
+    <integer name="config_drawer_speed">400</integer>
+    <integer name="config_drawer_snap">50</integer>
+
+    <bool name="config_drawer_overshoot">false</bool>
 
     <!-- config_desktop_label_text_size min is 8, so it will add 8 to whatever value you set here -->
     <integer name="config_desktop_label_text_size">6</integer>
 
+    <bool name="config_desktop_label_bold_text">false</bool>
     <bool name="config_desktop_label_padding_override">false</bool>
 
     <integer name="config_desktop_label_padding_radius">8</integer>

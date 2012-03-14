@@ -23,7 +23,6 @@
         <item>Page</item>
         <item>Cube</item>
         <item>Scatter</item>
-        <item>Tip Over</item>
     </string-array>
     <string-array name="home_orientation_entries">
         <item>Sensor</item>
@@ -75,7 +74,6 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
-        <item>6</item>
     </string-array>
     <string-array name="home_orientation_values" translatable="false">
         <item>1</item>

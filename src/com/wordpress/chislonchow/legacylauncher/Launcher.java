@@ -3533,12 +3533,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mWorkspace.setWallpaperScroll(MyLauncherSettingsHelper
 					.getWallpaperScrolling(this));
 		}
-		int animationSpeed = MyLauncherSettingsHelper.getAnimationSpeed(this);
+		int animationSpeed = MyLauncherSettingsHelper.getDrawerAnimationSpeed(this);
 		if (mAllAppsGrid != null) {
 			mAllAppsGrid.setAnimationSpeed(animationSpeed);
 			if (mDrawerStyle == 1) {
 				mAllAppsGrid.setSpeed(MyLauncherSettingsHelper.getDrawerSpeed(this));
 				mAllAppsGrid.setSnap(MyLauncherSettingsHelper.getDrawerSnap(this));
+				mAllAppsGrid.setOvershoot(MyLauncherSettingsHelper.getDrawerOvershoot(this));
 			}
 		}
 		mWallpaperHack = MyLauncherSettingsHelper.getWallpaperHack(this);

@@ -28,6 +28,7 @@ public interface Drawer {
 	
 	public void setSpeed(int value);
 	public void setSnap(int value);
+	public void setOvershoot(boolean value);
 
 	public void switchGroups(Runnable switchGroups);
 	

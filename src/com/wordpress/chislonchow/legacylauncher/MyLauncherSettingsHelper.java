@@ -44,6 +44,7 @@ public final class MyLauncherSettingsHelper {
 		"autosizeIcons",
 		"uiHideLabels",
 		"desktopLabelSize",
+		"desktopLabelBold",
 		"desktopLabelPaddingOverride",
 		"desktopLabelPaddingH",
 		"desktopLabelPaddingV",
@@ -175,8 +176,13 @@ public final class MyLauncherSettingsHelper {
 		int newD = sp.getInt("drawerSnap", context.getResources().getInteger(R.integer.config_drawer_snap));
 		return newD;
 	}
+	public static boolean getDrawerOvershoot(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("drawerOvershoot", context.getResources().getBoolean(R.bool.config_drawer_overshoot));
+		return newD;
+	}
 
-	public static int getAnimationSpeed(Context context) {
+	public static int getDrawerAnimationSpeed(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = sp.getInt("animationSpeed", context.getResources().getInteger(R.integer.config_animation_speed))+300;
 		return newD;
@@ -231,6 +237,11 @@ public final class MyLauncherSettingsHelper {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int value = sp.getInt("desktopLabelSize", context.getResources().getInteger(R.integer.config_desktop_label_text_size))+8;
 		return value;
+	}
+	public static boolean getDesktopLabelBold(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("desktopLabelBold", context.getResources().getBoolean(R.bool.config_desktop_label_bold_text));
+		return newD;
 	}
 
 	public static boolean getDesktopLabelPaddingOverride(Context context) {

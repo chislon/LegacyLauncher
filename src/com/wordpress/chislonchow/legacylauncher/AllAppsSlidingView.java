@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
@@ -43,7 +44,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private static final int INVALID_SCREEN = -1;
 
 	private static final int SNAP_VELOCITY = 600;
-	private static final int SCROLLING_OVERSHOOT = 50;	// pixels
+	private static final int SCROLLING_OVERSHOOT = 48;	// pixels
 	private int mScaledSnapVelocity = SNAP_VELOCITY;
 
 	private int mCurrentScreen;
@@ -57,12 +58,12 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private float mLastMotionX;
 	private float mLastMotionY;
 
+	private final static int TOUCH_STATE_REST = 0;
+	private final static int TOUCH_STATE_SCROLLING = 1;
 	static final int TOUCH_STATE_DOWN = 3;
 	static final int TOUCH_STATE_TAP = 4;
 	static final int TOUCH_STATE_DONE_WAITING = 5;
 
-	private final static int TOUCH_STATE_REST = 0;
-	private final static int TOUCH_STATE_SCROLLING = 1;
 	private int mTouchState = TOUCH_STATE_REST;
 	private int mTouchSlop;
 	private int mMaximumVelocity;
@@ -170,12 +171,12 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private int mTargetAlpha=255;
 	private int mAnimationDuration=800;
 	//ADW: speed for new scrolling transitions
-	private int mScrollingSpeed=500;
+	private int mScrollingSpeed=400;
 	//ADW: overshoot pixels scroll
-	private int mScaledScrollingOvershoot=50;
+	private int mScaledScrollingOvershoot=0;
 	//CCHOW: Snap to original screen speed
 	//XXX: make this configurable
-	private int mScrollingSnap = 250;
+	private int mScrollingSnap = 50;
 
 	//ADW:Bg color
 	private int mBgColor=0xFF000000;
@@ -214,7 +215,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private void initView() {
 		final float scale = getContext().getResources().getDisplayMetrics().density;
 		mScaledSnapVelocity = (int) (scale * SNAP_VELOCITY);
-		mScaledScrollingOvershoot = (int) (scale * SCROLLING_OVERSHOOT);
+
+		setOvershoot(MyLauncherSettingsHelper.getDrawerOvershoot(getContext()));
 
 		if (MyLauncherSettingsHelper.getDrawerCatalogsFlingNavigation(getContext())) {
 			setupGestures();
@@ -492,7 +494,9 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		 * state and he is moving his finger.  We want to intercept this
 		 * motion.
 		 */
+
 		final int action = ev.getAction();
+
 		if ((action == MotionEvent.ACTION_MOVE) && (mTouchState != TOUCH_STATE_REST)) {
 			return true;
 		}
@@ -519,8 +523,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			boolean yMoved = yDiff > touchSlop;
 
 			if (xMoved || yMoved) {
-
-				if (xMoved) {
+				// If xDiff > yDiff means the finger path pitch is smaller than 45deg so we assume the user want to scroll X axis
+				if (xDiff > yDiff) {
 					// Scroll if the user moved far enough along the X axis
 					mTouchState = TOUCH_STATE_SCROLLING;
 				}
@@ -528,6 +532,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			break;
 
 		case MotionEvent.ACTION_DOWN:
+
 			// Remember location of down touch
 			mLastMotionX = x;
 			mLastMotionY = y;
@@ -553,14 +558,20 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		 */
 		return mTouchState != TOUCH_STATE_REST;
 	}
+
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
+
 		if (mVelocityTracker == null) {
 			mVelocityTracker = VelocityTracker.obtain();
 		}
 		mVelocityTracker.addMovement(ev);
 
 		final int action = ev.getAction();
+
+
+		Log.d("CHISLON", "action" + action);
+
 		final float x = ev.getX();
 		final float y = ev.getY();
 		final View child;
@@ -585,31 +596,38 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 				mCheckTapPosition = getPositionForView(child);
 			}
 			// Remember where the motion event started
-			mLastMotionX = x;
+			//mLastMotionX = x;	// CCHOW THIS IS DONE AT TOUCH INTERCEPTION
 			break;
 		case MotionEvent.ACTION_MOVE:
 			if (mTouchState == TOUCH_STATE_SCROLLING || mTouchState == TOUCH_STATE_DOWN) {
+
 				// Scroll to follow the motion event
 				final int deltaX = (int) (mLastMotionX - x);
-				if(Math.abs(deltaX)>mTouchSlop || mTouchState == TOUCH_STATE_SCROLLING){
-					mTouchState = TOUCH_STATE_SCROLLING;
-					mLastMotionX = x;
+				final int deltaY = (int) (mLastMotionY - y);
 
-					if (deltaX < 0) {
-						if (getScrollX() > -mScaledScrollingOvershoot) {
-							scrollBy(Math.min(deltaX,mScaledScrollingOvershoot), 0);
-						}
-					} else if (deltaX > 0) {
-						final int availableToScroll = ((mTotalScreens)*mPageWidth)-getScrollX()-mPageWidth+mScaledScrollingOvershoot;
-						if (availableToScroll > 0) {
-							scrollBy(deltaX, 0);
+				final int xDiff = (int) Math.abs(deltaX);
+				final int yDiff = (int) Math.abs(deltaY);
+
+				// significant movement
+				if ((xDiff > mTouchSlop) || (yDiff > mTouchSlop)) {
+					mTouchState = TOUCH_STATE_SCROLLING;
+					// If xDiff > yDiff means the finger path pitch is smaller than 45deg so we assume the user want to scroll X axis
+					if (xDiff > yDiff) {
+						// Scroll if the user moved far enough along the X axis
+						mLastMotionX = x;
+						if (deltaX < 0) {
+							final int availableToScroll = getScrollX() + mScaledScrollingOvershoot;
+							if ((availableToScroll > 0) && (availableToScroll > -deltaX)) {
+								scrollBy(deltaX, 0);
+							}
+						} else if (deltaX > 0) {
+							final int availableToScroll = ((mTotalScreens - 1)*mPageWidth) - getScrollX() + mScaledScrollingOvershoot;
+							if ((availableToScroll > 0) && (availableToScroll > deltaX)) {
+								scrollBy(deltaX, 0);
+							}
 						}
 					}
-				}
-				final int deltaY = (int) (mLastMotionY - y);
-				if(Math.abs(deltaY)>mTouchSlop || mTouchState == TOUCH_STATE_SCROLLING){
-					mTouchState = TOUCH_STATE_SCROLLING;
-				}
+				}		
 			}
 			break;
 		case MotionEvent.ACTION_UP:
@@ -617,13 +635,28 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 				final VelocityTracker velocityTracker = mVelocityTracker;
 				velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
 				int velocityX = (int) velocityTracker.getXVelocity();
-				//ADW: remove for now the "multi-page scrolling", is causing a lot of mess...
-				/*int moveScreens=Math.round(velocityX/1000);
-                int destinationScreen=mCurrentScreen-moveScreens;
-                if(destinationScreen<0) destinationScreen=0;
-                if(destinationScreen>mTotalScreens-1)destinationScreen=mTotalScreens-1;*/
 
 				final int currentScreen = mCurrentScreen;
+
+				//multipage scroll does not scroll fast enough  right now :(
+				/*
+				 * 
+
+				final int SCREEN_SKIP = 5;
+
+				final int SCREEN_SKIP_THRESHOLD = 2000;
+
+				if ((velocityX > SCREEN_SKIP_THRESHOLD) && (currentScreen > 0)) {
+					// Fling hard enough to move left by a lot
+					int targetScreen = currentScreen - SCREEN_SKIP;
+					snapToScreen((targetScreen < 0) ? 0 : targetScreen);
+				} else if ((velocityX < -SCREEN_SKIP_THRESHOLD) && (currentScreen < (mTotalScreens - 1))) {
+					// Fling hard enough to move right by a lot
+					int targetScreen = currentScreen + SCREEN_SKIP;
+					snapToScreen((targetScreen > (mTotalScreens - 1)) ? (mTotalScreens - 1) : targetScreen);
+				} else
+				 */
+
 				if (velocityX > mScaledSnapVelocity && currentScreen > 0) {
 					// Fling hard enough to move left
 					//snapToScreen(destinationScreen);
@@ -968,7 +1001,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		mNextScreen=whichScreen;
 		final int screenDelta = Math.abs(whichScreen - mCurrentScreen);
 		mCurrentScreen = whichScreen;
-		mPager.setCurrentItem(mCurrentScreen);
+		mPager.setCurrentItem(mCurrentScreen);	// sometimes it wont draw properly unless this is set
 
 		if(changingScreens){
 			mLayoutMode=LAYOUT_SCROLLING;
@@ -988,9 +1021,10 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			final int duration = mScrollingSpeed + durationOffset;
 			mScroller.startScroll(getScrollX(), 0, delta, 0, duration);
 		} else {
-			// scale down the velocities a bit
+			// scale down the velocities a bit with a sqrt
 			final int duration = screenDelta * (mScrollingSpeed + durationOffset);
-			mScroller.startScroll(getScrollX(), 0, delta, 0, duration);
+			mScroller.startScroll(getScrollX(), 0, delta, 0, (int)(duration * screenDelta));
+			//mScroller.startScroll(getScrollX(), 0, delta, 0, (int)(duration * 2 * (Math.pow( (double)screenDelta, .7 ))));
 		}
 		invalidate();
 	}
@@ -2109,5 +2143,14 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 	public void setSnap(int value) {
 		mScrollingSnap = value;
+	}
+	@Override
+	public void setOvershoot(boolean value) {
+		final float scale = getContext().getResources().getDisplayMetrics().density;
+		if (value) {
+			mScaledScrollingOvershoot = (int)(SCROLLING_OVERSHOOT * scale);
+		} else {
+			mScaledScrollingOvershoot = 0;
+		}
 	}
 }

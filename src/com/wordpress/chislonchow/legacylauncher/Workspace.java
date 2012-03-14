@@ -135,13 +135,13 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 	private boolean wallpaperHack=true;
 	private BitmapDrawable mWallpaperDrawable;
 	//ADW: speed for desktop transitions
-	private int mScrollingSpeed=500;
+	private int mScrollingSpeed=400;
 	//ADW: bounce scroll
 	private int mScrollingBounce=0;
 	private boolean mScrollingLoop=false;
 	//CCHOW: Snap to original screen speed
 	//XXX: make this configurable
-	private int mScrollingSnap = 250;
+	private int mScrollingSnap = 50;
 	//ADW: sense zoom constants
 	private static final int SENSE_OPENING = 1;
 	private static final int SENSE_CLOSING = 2;
@@ -908,6 +908,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 			final int touchSlop = mTouchSlop;
 			boolean xMoved = xDiff > touchSlop;
 			boolean yMoved = yDiff > touchSlop;
+
 			if (xMoved || yMoved) {
 				// If xDiff > yDiff means the finger path pitch is smaller than 45deg so we assume the user want to scroll X axis
 				if (xDiff > yDiff) {
@@ -2464,26 +2465,6 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 			CellLayout.mIsTransitionNegative = isMovingRight;
 			canvas.translate(xOffset, 0);
 		}
-		else if ( mTransitionStyle == 6 ) // tip over
-		{
-			canvas.save();
-			mIsTransitionNegative = !isMovingRight;
-			if( isMovingRight )
-			{
-				mTransformAmount = transformAmount;
-				canvas.translate(xOffset, 0);
-			}
-			else
-			{
-				mTransformAmount = -transformAmount;
-			}
-
-			if ( mDesktopCacheType == MyLauncherSettingsHelper.CACHE_AUTO )
-			{
-				canvas.setDrawFilter(sFilterBitmap);
-			}
-			setStaticTransformationsEnabled( true );
-		}
 	}
 
 	private void postTransitionDraw(Canvas canvas, int mTransitionStyle, boolean isMovingRight, int xOffset, float transformAmount, int width )
@@ -2550,21 +2531,6 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 			}
 			CellLayout.mTransitionAmount = 1 - transformAmount;
 		} 
-		else if ( mTransitionStyle == 6 )  // tip over
-		{
-			if( isMovingRight )
-			{
-				mTransformAmount = -( 1 - transformAmount );
-				canvas.translate(-xOffset, 0);
-			}
-			else
-			{
-				mTransformAmount = -( 1 - transformAmount );
-				canvas.translate(width + xOffset, 0);
-			}
-
-			mIsTransformOtherView = false;
-		}
 	}
 
 	private void finishTransitionDraw(Canvas canvas, int mTransitionStyle)

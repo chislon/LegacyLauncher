@@ -22,6 +22,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.util.AttributeSet;
@@ -73,7 +74,7 @@ public class BubbleTextView extends CounterTextView {
 
 		//ADW: Load textcolor and bubble color from theme
 		String themePackage = MyLauncherSettingsHelper.getThemePackageName(context, Launcher.THEME_DEFAULT);
-		
+
 		// load theme padding and colors 
 		if(!themePackage.equals(Launcher.THEME_DEFAULT)){
 			Resources themeResources = null;
@@ -105,6 +106,11 @@ public class BubbleTextView extends CounterTextView {
 		// text size customization. no scaling because the entire canvas is scaled. 
 		setTextSize(MyLauncherSettingsHelper.getDesktopLabelSize(context));
 
+		// text size bold.
+		if (MyLauncherSettingsHelper.getDesktopLabelBold(context)) {
+			setTypeface(Typeface.DEFAULT_BOLD); 
+		}
+
 		// retrieve overridden or default values
 		if (overrideColor) {
 			colorBg = MyLauncherSettingsHelper.getDesktopLabelColorBg(context);	// set later in code
@@ -112,7 +118,7 @@ public class BubbleTextView extends CounterTextView {
 		} else {
 			colorBg = context.getResources().getInteger(R.integer.config_desktop_label_color_bg);
 		}
-		
+
 		if (overridePadding) {
 			mCornerRadius = MyLauncherSettingsHelper.getDesktopLabelPaddingRadius(context);
 			mPaddingH = MyLauncherSettingsHelper.getDesktopLabelPaddingH(context);
@@ -123,13 +129,13 @@ public class BubbleTextView extends CounterTextView {
 			mPaddingV = context.getResources().getInteger(R.integer.config_desktop_label_padding_v);
 
 		}
-		
+
 		// scale padding to display 
 		final float scale = context.getResources().getDisplayMetrics().density;
 		mCornerRadius *= scale;
 		mPaddingH *= scale;
 		mPaddingV *= scale;
-	
+
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		//mPaint.setColor(getContext().getResources().getColor(R.color.bubble_dark_background));
 		mPaint.setColor(colorBg);

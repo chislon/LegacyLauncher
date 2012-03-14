@@ -208,6 +208,7 @@ OnPreferenceChangeListener {
 			dSPref = (PersistentDialogSeekBarPreference) findPreference("drawerSnap");
 			dSPref.setEnabled(true);
 			dSPref.setInterval(50);
+			findPreference("drawerOvershoot").setEnabled(true);
 		} else {
 			rowsPortrait.setEnabled(false);
 			rowsLandscape.setEnabled(false);
@@ -218,6 +219,7 @@ OnPreferenceChangeListener {
 			dSPref = (PersistentDialogSeekBarPreference) findPreference("drawerSnap");
 			dSPref.setEnabled(false);
 			dSPref.setInterval(50);
+			findPreference("drawerOvershoot").setEnabled(false);
 		}
 		mContext = this;
 		/*
@@ -774,22 +776,12 @@ OnPreferenceChangeListener {
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 		} else if (key.equals("drawerStyle")) {
 			boolean drawerHorizontal = (Integer.valueOf(newValue.toString()) == 1);
-			Preference pref;
-
-			pref= findPreference("drawerRowsPortrait");
-			pref.setEnabled(drawerHorizontal);
-
-			pref = findPreference("drawerRowsLandscape");
-			pref.setEnabled(drawerHorizontal);
-
-			pref = findPreference("pageHorizontalMargin");
-			pref.setEnabled(drawerHorizontal);
-
-			pref = findPreference("drawerSpeed");
-			pref.setEnabled(drawerHorizontal);
-
-			pref = findPreference("drawerSnap");
-			pref.setEnabled(drawerHorizontal);
+			findPreference("drawerRowsPortrait").setEnabled(drawerHorizontal);
+			findPreference("drawerRowsLandscape").setEnabled(drawerHorizontal);
+			findPreference("pageHorizontalMargin").setEnabled(drawerHorizontal);
+			findPreference("drawerSpeed").setEnabled(drawerHorizontal);
+			findPreference("drawerSnap").setEnabled(drawerHorizontal);
+			findPreference("drawerOvershoot").setEnabled(drawerHorizontal);
 
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
