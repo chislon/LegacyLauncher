@@ -20,7 +20,6 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
@@ -568,9 +567,6 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		mVelocityTracker.addMovement(ev);
 
 		final int action = ev.getAction();
-
-
-		Log.d("CHISLON", "action" + action);
 
 		final float x = ev.getX();
 		final float y = ev.getY();
