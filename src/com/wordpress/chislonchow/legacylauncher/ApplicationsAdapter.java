@@ -69,6 +69,13 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 		mTextSize = MyLauncherSettingsHelper.getDrawerLabelSize(context);
 		mTextBold = MyLauncherSettingsHelper.getDrawerLabelBold(context);
 
+		final boolean overrideTextColor = MyLauncherSettingsHelper.getDrawerLabelColorOverride(context);
+		if(overrideTextColor) {
+			mTextColor = MyLauncherSettingsHelper.getDrawerLabelColor(context);
+			useThemeTextColor = true;
+		}
+
+
 		// ADW: Load textcolor and bubble color from theme
 		String themePackage = MyLauncherSettingsHelper.getThemePackageName(
 				getContext(), Launcher.THEME_DEFAULT);
@@ -81,11 +88,13 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 				// e.printStackTrace();
 			}
 			if (themeResources != null) {
-				int textColorId = themeResources.getIdentifier(
-						"drawer_text_color", "color", themePackage);
-				if (textColorId != 0) {
-					mTextColor = themeResources.getColor(textColorId);
-					useThemeTextColor = true;
+				if(!overrideTextColor) {
+					int textColorId = themeResources.getIdentifier(
+							"drawer_text_color", "color", themePackage);
+					if (textColorId != 0) {
+						mTextColor = themeResources.getColor(textColorId);
+						useThemeTextColor = true;
+					}
 				}
 				mBackground = IconHighlights.getDrawable(getContext(),
 						IconHighlights.TYPE_DRAWER);

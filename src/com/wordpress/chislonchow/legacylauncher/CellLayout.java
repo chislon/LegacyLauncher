@@ -94,7 +94,7 @@ public class CellLayout extends WidgetCellLayout {
 
 		mCellWidth = a.getDimensionPixelSize(R.styleable.CellLayout_cellWidth, 10);
 		mCellHeight = a.getDimensionPixelSize(R.styleable.CellLayout_cellHeight, 10);
-		if(MyLauncherSettingsHelper.getDockStyle(context)!=Launcher.DOCK_STYLE_NONE){
+		if (MyLauncherSettingsHelper.getDockStyle(context)!=Launcher.DOCK_STYLE_NONE) {
 			mLongAxisStartPadding = 
 					a.getDimensionPixelSize(R.styleable.CellLayout_longAxisStartPadding, 10);
 			mLongAxisEndPadding = 
@@ -985,77 +985,77 @@ public class CellLayout extends WidgetCellLayout {
 		/**
 		 * Horizontal location of the item in the grid.
 		 */
-		 public int cellX;
+		public int cellX;
 
-		 /**
-		  * Vertical location of the item in the grid.
-		  */
-		 public int cellY;
+		/**
+		 * Vertical location of the item in the grid.
+		 */
+		public int cellY;
 
-		 /**
-		  * Number of cells spanned horizontally by the item.
-		  */
-		 public int cellHSpan;
+		/**
+		 * Number of cells spanned horizontally by the item.
+		 */
+		public int cellHSpan;
 
-		 /**
-		  * Number of cells spanned vertically by the item.
-		  */
-		 public int cellVSpan;
+		/**
+		 * Number of cells spanned vertically by the item.
+		 */
+		public int cellVSpan;
 
-		 /**
-		  * Is this item currently being dragged
-		  */
-		 public boolean isDragging;
+		/**
+		 * Is this item currently being dragged
+		 */
+		public boolean isDragging;
 
-		 // X coordinate of the view in the layout.
-		 int x;
-		 // Y coordinate of the view in the layout.
-		 int y;
+		// X coordinate of the view in the layout.
+		int x;
+		// Y coordinate of the view in the layout.
+		int y;
 
-		 boolean regenerateId;
+		boolean regenerateId;
 
-		 boolean dropped;        
+		boolean dropped;        
 
-		 public LayoutParams(Context c, AttributeSet attrs) {
-			 super(c, attrs);
-			 cellHSpan = 1;
-			 cellVSpan = 1;
-		 }
+		public LayoutParams(Context c, AttributeSet attrs) {
+			super(c, attrs);
+			cellHSpan = 1;
+			cellVSpan = 1;
+		}
 
-		 public LayoutParams(ViewGroup.LayoutParams source) {
-			 super(source);
-			 cellHSpan = 1;
-			 cellVSpan = 1;
-		 }
+		public LayoutParams(ViewGroup.LayoutParams source) {
+			super(source);
+			cellHSpan = 1;
+			cellVSpan = 1;
+		}
 
-		 public LayoutParams(int cellX, int cellY, int cellHSpan, int cellVSpan) {
-			 super(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-			 this.cellX = cellX;
-			 this.cellY = cellY;
-			 this.cellHSpan = cellHSpan;
-			 this.cellVSpan = cellVSpan;
-		 }
+		public LayoutParams(int cellX, int cellY, int cellHSpan, int cellVSpan) {
+			super(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+			this.cellX = cellX;
+			this.cellY = cellY;
+			this.cellHSpan = cellHSpan;
+			this.cellVSpan = cellVSpan;
+		}
 
-		 public void setup(int cellWidth, int cellHeight, int widthGap, int heightGap,
-				 int hStartPadding, int vStartPadding,boolean autoStretch) {
+		public void setup(int cellWidth, int cellHeight, int widthGap, int heightGap,
+				int hStartPadding, int vStartPadding,boolean autoStretch) {
 
-			 final int myCellHSpan = cellHSpan;
-			 final int myCellVSpan = cellVSpan;
-			 final int myCellX = cellX;
-			 final int myCellY = cellY;
+			final int myCellHSpan = cellHSpan;
+			final int myCellVSpan = cellVSpan;
+			final int myCellX = cellX;
+			final int myCellY = cellY;
 
-			 width = myCellHSpan * cellWidth + ((myCellHSpan - 1) * widthGap) -
-					 leftMargin - rightMargin;
-			 height = myCellVSpan * cellHeight + ((myCellVSpan - 1) * heightGap) -
-					 topMargin - bottomMargin;
-			 if(autoStretch){
-				 width=(cellWidth*myCellHSpan)- rightMargin-leftMargin;
-				 height=(cellHeight*myCellVSpan);
-			 }
+			width = myCellHSpan * cellWidth + ((myCellHSpan - 1) * widthGap) -
+					leftMargin - rightMargin;
+			height = myCellVSpan * cellHeight + ((myCellVSpan - 1) * heightGap) -
+					topMargin - bottomMargin;
+			if(autoStretch){
+				width=(cellWidth*myCellHSpan)- rightMargin-leftMargin;
+				height=(cellHeight*myCellVSpan);
+			}
 
-			 x = hStartPadding + myCellX * (cellWidth + widthGap) + leftMargin;
-			 y = vStartPadding + myCellY * (cellHeight + heightGap) + topMargin;
-		 }
+			x = hStartPadding + myCellX * (cellWidth + widthGap) + leftMargin;
+			y = vStartPadding + myCellY * (cellHeight + heightGap) + topMargin;
+		}
 	}
 
 	static final class CellInfo implements ContextMenu.ContextMenuInfo {

@@ -13,9 +13,9 @@
         <item>Open App</item>
     </string-array>
     <string-array name="desktop_indicator_entries">
-        <item>Dot paginator at top</item>
-        <item>Sliding paginator at top</item>
-        <item>Sliding paginator at bottom</item>
+        <item>Dot pager at top</item>
+        <item>Sliding pager at top</item>
+        <item>Sliding pager at bottom</item>
     </string-array>
     <string-array name="desktop_transition_entries">
         <item>Normal</item>
@@ -30,12 +30,12 @@
         <item>Landscape</item>
     </string-array>
     <string-array name="screen_cache_entries">
-        <item>Low quality</item>
+        <item>Low Quality</item>
         <item>Auto</item>
         <item>Disabled</item>
     </string-array>
     <string-array name="main_dock_entries">
-        <item>"Hide Dock and expand desktop"</item>
+        <item>"None (Hide Dock)"</item>
         <item>"1 Icon"</item>
         <item>"3 Icons"</item>
         <item>"5 Icons"</item>
@@ -50,6 +50,15 @@
     <string-array name="app_drawer_style_entries">
         <item>Vertical Scroll, Continuous</item>
         <item>Horizontal Scroll, Paged</item>
+    </string-array>
+    <string-array name="catalog_sorttype_entries">
+        <item>"Name/Checked"</item>
+        <item>"Name"</item>
+        <item>"Age"</item>
+    </string-array>
+    <string-array name="catalog_sorttype_prefroyo_entries">
+        <item>"Name/Checked"</item>
+        <item>"Name"</item>
     </string-array>
     <!-- Do not translate. -->
     <string-array name="menu_binding_values" translatable="false">

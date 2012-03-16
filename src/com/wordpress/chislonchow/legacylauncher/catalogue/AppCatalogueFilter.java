@@ -3,13 +3,13 @@ package com.wordpress.chislonchow.legacylauncher.catalogue;
 import java.util.List;
 
 import com.wordpress.chislonchow.legacylauncher.Launcher;
-import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters.Catalogue;
+import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters.Catalog;
 
 import android.content.SharedPreferences;
 
 public class AppCatalogueFilter {
 
-	private AppCatalogueFilters.Catalogue mCatalogue;
+	private AppCatalogueFilters.Catalog mCatalogue;
 
 	public AppCatalogueFilter() {
 		this(AppGroupAdapter.APP_GROUP_ALL);
@@ -31,8 +31,8 @@ public class AppCatalogueFilter {
             AppCatalogueFilters instance = AppCatalogueFilters.getInstance();
     		if ( ((Launcher)instance.mContext).mUseDrawerUngroupCatalog )
     		{
-                List<Catalogue> allGroups = instance.getAllGroups();
-    			for (Catalogue catalogue : allGroups)
+                List<Catalog> allGroups = instance.getAllGroups();
+    			for (Catalog catalogue : allGroups)
     			{
     				if ( catalogue.getPreferences().getBoolean(className, false) )
     				{

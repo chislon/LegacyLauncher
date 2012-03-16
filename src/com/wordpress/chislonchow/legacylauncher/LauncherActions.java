@@ -3,8 +3,8 @@ package com.wordpress.chislonchow.legacylauncher;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilter;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
+import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilter;
 import com.wordpress.chislonchow.legacylauncher.R;
 
 import android.content.Intent;
@@ -59,8 +59,8 @@ public class LauncherActions {
 			}
 		}
 		AppCatalogueFilters filters = AppCatalogueFilters.getInstance();
-		List<AppCatalogueFilters.Catalogue> catalogues = filters.getAllGroups();
-		for(AppCatalogueFilters.Catalogue cat : catalogues) {
+		List<AppCatalogueFilters.Catalog> catalogues = filters.getAllGroups();
+		for(AppCatalogueFilters.Catalog cat : catalogues) {
 			ShowGroupAction act = new ShowGroupAction(cat);
 			result.add(act);
 		}
@@ -220,11 +220,11 @@ public class LauncherActions {
 
 	private class ShowGroupAction implements Action {
 
-		private final AppCatalogueFilters.Catalogue mCatalogue;
+		private final AppCatalogueFilters.Catalog mCatalogue;
 
 		private static final String EXTRA_CATALOG_INDEX = "EXTRA_CATALOG_INDEX";
 
- 		public ShowGroupAction(AppCatalogueFilters.Catalogue catalogue) {
+ 		public ShowGroupAction(AppCatalogueFilters.Catalog catalogue) {
 			mCatalogue = catalogue;
 		}
 

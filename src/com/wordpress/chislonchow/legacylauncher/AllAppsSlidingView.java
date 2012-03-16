@@ -3,10 +3,6 @@ package com.wordpress.chislonchow.legacylauncher;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wordpress.chislonchow.legacylauncher.AllAppsSlidingViewHolderLayout.OnFadingListener;
-import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
-import com.wordpress.chislonchow.legacylauncher.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
@@ -20,7 +16,9 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -29,21 +27,24 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.PopupWindow;
-import android.widget.Scroller;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.Scroller;
+
+import com.wordpress.chislonchow.legacylauncher.AllAppsSlidingViewHolderLayout.OnFadingListener;
+import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
 public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> implements OnItemClickListener, OnItemLongClickListener, DragSource, Drawer{// implements DragScroller{
 	private static final int DEFAULT_SCREEN = 0;
 	private static final int INVALID_SCREEN = -1;
 
 	private static final int SNAP_VELOCITY = 600;
-	private static final int SCROLLING_OVERSHOOT = 48;	// pixels
+
 	private int mScaledSnapVelocity = SNAP_VELOCITY;
 
 	private int mCurrentScreen;
@@ -56,6 +57,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private VelocityTracker mVelocityTracker;
 	private float mLastMotionX;
 	private float mLastMotionY;
+
+	private boolean mDrawerZoom = false;
 
 	private final static int TOUCH_STATE_REST = 0;
 	private final static int TOUCH_STATE_SCROLLING = 1;
@@ -78,8 +81,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	public int mItemCount;
 	public int mOldItemCount;
 
-
-	private int mPageHorizontalMargin=0;
+	private int mScaledPageHorizontalMargin=0;
 	private int mNumColumns=2;
 	private int mNumRows=2;
 	private int paginatorSpace=16;
@@ -172,7 +174,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	//ADW: speed for new scrolling transitions
 	private int mScrollingSpeed=400;
 	//ADW: overshoot pixels scroll
-	private int mScaledScrollingOvershoot=0;
+	private boolean mScrollingOvershoot=false;
 	//CCHOW: Snap to original screen speed
 	//XXX: make this configurable
 	private int mScrollingSnap = 50;
@@ -244,17 +246,11 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 				if(Status==OnFadingListener.CLOSE){
 					setVisibility(View.GONE);
 					mLauncher.getWorkspace().clearChildrenCache();
-				}else{
+				} else {
 					isAnimating=false;
 					mPager.setVisibility(VISIBLE);
 					mBgAlpha=mTargetAlpha;
 				}
-			}
-			public void onAlphaChange(float alphaPercent) {
-				// TODO Auto-generated method stub
-				mBgAlpha=(int)(mTargetAlpha*alphaPercent);
-				//ADW: hack to redraw pager background..... :-(
-				invalidate(mPager.getLeft(), mPager.getTop(), mPager.getRight(), mPager.getBottom());
 			}
 		};
 	}
@@ -303,6 +299,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		int saveCount = 0;
 		final boolean clipToPadding = (mGroupFlags & CLIP_TO_PADDING_MASK) == CLIP_TO_PADDING_MASK;
 		canvas.drawARGB(mBgAlpha, Color.red(mBgColor), Color.green(mBgColor), Color.blue(mBgColor));
+		//canvas.drawARGB(mBgAlpha, Color.red(mBgColor), Color.green(mBgColor), Color.blue(mBgColor));
 		if (clipToPadding) {
 			saveCount = canvas.save();
 			final int scrollX = mScrollX;
@@ -386,10 +383,11 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		final int startPos=pageNum*mNumColumns*mNumRows;
 
 		final int marginTop=getPaddingTop();
-		final int marginBottom=getPaddingBottom();
-		final int marginLeft=getPaddingLeft() + mPageHorizontalMargin;
+		final int marginBottom=getPaddingBottom() + mPager.getHeight();
+		final int marginLeft=getPaddingLeft() + mScaledPageHorizontalMargin;
 		final int marginRight=getPaddingRight();
 		final int actualWidth=getMeasuredWidth()-marginLeft-marginRight;
+
 		final int actualHeight=getMeasuredHeight()-marginTop-marginBottom;
 		final int columnWidth=(actualWidth - marginLeft)/mNumColumns;
 		final int rowHeight=actualHeight/mNumRows;
@@ -612,12 +610,15 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 						// Scroll if the user moved far enough along the X axis
 						mLastMotionX = x;
 						if (deltaX < 0) {
-							final int availableToScroll = getScrollX() + mScaledScrollingOvershoot;
+
+							int availableToScroll = getScrollX();
+							availableToScroll += (mScrollingOvershoot? mPageWidth : 0);
 							if ((availableToScroll > 0) && (availableToScroll > -deltaX)) {
 								scrollBy(deltaX, 0);
 							}
 						} else if (deltaX > 0) {
-							final int availableToScroll = ((mTotalScreens - 1)*mPageWidth) - getScrollX() + mScaledScrollingOvershoot;
+							int availableToScroll = ((mTotalScreens - 1)*mPageWidth) - getScrollX();
+							availableToScroll += (mScrollingOvershoot? mPageWidth : 0);
 							if ((availableToScroll > 0) && (availableToScroll > deltaX)) {
 								scrollBy(deltaX, 0);
 							}
@@ -1798,15 +1799,18 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 		ApplicationInfo app = (ApplicationInfo) parent.getItemAtPosition(position);
 		app = new ApplicationInfo(app);
-
+		/*
 		mLauncher.showQuickActionWindow(app, v, new PopupWindow.OnDismissListener()
 		{
 			@Override
 			public void onDismiss()
 			{
-				mLauncher.closeAllApplications();
+		 */
+		mLauncher.closeAllApplications();
+		/*
 			}
 		});
+		 */
 		mDragger.startDrag(v, this, app, DragController.DRAG_ACTION_COPY);
 
 		return true;
@@ -1824,8 +1828,9 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		return mNumColumns;
 	}
 	public void setPageHorizontalMargin(int margin) {
-		if(margin!=mPageHorizontalMargin){
-			this.mPageHorizontalMargin = margin;
+		if(margin!=mScaledPageHorizontalMargin){
+			final float scale = getContext().getResources().getDisplayMetrics().density;
+			this.mScaledPageHorizontalMargin = (int) (margin * scale);
 			if(mAdapter!=null){
 				scrollTo(0, 0);
 				mTotalScreens=getPageCount();
@@ -1882,6 +1887,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		mStatus=AllAppsSlidingViewHolderLayout.OnFadingListener.OPEN;
 		mBgColor=MyLauncherSettingsHelper.getDrawerColor(mLauncher);
 		mTargetAlpha=Color.alpha(mBgColor);
+		mDrawerZoom = MyLauncherSettingsHelper.getDrawerZoom(mLauncher);
+
 		for(int i=0;i<getChildCount();i++){
 			if(getChildAt(i) instanceof AllAppsSlidingViewHolderLayout){
 				((AllAppsSlidingViewHolderLayout)getChildAt(i)).updateLabelVars(mLauncher);
@@ -1895,12 +1902,21 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			animate=false;
 		else if(getAdapter().getCount()<=0)
 			animate=false;
-		if(animate){
+		if(animate){			
 			ListAdapter adapter = getAdapter();
 			if (adapter instanceof ApplicationsAdapter)
 				((ApplicationsAdapter)adapter).setChildDrawingCacheEnabled(true);
-			mPager.setVisibility(INVISIBLE);
-			mBgAlpha=0;
+			mPager.setVisibility(VISIBLE);
+			mBgAlpha=mTargetAlpha;
+			Animation ani;
+			if (mDrawerZoom) {
+				ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_zoom_in);
+			} else {
+				ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_fade_in);
+			}
+			ani.setDuration(mAnimationDuration);
+			startAnimation(ani);
+
 		}else{
 			mPager.setVisibility(VISIBLE);
 			mBgAlpha=mTargetAlpha;
@@ -1919,10 +1935,9 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		mPager.showGroupText(mLauncher.mUseDrawerTitleCatalog && AppCatalogueFilters.getInstance().getAllGroups().size() > 0);
 		mPager.requestLayout();
 	}
-	public void close(boolean animate){
+	public void close(boolean animate) {
 		mStatus=AllAppsSlidingViewHolderLayout.OnFadingListener.CLOSE;
 		setPressed(false);
-		mPager.setVisibility(INVISIBLE);
 		if(getAdapter()==null)
 			animate=false;
 		else if(getAdapter().getCount()<=0)
@@ -1930,18 +1945,28 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		if(animate){
 			findCurrentHolder();
 			AllAppsSlidingViewHolderLayout holder=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
+
 			if(holder!=null){
+				Animation ani;
+				if (mDrawerZoom) {
+					ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_zoom_out);
+				} else {
+					ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_fade_out);
+				}
+				ani.setDuration(mAnimationDuration);
+				startAnimation(ani);
+
 				isAnimating=true;
 				holder.close(animate, mAnimationDuration);
 			}else{
 				isAnimating=false;
 				mLauncher.getWorkspace().clearChildrenCache();
-				setVisibility(View.GONE);
 			}
-		}else{
+		} else {
 			mLauncher.getWorkspace().clearChildrenCache();
-			setVisibility(View.GONE);
 		}
+		setVisibility(View.GONE);
+
 	}
 	public void setAnimationSpeed(int speed){
 		mAnimationDuration=speed;
@@ -1958,17 +1983,18 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		}
 	}
 	public void updateAppGrp() {
-		if(getAdapter()!=null){
+		if(getAdapter() != null){
 			(getAdapter()).updateDataSet();
 			scrollTo(0, 0);
-			mTotalScreens=getPageCount();
+			mTotalScreens = getPageCount();
 			mCurrentScreen=0;
 			mCurrentHolder=1;
 			mPager.setTotalItems(mTotalScreens);
 			mPager.setCurrentItem(0);
-			mBlockLayouts=false;
+			mBlockLayouts = false;
 			mScrollToScreen=0;
 			mLayoutMode=LAYOUT_NORMAL;
+			
 			mPager.showGroupText(mLauncher.mUseDrawerTitleCatalog && AppCatalogueFilters.getInstance().getAllGroups().size() > 0);
 			requestLayout();
 		}
@@ -2142,11 +2168,6 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	}
 	@Override
 	public void setOvershoot(boolean value) {
-		final float scale = getContext().getResources().getDisplayMetrics().density;
-		if (value) {
-			mScaledScrollingOvershoot = (int)(SCROLLING_OVERSHOOT * scale);
-		} else {
-			mScaledScrollingOvershoot = 0;
-		}
+		mScrollingOvershoot = value;
 	}
 }

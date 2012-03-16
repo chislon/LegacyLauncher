@@ -113,8 +113,13 @@ public class BubbleTextView extends CounterTextView {
 
 		// retrieve overridden or default values
 		if (overrideColor) {
+			// bubble background color
 			colorBg = MyLauncherSettingsHelper.getDesktopLabelColorBg(context);	// set later in code
+			// text color
 			setTextColor(MyLauncherSettingsHelper.getDesktopLabelColorText(context));
+			// set the shadow layer (overwrites the value from CounterTextView
+			int colorShadow = MyLauncherSettingsHelper.getDesktopLabelColorShadow(context);	// set later in code
+			setShadowLayer(2f, 1, 1, colorShadow);
 		} else {
 			colorBg = context.getResources().getInteger(R.integer.config_desktop_label_color_bg);
 		}
@@ -127,8 +132,8 @@ public class BubbleTextView extends CounterTextView {
 			mCornerRadius = context.getResources().getInteger(R.integer.config_desktop_label_padding_radius);
 			mPaddingH = context.getResources().getInteger(R.integer.config_desktop_label_padding_h);
 			mPaddingV = context.getResources().getInteger(R.integer.config_desktop_label_padding_v);
-
 		}
+
 
 		// scale padding to display 
 		final float scale = context.getResources().getDisplayMetrics().density;

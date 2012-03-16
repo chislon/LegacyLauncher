@@ -19,7 +19,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wordpress.chislonchow.legacylauncher"
-    android:versionCode="15"
+    android:versionCode="18"
     android:versionName="@string/app_version" >
 
     <uses-sdk
@@ -67,7 +67,7 @@
     <uses-permission android:name="android.permission.PERSISTENT_ACTIVITY" />
 
     <application
-        android:name="LauncherApplication"
+        android:name=".LauncherApplication"
         android:icon="@drawable/ic_launcher_home"
         android:label="@string/application_name" >
         <activity
@@ -93,6 +93,7 @@
             android:label="@string/launcher_label_settings" />
         <activity
             android:name="ActivityPickerActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard"
             android:label="@string/pref_label_activities" />
         <activity
             android:name=".CustomShortcutActivity"
@@ -114,12 +115,12 @@
 
         <!-- The settings provider contains Home's data, like the workspace favorites -->
         <provider
-            android:name="LauncherProvider"
+            android:name=".LauncherProvider"
             android:authorities="com.wordpress.chislonchow.legacylauncher.settings"
             android:readPermission="com.android.launcher.permission.READ_SETTINGS"
             android:writePermission="com.android.launcher.permission.WRITE_SETTINGS" />
 
-        <activity android:name="com.wordpress.chislonchow.legacylauncher.catalogue.AppInfoMList" />
+        <activity android:name=".catalogue.AppInfoMList" />
     </application>
 
 </manifest>

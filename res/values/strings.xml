@@ -20,11 +20,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- General -->
-    <skip />
+    <string name="done">Done</string>
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.15 Beta</string>
+    <string name="app_version">0.17 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -139,6 +139,8 @@
     <string name="pref_summary_enable_previews">Enable desktop previews</string>
     <string name="pref_title_spread_previews">Spread previews</string>
     <string name="pref_summary_spread_previews">Apply the spread style desktop preview style</string>
+
+    <!-- Desktop icons -->
     <string name="pref_title_desktop_label_size">Text size</string>
     <string name="pref_summary_desktop_label_size">Select text size for labels</string>
     <string name="pref_dialog_desktop_label_size">Select text size for labels</string>
@@ -153,8 +155,11 @@
     <string name="pref_title_desktop_label_padding_vertical">Vertical padding</string>
     <string name="pref_summary_desktop_label_padding_vertical">Label background vertical padding</string>
     <string name="pref_dialog_desktop_label_padding_vertical">Label background vertical padding</string>
+    <string name="pref_title_desktop_label_color_category">Icon Label Colors</string>
     <string name="pref_title_desktop_label_color_override">Override colors</string>
     <string name="pref_summary_desktop_label_color_override">Select to override label colors</string>
+    <string name="pref_title_desktop_label_color_shadow">Text shadow color</string>
+    <string name="pref_summary_desktop_label_color_shadow">Label text shadow color</string>
     <string name="pref_title_desktop_label_color_text">Text color</string>
     <string name="pref_summary_desktop_label_color_text">Select text color of labels</string>
     <string name="pref_title_desktop_label_bold_text">Text bold</string>
@@ -185,8 +190,8 @@
     <string name="pref_summary_drawer_settings">Tray style, layout, response</string>
     <string name="pref_title_drawer_appearance">Tray Appearance</string>
     <string name="pref_summary_drawer_appearance">Application tray visual settings</string>
-    <string name="pref_title_drawer_catalogs_settings">Tray Catalogs</string>
-    <string name="pref_summary_drawer_catalogs_settings">Applications tray catalogs preferences</string>
+    <string name="pref_title_drawer_catalogs">Tray Catalogs</string>
+    <string name="pref_summary_drawer_catalogs">Applications tray catalogs preferences</string>
     <string name="pref_title_drawer_animation_speed">Animation duration</string>
     <string name="pref_summary_drawer_animation_speed">Set animation time in milliseconds </string>
     <string name="pref_dialog_animation_speed">Set animation time in milliseconds</string>
@@ -214,11 +219,15 @@
     <string name="pref_title_drawer_animation_category">Tray Animations</string>
     <string name="pref_title_drawer_app_label_category">Application Labels</string>
     <string name="pref_title_drawer_background_category">Tray Background</string>
-    <string name="pref_title_drawer_label_size">Set labels size</string>
-    <string name="pref_summary_drawer_label_size">Application label text size</string>
-    <string name="pref_dialog_drawer_label_size">Select application label text sizes</string>
-    <string name="pref_title_drawer_label_bold">Set labels bold</string>
-    <string name="pref_summary_drawer_label_bold">Application label bold text style</string>
+    <string name="pref_title_drawer_label_size">Text size</string>
+    <string name="pref_summary_drawer_label_size">Label text size</string>
+    <string name="pref_dialog_drawer_label_size">Label text size</string>
+    <string name="pref_title_drawer_label_bold">Text bold</string>
+    <string name="pref_summary_drawer_label_bold">Label bold text style</string>
+    <string name="pref_title_drawer_label_color_override">Override colors</string>
+    <string name="pref_summary_drawer_label_color_override">Select to override label text colors</string>
+    <string name="pref_title_drawer_label_color">Text color</string>
+    <string name="pref_summary_drawer_label_color">Label text color</string>
     <string name="pref_title_drawer_navigate_catalogs">Navigation buttons</string>
     <string name="pref_summary_drawer_navigate_catalogs">Show catalog navigation buttons</string>
     <string name="pref_title_drawer_catalog_fling_navigate">Fling navigation</string>
@@ -242,14 +251,14 @@
     <!-- Dock Settings -->
     <string name="pref_title_dock">Dock</string>
     <string name="pref_title_dock_settings">Dock Configuration</string>
-    <string name="pref_summary_dock_settings">Dock icon count, pagination dots</string>
+    <string name="pref_summary_dock_settings">Dock icon count, paging dots</string>
     <string name="pref_title_dock_appearance">Dock Appearance</string>
     <string name="pref_summary_dock_appearance">Icon size, dock background</string>
-    <string name="pref_title_desktop_dots">Dock pagination dots</string>
-    <string name="pref_summary_desktop_dots">Show/hide dock pagination dots</string>
+    <string name="pref_title_desktop_dots">Dock paging dots</string>
+    <string name="pref_summary_desktop_dots">Show/hide dock paging dots</string>
     <string name="pref_title_ab_scale_factor">Icon size</string>
-    <string name="pref_summary_ab_scale_factor">Set the scaling size for the icon</string>
-    <string name="pref_dialog_ab_scale_factor">Set the scaling size for the icons</string>
+    <string name="pref_summary_ab_scale_factor">Set the scaling size for icons</string>
+    <string name="pref_dialog_ab_scale_factor">Set the scaling size for icons</string>
     <string name="pref_title_hide_ab_bg">Hide dock background</string>
     <string name="pref_summary_hide_ab_bg">Hide background in dock</string>
     <string name="pref_title_hide_icon_labels">Hide icon labels</string>
@@ -263,6 +272,8 @@
     <string name="pref_summary_ab_tint">Perform color tinting on dock icons</string>
     <string name="pref_title_ab_tint_color">Tint color</string>
     <string name="pref_summary_ab_tint_color">Change tinting color</string>
+    <string name="pref_title_main_dock_drawer_hide">Hide Dock in Drawer</string>
+    <string name="pref_summary_main_dock_drawer_hide">Hide dock from view when in drawer</string>
 
     <!-- Other preferences -->
     <string name="pref_title_application_settings">More</string>
@@ -312,8 +323,6 @@
     <string name="pref_summary_autosize_icons">Stretch icons/widgets to prevent overlap</string>
     <string name="pref_title_drawer_labels">Show app labels</string>
     <string name="pref_summary_drawer_labels">Show the labels on app tray</string>
-    <string name="pref_title_fade_drawer_labels">Fade app labels</string>
-    <string name="pref_summary_fade_drawer_labels">Label fading effects</string>
     <string name="widget_config_dialog_title">Widget span config</string>
     <string name="widget_config_dialog_summary">Define number of widget span rows/columns</string>
     <string name="widget_columns">Columns</string>
@@ -366,18 +375,31 @@
     <string name="shirtcuts_select_icon_type">Select icon type</string>
     <string name="shirtcuts_select_icon_pack">Select icon pack</string>
     <string name="shirtcuts_restore_original">Restore Original</string>
+
+    <!-- Catalogs strings -->
     <string name="selectAll">Select all</string>
-    <string name="AppGroupAll">"All"</string>
-    <string name="AppGroupUn">"Uncataloged"</string>
-    <string name="AppGroupAdd">"New Catalog"</string>
-    <string name="AppGroupDel">"Remove Catalog"</string>
-    <string name="AppGroupDelLong">"Really Remove\nCurrent Catalog?"</string>
-    <string name="AppGroupChoose">"Choose Catalog"</string>
-    <string name="AppGroupConfig">"Setup Catalog"</string>
-    <string name="AppGroupRename">"New Catalog"</string>
-    <string name="AppGroupConfigError">"Cannot setup this catalog"</string>
+    <string name="selectNone">Select none</string>
+    <string name="sortType">Sort by\:</string>
+    <string name="app_group_prepend">"Catalog: "</string>
+    <string name="app_group_no_items_add">"No items selected, stop adding catalog?"</string>
+    <string name="app_group_no_items_modify">"No items selected, remove current catalog?"</string>
+    <string name="app_group_all">"All"</string>
+    <string name="app_group_un">"All (Uncataloged)"</string>
+    <string name="app_group_config_confirm">"Save changes to catalog?"</string>
+    <string name="app_group_add">"Add Catalog"</string>
+    <string name="app_group_add_abort">"Add catalog aborted"</string>
+    <string name="app_group_delete">"Remove catalog"</string>
+    <string name="app_group_delete_long">"Really remove current catalog?"</string>
+    <string name="app_group_choose">"Choose Catalog"</string>
+    <string name="app_group_config">"Modify Catalog"</string>
+    <string name="app_group_rename">"New Catalog"</string>
+    <string name="app_group_config_error">"Cannot modify this catalog"</string>
+    <string name="app_group_remove_error">"Cannot remove this catalog"</string>
+    <string name="app_group_remove_success">"Catalog removed"</string>
     <string name="rename_group_title">New Catalog</string>
     <string name="rename_group_label">Catalog Name</string>
+    <string name="create_group_success">""New catalog: "</string>
+    <string name="create_group_fail">Failed to create catalog, name not accepted.</string>
     <string name="show_catalog">Show Catalog \"%s\"</string>
     <string name="pref_title_launcher_restart">Restart</string>
     <string name="pref_summary_launcher_restart">Close and restart Legacy Launcher</string>
@@ -411,10 +433,10 @@
     <string name="pref_title_xml_export">Backup settings</string>
     <string name="pref_summary_xml_export">Backup to /sdcard/legacy_launcher_settings.xml</string>
     <string name="pref_summary_db_import">Restore from /sdcard/legacy_launcher.db</string>
-    <string name="pref_title_db_export">Backup desktop icon placement</string>
+    <string name="pref_title_db_export">Backup desktop icons</string>
     <string name="pref_summary_db_export">Backup to /sdcard/legacy_launcher.db</string>
     <string name="pref_title_db">Desktop Icon Placement</string>
-    <string name="pref_title_db_import">Restore desktop icon placement</string>
+    <string name="pref_title_db_import">Restore desktop icons</string>
 
     <!-- Other UI preferences -->
     <string name="pref_title_ui_settings">UI Components</string>

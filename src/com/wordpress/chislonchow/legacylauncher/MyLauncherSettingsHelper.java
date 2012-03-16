@@ -22,7 +22,7 @@ public final class MyLauncherSettingsHelper {
 
 	private static final String LEGACY_PREFERENCES = "launcher.preferences.almostnexus";
 
-	// modification of these keys cause restart 
+	// modification of these keys cause restart of the entire launcher... 
 	private static final String[] restart_keys = {
 		"highlights_color",
 		"highlights_color_focus",
@@ -37,6 +37,8 @@ public final class MyLauncherSettingsHelper {
 		"drawerStyle", 
 		"drawerLabelTextSize",
 		"drawerLabelBold",
+		"drawerLabelColorOverride",
+		"drawerLabelColor",
 		"uiDesktopIndicatorColor",
 		"uiDesktopIndicator",
 		"desktopRows",
@@ -51,9 +53,11 @@ public final class MyLauncherSettingsHelper {
 		"desktopLabelPaddingRadius",
 		"desktopLabelColorOverride",
 		"desktopLabelColorText",
+		"desktopLabelColorShadow",
 		"desktopLabelColorBg",
 		"folderTextSize",
-		"drawerCatalogFlingNavigate"
+		"drawerCatalogFlingNavigate",
+		"mainDockDrawerHide"
 	};
 
 	public static boolean needsRestart(String key){
@@ -274,6 +278,11 @@ public final class MyLauncherSettingsHelper {
 		int value = sp.getInt("desktopLabelColorText", context.getResources().getInteger(R.integer.config_desktop_label_color_text));
 		return value;
 	}
+	public static int getDesktopLabelColorShadow(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int value = sp.getInt("desktopLabelColorShadow", context.getResources().getInteger(R.integer.config_desktop_label_color_shadow));
+		return value;
+	}
 	public static int getDesktopLabelColorBg(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int value = sp.getInt("desktopLabelColorBg", context.getResources().getInteger(R.integer.config_desktop_label_color_bg));
@@ -305,9 +314,14 @@ public final class MyLauncherSettingsHelper {
 		boolean newD = sp.getBoolean("drawerLabelBold", context.getResources().getBoolean(R.bool.config_drawer_label_bold));
 		return newD;
 	}
-	public static boolean getFadeDrawerLabels(Context context) {
+	public static int getDrawerLabelColor(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("fadeDrawerLabels", context.getResources().getBoolean(R.bool.config_fade_drawer_labels));
+		int newD = sp.getInt("drawerLabelColor", context.getResources().getInteger(R.integer.config_drawer_label_color));
+		return newD;
+	}
+	public static boolean getDrawerLabelColorOverride(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("drawerLabelColorOverride", context.getResources().getBoolean(R.bool.config_drawer_label_color_override));
 		return newD;
 	}
 	public static int getScreenCache(Context context) {
@@ -585,6 +599,12 @@ public final class MyLauncherSettingsHelper {
 		boolean newD = sp.getBoolean("mainDockLockMAB", true);
 		return newD;
 	}
+	public static boolean getDockHide(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("mainDockDrawerHide", context.getResources().getBoolean(R.bool.config_main_dock_drawer_hide));
+		return newD;
+	}
+
 	public static int getDrawerStyle(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("drawerStyle", context.getResources().getString(R.string.config_drawer_style)));

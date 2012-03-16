@@ -22,7 +22,7 @@ import android.graphics.drawable.Drawable;
 class AppListInfo {
     String title;
     String className;
-
+    long firstInstallTime;
     boolean checked;
     Drawable icon;
 }

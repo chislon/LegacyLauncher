@@ -20,12 +20,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
+    android:orientation="horizontal"
+    android:paddingLeft="10dip" >
 
-    android:paddingLeft="10dip"
-
-    android:orientation="horizontal">
-
-    <ImageView android:id="@+id/icon"
+    <ImageView
+        android:id="@+id/icon"
         android:layout_width="@android:dimen/app_icon_size"
         android:layout_height="@android:dimen/app_icon_size"
         android:layout_gravity="center_vertical"
@@ -33,37 +32,31 @@
 
     <LinearLayout
         android:layout_width="0dip"
-        android:layout_weight="1.0"
         android:layout_height="fill_parent"
-
-        android:paddingLeft="8dip"
-        android:paddingRight="8dip"
-
+        android:layout_weight="1.0"
+        android:gravity="center_vertical"
         android:orientation="vertical"
-        android:gravity="center_vertical">
+        android:paddingLeft="8dip"
+        android:paddingRight="8dip" >
 
-        <TextView android:id="@+id/name"
+        <TextView
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:singleLine="true"
             android:ellipsize="end"
-
+            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <TextView android:id="@+id/description"
+        <TextView
+            android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:layout_below="@id/name"
             android:layout_alignLeft="@id/name"
-
-            android:singleLine="true"
+            android:layout_below="@id/name"
             android:ellipsize="end"
-
+            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?android:attr/textColorSecondary" />
-
     </LinearLayout>
 
 </LinearLayout>

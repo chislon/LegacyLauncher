@@ -10,6 +10,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.graphics.drawable.TransitionDrawable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -94,7 +95,7 @@ public class PreviewPager extends ViewGroup {
 		TextView groupName = null;
 		if ( mEnableGroupText && mShowGroupText )
 		{
-			String groupTitle = getCurrentGroupTitle();
+			String groupTitle = getCurrentTitle();
 			if ( groupTitle != null )
 			{
 				groupName=new TextView(getContext());
@@ -107,23 +108,21 @@ public class PreviewPager extends ViewGroup {
 				
 		        groupName.getPaint().setAntiAlias(true);
 				int textSize = mTextSize;
-				if ( textSize == -1 )
-				{
-					if ( getHeight() > 0 )
-					{
+				if ( textSize == -1 ) {
+					if ( getHeight() > 0 ) {
 						// start here
-						textSize = 20;
-						groupName.setTextSize(textSize);
+						textSize = 12;
+						groupName.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 						
 						int targetSize = getHeight() - (getHeight() - dotWidth)/2;
 						int textHeight = 99999;
 						while ( textHeight > targetSize)
 						{
-							groupName.setTextSize(--textSize);
+							groupName.setTextSize(TypedValue.COMPLEX_UNIT_SP, --textSize);
 							textHeight = (int) groupName.getPaint().getTextSize();
-							if ( textSize < 10 )
+							if ( textSize < 7 )	// 7 dip
 							{
-								textSize = 10;
+								textSize = 7;
 								break;
 							}
 						}
@@ -131,7 +130,7 @@ public class PreviewPager extends ViewGroup {
 					}
 				}
 				
-				groupName.setTextSize(textSize);
+				groupName.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 				int textWidth = (int) groupName.getPaint().measureText(groupTitle);
 				marginLeft -= ( textWidth / 2); 
 				
@@ -187,14 +186,14 @@ public class PreviewPager extends ViewGroup {
 		postInvalidate();
 	}
 
-	private String getCurrentGroupTitle()
+	private String getCurrentTitle()
 	{
 		String groupTitle = null;
 		final ApplicationsAdapter drawerAdapter = Launcher.getModel().getApplicationsAdapter();
 		if (drawerAdapter != null)
 		{
 		    int index = drawerAdapter.getCatalogueFilter().getCurrentFilterIndex();
-		    int title = isUngroupMode?R.string.AppGroupUn:R.string.AppGroupAll;
+		    int title = isUngroupMode?R.string.app_group_un:R.string.app_group_all;
 		    groupTitle = (index ==  AppGroupAdapter.APP_GROUP_ALL ?
 		    		getContext().getString(title) :
 		    		AppCatalogueFilters.getInstance().getGroupTitle(index));

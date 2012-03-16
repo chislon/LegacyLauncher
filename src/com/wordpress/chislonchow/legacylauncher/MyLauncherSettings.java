@@ -104,7 +104,7 @@ OnPreferenceChangeListener {
 		PersistentDialogSeekBarPreference dSPref;
 		dSPref = (PersistentDialogSeekBarPreference) findPreference("animationSpeed");
 		dSPref.setMin(300);
-		dSPref.setInterval(100);
+		dSPref.setInterval(50);
 		dSPref =  (PersistentDialogSeekBarPreference) findPreference("drawerLabelTextSize");
 		dSPref.setMin(8);
 		dSPref = (PersistentDialogSeekBarPreference) findPreference("desktopLabelSize");
@@ -161,32 +161,48 @@ OnPreferenceChangeListener {
 		listPref.setOnPreferenceChangeListener(this);
 		listPref.setSummary(listPref.getEntry());
 
-		ListPreference dockStyle = (ListPreference) findPreference("main_dock_style");
-		dockStyle.setOnPreferenceChangeListener(this);
-		dockStyle.setSummary(dockStyle.getEntry());
-		int val = Integer.valueOf(dockStyle.getValue());
+		// dock style
+		listPref = (ListPreference) findPreference("main_dock_style");
+		listPref.setOnPreferenceChangeListener(this);
+		listPref.setSummary(listPref.getEntry());
+		int val = Integer.valueOf(listPref.getValue());
 
-		CheckBoxPreference checkBoxPref;
-		checkBoxPref = (CheckBoxPreference) findPreference("uiDots");
-		if (val == Launcher.DOCK_STYLE_5 || val == Launcher.DOCK_STYLE_NONE) {
-			checkBoxPref.setChecked(false);
-			checkBoxPref.setEnabled(false);
-		} else {
-			checkBoxPref.setEnabled(true);
+		CheckBoxPreference checkPref;
+		checkPref = (CheckBoxPreference) findPreference("uiDots");
+
+		switch (val) {
+		case Launcher.DOCK_STYLE_NONE:
+			checkPref.setChecked(false);
+			checkPref.setEnabled(false);
+
+			findPreference("mainDockLockMAB").setEnabled(false);
+
+			findPreference("mainDockDrawerHide").setEnabled(false);
+			break;
+		case Launcher.DOCK_STYLE_5:
+			checkPref.setChecked(false);
+			checkPref.setEnabled(false);
+
+			findPreference("mainDockLockMAB").setEnabled(true);
+
+			findPreference("mainDockDrawerHide").setEnabled(true);
+			break;
+		default:	//styles 1, 3
+			checkPref.setEnabled(true);
+
+			findPreference("mainDockLockMAB").setEnabled(true);
+
+			findPreference("mainDockDrawerHide").setEnabled(true);
+			break;
 		}
 
-		checkBoxPref = (CheckBoxPreference) findPreference("mainDockLockMAB");
-		if (val == Launcher.DOCK_STYLE_NONE) {
-			checkBoxPref.setEnabled(false);
-		} else {
-			checkBoxPref.setEnabled(true);
-		}
-		checkBoxPref = (CheckBoxPreference) findPreference("systemPersistent");
-		checkBoxPref.setOnPreferenceChangeListener(this);
+		// system persistent
+		checkPref = (CheckBoxPreference) findPreference("systemPersistent");
+		checkPref.setOnPreferenceChangeListener(this);
 
 		listPref = (ListPreference) findPreference("homeOrientation");
 		listPref.setOnPreferenceChangeListener(this);
-		if (checkBoxPref.isChecked()) {
+		if (checkPref.isChecked()) {
 			CharSequence[] entries = listPref.getEntries();
 			listPref.setSummary(entries[1]);	// XXX: launcher orientation portrait hard-coded in
 		} else {
@@ -759,19 +775,37 @@ OnPreferenceChangeListener {
 			}
 		} else if (key.equals("main_dock_style")) {
 			CheckBoxPreference dots = (CheckBoxPreference) findPreference("uiDots");
+			CheckBoxPreference lockMAB = (CheckBoxPreference) findPreference("mainDockLockMAB");
+			CheckBoxPreference hide = (CheckBoxPreference)findPreference("mainDockDrawerHide");
+
 			int val = Integer.valueOf(newValue.toString());
-			if (val == Launcher.DOCK_STYLE_5 || val == Launcher.DOCK_STYLE_NONE) {
+
+			switch (val) {
+			case Launcher.DOCK_STYLE_NONE:
 				dots.setChecked(false);
 				dots.setEnabled(false);
-			} else {
-				dots.setEnabled(true);
-			}
-			CheckBoxPreference lockMAB = (CheckBoxPreference) findPreference("mainDockLockMAB");
-			if (val == Launcher.DOCK_STYLE_NONE) {
+
 				lockMAB.setEnabled(false);
-			} else {
+
+				hide.setEnabled(false);
+				break;
+			case Launcher.DOCK_STYLE_5:
+				dots.setChecked(false);
+				dots.setEnabled(false);
+
 				lockMAB.setEnabled(true);
+
+				hide.setEnabled(true);
+				break;
+			default:	//styles 1, 3
+				dots.setEnabled(true);
+
+				lockMAB.setEnabled(true);
+
+				hide.setEnabled(true);
+				break;
 			}
+
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 		} else if (key.equals("drawerStyle")) {
@@ -799,7 +833,9 @@ OnPreferenceChangeListener {
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 		} else if (key.equals("deleteZoneLocation") || 
 				key.equals("desktopTransitionStyle") || 
-				key.equals("homeOrientation")) {
+				key.equals("homeOrientation") ||
+				key.equals("mainDockDrawerHide")) {
+
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
 		} else if (key.equals("systemPersistent")) {
@@ -807,7 +843,7 @@ OnPreferenceChangeListener {
 			ListPreference listPref = (ListPreference) findPreference("homeOrientation");
 			CharSequence[] entries = listPref.getEntries();
 			if (Boolean.parseBoolean(newValue.toString())) {
-				listPref.setSummary(entries[1]);	// XXX: launcher orientation portrait hard-coded in
+				listPref.setSummary(null);	// blank orientation selection
 			} else {
 				listPref.setSummary(listPref.getEntry());
 			}

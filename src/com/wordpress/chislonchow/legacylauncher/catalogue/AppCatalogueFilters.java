@@ -33,19 +33,19 @@ public final class AppCatalogueFilters {
 	private static AppCatalogueFilters sInstance;
 
 	public synchronized static AppCatalogueFilters getInstance() {
-        if (sInstance == null) {
-        	sInstance = new AppCatalogueFilters();
-        }
-        return sInstance;
-    }
+		if (sInstance == null) {
+			sInstance = new AppCatalogueFilters();
+		}
+		return sInstance;
+	}
 
 
-	public class Catalogue {
+	public class Catalog {
 		private final int mIndex;
 		private final SharedPreferences mPreferences;
 		private final String mTitle;
 
-		public Catalogue(String title, int index) {
+		public Catalog(String title, int index) {
 			mIndex = index;
 			mTitle = title;
 			mPreferences = mContext.getSharedPreferences(APP_GROUP_PREFS_PREFIX + index, 0);
@@ -65,9 +65,9 @@ public final class AppCatalogueFilters {
 
 		public void setTitleView(TextView v) {
 			if (mTitle != null) {
-				v.setText(mTitle);
+				v.setText(mContext.getResources().getString(R.string.app_group_prepend) + mTitle);
 			} else {
-				v.setText(R.string.AppGroupAdd);
+				v.setText(R.string.app_group_add);
 			}
 		}
 	}
@@ -78,7 +78,7 @@ public final class AppCatalogueFilters {
 	private final AppCatalogueFilter mDrawerFilter = new AppCatalogueFilter();
 
 	private SharedPreferences mAllGroupsIndex = null;
-	private final Hashtable<Integer, Catalogue> mAllAppGroups = new Hashtable<Integer, Catalogue>();
+	private final Hashtable<Integer, Catalog> mAllAppGroups = new Hashtable<Integer, Catalog>();
 
 	private AppCatalogueFilters() {}
 
@@ -97,7 +97,7 @@ public final class AppCatalogueFilters {
 	{
 		if (!mAllAppGroups.containsKey(index))
 			return; // invalid index, do nothing.
-		Catalogue cat = mAllAppGroups.get(index);
+		Catalog cat = mAllAppGroups.get(index);
 		SharedPreferences.Editor ed = cat.getPreferences().edit();
 		ed.clear();
 		ed.commit();
@@ -115,7 +115,7 @@ public final class AppCatalogueFilters {
 		SharedPreferences.Editor editor = mAllGroupsIndex.edit();
 		editor.putString("GrpName"+grp, grpName);
 		editor.commit();
-		Catalogue cat = new Catalogue(grpName, grp);
+		Catalog cat = new Catalog(grpName, grp);
 		mAllAppGroups.put(grp, cat);
 
 		return grp;
@@ -149,15 +149,15 @@ public final class AppCatalogueFilters {
 			if (key.startsWith(PREF_GRP_NAME)) {
 				String title = mAllGroupsIndex.getString(key, "");
 				int index = Integer.parseInt(key.substring(prefNameLen));
-				Catalogue cat = new Catalogue(title, index);
+				Catalog cat = new Catalog(title, index);
 				mAllAppGroups.put(index, cat);
 			}
 		}
 	}
 
-	public List<Catalogue> getAllGroups() {
-		List<Catalogue> result = new ArrayList<Catalogue>(mAllAppGroups.size());
-		for (Catalogue itm : mAllAppGroups.values()) {
+	public List<Catalog> getAllGroups() {
+		List<Catalog> result = new ArrayList<Catalog>(mAllAppGroups.size());
+		for (Catalog itm : mAllAppGroups.values()) {
 			result.add(itm);
 		}
 		return result;
@@ -172,7 +172,7 @@ public final class AppCatalogueFilters {
 		return result;
 	}
 
-	public Catalogue getCatalogue(int index) {
+	public Catalog getCatalogue(int index) {
 		if (mAllAppGroups.containsKey(index))
 			return mAllAppGroups.get(index);
 		else

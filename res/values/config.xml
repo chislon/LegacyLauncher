@@ -41,6 +41,7 @@
     <bool name="config_desktop_label_color_override">false</bool>
 
     <integer name="config_desktop_label_color_text">0xffffffff</integer>
+    <integer name="config_desktop_label_color_shadow">0xff000000</integer>
     <integer name="config_desktop_label_color_bg">0xb2191919</integer>
 
     <bool name="config_desktop_looping">false</bool>
@@ -66,7 +67,7 @@
     <bool name="config_previews_enable">true</bool>
     <bool name="config_previews_spread">true</bool>
     <bool name="config_ui_dots">false</bool>
-    <bool name="config_ui_close_folder">false</bool>
+    <bool name="config_ui_close_folder">true</bool>
 
     <!-- config_ui_close_folder min is 8, so it will add 8 to whatever value you set here -->
     <integer name="config_folder_text_size">6</integer>
@@ -94,12 +95,14 @@
 
     <bool name="config_autosize_icons">false</bool>
     <bool name="config_drawer_labels">true</bool>
+    <bool name="config_drawer_label_color_override">false</bool>
+
+    <integer name="config_drawer_label_color">0xffffffff</integer>
 
     <!-- config min value is 8, so it will add 8 to whatever value you set here -->
     <integer name="config_drawer_label_size">6</integer>
 
     <bool name="config_drawer_label_bold">false</bool>
-    <bool name="config_fade_drawer_labels">false</bool>
     <bool name="config_desktop_indicator">true</bool>
     <bool name="config_desktop_indicator_autohide">false</bool>
     <bool name="config_desktop_indicator_color_allow">false</bool>
@@ -127,6 +130,7 @@
 
     <string name="config_main_dock_style">2</string>
 
+    <bool name="config_main_dock_drawer_hide">false</bool>
     <bool name="config_main_dock_lock_MAB">true</bool>
 
     <string name="config_drawer_style">1</string>

@@ -18,10 +18,6 @@ package com.wordpress.chislonchow.legacylauncher;
 
 //import com.wordpress.chislonchow.legacylauncher.catalogue.CataGridView;
 
-import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
-import com.wordpress.chislonchow.legacylauncher.catalogue.AppGroupAdapter;
-import com.wordpress.chislonchow.legacylauncher.R;
-
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
@@ -33,16 +29,21 @@ import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListAdapter;
-import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
+import com.wordpress.chislonchow.legacylauncher.catalogue.AppGroupAdapter;
 
 public class AllAppsGridView extends GridView implements
 AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
@@ -59,7 +60,6 @@ DragSource, Drawer {
 	private int mStatus = CLOSED;
 	private boolean isAnimating;
 	private long startTime;
-	private float mScaleFactor;
 	private int mIconSize = 0;
 	private int mBgAlpha = 255;
 	private int mTargetAlpha = 255;
@@ -68,10 +68,7 @@ DragSource, Drawer {
 	private int mAnimationDuration = 800;
 	private int mBgColor = 0xFF000000;
 	private boolean mDrawLabels = true;
-	private boolean mFadeDrawLabels = false;
 	private boolean mDrawerZoom = false;
-
-	private float mLabelFactor;
 
 	private Rect rl1=new Rect();
 	private Rect rl2=new Rect();
@@ -144,14 +141,18 @@ DragSource, Drawer {
 				.getItemAtPosition(position);
 		app = new ApplicationInfo(app);
 
+		/*
 		mLauncher.showQuickActionWindow(app, view, new PopupWindow.OnDismissListener()
 		{
 			@Override
 			public void onDismiss()
 			{
-				mLauncher.closeAllApplications();
+		 */
+		mLauncher.closeAllApplications();
+		/*
 			}
 		});
+		 */
 		mDragger.startDrag(view, this, app, DragController.DRAG_ACTION_COPY);
 
 		return true;
@@ -171,27 +172,6 @@ DragSource, Drawer {
 	}
 
 	/**
-	 * ADW: easing functions for animation
-	 */
-	static float easeOut(float time, float begin, float end, float duration) {
-		float change = end - begin;
-		return change * ((time = time / duration - 1) * time * time + 1)
-				+ begin;
-	}
-
-	static float easeIn(float time, float begin, float end, float duration) {
-		float change = end - begin;
-		return change * (time /= duration) * time * time + begin;
-	}
-
-	static float easeInOut(float time, float begin, float end, float duration) {
-		float change = end - begin;
-		if ((time /= duration / 2.0f) < 1)
-			return change / 2.0f * time * time * time + begin;
-		return change / 2.0f * ((time -= 2.0f) * time * time + 2.0f) + begin;
-	}
-
-	/**
 	 * ADW: Override drawing methods to do animation
 	 */
 	@Override
@@ -205,15 +185,7 @@ DragSource, Drawer {
 			} else {
 				currentTime = SystemClock.uptimeMillis() - startTime;
 			}
-			if (mStatus == OPENING) {
-				mScaleFactor = easeOut(currentTime, 3.0f, 1.0f, mAnimationDuration);
-				mLabelFactor = easeOut(currentTime, -1.0f, 1.0f, mAnimationDuration);
-			} else if (mStatus == CLOSING) {
-				mScaleFactor = easeIn(currentTime, 1.0f, 3.0f, mAnimationDuration);
-				mLabelFactor = easeIn(currentTime, 1.0f, -1.0f, mAnimationDuration);
-			}
-			if (mLabelFactor < 0)
-				mLabelFactor = 0;
+
 			if (currentTime >= mAnimationDuration) {
 				isAnimating = false;
 				if (mStatus == OPENING) {
@@ -225,35 +197,22 @@ DragSource, Drawer {
 				}
 			}
 		}
-		shouldDrawLabels = mFadeDrawLabels && mDrawLabels
-				&& (mStatus == OPENING || mStatus == CLOSING);
-		float percentageScale = 1.0f;
-		if (isAnimating) {
-			percentageScale = 1.0f - ((mScaleFactor - 1) / 3.0f);
-			if (percentageScale > 0.9f)
-				percentageScale = 1f;
-			if (percentageScale < 0)
-				percentageScale = 0;
-			mBgAlpha = (int) (percentageScale * 255);
-		}
-		mPaint.setAlpha(mBgAlpha);
+		shouldDrawLabels = mDrawLabels && (mStatus == OPENING || mStatus == CLOSING);
+
 		if (getVisibility() == View.VISIBLE) {
 			canvas
-			.drawARGB((int) (percentageScale * mTargetAlpha), Color
+			.drawARGB((int) (mTargetAlpha), Color
 					.red(mBgColor), Color.green(mBgColor), Color
 					.blue(mBgColor));
 			int index = ((ApplicationsAdapter) getAdapter()).getCatalogueFilter().getCurrentFilterIndex();
-			if (mLastIndexDraw != index)
-			{
+			if (mLastIndexDraw != index) {
 				mLastIndexDraw = index;
-				int title = isUngroupMode?R.string.AppGroupUn:R.string.AppGroupAll;
+				int title = isUngroupMode ? R.string.app_group_un:R.string.app_group_all;
 				mGroupTitle = (index == AppGroupAdapter.APP_GROUP_ALL ? mLauncher.getString(title) : AppCatalogueFilters.getInstance()
 						.getGroupTitle(index));
 
-				// ((LauncherPlus)mLauncher).groupTitlePopupWindow(mLauncher,
-				// AllAppsGridView.this, name);
 				mGroupTitleText = new TextView(getContext());
-				mGroupTitleText.setTextSize(15);
+				mGroupTitleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);	// fix px->sp
 				mGroupTitleText.setText(mGroupTitle);
 				mGroupTitleText.setTextColor(Color.WHITE);
 
@@ -274,16 +233,7 @@ DragSource, Drawer {
 
 			if ( mShouldDrawGroupText )
 			{
-				if (mStatus == OPEN )
-				{
-					mGroupPaint.setAlpha(255);
-					canvas.drawText(mGroupTitle, mGroupTextX, mGroupTextY, mGroupPaint);
-				}
-				else if ( isAnimating && mStatus == OPENING)
-				{
-					mGroupPaint.setAlpha((int) (mLabelFactor * 255));
-					canvas.drawText(mGroupTitle, mGroupTextX, mGroupTextY, mGroupPaint);
-				}
+				canvas.drawText(mGroupTitle, mGroupTextX, mGroupTextY, mGroupPaint);
 				canvas.translate(0, mGroupTextY);
 			}
 
@@ -306,30 +256,21 @@ DragSource, Drawer {
 		int childTop = child.getTop();
 		if (isAnimating) {
 			postInvalidate();
-			float distH = (childLeft + (childWidth / 2))
-					- (getWidth() / 2);
-			float distV = (childTop + (child.getHeight() / 2))
-					- (getHeight() / 2);
-			float scaleFactor;
-			if (mDrawerZoom) {
-				scaleFactor = mScaleFactor;
-			} else {
-				scaleFactor = 1;
-			}
-			float x = childLeft + (distH * (scaleFactor - 1)) * scaleFactor;
-			float y = childTop + (distV * (scaleFactor - 1)) * scaleFactor;
-			float width = childWidth * scaleFactor;
+
+			float x = childLeft;
+			float y = childTop;
+			float width = childWidth;
 			if (shouldDrawLabels) {
 				child.setDrawingCacheEnabled(true);
 				child.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
 				b = child.getDrawingCache();
+
 				if ( b != null) {
 					// ADW: try to manually draw labels
 					int bHeight = b.getHeight();
 					int bWidth = b.getWidth();
 					rl1.set(0, mIconSize, bWidth, bHeight);
 					rl2.set(childLeft, childTop + mIconSize, childLeft + bWidth,childTop + bHeight);
-					mLabelPaint.setAlpha((int) (mLabelFactor * 255));
 					canvas.drawBitmap(b, rl1, rl2, mLabelPaint);
 				}
 			}
@@ -339,22 +280,27 @@ DragSource, Drawer {
 			canvas.scale(scale, scale);
 
 			tmp[1].draw(canvas);
+
 		} else {
 			int alpha = 255;
-			if ( mStatusTransformation )
-			{
+
+			if ( mStatusTransformation ) {
 				getChildStaticTransformation( child, mTransformation);
-				alpha = (int) (mTransformation.getAlpha() * 255);
+				alpha = (int) Math.min((mTransformation.getAlpha() * 255), 255);	// fix for flickering
 			}
+
 			if (mDrawLabels) {
 				child.setDrawingCacheEnabled(true);
+				child.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
 				b = child.getDrawingCache();
 				if (b != null) {
 					mPaint.setAlpha(alpha);
 					canvas.drawBitmap(b, childLeft, childTop, mPaint);
 				} else {
+					/*
 					canvas.saveLayerAlpha(childLeft, childTop, childLeft + childWidth, childTop + child.getHeight(), (int) (mTransformation.getAlpha() * 255),
 							Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG);
+					 */
 					canvas.translate(childLeft, childTop);
 					child.draw(canvas);
 				}
@@ -372,28 +318,36 @@ DragSource, Drawer {
 	 * Open/close public methods
 	 */
 	public void open(boolean animate) {
+		mDrawerZoom = MyLauncherSettingsHelper.getDrawerZoom(mLauncher);
 		mLastIndexDraw = -99;
 		mBgColor = MyLauncherSettingsHelper.getDrawerColor(mLauncher);
 		mTargetAlpha = Color.alpha(mBgColor);
 		mDrawLabels = MyLauncherSettingsHelper.getDrawerLabels(mLauncher);
-		mFadeDrawLabels = MyLauncherSettingsHelper
-				.getFadeDrawerLabels(mLauncher);
-		mDrawerZoom = MyLauncherSettingsHelper
-				.getDrawerZoom(mLauncher);
+
 		if(getAdapter()==null)
 			animate=false;
 		else if(getAdapter().getCount()<=0)
 			animate=false;
 		if (animate) {
-
-			if (mFadeDrawLabels && mDrawLabels) {
+			if (mDrawLabels) {
 				ListAdapter adapter = getAdapter();
 				if (adapter instanceof ApplicationsAdapter)
 					((ApplicationsAdapter)adapter).setChildDrawingCacheEnabled(true);
 			}
-			mBgAlpha = 0;
+
+			mBgAlpha = mTargetAlpha;
 			isAnimating = true;
 			mStatus = OPENING;
+
+			Animation ani;
+			if (mDrawerZoom) {
+				ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_zoom_in);
+			} else {
+				ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_fade_in);
+			}
+			ani.setDuration(mAnimationDuration);
+			startAnimation(ani);
+
 		} else {
 			mBgAlpha = mTargetAlpha;
 			isAnimating = false;
@@ -412,6 +366,15 @@ DragSource, Drawer {
 		if (animate) {
 			mStatus = CLOSING;
 			isAnimating = true;
+
+			Animation ani;
+			if (mDrawerZoom) {
+				ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_zoom_out);
+			} else {
+				ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_fade_out);
+			}
+			ani.setDuration(mAnimationDuration);
+			startAnimation(ani);
 		} else {
 			mStatus = CLOSED;
 			isAnimating = false;
@@ -566,7 +529,7 @@ DragSource, Drawer {
 	protected void onLayout(boolean changed, int l, int t, int r, int b)
 	{
 		super.onLayout(changed, l, t, r, b);
-		
+
 		if (MyLauncherSettingsHelper.getDrawerCatalogsFlingNavigation(getContext())) {
 			setupGestures();
 
@@ -671,6 +634,6 @@ DragSource, Drawer {
 	@Override
 	public void setOvershoot(boolean value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

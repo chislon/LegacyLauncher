@@ -1,57 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-    
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
         android:layout_gravity="right"
-        android:background="#AAAAAAAA">
-        
-        <TextView android:text="@string/selectAll" 
+        android:background="#AAAAAAAA"
+        android:gravity="left"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2.0dip"
+            android:gravity="left"
+            android:text="@string/sortType"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <Spinner
+            android:id="@+id/sortType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_default"
+            android:gravity="left"
+            android:prompt="@string/sortType" />
+
+        <ToggleButton
+            android:id="@+id/sortDirection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/togglebutton_arrows_up_down"
+            android:gravity="left"
+            android:textOff=""
+            android:textOn="" />
+
+        <TextView
+            android:id="@+id/text_select_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:gravity="right"
-            android:textAppearance="?android:attr/textAppearanceMedium" />    
-        <CheckBox android:id="@+id/checkAll" 
-            android:layout_width="wrap_content" 
-            android:layout_height="wrap_content"
-            android:layout_weight="0">          
-        </CheckBox>
-        
-    </LinearLayout>
-    
+            android:text="@string/selectAll"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <ListView android:id="@android:id/list"
+        <CheckBox
+            android:id="@+id/checkAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0" >
+        </CheckBox>
+    </LinearLayout>
+
+    <ListView
+        android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:transcriptMode="normal" >
-    
     </ListView>
-    
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom">
-        
-        <Button android:text="@android:string/ok" 
-            android:id="@+id/Button_Ok_App" 
-            android:layout_weight="1" 
-            android:layout_width="fill_parent" 
-            android:layout_height="fill_parent">
+        android:gravity="bottom"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/Button_cancel_app_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@android:string/cancel" >
         </Button>
 
+        <Button
+            android:id="@+id/Button_ok_app_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/done" >
+        </Button>
     </LinearLayout>
-    
 
 </LinearLayout>
-
