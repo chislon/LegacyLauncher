@@ -3,9 +3,9 @@
 
     <string name="changelog">-&lt;b>NOTICE:&lt;/b> This is a beta release with no support &lt;br>&lt;br>
 -&lt;b>NOTICE:&lt;/b> To add/remove screens press MENU/Edit Desktop&lt;br>&lt;br>
-&lt;b>--------------&lt;/b>&lt;br>
+--------------&lt;br>&lt;br>
 &lt;b>Version 0.17:&lt;/b>&lt;br>
-&lt;b>- Fix FC with catalogs less than Android 2.3, other changes to catalogs&lt;/b>&lt;br>
+- Fix FC with catalogs less than Android 2.3, other changes to catalogs&lt;br>
 &lt;b>Version 0.16:&lt;/b>&lt;br>
 - Changes for animations, adjustable font color, update to apps list (Cyanogenmod)&lt;br>&lt;br>
 &lt;b>Version 0.15:&lt;/b>&lt;br>
