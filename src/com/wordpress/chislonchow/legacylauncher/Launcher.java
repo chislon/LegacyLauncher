@@ -665,10 +665,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					.getRowsLandscape(Launcher.this));
 		}
 
-		if (mDrawerStyle == 1) {
-			//mAllAppsGrid.se
-		}
-
 		mWorkspace.setWallpaper(false);
 		if (mRestoring) {
 			startLoaders();
@@ -700,6 +696,22 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 
 		mIsNewIntent = false;
+	}
+	
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+
+		// update locked variables
+		mLauncherLocked = MyLauncherSettingsHelper.getLauncherLocked(this);
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		dismissQuickActionWindow();
 	}
 
 	@Override
@@ -3568,12 +3580,12 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		if (mIsEditMode || mIsWidgetEditMode)
 			return;
 		updateAlmostNexusVars();
-		float scale = MyLauncherSettingsHelper.getuiScaleAB(this);
+		float uiScaleAB = MyLauncherSettingsHelper.getuiScaleAB(this);
 		boolean tint = MyLauncherSettingsHelper.getUIABTint(this);
 		int tintcolor = MyLauncherSettingsHelper.getUIABTintColor(this);
-		if (scale != mUiScaleAB || tint != mUiABTint
+		if (uiScaleAB != mUiScaleAB || tint != mUiABTint
 				|| tintcolor != mUiABTintColor) {
-			mUiScaleAB = scale;
+			mUiScaleAB = uiScaleAB;
 			mUiABTint = tint;
 			mUiABTintColor = tintcolor;
 			mRAB.updateIcon();
@@ -4579,22 +4591,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	public DesktopIndicator getDesktopIndicator() {
 		return mDesktopIndicator;
-	}
-
-	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-
-		// update locked variables
-		mLauncherLocked = MyLauncherSettingsHelper.getLauncherLocked(this);
-	}
-
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		dismissQuickActionWindow();
 	}
 
 	private boolean checkDefaultLauncher() {

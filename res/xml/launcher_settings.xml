@@ -363,7 +363,7 @@
 			<com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference
 				android:title="@string/pref_title_ab_scale_factor" android:summary="@string/pref_summary_ab_scale_factor"
 				android:dialogMessage="@string/pref_dialog_ab_scale_factor"
-				android:key="uiScaleAB" android:defaultValue="7" android:max="9" />
+				android:key="uiScaleAB" android:defaultValue="7" android:max="11" />
 			<CheckBoxPreference android:title="@string/pref_title_hide_ab_bg"
 				android:defaultValue="@bool/config_ui_ab_hide_bg" android:summary="@string/pref_summary_hide_ab_bg"
 				android:key="uiABBg" />

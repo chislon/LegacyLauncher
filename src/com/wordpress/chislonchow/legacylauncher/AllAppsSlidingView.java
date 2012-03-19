@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.HapticFeedbackConstants;
@@ -37,6 +38,10 @@ import android.widget.Scroller;
 
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
 public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> implements OnItemClickListener, OnItemLongClickListener, DragSource, Drawer{// implements DragScroller{
+
+	private static final String LOG_TAG = "AllAppsSlidingView";
+	private static final boolean LOGD = false;
+
 	private static final int DEFAULT_SCREEN = 0;
 	private static final int INVALID_SCREEN = -1;
 
@@ -81,7 +86,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private int mNumColumns=2;
 	private int mNumRows=2;
 	private int paginatorSpace=16;
-	
+
 	private static final int LAYOUT_NORMAL = 0;
 	private static final int LAYOUT_SCROLLING = 1;
 	int mLayoutMode = LAYOUT_NORMAL;
@@ -164,7 +169,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private int mScrollToScreen;
 	//ADW: Animation variables
 	private boolean isAnimating=false;
-	
+
 	private int mBgAlpha=255;
 	private int mTargetAlpha=255;
 	private int mAnimationDuration=800;
@@ -173,16 +178,15 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	//ADW: overshoot pixels scroll
 	private boolean mScrollingOvershoot=false;
 	//CCHOW: Snap to original screen speed
-	//XXX: make this configurable
 	private int mScrollingSnap = 50;
 
 	//ADW:Bg color
 	private int mBgColor=0xFF000000;
-	
+
 	private static int STATUS_OPEN = 0;		// can be opening or opened
 	private static int STATUS_CLOSE = 1;	// can be closing or closed
 	private int mStatus=STATUS_CLOSE;
-	
+
 	public AllAppsSlidingView(Context context) {
 		super(context);
 		initView();
@@ -355,8 +359,9 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		makePage(mCurrentScreen-1);
 		makePage(mCurrentScreen);
 		makePage(mCurrentScreen+1);
-		requestFocus();
 		setFocusable(true);
+		requestFocus();
+
 		mDataChanged = false;
 		mBlockLayouts=true;
 		findCurrentHolder();
@@ -385,7 +390,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		int x=marginLeft;
 		int y=marginTop;
 		AllAppsSlidingViewHolderLayout holder = new AllAppsSlidingViewHolderLayout(getContext());
-		
+
 		for(int i=0;i<mNumRows;i++){
 			for(int j=0;j<mNumColumns;j++){
 				if(pos<mAdapter.getCount()){
@@ -417,7 +422,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		holder.layout(pageSpacing, paginatorSpace, pageSpacing+mPageWidth, getMeasuredHeight());
 
 		holder.setTag(pageNum);
-		
+
 		addViewInLayout(holder, getChildCount(), holderParams, true);
 		if(pageNum==mCurrentScreen && isAnimating){
 			if(mStatus==STATUS_OPEN)
@@ -949,6 +954,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			int realScreen=mCurrentHolder;
 			final ViewGroup h=(ViewGroup)getChildAt(realScreen);
 			//ADW: fix possible nullPointerException when flinging too fast
+			//XXX
 			if(h!=null){
 				for(int i=0;i<h.getChildCount();i++){
 					final View child = h.getChildAt(i);
@@ -964,7 +970,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		return null;
 	}
 	private void snapToDestination() {
-		//Log.d("AllAppsSlidingView", " snapToDestination");
+		if (LOGD)
+			Log.d("AllAppsSlidingView", " snapToDestination");
 
 		final int screenWidth = mPageWidth;
 		final int whichScreen = (getScrollX() + (screenWidth / 2)) / screenWidth;
@@ -973,8 +980,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 	void snapToScreen(int whichScreen) {
 		if (!mScroller.isFinished()) return;
-
-		//Log.d("AllAppsSlidingView", " snapToScreen " + whichScreen);
+		if (LOGD)
+			Log.d("AllAppsSlidingView", " snapToScreen " + whichScreen);
 
 		whichScreen = Math.max(0, Math.min(whichScreen, mTotalScreens - 1));
 		boolean changingScreens = whichScreen != mCurrentScreen;
@@ -1032,8 +1039,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			mAdapter.registerDataSetObserver(mDataSetObserver);
 
 			mRecycler.setViewTypeCount(mAdapter.getViewTypeCount());
-
 		}
+
 		mBlockLayouts=false;
 		requestLayout();
 	}
@@ -1712,12 +1719,14 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 		@Override
 		public void onChanged() {
+			if (LOGD)
+				Log.d(LOG_TAG, "AdapterDataSetObserver onChanged");
 			mDataChanged = true;
 			mOldItemCount = mItemCount;
 			mItemCount = getAdapter().getCount();
 			mTotalScreens=getPageCount();
 			mPager.setTotalItems(mTotalScreens);
-			
+
 			if(mTotalScreens-1<mCurrentScreen){
 				scrollTo(0, 0);
 				mCurrentScreen=0;
@@ -1726,7 +1735,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 				mScrollToScreen=0;
 				mLayoutMode=LAYOUT_NORMAL;
 			}
-			
+
 			// Detect the case where a cursor that was previously invalidated has
 			// been repopulated with new data.
 			if (AllAppsSlidingView.this.getAdapter().hasStableIds() && mInstanceState != null
@@ -1805,64 +1814,68 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		mDragger=dragger;
 
 	}
+
+	private void snapBackToOrigin() {
+		if (LOGD)
+			Log.d(LOG_TAG, "snapBackToOrigin");
+		if(mAdapter!=null){
+			scrollTo(0, 0);
+			mTotalScreens=getPageCount();
+			mCurrentScreen=0;
+			mCurrentHolder=1;
+			mPager.setTotalItems(mTotalScreens);
+			mPager.setCurrentItem(0);
+			mBlockLayouts=false;
+			mScrollToScreen=0;
+			mLayoutMode=LAYOUT_NORMAL;
+			requestLayout();
+		}
+	}
+
+	/*
+	 * Some functions to setup the look of the sliding drawer
+	 */
 	public int getNumColumns() {
 		return mNumColumns;
 	}
+
 	public void setPageHorizontalMargin(int margin) {
-		if(margin!=mScaledPageHorizontalMargin){
-			final float scale = getContext().getResources().getDisplayMetrics().density;
-			this.mScaledPageHorizontalMargin = (int) (margin * scale);
-			if(mAdapter!=null){
-				scrollTo(0, 0);
-				mTotalScreens=getPageCount();
-				mCurrentScreen=0;
-				mCurrentHolder=1;
-				mPager.setTotalItems(mTotalScreens);
-				mPager.setCurrentItem(0);
-				mBlockLayouts=false;
-				mScrollToScreen=0;
-				mLayoutMode=LAYOUT_NORMAL;
-				requestLayout();
-			}
+		if (LOGD)
+			Log.d(LOG_TAG, "setPageHorizontalMargin: mScaledPageHorizontalMargin " + mScaledPageHorizontalMargin + ", margin " + margin);
+		final int scaledMarginNew = (int) (margin * getContext().getResources().getDisplayMetrics().density);
+		if(scaledMarginNew!=mScaledPageHorizontalMargin){
+			this.mScaledPageHorizontalMargin = scaledMarginNew;
+			snapBackToOrigin();
 		}
 	}
 	public void setNumColumns(int numColumns) {
+		if (LOGD)
+			Log.d(LOG_TAG, "setNumColumns: mNumColumns " + mNumColumns + ", numColumns " + numColumns);
 		if(mNumColumns!=numColumns){
 			this.mNumColumns = numColumns;
-			if(mAdapter!=null){
-				scrollTo(0, 0);
-				mTotalScreens=getPageCount();
-				mCurrentScreen=0;
-				mCurrentHolder=1;
-				mPager.setTotalItems(mTotalScreens);
-				mPager.setCurrentItem(0);
-				mBlockLayouts=false;
-				mScrollToScreen=0;
-				mLayoutMode=LAYOUT_NORMAL;
-				requestLayout();
-			}
+			snapBackToOrigin();
 		}
 	}
+
 	public int getNumRows() {
 		return mNumRows;
 	}
+
 	public void setNumRows(int numRows) {
+		if (LOGD)
+			Log.d(LOG_TAG, "setNumRows: mNumRows " + mNumRows + ", numRows " + numRows);
 		if(mNumRows!=numRows){
 			this.mNumRows = numRows;
-			if(mAdapter!=null){
-				scrollTo(0, 0);
-				mTotalScreens=getPageCount();
-				mCurrentScreen=0;
-				mCurrentHolder=1;
-				mPager.setTotalItems(mTotalScreens);
-				mPager.setCurrentItem(0);
-				mBlockLayouts=false;
-				mScrollToScreen=0;
-				mLayoutMode=LAYOUT_NORMAL;
-				requestLayout();
-			}
+			snapBackToOrigin();
 		}
 	}
+
+
+	/*
+	 * called when opened
+	 * (non-Javadoc)
+	 * @see com.wordpress.chislonchow.legacylauncher.Drawer#open(boolean)
+	 */
 	public void open(boolean animate) {
 		mStatus=STATUS_OPEN;
 		mBgColor=MyLauncherSettingsHelper.getDrawerColor(mLauncher);
@@ -1879,7 +1892,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		mScroller.forceFinished(true);
 
 		setVisibility(View.VISIBLE);
-		
+
 		findCurrentHolder();
 		final AllAppsSlidingViewHolderLayout holder=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
 		if (holder==null) {
@@ -1910,10 +1923,15 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		mPager.requestLayout();
 	}
 
+	/* 
+	 * Called when closed
+	 * (non-Javadoc)
+	 * @see com.wordpress.chislonchow.legacylauncher.Drawer#close(boolean)
+	 */
 	public void close(boolean animate) {
 		mStatus=STATUS_CLOSE;
 		setPressed(false);
-		
+
 		if(animate) {
 			Animation ani;
 			if (mDrawerZoom) {
@@ -1954,7 +1972,11 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		}
 	}
 	public void updateAppGrp() {
-		if(getAdapter() != null){
+		if (LOGD)
+			Log.d(LOG_TAG, "updateAppGrp");
+		if (getAdapter() != null) {
+			if (LOGD)
+				Log.d(LOG_TAG, "updateAppGrp with adapter");
 			(getAdapter()).updateDataSet();
 			scrollTo(0, 0);
 			mTotalScreens = getPageCount();
@@ -2149,7 +2171,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		if (!isVisible()) {
 			setVisibility(View.GONE);
 			mLauncher.getWorkspace().clearChildrenCache();
-			
+
 			findCurrentHolder();
 			final AllAppsSlidingViewHolderLayout holder=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
 			holder.setHolderStatus(AllAppsSlidingViewHolderLayout.HOLDER_CLOSED);

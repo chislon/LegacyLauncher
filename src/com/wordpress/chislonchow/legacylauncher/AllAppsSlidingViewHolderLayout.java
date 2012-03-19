@@ -15,10 +15,10 @@ import android.widget.TextView;
 public class AllAppsSlidingViewHolderLayout extends ViewGroup {
 	//ADW: Animation vars
 	protected final static int HOLDER_CLOSED 	= 1;
-	protected final static int HOLDER_OPENED 		= 2;
+	protected final static int HOLDER_OPENED 	= 2;
 	protected final static int HOLDER_CLOSING 	= 3;
 	protected final static int HOLDER_OPENING 	= 4;
-	private int mStatus=HOLDER_OPENED;
+	private int mStatus = HOLDER_OPENED;
 	private boolean isAnimating;
 	private int mIconSize=0;
 	private Paint mPaint;
@@ -149,7 +149,7 @@ public class AllAppsSlidingViewHolderLayout extends ViewGroup {
 		}
 		// lower quality when drawing
 		if(isAnimating) {
-			postInvalidate();
+			//postInvalidate();
 
 			if(mDrawLabels) {
 				child.setDrawingCacheEnabled(true);

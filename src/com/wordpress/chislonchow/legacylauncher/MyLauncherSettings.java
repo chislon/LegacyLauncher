@@ -91,9 +91,9 @@ OnPreferenceChangeListener {
 		dialogSeekBarPref.setMin(3);
 		dialogSeekBarPref = (PersistentDialogSeekBarPreference) findPreference("desktopRows");
 		dialogSeekBarPref.setMin(3);
+		
 		dialogSeekBarPref = (PersistentDialogSeekBarPreference) findPreference("drawerColumnsPortrait");
 		dialogSeekBarPref.setMin(1);
-
 		PersistentDialogSeekBarPreference rowsPortrait = (PersistentDialogSeekBarPreference) findPreference("drawerRowsPortrait");
 		rowsPortrait.setMin(1);
 		PersistentDialogSeekBarPreference columnsLandscape = (PersistentDialogSeekBarPreference) findPreference("drawerColumnsLandscape");

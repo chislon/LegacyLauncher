@@ -288,7 +288,7 @@ final class Utilities {
      * @param tint
      * @return
      */
-    static Drawable scaledDrawable(Drawable icon,Context context, boolean tint, float scale, int color){
+    static Drawable scaledDrawable(Drawable icon,Context context, boolean tint, float scaleTo, int color){
         final Resources resources=context.getResources();
     	sIconWidth = sIconHeight = (int) resources.getDimension(android.R.dimen.app_icon_size);
       
@@ -317,8 +317,9 @@ final class Utilities {
 	        canvas.drawRect(0, 0, width, 
 	                height, paint);
         }
-        try{
-        	Bitmap endImage=Bitmap.createScaledBitmap(original, (int)(width*scale), (int)(height*scale), true);
+        
+        try {
+        	Bitmap endImage=Bitmap.createScaledBitmap(original, (int)(width*scaleTo), (int)(height*scaleTo), true);
         	original.recycle();
         	return new FastBitmapDrawable(endImage);
         } catch (OutOfMemoryError e) {
