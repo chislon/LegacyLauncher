@@ -26,7 +26,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -53,18 +52,14 @@ DragSource, Drawer {
 	private Launcher mLauncher;
 	private Paint mPaint;
 	// ADW: Animation vars
-	private final static int CLOSED = 1;
-	private final static int OPEN = 2;
-	private final static int CLOSING = 3;
-	private final static int OPENING = 4;
-	private int mStatus = CLOSED;
+	private final static int STATUS_OPEN = 0;
+	private final static int STATUS_CLOSE = 1;
+	private int mStatus = STATUS_CLOSE;
 	private boolean isAnimating;
-	private long startTime;
 	private int mIconSize = 0;
 	private int mBgAlpha = 255;
 	private int mTargetAlpha = 255;
 	private Paint mLabelPaint;
-	private boolean shouldDrawLabels = false;
 	private int mAnimationDuration = 800;
 	private int mBgColor = 0xFF000000;
 	private boolean mDrawLabels = true;
@@ -177,33 +172,13 @@ DragSource, Drawer {
 	@Override
 	public void draw(Canvas canvas) {
 		int saveCount = canvas.save();
-		if (isAnimating) {
-			long currentTime;
-			if (startTime == 0) {
-				startTime = SystemClock.uptimeMillis();
-				currentTime = 0;
-			} else {
-				currentTime = SystemClock.uptimeMillis() - startTime;
-			}
-
-			if (currentTime >= mAnimationDuration) {
-				isAnimating = false;
-				if (mStatus == OPENING) {
-					mStatus = OPEN;
-				} else if (mStatus == CLOSING) {
-					mStatus = CLOSED;
-					mLauncher.getWorkspace().clearChildrenCache();
-					setVisibility(View.GONE);
-				}
-			}
-		}
-		shouldDrawLabels = mDrawLabels && (mStatus == OPENING || mStatus == CLOSING);
 
 		if (getVisibility() == View.VISIBLE) {
-			canvas
-			.drawARGB((int) (mTargetAlpha), Color
-					.red(mBgColor), Color.green(mBgColor), Color
-					.blue(mBgColor));
+			canvas.drawARGB(
+					(int) (mTargetAlpha), 
+					Color.red(mBgColor), 
+					Color.green(mBgColor), 
+					Color.blue(mBgColor));
 			int index = ((ApplicationsAdapter) getAdapter()).getCatalogueFilter().getCurrentFilterIndex();
 			if (mLastIndexDraw != index) {
 				mLastIndexDraw = index;
@@ -231,8 +206,7 @@ DragSource, Drawer {
 						&& AppCatalogueFilters.getInstance().getAllGroups().size() > 0;
 			}
 
-			if ( mShouldDrawGroupText )
-			{
+			if ( mShouldDrawGroupText ){
 				canvas.drawText(mGroupTitle, mGroupTextX, mGroupTextY, mGroupPaint);
 				canvas.translate(0, mGroupTextY);
 			}
@@ -260,7 +234,7 @@ DragSource, Drawer {
 			float x = childLeft;
 			float y = childTop;
 			float width = childWidth;
-			if (shouldDrawLabels) {
+			if (mDrawLabels) {
 				child.setDrawingCacheEnabled(true);
 				child.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
 				b = child.getDrawingCache();
@@ -318,16 +292,14 @@ DragSource, Drawer {
 	 * Open/close public methods
 	 */
 	public void open(boolean animate) {
+		mStatus = STATUS_OPEN;
+		
 		mDrawerZoom = MyLauncherSettingsHelper.getDrawerZoom(mLauncher);
 		mLastIndexDraw = -99;
 		mBgColor = MyLauncherSettingsHelper.getDrawerColor(mLauncher);
 		mTargetAlpha = Color.alpha(mBgColor);
 		mDrawLabels = MyLauncherSettingsHelper.getDrawerLabels(mLauncher);
 
-		if(getAdapter()==null)
-			animate=false;
-		else if(getAdapter().getCount()<=0)
-			animate=false;
 		if (animate) {
 			if (mDrawLabels) {
 				ListAdapter adapter = getAdapter();
@@ -337,7 +309,6 @@ DragSource, Drawer {
 
 			mBgAlpha = mTargetAlpha;
 			isAnimating = true;
-			mStatus = OPENING;
 
 			Animation ani;
 			if (mDrawerZoom) {
@@ -351,20 +322,15 @@ DragSource, Drawer {
 		} else {
 			mBgAlpha = mTargetAlpha;
 			isAnimating = false;
-			mStatus = OPEN;
 		}
-		startTime = 0;
 		this.setVisibility(View.VISIBLE);
 		invalidate();
 	}
 
 	public void close(boolean animate) {
-		if(getAdapter()==null)
-			animate=false;
-		else if(getAdapter().getCount()<=0)
-			animate=false;
+		mStatus = STATUS_CLOSE;
+
 		if (animate) {
-			mStatus = CLOSING;
 			isAnimating = true;
 
 			Animation ani;
@@ -376,12 +342,10 @@ DragSource, Drawer {
 			ani.setDuration(mAnimationDuration);
 			startAnimation(ani);
 		} else {
-			mStatus = CLOSED;
 			isAnimating = false;
 			mLauncher.getWorkspace().clearChildrenCache();
 			setVisibility(View.GONE);
 		}
-		startTime = 0;
 		invalidate();
 	}
 	public void setAnimationSpeed(int speed) {
@@ -635,5 +599,19 @@ DragSource, Drawer {
 	public void setOvershoot(boolean value) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private boolean isVisible() {
+		return mStatus == STATUS_OPEN;
+	}
+
+	@Override
+	protected void onAnimationEnd() {
+		isAnimating = false;
+
+		if (!isVisible()) {
+			setVisibility(View.GONE);
+			mLauncher.getWorkspace().clearChildrenCache();
+		}
 	}
 }

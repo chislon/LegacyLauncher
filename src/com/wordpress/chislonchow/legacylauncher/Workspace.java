@@ -522,7 +522,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 			}
 			postInvalidate();
 		} else if (mNextScreen != INVALID_SCREEN) {
-			int lastScreen = mCurrentScreen;
+			//int lastScreen = mCurrentScreen;
 			mCurrentScreen = Math.max(0, Math.min(mNextScreen, getChildCount() - 1));
 			//ADW: dots
 			//indicatorLevels(mCurrentScreen);

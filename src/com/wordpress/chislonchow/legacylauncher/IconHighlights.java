@@ -47,8 +47,9 @@ public class IconHighlights {
 		return drawable;
 	}
 	private static Drawable oldSelector(Context context, int type){
-		int selectedColor=MyLauncherSettingsHelper.getHighlightsColorFocus(context);
+		//int selectedColor=MyLauncherSettingsHelper.getHighlightsColorFocus(context);
 		int pressedColor=MyLauncherSettingsHelper.getHighlightsColor(context);
+		
 		//ADW: Load the specified theme
 		String themePackage=MyLauncherSettingsHelper.getThemePackageName(context, Launcher.THEME_DEFAULT);
 		Resources themeResources=null;

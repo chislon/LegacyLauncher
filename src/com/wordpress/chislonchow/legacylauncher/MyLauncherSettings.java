@@ -197,17 +197,9 @@ OnPreferenceChangeListener {
 		}
 
 		// system persistent
-		checkPref = (CheckBoxPreference) findPreference("systemPersistent");
-		checkPref.setOnPreferenceChangeListener(this);
-
 		listPref = (ListPreference) findPreference("homeOrientation");
 		listPref.setOnPreferenceChangeListener(this);
-		if (checkPref.isChecked()) {
-			CharSequence[] entries = listPref.getEntries();
-			listPref.setSummary(entries[1]);	// XXX: launcher orientation portrait hard-coded in
-		} else {
-			listPref.setSummary(listPref.getEntry());
-		}
+		listPref.setSummary(listPref.getEntry());
 
 		listPref = (ListPreference) findPreference("drawerStyle");
 		listPref.setOnPreferenceChangeListener(this);
@@ -253,12 +245,14 @@ OnPreferenceChangeListener {
 					}
 				});
 		 */
+		
 		// launcher lock password implementation
 		Preference launcherLockPassword = findPreference("launcherLockPassword");
 		launcherLockPassword.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 				final EditText input = new EditText(mContext);
 				input.setMaxLines(1);
+				input.setHint(getString(R.string.hint_password_new));
 				final int maxLength = 32;  
 				InputFilter[] FilterArray = new InputFilter[2];  
 				FilterArray[0] = new InputFilter.LengthFilter(maxLength);  
@@ -838,15 +832,6 @@ OnPreferenceChangeListener {
 
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
 			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
-		} else if (key.equals("systemPersistent")) {
-			// system persistent updates orientation
-			ListPreference listPref = (ListPreference) findPreference("homeOrientation");
-			CharSequence[] entries = listPref.getEntries();
-			if (Boolean.parseBoolean(newValue.toString())) {
-				listPref.setSummary(null);	// blank orientation selection
-			} else {
-				listPref.setSummary(listPref.getEntry());
-			}
 		}
 		return true;
 	}

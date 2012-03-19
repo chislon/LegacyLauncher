@@ -417,12 +417,8 @@
 			android:title="@string/pref_title_screen_cache" android:summary="@string/pref_summary_screen_cache"
 			android:defaultValue="@string/config_screen_cache"
 			android:entryValues="@array/screen_cache_values" android:entries="@array/screen_cache_entries" />
-		<CheckBoxPreference android:key="systemPersistent"
-			android:disableDependentsState="true" android:title="@string/pref_title_system_persistent"
-			android:summary="@string/pref_summary_system_persistent"
-			android:defaultValue="@bool/config_system_persistent" />
 		<ListPreference android:key="homeOrientation"
-			android:dependency="systemPersistent" android:title="@string/pref_title_orientation_sensor"
+			android:title="@string/pref_title_orientation_sensor"
 			android:defaultValue="@string/config_orientation_default"
 			android:entryValues="@array/home_orientation_values" android:entries="@array/home_orientation_entries" />
 	</PreferenceScreen>
@@ -436,9 +432,6 @@
 		<Preference android:key="launcherLockPasswordClear"
 			android:title="@string/pref_title_lock_password_clear"
 			android:summary="@string/pref_summary_lock_password_clear" />
-		<!-- <CheckBoxPreference android:title="@string/pref_title_lock_option_settings" 
-			android:visibility="invisible" android:defaultValue="false" android:summary="@string/pref_summary_lock_option_settings" 
-			android:key="lockOptionMenuDeviceSettings" /> -->
 	</PreferenceScreen>
 	<PreferenceCategory android:title="@string/pref_title_application_settings">
 		<PreferenceScreen android:key="themePrefences"

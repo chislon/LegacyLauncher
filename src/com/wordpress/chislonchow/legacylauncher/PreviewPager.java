@@ -221,7 +221,7 @@ public class PreviewPager extends ViewGroup {
 			updateLayout();
 		}
 	}
-	protected void setLeft(int value){
+	protected void setPagerLeft(int value){
 		int width=this.mRight-this.mLeft;
 		this.mLeft=value;
 		this.mRight=this.mLeft+width;

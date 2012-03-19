@@ -88,6 +88,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.MessageQueue;
 import android.os.Parcelable;
+import android.os.Vibrator;
 import android.provider.LiveFolders;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -308,7 +309,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private int mAppDrawerPadding = -1;
 
 	private boolean mLauncherLocked = false;
-	private boolean mLockOptionMenuDeviceSettings = false;
 
 	public boolean getPreviewsEnable() {
 		return mPreviewsEnable;
@@ -352,8 +352,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 */
 	private static WallpaperIntentReceiver sWallpaperReceiver;
 	private boolean mShouldRestart = false;
-	private boolean mMessWithPersistence = false;
-	private boolean mIsDefaultLauncher = false;
 	// ADW Theme constants
 	public static final int THEME_ITEM_BACKGROUND = 0;
 	public static final int THEME_ITEM_FOREGROUND = 1;
@@ -409,16 +407,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		mMessWithPersistence = MyLauncherSettingsHelper
-				.getSystemPersistent(this);
-		if (mMessWithPersistence) {
-			changeOrientation(
-					MyLauncherSettingsHelper.getDesktopOrientation(this), true);
-		} else {
-			changeOrientation(
-					MyLauncherSettingsHelper.getDesktopOrientation(this),
-					false);
-		}
+		changeOrientation(MyLauncherSettingsHelper.getDesktopOrientation(this));
 		super.onCreate(savedInstanceState);
 		mInflater = getLayoutInflater();
 
@@ -631,8 +620,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				completeEditShortcut(data);
 				break;
 			}
-		} else if (resultCode == AppInfoMList.RESULT_DELETE_CATALOG && requestCode == REQUEST_SHOW_APP_LIST) {
-			delCurrentGrp();
+		} else if ((resultCode == RESULT_CANCELED) && (requestCode == REQUEST_SHOW_APP_LIST)) {
+			checkActionButtonsSpecialMode();
+			mAllAppsGrid.updateAppGrp();			
 			showAllApps(true, null);
 		} else if ((requestCode == REQUEST_PICK_APPWIDGET || requestCode == REQUEST_CREATE_APPWIDGET)
 				&& resultCode == RESULT_CANCELED && data != null) {
@@ -727,7 +717,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		if (mBinder != null) {
 			mBinder.mTerminate = true;
 		}
-		// if(mMessWithPersistence)setPersistent(false);
 		if (PROFILE_ROTATE) {
 			android.os.Debug.startMethodTracing("/sdcard/launcher-rotate");
 		}
@@ -1472,7 +1461,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	@Override
 	public void onDestroy() {
 		mDestroyed = true;
-		// setPersistent(false);
 		// ADW: unregister the sharedpref listener
 		getSharedPreferences("launcher.preferences.almostnexus",
 				Context.MODE_PRIVATE)
@@ -1588,9 +1576,18 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			return false;
 
 		super.onCreateOptionsMenu(menu);
+		/*
 		menu.add(MENU_GROUP_ADD, MENU_ADD, 0, R.string.menu_add)
 		.setIcon(android.R.drawable.ic_menu_add)
 		.setAlphabeticShortcut('A');
+		 */
+
+		// CCHOW CHANGE START
+		// disable wallpaper menu item
+		menu.add(MENU_GROUP_ADD, MENU_WALLPAPER_SETTINGS, 0,
+				R.string.menu_wallpaper) .setIcon(android.R.drawable.ic_menu_gallery)
+				.setAlphabeticShortcut('W');
+		// CCHOW CHANGE END
 
 		menu.add(MENU_GROUP_ADD, MENU_EDIT, 0, R.string.menu_edit_desktop)
 		.setIcon(android.R.drawable.ic_menu_edit)
@@ -1625,14 +1622,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		menu.add(MENU_GROUP_NORMAL, MENU_SETTINGS, 0, R.string.menu_settings)
 		.setIcon(android.R.drawable.ic_menu_preferences)
 		.setAlphabeticShortcut('P').setIntent(settings);
-		// CCHOW CHANGE START
-		// disable wallpaper menu item
-		/*
-		 * menu.add(MENU_GROUP_NORMAL, MENU_WALLPAPER_SETTINGS, 0,
-		 * R.string.menu_wallpaper) .setIcon(android.R.drawable.ic_menu_gallery)
-		 * .setAlphabeticShortcut('W');
-		 */
-		// CCHOW CHANGE END
 
 		// drawer options
 		menu.add(MENU_GROUP_CATALOGUE, MENU_APP_SWITCH_GRP, 0,
@@ -1677,9 +1666,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		boolean forceHidden = getResources().getBoolean(
 				R.bool.force_hidden_settings);
 		boolean showmenu = true;
-		if (!forceHidden) {
+		if (!forceHidden && LOGD) {
 			// //ADW: Check if this is the default launcher
-			mIsDefaultLauncher = checkDefaultLauncher();			
+			checkDefaultLauncher();			
 		}
 
 		if (allAppsOpen)
@@ -1748,6 +1737,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					// ask for the password securely
 					final EditText input = new EditText(this);
 					input.setMaxLines(1);
+					input.setHint(getString(R.string.hint_password_old));
 					final int maxLength = 32;  
 					InputFilter[] FilterArray = new InputFilter[2];  
 					FilterArray[0] = new InputFilter.LengthFilter(maxLength);  
@@ -1770,14 +1760,18 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							Editable value = input.getText(); 
-
-							// password valid unlock
 							if (value.toString().equals(passSecure)) {
+								// password valid unlock
 								Toast.makeText(Launcher.this, R.string.toast_launcher_unlock, Toast.LENGTH_SHORT).show();
 								mLauncherLocked = false;
 								// commit setting
 								MyLauncherSettingsHelper.setLauncherLocked(Launcher.this, mLauncherLocked);
 							} else {
+								Vibrator vibrateService = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+								if (vibrateService != null)
+									vibrateService.vibrate(1000);// vibrate for ~1000 seconds
+
+								// password invalid
 								Toast.makeText(Launcher.this, getString(R.string.lock_password_invalid), Toast.LENGTH_SHORT).show();
 							}
 						}
@@ -1871,7 +1865,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 				-1);
 
-		String customWidget = data.getStringExtra(EXTRA_CUSTOM_WIDGET);
+		//String customWidget = data.getStringExtra(EXTRA_CUSTOM_WIDGET);
+
 		/*
 		 * if (SEARCH_WIDGET.equals(customWidget)) { // We don't need this any
 		 * more, since this isn't a real app widget.
@@ -2736,7 +2731,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		return true;
 	}
 
-	static LauncherModel getModel() {
+	public static LauncherModel getModel() {
 		return sModel;
 	}
 
@@ -2787,7 +2782,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog,
 						int whichButton) {
-					delCurrentGrp();
+					deleteCurrentGroup();
 					Toast.makeText(Launcher.this, R.string.app_group_remove_success, Toast.LENGTH_SHORT).show();
 					/* User clicked OK so do some stuff */
 				}
@@ -2817,7 +2812,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 	}
 
-	private void delCurrentGrp() {
+	private void deleteCurrentGroup() {
 		int index = sModel.getApplicationsAdapter().getCatalogueFilter()
 				.getCurrentFilterIndex();
 		AppCatalogueFilters.getInstance().dropGroup(index);
@@ -4310,16 +4305,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				finish();
 				startActivity(getIntent());
 				return true;
-			} else {
-				/*
-				 * if(mMessWithPersistence){ int
-				 * currentOrientation=getResources(
-				 * ).getConfiguration().orientation;
-				 * if(currentOrientation!=savedOrientation){
-				 * mShouldRestart=true; finish(); startActivity(getIntent()); }
-				 * }
-				 */
-			}
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -4334,31 +4320,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			// TODO: ADW Move here all the updates instead on
 			// updateAlmostNexusUI()
 			if (key.equals("homeOrientation")) {
-				if (!mMessWithPersistence) {
-					changeOrientation(
-							MyLauncherSettingsHelper
-							.getDesktopOrientation(this),
-							false);
-				} else {
-					changeOrientation(
-							MyLauncherSettingsHelper
-							.getDesktopOrientation(this),
-							true);
-				}
-			} else if (key.equals("systemPersistent")) {
-				mMessWithPersistence = MyLauncherSettingsHelper
-						.getSystemPersistent(this);
-				if (mMessWithPersistence) {
-					changeOrientation(
-							MyLauncherSettingsHelper
-							.getDesktopOrientation(this),
-							true);
-				} else {
-					changeOrientation(
-							MyLauncherSettingsHelper
-							.getDesktopOrientation(this),
-							false);
-				}
+				changeOrientation(MyLauncherSettingsHelper.getDesktopOrientation(this));
 			} else if (key.equals("notifReceiver")) {
 				boolean useNotifReceiver = MyLauncherSettingsHelper
 						.getNotifReceiver(this);
@@ -4622,24 +4584,14 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
-		// if(mMessWithPersistence)setPersistent(false);
 		super.onStart();
-		// int currentOrientation=getResources().getConfiguration().orientation;
-		// if(currentOrientation!=savedOrientation){
-		// mShouldRestart=true;
-		// }
 
 		// update locked variables
 		mLauncherLocked = MyLauncherSettingsHelper.getLauncherLocked(this);
-		mLockOptionMenuDeviceSettings = MyLauncherSettingsHelper.getLockOptionMenuDeviceSettings(this);
 	}
 
 	@Override
 	protected void onStop() {
-		// if(!mShouldRestart){
-		// savedOrientation=getResources().getConfiguration().orientation;
-		// if(mMessWithPersistence)setPersistent(true);
-		// }
 		// TODO Auto-generated method stub
 		super.onStop();
 		dismissQuickActionWindow();
@@ -4720,23 +4672,19 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		return themeFont;
 	}
 
-	private void changeOrientation(int type, boolean persistence) {
-		if (!persistence) {
-			switch (type) {
-			case MyLauncherSettingsHelper.ORIENTATION_SENSOR:
-				this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
-				break;
-			case MyLauncherSettingsHelper.ORIENTATION_PORTRAIT:
-				this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-				break;
-			case MyLauncherSettingsHelper.ORIENTATION_LANDSCAPE:
-				this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-				break;
-			default:
-				break;
-			}
-		} else {
-			this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+	private void changeOrientation(int type) {
+		switch (type) {
+		case MyLauncherSettingsHelper.ORIENTATION_SENSOR:
+			this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+			break;
+		case MyLauncherSettingsHelper.ORIENTATION_PORTRAIT:
+			this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+			break;
+		case MyLauncherSettingsHelper.ORIENTATION_LANDSCAPE:
+			this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			break;
+		default:
+			break;
 		}
 	}
 

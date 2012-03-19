@@ -47,13 +47,15 @@ import android.widget.ToggleButton;
 
 import com.wordpress.chislonchow.legacylauncher.ApplicationInfo;
 import com.wordpress.chislonchow.legacylauncher.ApplicationsAdapter;
+import com.wordpress.chislonchow.legacylauncher.Launcher;
+import com.wordpress.chislonchow.legacylauncher.LauncherModel;
+import com.wordpress.chislonchow.legacylauncher.MyLauncherSettingsHelper;
 import com.wordpress.chislonchow.legacylauncher.R;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters.Catalog;
 import com.wordpress.chislonchow.legacylauncher.catalogue.ApplicationListAdapter.SortType;
 
 public class AppInfoMList extends ListActivity implements
-View.OnCreateContextMenuListener, View.OnClickListener,
-DialogInterface.OnCancelListener {
+View.OnCreateContextMenuListener, View.OnClickListener {
 	private static final String TAG = "AppInfoMList";
 	private static final boolean DBG = false;
 	public static final String EXTRA_CATALOGUE_INDEX = "EXTRA_CATALOGUE_INDEX";
@@ -67,8 +69,6 @@ DialogInterface.OnCancelListener {
 	private Button mOkButton, mCancelButton;
 	private Catalog mCatalogue;
 
-	private boolean mCatalogueNew;
-
 	private ApplicationListAdapter.SortType mSortType = ApplicationListAdapter.SortType.NAME;
 	private boolean mSortAscending = DEFAULT_SORT_ASCENDING;
 
@@ -77,24 +77,32 @@ DialogInterface.OnCancelListener {
 
 	private static final boolean POST_API_9 = (android.os.Build.VERSION.SDK_INT >= 9);
 
-	public static final int RESULT_DELETE_CATALOG = 20;
+	private boolean mCatalogueNew;
+
+	// take care of catalog deletion 
+	public static final int RESULT_NO_REFRESH_LAUNCHER_TRAY = 20;	// sent back to launcher so it doesn't update the interface
+	private boolean mCatalogPrepareDelete;							// if set to true, this deletes the selected catalog onPause
+
+	private int mGroupSelectedIndex;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
 
-		int GroupIndex = intent.getIntExtra(EXTRA_CATALOGUE_INDEX,
+		mGroupSelectedIndex = intent.getIntExtra(EXTRA_CATALOGUE_INDEX,
 				AppCatalogueFilters.getInstance().getDrawerFilter().getCurrentFilterIndex());
-		mCatalogue = AppCatalogueFilters.getInstance().getCatalogue(GroupIndex);
+		mCatalogue = AppCatalogueFilters.getInstance().getCatalogue(mGroupSelectedIndex);
 
 		if (mCatalogue == null) {
-			setResult(RESULT_CANCELED);
+			setResult(RESULT_NO_REFRESH_LAUNCHER_TRAY);
+			mCatalogPrepareDelete = false;
 			finish();
 			return;
 		}
 
 		mCatalogueNew = intent.getBooleanExtra(EXTRA_CATALOGUE_NEW, false);
+		mCatalogPrepareDelete = mCatalogueNew;	//default state of prepare delete depends on if catalog is new or existing
 
 		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.app_group_conf_list);
@@ -106,7 +114,6 @@ DialogInterface.OnCancelListener {
 
 		/* sort type spinner */
 		final Spinner spinner = (Spinner) findViewById(R.id.sortType);
-
 		ArrayAdapter<CharSequence> adapter;
 		if (POST_API_9) {
 			adapter = ArrayAdapter.createFromResource(
@@ -162,14 +169,35 @@ DialogInterface.OnCancelListener {
 		updateAppList();
 	}
 
-	// Finish the activity if the user presses the back button to cancel the
-	// activity
-	public void onCancel(DialogInterface dialog) {
+	/*
+	 * This way of exiting ensures that changes have not been made to catalogs
+	 */
+	private void noDeleteExit(){
 		if (mCatalogueNew) {
 			Toast.makeText(this, R.string.app_group_add_abort, Toast.LENGTH_SHORT).show();
-			setResult(RESULT_DELETE_CATALOG);
+		} else {
+			setResult(RESULT_NO_REFRESH_LAUNCHER_TRAY);
+			mCatalogPrepareDelete = false;
 		}
 		finish();
+	}
+
+	@Override
+	public void onPause() {
+		// handle catalog deletion if the flag was set
+		if (mCatalogPrepareDelete) {
+			LauncherModel sModel = Launcher.getModel();
+			AppCatalogueFilters.getInstance().dropGroup(mGroupSelectedIndex);
+			sModel.getApplicationsAdapter().getCatalogueFilter().setCurrentGroupIndex(-1);
+			MyLauncherSettingsHelper.setCurrentAppCatalog(this, -1);
+		}
+		super.onPause();
+	}
+
+	// back key handling
+	@Override
+	public void onBackPressed(){
+		noDeleteExit();
 	}
 
 	/*
@@ -199,9 +227,10 @@ DialogInterface.OnCancelListener {
 				} else {
 					editor.remove(tempAppListInfo.className);
 				}
-
+				/*
 				if (DBG && checked)
 					Log.v("-----", tempAppListInfo.className);
+				 */
 			}
 			editor.commit();
 			if (checkedCount == 0) {
@@ -215,11 +244,11 @@ DialogInterface.OnCancelListener {
 						new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog,
 							int whichButton) {
-						setResult(RESULT_DELETE_CATALOG);
 						if (mCatalogueNew) {
 							Toast.makeText(AppInfoMList.this, R.string.app_group_add_abort, Toast.LENGTH_SHORT).show();
 						} else {
 							Toast.makeText(AppInfoMList.this, R.string.app_group_remove_success, Toast.LENGTH_SHORT).show();
+							mCatalogPrepareDelete = true;
 						}
 						finish();
 						/* User clicked OK so do some stuff */
@@ -228,14 +257,11 @@ DialogInterface.OnCancelListener {
 				.setNegativeButton(android.R.string.cancel, null).create().show();
 			} else {
 				setResult(RESULT_OK);
+				mCatalogPrepareDelete = false;
 				finish();
 			}
 		} else if (v == mCancelButton) {
-			if (mCatalogueNew) {
-				Toast.makeText(this, R.string.app_group_add_abort, Toast.LENGTH_SHORT).show();
-				setResult(RESULT_DELETE_CATALOG);
-			}
-			finish();
+			noDeleteExit();
 		}
 	}
 

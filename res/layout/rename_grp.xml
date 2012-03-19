@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2008 The Android Open Source Project
+<!--
+     Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,27 +18,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="20dip"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="20dip" >
 
-    <TextView 
-        android:layout_height="wrap_content"
+    <TextView
         android:layout_width="wrap_content"
-        android:text="@string/rename_group_label"
+        android:layout_height="wrap_content"
         android:gravity="left"
+        android:text="@string/rename_group_label"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-            
+
     <EditText
         android:id="@+id/group_name"
-        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:scrollHorizontally="true"
+        android:layout_height="wrap_content"
         android:autoText="false"
         android:capitalize="none"
         android:gravity="fill_horizontal"
+        android:hint="@string/hint_name_category"
         android:maxLength="30"
-		android:maxLines="1"
-		android:singleLine="true"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>

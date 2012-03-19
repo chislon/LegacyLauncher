@@ -19,7 +19,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wordpress.chislonchow.legacylauncher"
-    android:versionCode="18"
+    android:versionCode="19"
     android:versionName="@string/app_version" >
 
     <uses-sdk
@@ -64,7 +64,6 @@
     <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.PERSISTENT_ACTIVITY" />
 
     <application
         android:name=".LauncherApplication"
@@ -93,7 +92,6 @@
             android:label="@string/launcher_label_settings" />
         <activity
             android:name="ActivityPickerActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard"
             android:label="@string/pref_label_activities" />
         <activity
             android:name=".CustomShortcutActivity"
@@ -109,8 +107,7 @@
             android:name=".InstallShortcutReceiver"
             android:permission="com.android.launcher.permission.INSTALL_SHORTCUT" >
             <intent-filter>
-                <action android:name="com.wordpress.chislonchow.legacylauncher.action.INSTALL_SHORTCUT" />
-            </intent-filter>
+                <action android:name="com.android.launcher.action.INSTALL_SHORTCUT" />            </intent-filter>
         </receiver>
 
         <!-- The settings provider contains Home's data, like the workspace favorites -->
@@ -120,7 +117,10 @@
             android:readPermission="com.android.launcher.permission.READ_SETTINGS"
             android:writePermission="com.android.launcher.permission.WRITE_SETTINGS" />
 
-        <activity android:name=".catalogue.AppInfoMList" />
+        <activity
+            android:name=".catalogue.AppInfoMList"
+            android:configChanges="orientation|keyboardHidden|keyboard"
+            android:noHistory="true" />
     </application>
 
 </manifest>

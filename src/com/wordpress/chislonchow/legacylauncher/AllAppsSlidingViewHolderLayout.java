@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,27 +14,18 @@ import android.widget.TextView;
 
 public class AllAppsSlidingViewHolderLayout extends ViewGroup {
 	//ADW: Animation vars
-	private final static int CLOSED=1;
-	private final static int OPEN=2;
-	private final static int CLOSING=3;
-	private final static int OPENING=4;
-	private int mStatus=OPEN;
+	protected final static int HOLDER_CLOSED 	= 1;
+	protected final static int HOLDER_OPENED 		= 2;
+	protected final static int HOLDER_CLOSING 	= 3;
+	protected final static int HOLDER_OPENING 	= 4;
+	private int mStatus=HOLDER_OPENED;
 	private boolean isAnimating;
-	private long startTime;
 	private int mIconSize=0;
 	private Paint mPaint;
 	private Paint mLabelPaint;
-	private boolean shouldDrawLabels=false;
-	private int mAnimationDuration=800;
+
 	private boolean mDrawLabels=true;
-	private long mCurrentTime;
-	//ADW: listener to dispatch open/close animation events
-	private OnFadingListener mOnFadingListener;
 
-	private float x;
-	private float y;
-
-	private int xx;
 	public AllAppsSlidingViewHolderLayout(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -144,28 +134,7 @@ public class AllAppsSlidingViewHolderLayout extends ViewGroup {
 	 */
 	@Override
 	public void draw(Canvas canvas) {
-		if (isAnimating) {
-			if (startTime == 0) {
-				startTime = SystemClock.uptimeMillis();
-				mCurrentTime = 0;
-			} else {
-				mCurrentTime = SystemClock.uptimeMillis() - startTime;
-			}
-
-			if (mCurrentTime >= mAnimationDuration) {
-				isAnimating = false;
-				if (mStatus == OPENING) {
-					mStatus = OPEN;
-					dispatchFadingEvent(OnFadingListener.OPEN);
-				} else if (mStatus == CLOSING) {
-					mStatus = CLOSED;
-					dispatchFadingEvent(OnFadingListener.CLOSE);
-				}
-			}
-		}
-		if(mStatus!=CLOSED){
-			shouldDrawLabels = mDrawLabels
-					&& (mStatus == OPENING || mStatus == CLOSING);
+		if (mStatus != HOLDER_CLOSED){
 			super.draw(canvas);
 		}
 	}
@@ -178,18 +147,16 @@ public class AllAppsSlidingViewHolderLayout extends ViewGroup {
 		if(mIconSize==0){
 			mIconSize=tmp[1].getIntrinsicHeight()+child.getPaddingTop();
 		}
+		// lower quality when drawing
 		if(isAnimating) {
 			postInvalidate();
 
-			x=child.getLeft();
-			y=child.getTop();
-
-			if(shouldDrawLabels) {
+			if(mDrawLabels) {
 				child.setDrawingCacheEnabled(true);
 				child.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
 				b = child.getDrawingCache();
 
-				if(b != null){
+				if(b != null) {
 					//ADW: try to manually draw labels
 					final Rect rl1=new Rect(0,mIconSize,b.getWidth(),b.getHeight());
 					final Rect rl2=new Rect(child.getLeft(),child.getTop()+mIconSize,child.getLeft()
@@ -199,19 +166,20 @@ public class AllAppsSlidingViewHolderLayout extends ViewGroup {
 			}
 
 			final Rect r3 = tmp[1].getBounds();
-			xx=(child.getWidth()/2)-(r3.width()/2);
+			final int xx=(child.getWidth()/2)-(r3.width()/2);
 			canvas.save();
-			canvas.translate(x+xx, y+child.getPaddingTop());
+			canvas.translate(child.getLeft()+xx, child.getTop()+child.getPaddingTop());
 
 			tmp[1].draw(canvas);			
 			canvas.restore();
 		} else {
+			// no drawing cache for icons that are just being displayed
 			if(mDrawLabels){
 				canvas.save();
 				canvas.translate(child.getLeft(), child.getTop());
 				child.draw(canvas);
 				canvas.restore();
-			}else{
+			} else { 
 				final Rect r3 = tmp[1].getBounds();
 				int xx=(child.getWidth()/2)-(r3.width()/2);
 				canvas.save();
@@ -226,68 +194,36 @@ public class AllAppsSlidingViewHolderLayout extends ViewGroup {
 	/**
 	 * Open/close public methods
 	 */
-	public void open(boolean animate, int speed){
-		if(mStatus!=OPENING){
-			mAnimationDuration=speed;
+	public void open(boolean animate){
+		if(mStatus!=HOLDER_OPENING){
 			if(animate){
 				isAnimating=true;
-				mStatus=OPENING;
+				mStatus=HOLDER_OPENING;
 			}else{
 				isAnimating=false;
-				mStatus=OPEN;
-				dispatchFadingEvent(OnFadingListener.OPEN);
+				mStatus=HOLDER_OPENED;
 			}
-			startTime=0;
 			invalidate();
 		}
 	}
-	public void close(boolean animate, int speed){
-		if(mStatus!=CLOSING){
-			mAnimationDuration=speed;
+	public void close(boolean animate){
+		if(mStatus!=HOLDER_CLOSING){
 			if(animate){
-				mStatus=CLOSING;
+				mStatus=HOLDER_CLOSING;
 				isAnimating=true;
 			}else{
-				mStatus=CLOSED;
+				mStatus=HOLDER_CLOSED;
 				isAnimating=false;
-				dispatchFadingEvent(OnFadingListener.CLOSE);
 			}
-			startTime=0;
 			invalidate();
 		}
 	}
-	/**
-	 * Interface definition for a callback to be invoked when an open/close animation
-	 * starts/ends
-	 */
-	public interface OnFadingListener {
-		public static final int OPEN=1;
-		public static final int CLOSE=2;
-		void onUpdate(int Status);
-	}
-	public void setOnFadingListener(OnFadingListener listener) {
-		mOnFadingListener = listener;
-	}
-	/**
-	 * Dispatches a trigger event to listener. Ignored if a listener is not set.
-	 * @param whichHandle the handle that triggered the event.
-	 */
-	private void dispatchFadingEvent(int status) {
-		if (mOnFadingListener != null) {
-			mOnFadingListener.onUpdate(status);
-		}
-	}
+
 	public void updateLabelVars(Context context){
 		mDrawLabels=MyLauncherSettingsHelper.getDrawerLabels(context);
 	}
-
-	public void setStartTime(long startTime)
-	{
-		this.startTime = startTime;
-	}
-
-	public long getStartTime()
-	{
-		return startTime;
+	
+	public void setHolderStatus(int status) {
+		mStatus = status;
 	}
 }

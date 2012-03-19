@@ -33,7 +33,7 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView {
 
     private static final long WIDGET_LONG_CLICK_TIMEOUT = 700;
 
-    private static final String TAG = "LauncherAppWidgetHostView";
+    //private static final String TAG = "LauncherAppWidgetHostView";
 
     private boolean mHasPerformedLongPress;
 

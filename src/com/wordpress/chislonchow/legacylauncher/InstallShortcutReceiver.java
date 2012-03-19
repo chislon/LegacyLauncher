@@ -23,11 +23,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.util.Log;
 import android.widget.Toast;
 
 public class InstallShortcutReceiver extends BroadcastReceiver {
     private static final String ACTION_INSTALL_SHORTCUT =
-            "com.wordpress.chislonchow.legacylauncher.action.INSTALL_SHORTCUT";
+            "com.android.launcher.action.INSTALL_SHORTCUT";
 
     private final int[] mCoordinates = new int[2];
 

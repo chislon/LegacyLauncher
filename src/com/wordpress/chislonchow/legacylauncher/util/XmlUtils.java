@@ -505,7 +505,8 @@ public class XmlUtils
      *
      * @see #readMapXml
      */
-    public static final HashMap readThisMapXml(XmlPullParser parser, String endTag, String[] name)
+    @SuppressWarnings("static-access")
+	public static final HashMap readThisMapXml(XmlPullParser parser, String endTag, String[] name)
     throws XmlPullParserException, java.io.IOException
     {
         HashMap map = new HashMap();
@@ -549,7 +550,8 @@ public class XmlUtils
      *
      * @see #readListXml
      */
-    public static final ArrayList readThisListXml(XmlPullParser parser, String endTag, String[] name)
+    @SuppressWarnings("static-access")
+	public static final ArrayList readThisListXml(XmlPullParser parser, String endTag, String[] name)
     throws XmlPullParserException, java.io.IOException
     {
         ArrayList list = new ArrayList();
@@ -588,7 +590,8 @@ public class XmlUtils
      *
      * @see #readListXml
      */
-    public static final int[] readThisIntArrayXml(XmlPullParser parser,
+    @SuppressWarnings("static-access")
+	public static final int[] readThisIntArrayXml(XmlPullParser parser,
             String endTag, String[] name)
             throws XmlPullParserException, java.io.IOException {
 
@@ -658,7 +661,8 @@ public class XmlUtils
      * @see #readListXml
      * @see #writeValueXml
      */
-    public static final Object readValueXml(XmlPullParser parser, String[] name)
+    @SuppressWarnings("static-access")
+	public static final Object readValueXml(XmlPullParser parser, String[] name)
     throws XmlPullParserException, java.io.IOException
     {
         int eventType = parser.getEventType();
@@ -679,7 +683,8 @@ public class XmlUtils
             "Unexpected end of document");
     }
 
-    private static final Object readThisValueXml(XmlPullParser parser, String[] name)
+    @SuppressWarnings("static-access")
+	private static final Object readThisValueXml(XmlPullParser parser, String[] name)
     throws XmlPullParserException, java.io.IOException
     {
         final String valueName = parser.getAttributeValue(null, "name");
@@ -768,7 +773,8 @@ public class XmlUtils
             "Unexpected end of document in <" + tagName + ">");
     }
 
-    public static final void beginDocument(XmlPullParser parser, String firstElementName) throws XmlPullParserException, IOException
+    @SuppressWarnings("static-access")
+	public static final void beginDocument(XmlPullParser parser, String firstElementName) throws XmlPullParserException, IOException
     {
         int type;
         while ((type=parser.next()) != parser.START_TAG
@@ -786,7 +792,8 @@ public class XmlUtils
         }
     }
 
-    public static final void nextElement(XmlPullParser parser) throws XmlPullParserException, IOException
+    @SuppressWarnings("static-access")
+	public static final void nextElement(XmlPullParser parser) throws XmlPullParserException, IOException
     {
         int type;
         while ((type=parser.next()) != parser.START_TAG

@@ -354,11 +354,6 @@ public final class MyLauncherSettingsHelper {
 		int newD = sp.getInt("uiDesktopIndicatorColor", context.getResources().getInteger(R.integer.config_desktop_indicator_color));
 		return newD;
 	}
-	public static boolean getSystemPersistent(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("systemPersistent", context.getResources().getBoolean(R.bool.config_system_persistent));
-		return newD;
-	}
 	public static String getSwipeDownAppToLaunchPackageName(Context context)
 	{
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
@@ -623,11 +618,6 @@ public final class MyLauncherSettingsHelper {
 	public static int getUIABTintColor(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = sp.getInt("uiABTintColor", context.getResources().getInteger(R.integer.config_ab_tint_color));
-		return newD;
-	}
-	public static boolean getLockOptionMenuDeviceSettings(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);;
-		boolean newD = sp.getBoolean("lockOptionMenuDeviceSettings", false);
 		return newD;
 	}
 	public static boolean getLauncherLocked(Context context) {

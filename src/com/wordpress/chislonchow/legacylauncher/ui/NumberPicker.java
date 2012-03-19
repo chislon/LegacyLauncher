@@ -44,7 +44,6 @@ import android.widget.EditText;
 public class NumberPicker extends LinearLayout implements OnClickListener,
         OnFocusChangeListener, OnLongClickListener {
 
-    private static final String TAG = "NumberPicker";
     private static final int DEFAULT_MAX = 200;
     private static final int DEFAULT_MIN = 0;
 

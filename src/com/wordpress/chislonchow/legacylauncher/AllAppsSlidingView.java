@@ -16,7 +16,6 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.HapticFeedbackConstants;
@@ -34,10 +33,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.Scroller;
 
-import com.wordpress.chislonchow.legacylauncher.AllAppsSlidingViewHolderLayout.OnFadingListener;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
 public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> implements OnItemClickListener, OnItemLongClickListener, DragSource, Drawer{// implements DragScroller{
 	private static final int DEFAULT_SCREEN = 0;
@@ -51,7 +48,6 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private int mTotalScreens;
 	private int mCurrentHolder=1;
 	private int mPageWidth;
-	private final int mDefaultScreen=DEFAULT_SCREEN;
 	private int mNextScreen = INVALID_SCREEN;
 	private Scroller mScroller;
 	private VelocityTracker mVelocityTracker;
@@ -85,8 +81,9 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private int mNumColumns=2;
 	private int mNumRows=2;
 	private int paginatorSpace=16;
-	static final int LAYOUT_NORMAL = 0;
-	static final int LAYOUT_SCROLLING = 1;
+	
+	private static final int LAYOUT_NORMAL = 0;
+	private static final int LAYOUT_SCROLLING = 1;
 	int mLayoutMode = LAYOUT_NORMAL;
 
 	private DisplayMetrics dm = getResources().getDisplayMetrics();
@@ -167,7 +164,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private int mScrollToScreen;
 	//ADW: Animation variables
 	private boolean isAnimating=false;
-	private OnFadingListener mFadingListener;
+	
 	private int mBgAlpha=255;
 	private int mTargetAlpha=255;
 	private int mAnimationDuration=800;
@@ -181,8 +178,11 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 	//ADW:Bg color
 	private int mBgColor=0xFF000000;
-	private int mStatus=AllAppsSlidingViewHolderLayout.OnFadingListener.CLOSE;
-	private AllAppsSlidingViewHolderLayout mHolder;
+	
+	private static int STATUS_OPEN = 0;		// can be opening or opened
+	private static int STATUS_CLOSE = 1;	// can be closing or closed
+	private int mStatus=STATUS_CLOSE;
+	
 	public AllAppsSlidingView(Context context) {
 		super(context);
 		initView();
@@ -213,7 +213,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		else return false;
 	}
 
-	private void initView() {
+	private void initView() {		
 		final float scale = getContext().getResources().getDisplayMetrics().density;
 		mScaledSnapVelocity = (int) (scale * SNAP_VELOCITY);
 
@@ -229,7 +229,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		setFocusableInTouchMode(true);
 		setWillNotDraw(false);
 		mScroller = new Scroller(getContext());
-		mCurrentScreen = mDefaultScreen;
+		mCurrentScreen = DEFAULT_SCREEN;
 		mScroller.forceFinished(true);
 		mPaint = new Paint();
 		mPaint.setDither(false);
@@ -239,20 +239,6 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
 		mPager=new PreviewPager(getContext());
 		mPager.enableGroupText(true);
-		//ADW: listener to handle holderlayouts animations
-		mFadingListener=new OnFadingListener() {
-			public void onUpdate(int Status) {
-				// TODO Auto-generated method stub
-				if(Status==OnFadingListener.CLOSE){
-					setVisibility(View.GONE);
-					mLauncher.getWorkspace().clearChildrenCache();
-				} else {
-					isAnimating=false;
-					mPager.setVisibility(VISIBLE);
-					mBgAlpha=mTargetAlpha;
-				}
-			}
-		};
 	}
 	@Override
 	protected void onFinishInflate() {
@@ -268,7 +254,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	@Override
 	protected void onScrollChanged(int l, int t, int oldl, int oldt) {
 		super.onScrollChanged(l, t, oldl, oldt);
-		mPager.setLeft(l);
+		mPager.setPagerLeft(l);
 		if(mLayoutMode==LAYOUT_SCROLLING){
 			final int screenWidth = mPageWidth;
 			final int whichScreen = (getScrollX() + (screenWidth / 2)) / screenWidth;
@@ -398,9 +384,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		int pos=startPos;
 		int x=marginLeft;
 		int y=marginTop;
-		AllAppsSlidingViewHolderLayout oldHolder = mHolder;
 		AllAppsSlidingViewHolderLayout holder = new AllAppsSlidingViewHolderLayout(getContext());
-		mHolder=holder;
+		
 		for(int i=0;i<mNumRows;i++){
 			for(int j=0;j<mNumColumns;j++){
 				if(pos<mAdapter.getCount()){
@@ -432,18 +417,13 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		holder.layout(pageSpacing, paginatorSpace, pageSpacing+mPageWidth, getMeasuredHeight());
 
 		holder.setTag(pageNum);
-		holder.setOnFadingListener(mFadingListener);
+		
 		addViewInLayout(holder, getChildCount(), holderParams, true);
 		if(pageNum==mCurrentScreen && isAnimating){
-			if(mStatus==AllAppsSlidingViewHolderLayout.OnFadingListener.OPEN)
-				holder.open(isAnimating, mAnimationDuration);
+			if(mStatus==STATUS_OPEN)
+				holder.open(isAnimating);
 			else
-				holder.close(isAnimating, mAnimationDuration);
-
-			if ( oldHolder != null )
-			{
-				holder.setStartTime(oldHolder.getStartTime());
-			}
+				holder.close(isAnimating);
 		}
 	}
 	private void addRemovePages(int current, int next){
@@ -984,6 +964,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		return null;
 	}
 	private void snapToDestination() {
+		//Log.d("AllAppsSlidingView", " snapToDestination");
+
 		final int screenWidth = mPageWidth;
 		final int whichScreen = (getScrollX() + (screenWidth / 2)) / screenWidth;
 		snapToScreen(whichScreen);
@@ -991,6 +973,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 	void snapToScreen(int whichScreen) {
 		if (!mScroller.isFinished()) return;
+
+		//Log.d("AllAppsSlidingView", " snapToScreen " + whichScreen);
 
 		whichScreen = Math.max(0, Math.min(whichScreen, mTotalScreens - 1));
 		boolean changingScreens = whichScreen != mCurrentScreen;
@@ -1015,14 +999,10 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		// Faruq: Added to allow easing even when Screen doesn't changed (when revert happens)
 		if (screenDelta == 0) {
 			durationOffset = mScrollingSnap;
-			final int duration = mScrollingSpeed + durationOffset;
-			mScroller.startScroll(getScrollX(), 0, delta, 0, duration);
-		} else {
-			// scale down the velocities a bit with a sqrt
-			final int duration = screenDelta * (mScrollingSpeed + durationOffset);
-			mScroller.startScroll(getScrollX(), 0, delta, 0, (int)(duration * screenDelta));
-			//mScroller.startScroll(getScrollX(), 0, delta, 0, (int)(duration * 2 * (Math.pow( (double)screenDelta, .7 ))));
 		}
+		mScrollingSpeed += durationOffset;
+
+		mScroller.startScroll(getScrollX(), 0, delta, 0, mScrollingSpeed);
 		invalidate();
 	}
 
@@ -1737,15 +1717,16 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			mItemCount = getAdapter().getCount();
 			mTotalScreens=getPageCount();
 			mPager.setTotalItems(mTotalScreens);
+			
 			if(mTotalScreens-1<mCurrentScreen){
 				scrollTo(0, 0);
 				mCurrentScreen=0;
 				mCurrentHolder=1;
 				mPager.setCurrentItem(0);
-				mBlockLayouts=false;
 				mScrollToScreen=0;
 				mLayoutMode=LAYOUT_NORMAL;
 			}
+			
 			// Detect the case where a cursor that was previously invalidated has
 			// been repopulated with new data.
 			if (AllAppsSlidingView.this.getAdapter().hasStableIds() && mInstanceState != null
@@ -1883,11 +1864,12 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		}
 	}
 	public void open(boolean animate) {
-		mHolder=null;
-		mStatus=AllAppsSlidingViewHolderLayout.OnFadingListener.OPEN;
+		mStatus=STATUS_OPEN;
 		mBgColor=MyLauncherSettingsHelper.getDrawerColor(mLauncher);
 		mTargetAlpha=Color.alpha(mBgColor);
 		mDrawerZoom = MyLauncherSettingsHelper.getDrawerZoom(mLauncher);
+
+		mBgAlpha=mTargetAlpha;
 
 		for(int i=0;i<getChildCount();i++){
 			if(getChildAt(i) instanceof AllAppsSlidingViewHolderLayout){
@@ -1895,19 +1877,24 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			}
 		}
 		mScroller.forceFinished(true);
+
 		setVisibility(View.VISIBLE);
+		
 		findCurrentHolder();
 		final AllAppsSlidingViewHolderLayout holder=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
-		if(getAdapter()==null)
-			animate=false;
-		else if(getAdapter().getCount()<=0)
-			animate=false;
-		if(animate){			
-			ListAdapter adapter = getAdapter();
-			if (adapter instanceof ApplicationsAdapter)
-				((ApplicationsAdapter)adapter).setChildDrawingCacheEnabled(true);
-			mPager.setVisibility(VISIBLE);
-			mBgAlpha=mTargetAlpha;
+		if (holder==null) {
+			isAnimating=animate;
+		} else {
+			if(mBlockLayouts){
+				//XXX: this is causing issues with drawing if the view has gone back to the first screen during close!
+				//snapToDestination();
+				holder.open(animate);
+			} else {
+				isAnimating=animate;
+			}
+		}
+
+		if (animate) {
 			Animation ani;
 			if (mDrawerZoom) {
 				ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_zoom_in);
@@ -1916,56 +1903,40 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			}
 			ani.setDuration(mAnimationDuration);
 			startAnimation(ani);
-
-		}else{
-			mPager.setVisibility(VISIBLE);
-			mBgAlpha=mTargetAlpha;
-		}
-		if(holder==null){
-			isAnimating=animate;
-		}else{
-			if(mBlockLayouts){
-				snapToDestination();
-				holder.open(animate, mAnimationDuration);
-			}else{
-				isAnimating=animate;
-			}
 		}
 
+		//mPager.setVisibility(VISIBLE);
 		mPager.showGroupText(mLauncher.mUseDrawerTitleCatalog && AppCatalogueFilters.getInstance().getAllGroups().size() > 0);
 		mPager.requestLayout();
 	}
+
 	public void close(boolean animate) {
-		mStatus=AllAppsSlidingViewHolderLayout.OnFadingListener.CLOSE;
+		mStatus=STATUS_CLOSE;
 		setPressed(false);
-		if(getAdapter()==null)
-			animate=false;
-		else if(getAdapter().getCount()<=0)
-			animate=false;
-		if(animate){
+		
+		if(animate) {
+			Animation ani;
+			if (mDrawerZoom) {
+				ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_zoom_out);
+			} else {
+				ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_fade_out);
+			}
+			ani.setDuration(mAnimationDuration);
+			startAnimation(ani);
+
 			findCurrentHolder();
 			AllAppsSlidingViewHolderLayout holder=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
 
-			if(holder!=null){
-				Animation ani;
-				if (mDrawerZoom) {
-					ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_zoom_out);
-				} else {
-					ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_fade_out);
-				}
-				ani.setDuration(mAnimationDuration);
-				startAnimation(ani);
-
+			if(holder != null) {
 				isAnimating=true;
-				holder.close(animate, mAnimationDuration);
-			}else{
+				holder.close(animate);
+			} else {
 				isAnimating=false;
-				mLauncher.getWorkspace().clearChildrenCache();
 			}
 		} else {
 			mLauncher.getWorkspace().clearChildrenCache();
+			setVisibility(View.GONE);
 		}
-		setVisibility(View.GONE);
 
 	}
 	public void setAnimationSpeed(int speed){
@@ -1994,7 +1965,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			mBlockLayouts = false;
 			mScrollToScreen=0;
 			mLayoutMode=LAYOUT_NORMAL;
-			
+
 			mPager.showGroupText(mLauncher.mUseDrawerTitleCatalog && AppCatalogueFilters.getInstance().getAllGroups().size() > 0);
 			requestLayout();
 		}
@@ -2003,10 +1974,10 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	public void setTextFilterEnabled(boolean textFilterEnabled) {}
 	public void clearTextFilter() {}
 
-	int FADE_OFF = 0;
-	int FADE_IN = 1;
-	int FADE_CHANGE = 2;
-	int FADE_OUT = 3;
+	private static final int FADE_OFF = 0;
+	private static final int FADE_IN = 1;
+	private static final int FADE_CHANGE = 2;
+	private static final int FADE_OUT = 3;
 	long mFadeEnd;
 	int mFadeType = FADE_OFF;
 	DataSetObserver mLastDSObserver;
@@ -2032,10 +2003,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	protected boolean getChildStaticTransformation(View child, Transformation t)
 	{
 		long time = mFadeEnd - System.currentTimeMillis();
-		if (mFadeType != FADE_OFF)
-		{
-			if (mFadeType == FADE_IN)
-			{
+		if (mFadeType != FADE_OFF) {
+			if (mFadeType == FADE_IN) {
 				mScroller.forceFinished(true);
 				scrollTo(0,0);
 				snapToScreen(0);
@@ -2045,9 +2014,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 					this.postInvalidate();
 					return true;
 				}
-			}
-			else
-			{
+			} else {
 				if (time > 0)
 				{
 					t.setAlpha(time / 150f);
@@ -2131,8 +2098,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		this.setOnTouchListener(gestureListener);
 	}
 
-	class MyGestureDetector extends SimpleOnGestureListener
-	{
+	class MyGestureDetector extends SimpleOnGestureListener {
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
 		{
@@ -2166,8 +2132,33 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	public void setSnap(int value) {
 		mScrollingSnap = value;
 	}
+
 	@Override
 	public void setOvershoot(boolean value) {
 		mScrollingOvershoot = value;
+	}
+
+	private boolean isVisible() {
+		return mStatus == STATUS_OPEN;
+	}
+
+	@Override
+	protected void onAnimationEnd() {
+		isAnimating = false;
+
+		if (!isVisible()) {
+			setVisibility(View.GONE);
+			mLauncher.getWorkspace().clearChildrenCache();
+			
+			findCurrentHolder();
+			final AllAppsSlidingViewHolderLayout holder=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
+			holder.setHolderStatus(AllAppsSlidingViewHolderLayout.HOLDER_CLOSED);
+		} else {
+			findCurrentHolder();
+			final AllAppsSlidingViewHolderLayout holder=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
+			holder.setHolderStatus(AllAppsSlidingViewHolderLayout.HOLDER_OPENED);
+
+			mPager.setVisibility(VISIBLE);
+		}
 	}
 }

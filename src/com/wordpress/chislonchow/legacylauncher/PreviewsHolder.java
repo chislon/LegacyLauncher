@@ -23,26 +23,17 @@ public class PreviewsHolder extends ViewGroup {
 		super(context, attrs, defStyle);
 		// TODO Auto-generated constructor stub
 	}
-	private void init(){
-		/*
-		2
-		2-1
-		2-2
-		2-1-2
-		3-3
-		3-1-3
-		 */
-	}
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         assert(MeasureSpec.getMode(widthMeasureSpec) != MeasureSpec.UNSPECIFIED);
 
         final int width = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
         int height = MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
-        final int count = getChildCount();
+        //final int count = getChildCount();
         int line_height = 0;
 
-        int xpos = getPaddingLeft();
+        //int xpos = getPaddingLeft();
         int ypos = getPaddingTop();
         int distro_set=getChildCount()-1;
         int childPos=0;
@@ -58,11 +49,11 @@ public class PreviewsHolder extends ViewGroup {
 
                     final int childw = child.getMeasuredWidth();
                     line_height = Math.max(line_height, child.getMeasuredHeight() + lp.vertical_spacing);
-                    xpos += childw + lp.horizontal_spacing;
+                    //xpos += childw + lp.horizontal_spacing;
                 }
                 childPos++;
         	}
-            xpos = getPaddingLeft();
+            //xpos = getPaddingLeft();
             ypos += line_height;
         }
         maxPreviewWidth=getChildAt(0).getMeasuredWidth();

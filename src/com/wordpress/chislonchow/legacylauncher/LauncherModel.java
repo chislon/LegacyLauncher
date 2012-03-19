@@ -1353,7 +1353,7 @@ public class LauncherModel {
     /**
      * @return The current list of applications
      */
-    ApplicationsAdapter getApplicationsAdapter() {
+    public ApplicationsAdapter getApplicationsAdapter() {
         return mApplicationsAdapter;
     }
 

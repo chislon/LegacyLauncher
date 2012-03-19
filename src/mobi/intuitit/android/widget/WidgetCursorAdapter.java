@@ -86,8 +86,6 @@ public class WidgetCursorAdapter extends CursorAdapter {
     final int mItemActionUriIndex;
     ComponentName mAppWidgetProvider;
 
-    private Activity mActivity;
-
     /**
      * 
      * @param context
@@ -110,8 +108,7 @@ public class WidgetCursorAdapter extends CursorAdapter {
         mIntent = intent;
         mAppWidgetProvider = provider;
         mInflater = LayoutInflater.from(context);
-        mActivity = a;
-
+        
         // verify is contentProvider requery is allowed
         mAllowRequery = intent.getBooleanExtra(
                 LauncherIntent.Extra.Scroll.EXTRA_DATA_PROVIDER_ALLOW_REQUERY, false);

@@ -59,7 +59,6 @@ OnItemClickListener, OnClickListener, View.OnLongClickListener {
 	 * ADW:Theme vars
 	 */
 	private int mTextColor=0;
-	private boolean useThemeTextColor=false;
 
 	/**
 	 * Used to inflate the Workspace from XML.

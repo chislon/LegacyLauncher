@@ -1,6 +1,7 @@
 package com.wordpress.chislonchow.legacylauncher;
 
 import java.util.Map;
+import java.util.Set;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -90,6 +91,12 @@ public class ObscuredSharedPreferences implements SharedPreferences {
 			delegate.remove(s);
 			return this;
 		}
+
+		public android.content.SharedPreferences.Editor putStringSet(
+				String arg0, Set<String> arg1) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	public Editor edit() {
@@ -178,7 +185,7 @@ public class ObscuredSharedPreferences implements SharedPreferences {
 			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
 			SecretKey key = keyFactory.generateSecret(new PBEKeySpec(SEKRIT));
 			Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
-			
+
 			String uniqueId = Settings.Secure.getString(context.getContentResolver(), Settings.System.ANDROID_ID);
 			// if the id fails to be fetched, just use the default emulator id
 			if (uniqueId == null) {
@@ -190,6 +197,12 @@ public class ObscuredSharedPreferences implements SharedPreferences {
 		} catch( Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+
+	public Set<String> getStringSet(String arg0, Set<String> arg1) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

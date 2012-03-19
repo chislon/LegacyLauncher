@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.17 Beta</string>
+    <string name="app_version">0.19 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -195,13 +195,13 @@
     <string name="pref_title_drawer_animation_speed">Animation duration</string>
     <string name="pref_summary_drawer_animation_speed">Set animation time in milliseconds </string>
     <string name="pref_dialog_animation_speed">Set animation time in milliseconds</string>
-    <string name="pref_title_page_horizontal_margin">Horizontal drawer margin</string>
-    <string name="pref_summary_page_horizontal_margin">Side margin width of horizontal drawer</string>
-    <string name="pref_dialog_page_horizontal_margin">Side margin width of horizontal drawer</string>
+    <string name="pref_title_page_horizontal_margin">Horizontal tray margin</string>
+    <string name="pref_summary_page_horizontal_margin">Side margin width of horizontal tray</string>
+    <string name="pref_dialog_page_horizontal_margin">Side margin width of horizontal tray</string>
     <string name="pref_title_animated_drawer">Animated tray</string>
     <string name="pref_summary_animated_drawer">Display animations</string>
-    <string name="pref_title_animated_zoom_drawer">Animate icon zoom</string>
-    <string name="pref_summary_animated_zoom_drawer">Zoom animation for icons</string>
+    <string name="pref_title_animated_zoom_drawer">Animate zoom</string>
+    <string name="pref_summary_animated_zoom_drawer">Zoom animation</string>
     <string name="pref_title_drawer_columns_portrait">Portrait columns</string>
     <string name="pref_summary_drawer_columns_portrait">Number of columns in portrait</string>
     <string name="pref_dialog_drawer_columns_portrait">Number of columns in portrait</string>
@@ -246,7 +246,7 @@
     <string name="pref_summary_drawer_snap">Time to snap to screen when scroll ends</string>
     <string name="pref_dialog_drawer_snap">Speed up snap time by decreasing value</string>
     <string name="pref_title_drawer_overshoot">Overshoot</string>
-    <string name="pref_summary_drawer_overshoot">Overshoot effect in horizontal drawer</string>
+    <string name="pref_summary_drawer_overshoot">Overshoot effect in horizontal tray</string>
 
     <!-- Dock Settings -->
     <string name="pref_title_dock">Dock</string>
@@ -272,8 +272,8 @@
     <string name="pref_summary_ab_tint">Perform color tinting on dock icons</string>
     <string name="pref_title_ab_tint_color">Tint color</string>
     <string name="pref_summary_ab_tint_color">Change tinting color</string>
-    <string name="pref_title_main_dock_drawer_hide">Hide Dock in Drawer</string>
-    <string name="pref_summary_main_dock_drawer_hide">Hide dock from view when in drawer</string>
+    <string name="pref_title_main_dock_drawer_hide">Hide dock in tray</string>
+    <string name="pref_summary_main_dock_drawer_hide">Hide from view with open application tray</string>
 
     <!-- Other preferences -->
     <string name="pref_title_application_settings">More</string>
@@ -343,8 +343,6 @@
     <string name="pref_title_system_preferences">System</string>
     <string name="pref_title_highlights_category">Icon Highlights</string>
     <string name="pref_title_indicators_category">Screen Indicator</string>
-    <string name="pref_title_system_persistent">System Persistent</string>
-    <string name="pref_summary_system_persistent">Keep launcher in memory and avoid system Launcher restarts</string>
     <!-- Theme preferences -->
     <string name="pref_title_theme_settings">Themes</string>
     <string name="pref_summary_theme_settings">Select visual themes</string>
@@ -412,8 +410,6 @@
     <string name="pref_summary_lock_password">Set a new launcher lock password</string>
     <string name="pref_title_lock_password_clear">Clear lock password</string>
     <string name="pref_summary_lock_password_clear">Remove launcher lock password</string>
-    <string name="pref_title_lock_option_settings">Hide \'Settings\' Option</string>
-    <string name="pref_summary_lock_option_settings">Can be dangerous! Make sure you know what you are doing!</string>
     <string name="dialog_lock_password_set">Set a password up to 32 characters</string>
     <string name="dialog_lock_password_get">Enter lock password</string>
     <string name="toast_password_clear">Lock password cleared</string>
@@ -469,10 +465,15 @@
     <string name="menu_lock">Lock Launcher</string>
     <string name="menu_unlock">Unlock Launcher</string>
 
+    <!-- Edit Text Hints -->
+    <string name="hint_name_category">Group name</string>
+    <string name="hint_password_new">New password</string>
+    <string name="hint_password_old">Enter password</string>
+
     <!-- Color Picker -->
     <string name="press_color_to_apply">Press on Color to apply</string>
 
-    <!-- Preferences -->
+    <!-- Color Picker Preferences -->
     <string name="pref_category">Category</string>
     <string name="color1_title">Color 1</string>
     <string name="color1_summary">black color by default, set by reference</string>

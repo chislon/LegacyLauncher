@@ -30,7 +30,7 @@ import com.wordpress.chislonchow.legacylauncher.R;
 
 public class UninstallShortcutReceiver extends BroadcastReceiver {
     private static final String ACTION_UNINSTALL_SHORTCUT =
-            "com.wordpress.chislonchow.legacylauncher.action.UNINSTALL_SHORTCUT";
+            "com.android.launcher.action.UNINSTALL_SHORTCUT";
 
     public void onReceive(Context context, Intent data) {
         if (!ACTION_UNINSTALL_SHORTCUT.equals(data.getAction())) {
