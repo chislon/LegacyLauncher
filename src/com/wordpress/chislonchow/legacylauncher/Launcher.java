@@ -697,7 +697,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 		mIsNewIntent = false;
 	}
-	
+
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
@@ -4805,11 +4805,17 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			View deleteButton = mScreensEditor.findViewById(R.id.delete_screen);
 			deleteButton
 			.setOnClickListener(new android.view.View.OnClickListener() {
+				AlertDialog alertDialog;
 				public void onClick(View v) {
 					final int screenToDelete = gal
 							.getSelectedItemPosition();
 					if (workspace.getChildCount() > 1) {
-						AlertDialog alertDialog = new AlertDialog.Builder(
+
+						if (alertDialog != null)
+							if (alertDialog.isShowing())
+								return;
+
+						alertDialog = new AlertDialog.Builder(
 								Launcher.this).create();
 						alertDialog.setTitle(getResources().getString(
 								R.string.title_dialog_xml));
@@ -4825,9 +4831,15 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 									public void onClick(
 											DialogInterface dialog,
 											int which) {
-										workspace
-										.removeScreen(screenToDelete);
-										screens.removeScreen(screenToDelete);
+										if (workspace.getChildCount() > 1) {
+											workspace.removeScreen(screenToDelete);
+											screens.removeScreen(screenToDelete);
+										} else {
+											Toast.makeText(
+													Launcher.this,
+													R.string.message_cannot_delete_desktop_screen,
+													Toast.LENGTH_LONG).show();
+										}
 									}
 								});
 						alertDialog.setButton(

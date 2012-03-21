@@ -2146,7 +2146,9 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 	 * Almos update remaining screens content inside model
 	 * @param screen
 	 */
-	protected void removeScreen(int screen){
+	protected void removeScreen(int screen) {
+		if (getChildCount() <= 1)
+			return;
 		final CellLayout layout = (CellLayout) getChildAt(screen);
 		int childCount = layout.getChildCount();
 		final LauncherModel model = Launcher.getModel();
