@@ -138,9 +138,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private static final boolean DEBUG_USER_INTERFACE = false;
 
 	private static final int MENU_GROUP_ADD = 1;
-	private static final int MENU_GROUP_ALMOSTNEXUS = 2;
+	private static final int MENU_GROUP_LAUNCHER_SETUP = 2;
 	private static final int MENU_GROUP_CATALOGUE = 3;
 	private static final int MENU_GROUP_NORMAL = 4;
+	private static final int MENU_GROUP_WALLPAPER = 5;
+
 	private static final int MENU_ADD = Menu.FIRST + 1;
 	private static final int MENU_WALLPAPER_SETTINGS = MENU_ADD + 1;
 	private static final int MENU_SEARCH = MENU_WALLPAPER_SETTINGS + 1;
@@ -1593,16 +1595,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		.setIcon(android.R.drawable.ic_menu_add)
 		.setAlphabeticShortcut('A');
 
-		// CCHOW CHANGE START
-		// disable wallpaper menu item
-		/*
-		menu.add(MENU_GROUP_ADD, MENU_WALLPAPER_SETTINGS, 0,
+		menu.add(MENU_GROUP_WALLPAPER, MENU_WALLPAPER_SETTINGS, 0,
 				R.string.menu_wallpaper) .setIcon(android.R.drawable.ic_menu_gallery)
 				.setAlphabeticShortcut('W');
-		 */
-		// CCHOW CHANGE END
 
-		menu.add(MENU_GROUP_ADD, MENU_EDIT, 0, R.string.menu_edit_desktop)
+		menu.add(MENU_GROUP_LAUNCHER_SETUP, MENU_EDIT, 0, R.string.menu_edit_desktop)
 		.setIcon(android.R.drawable.ic_menu_edit)
 		.setAlphabeticShortcut('E');
 
@@ -1615,7 +1612,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// CCHOW CHANGE END
 
 		// ADW: add custom settings
-		menu.add(MENU_GROUP_ALMOSTNEXUS, MENU_ALMOSTNEXUS, 0,
+		menu.add(MENU_GROUP_LAUNCHER_SETUP, MENU_ALMOSTNEXUS, 0,
 				R.string.menu_launcher_settings)
 				.setIcon(R.drawable.ic_menu_launcher_settings)
 				.setAlphabeticShortcut('X');
@@ -1672,22 +1669,22 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// binding.
 		// Get the vacancy state from the model instead.
 		mMenuAddInfo = mWorkspace.findAllVacantCellsFromModel();
-		menu.setGroupEnabled(MENU_GROUP_ADD, mMenuAddInfo != null
-				&& mMenuAddInfo.valid);
 
 		boolean forceHidden = getResources().getBoolean(
 				R.bool.force_hidden_settings);
 		boolean showmenu = true;
 		if (!forceHidden && LOGD) {
 			// //ADW: Check if this is the default launcher
-			checkDefaultLauncher();			
+			checkDefaultLauncher();
 		}
 
 		if (allAppsOpen)
 			showmenu = false;
 
-		menu.setGroupVisible(MENU_GROUP_ALMOSTNEXUS, showmenu && !mLauncherLocked);
-		menu.setGroupVisible(MENU_GROUP_ADD, !allAppsOpen  && !mLauncherLocked);		
+		menu.setGroupVisible(MENU_GROUP_ADD, !allAppsOpen  && !mLauncherLocked && mMenuAddInfo != null && mMenuAddInfo.valid);
+		menu.setGroupVisible(MENU_GROUP_WALLPAPER, !allAppsOpen  && !mLauncherLocked && !(mMenuAddInfo != null && mMenuAddInfo.valid));
+
+		menu.setGroupVisible(MENU_GROUP_LAUNCHER_SETUP, showmenu && !mLauncherLocked);
 		menu.setGroupVisible(MENU_GROUP_NORMAL, !allAppsOpen);
 		menu.setGroupVisible(MENU_GROUP_CATALOGUE, allAppsOpen && !mLauncherLocked);
 		if (mLauncherLocked) {
@@ -3927,8 +3924,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						((ImageView) group.getChildAt(i))
 						.setImageDrawable(null);
 					}
-					ArrayList<Bitmap> bitmaps = (ArrayList<Bitmap>) v
-							.getTag(R.id.icon);
+					ArrayList<Bitmap> bitmaps = ((ArrayList<Bitmap>) v
+							.getTag(R.id.icon));
 					for (Bitmap bitmap : bitmaps)
 						bitmap.recycle();
 
@@ -5575,16 +5572,19 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 		// rearrange user info folder item
 		if (info instanceof UserFolderInfo) {
-			qa.addItem(
-					getResources().getDrawable(
-							R.drawable.ic_menu_grabber),
-							R.string.menu_folder_icon_reorder, new OnClickListener() {
-						public void onClick(View v) {
-							Intent i = new Intent(Launcher.this, FolderIconReorderActivity.class);
-							i.putExtra(FolderIconReorderActivity.EXTRA_FOLDER_INFO_ID, ((UserFolderInfo) info).id);
-							Launcher.this.startActivity(i);
-						}
-					});
+			final UserFolderInfo ufi = (UserFolderInfo) info;
+			if (!ufi.contents.isEmpty()) {
+				qa.addItem(
+						getResources().getDrawable(
+								R.drawable.ic_menu_grabber),
+								R.string.menu_folder_icon_reorder, new OnClickListener() {
+							public void onClick(View v) {
+								Intent i = new Intent(Launcher.this, FolderIconReorderActivity.class);
+								i.putExtra(FolderIconReorderActivity.EXTRA_FOLDER_INFO_ID, ufi.id);
+								Launcher.this.startActivity(i);
+							}
+						});
+			}
 		}
 		// shows the quick action window on the screen
 		qa.show();

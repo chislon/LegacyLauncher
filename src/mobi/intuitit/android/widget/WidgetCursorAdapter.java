@@ -42,7 +42,6 @@ public class WidgetCursorAdapter extends CursorAdapter {
 
     boolean mAllowRequery = true;
 
-    private ContentResolver mContentResolver;
     private Intent mIntent;
 
     class ItemMapping {
@@ -104,7 +103,6 @@ public class WidgetCursorAdapter extends CursorAdapter {
 
         mAppWidgetId = appWidgetId;
         mListViewId = listViewId;
-        mContentResolver = context.getContentResolver();
         mIntent = intent;
         mAppWidgetProvider = provider;
         mInflater = LayoutInflater.from(context);

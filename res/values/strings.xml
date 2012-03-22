@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.22 Beta</string>
+    <string name="app_version">0.24 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -187,11 +187,11 @@
     <!-- Drawer preferences -->
     <string name="pref_title_drawer">Applications Tray</string>
     <string name="pref_title_drawer_settings">Tray Configuration</string>
-    <string name="pref_summary_drawer_settings">Tray style, layout, response</string>
+    <string name="pref_summary_drawer_settings">Style, layout, response</string>
     <string name="pref_title_drawer_appearance">Tray Appearance</string>
-    <string name="pref_summary_drawer_appearance">Application tray visual settings</string>
+    <string name="pref_summary_drawer_appearance">Visual settings</string>
     <string name="pref_title_drawer_catalogs">Tray Catalogs</string>
-    <string name="pref_summary_drawer_catalogs">Applications tray catalogs preferences</string>
+    <string name="pref_summary_drawer_catalogs">Catalogs preferences</string>
     <string name="pref_title_drawer_animation_speed">Animation duration</string>
     <string name="pref_summary_drawer_animation_speed">Set animation time in milliseconds </string>
     <string name="pref_dialog_animation_speed">Set animation time in milliseconds</string>
@@ -323,8 +323,8 @@
     <string name="pref_summary_autosize_icons">Stretch icons/widgets to prevent overlap</string>
     <string name="pref_title_drawer_labels">Show app labels</string>
     <string name="pref_summary_drawer_labels">Show the labels on app tray</string>
-    <string name="widget_config_dialog_title">Widget span config</string>
-    <string name="widget_config_dialog_summary">Define number of widget span rows/columns</string>
+    <string name="widget_config_dialog_title">Widget span</string>
+    <string name="widget_config_dialog_summary">Number of rows/columns widget spans across</string>
     <string name="widget_columns">Columns</string>
     <string name="widget_rows">Rows</string>
     <string name="pref_title_screen_cache">Scrolling Cache</string>

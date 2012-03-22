@@ -16,14 +16,11 @@
 
 package com.wordpress.chislonchow.legacylauncher;
 
-import com.wordpress.chislonchow.legacylauncher.R;
-
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ContentResolver;
 import android.database.Cursor;
-import android.util.Log;
 import android.widget.Toast;
 
 public class InstallShortcutReceiver extends BroadcastReceiver {

@@ -1,44 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="6dip"
+    android:layout_marginLeft="15dip"
+    android:layout_marginRight="16dip"
+    android:layout_marginTop="6dip"
+    android:layout_weight="1"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
+    android:paddingLeft="?android:attr/scrollbarSize"
     android:paddingRight="?android:attr/scrollbarSize" >
 
-    <RelativeLayout
+    <TextView
+        android:id="@+android:id/dialogMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dip"
-        android:layout_marginLeft="15dip"
-        android:layout_marginRight="16dip"
-        android:layout_marginTop="6dip"
-        android:layout_weight="1" >
+        android:layout_alignLeft="@android:id/title"
+        android:layout_below="@android:id/title"
+        android:maxLines="2"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <TextView
-            android:id="@+android:id/dialogMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@android:id/title"
-            android:layout_below="@android:id/title"
-            android:maxLines="2"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+    <SeekBar
+        android:id="@+android:id/myBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@android:id/dialogMessage"
+        android:layout_below="@android:id/dialogMessage" />
 
-        <SeekBar
-            android:id="@+android:id/myBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@android:id/dialogMessage"
-            android:layout_below="@android:id/dialogMessage" />
+    <TextView
+        android:id="@+android:id/actualValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@android:id/myBar"
+        android:layout_centerHorizontal="true"
+        android:maxLines="1"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <TextView
-            android:id="@+android:id/actualValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@android:id/myBar"
-            android:layout_centerHorizontal="true"
-            android:maxLines="1"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>

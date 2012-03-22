@@ -462,12 +462,12 @@ public class XmlUtils
      * @see #readThisMapXml
      * #see #writeMapXml
      */
-    public static final HashMap readMapXml(InputStream in)
+    public static final HashMap<?, ?> readMapXml(InputStream in)
     throws XmlPullParserException, java.io.IOException
     {
         XmlPullParser   parser = Xml.newPullParser();
         parser.setInput(in, null);
-        return (HashMap)readValueXml(parser, new String[1]);
+        return (HashMap<?, ?>)readValueXml(parser, new String[1]);
     }
 
     /**
@@ -506,10 +506,10 @@ public class XmlUtils
      * @see #readMapXml
      */
     @SuppressWarnings("static-access")
-	public static final HashMap readThisMapXml(XmlPullParser parser, String endTag, String[] name)
+	public static final HashMap<String, Object> readThisMapXml(XmlPullParser parser, String endTag, String[] name)
     throws XmlPullParserException, java.io.IOException
     {
-        HashMap map = new HashMap();
+        HashMap<String, Object> map = new HashMap<String, Object>();
 
         int eventType = parser.getEventType();
         do {

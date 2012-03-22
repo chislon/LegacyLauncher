@@ -1,10 +1,8 @@
 package com.wordpress.chislonchow.legacylauncher;
 
 import java.util.ArrayList;
-import com.wordpress.chislonchow.legacylauncher.R;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.graphics.Rect;
