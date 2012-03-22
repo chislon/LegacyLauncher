@@ -37,6 +37,15 @@
         android:background="@android:drawable/bottom_bar" >
 
         <Button
+            android:id="@+id/button_folder_icon_sort"
+            android:layout_width="150.0dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5.0dip"
+            android:text="@string/button_folder_icon_reorder_sort" >
+        </Button>
+
+        <Button
             android:id="@+id/button_folder_icon_done"
             android:layout_width="150.0dip"
             android:layout_height="wrap_content"

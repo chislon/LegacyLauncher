@@ -142,7 +142,7 @@ class ApplicationListAdapter extends BaseAdapter {
 		}
 	}
 	
-	static class AppListInfoNameSelectedDscComparator implements Comparator<AppListInfo> {
+	private static class AppListInfoNameSelectedDscComparator implements Comparator<AppListInfo> {
 		public final int compare(AppListInfo a, AppListInfo b) {
 			int result = (a.checked == b.checked ? 0 : (a.checked ? 1 : -1));
 			if (0 == result)
@@ -153,7 +153,7 @@ class ApplicationListAdapter extends BaseAdapter {
 		}
 	}
 
-	static class AppListInfoAgeComparator implements Comparator<AppListInfo> {
+	private static class AppListInfoAgeComparator implements Comparator<AppListInfo> {
 		public final int compare(AppListInfo a, AppListInfo b) {
 			int result = a.firstInstallTime < b.firstInstallTime ? -1 :
 				(a.firstInstallTime > b.firstInstallTime) ? 1 : 0;

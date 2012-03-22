@@ -56,6 +56,7 @@ public class ReorderTouchInterpolator extends ListView {
 	private int mItemHeightHalf;
 
 	private int mScreenWidth;
+	private float mScale;
 
 	public ReorderTouchInterpolator(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -67,6 +68,8 @@ public class ReorderTouchInterpolator extends ListView {
 
 		final WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 		mScreenWidth = wm.getDefaultDisplay().getWidth();
+		
+		mScale = res.getDisplayMetrics().density;
 	}
 
 	@Override
@@ -270,16 +273,16 @@ public class ReorderTouchInterpolator extends ListView {
 					adjustScrollBounds(y);
 					if (y > mLowerBound) {
 						// scroll the list up a bit
-						speed = y > (mHeight + mLowerBound) / 2 ? 16 : 4;
+						speed = (int) ((y > (mHeight + mLowerBound) / 2 ? 16 : 4) * mScale);
 					} else if (y < mUpperBound) {
 						// scroll the list down a bit
-						speed = y < mUpperBound / 2 ? -16 : -4;
+						speed = (int) ((y < mUpperBound / 2 ? -16 : -4) * mScale);
 					}
 					if (speed != 0) {
 						int ref = pointToPosition(0, mHeight / 2);
 						if (ref == AdapterView.INVALID_POSITION) {
 							//we hit a divider or an invisible view, check somewhere else
-							ref = pointToPosition(0, mHeight / 2 + getDividerHeight() + 64);
+							ref = pointToPosition(0, mHeight / 2 + getDividerHeight() + (int)(64 * mScale));
 						}
 						View v = getChildAt(ref - getFirstVisiblePosition());
 						if (v!= null) {

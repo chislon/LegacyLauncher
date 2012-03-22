@@ -24,8 +24,6 @@ import android.widget.TextView;
  */
 public class UserFolder extends Folder implements DropTarget {
 
-	protected static String EXTRA_FOLDER_INFO_ID = "EXTRA_FOLDER_INFO_ID";
-
 	public UserFolder(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
@@ -168,24 +166,5 @@ public class UserFolder extends Folder implements DropTarget {
 			textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTextSize);
 			return convertView;
 		}
-	}
-
-	@Override
-	public boolean onLongClick(View v) {
-		if (mInfo != null && !mLauncher.isLauncherLocked()) {
-			Intent i = new Intent(mLauncher, FolderIconReorderActivity.class);
-			i.putExtra(EXTRA_FOLDER_INFO_ID, mInfo.id);
-			mLauncher.startActivity(i);
-		}
-		mLauncher.closeFolder(this);
-		/*
-		mLauncher.closeFolder(this);
-		// disallow folder rename if locked
-		if (!mLauncher.isLauncherLocked()) {
-			mLauncher.editShortcut(mInfo);
-		}
-		//mLauncher.showRenameDialog(mInfo);
-		 */
-		return true;
 	}
 }

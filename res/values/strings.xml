@@ -486,7 +486,9 @@
 
     <!-- Activity Reorder -->
     <string name="activity_label_reorder_activity">"Rearranging Folder: "</string>
-    <string name="toast_folder_icon_reorder_finished">"Changes have been saved to the folder "</string>
-    <string name="button_folder_icon_reorder_rename">"Rename"</string>
+    <string name="toast_folder_icon_reorder_finished">"Changes have been saved to folder "</string>
+    <string name="button_folder_icon_reorder_sort">"Sort by name"</string>
+    <string name="dialog_folder_icon_reorder_sort">"Sort all icons in folder by name?"</string>
+    <string name="menu_folder_icon_reorder">"Rearrange"</string>
 
 </resources>

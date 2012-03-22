@@ -5319,6 +5319,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			// adds an item to the badge and defines the quick action to be
 			// triggered
 			// when the item is clicked on
+			
+			// remove icon
 			qa.addItem(
 					getResources().getDrawable(
 							android.R.drawable.ic_menu_delete),
@@ -5383,7 +5385,19 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							mQaw = null;
 						}
 					});
-
+			if (info instanceof UserFolderInfo) {
+				// rearrange user info folder item
+				qa.addItem(
+						getResources().getDrawable(
+								R.drawable.ic_menu_grabber),
+								R.string.menu_folder_icon_reorder, new OnClickListener() {
+							public void onClick(View v) {
+								Intent i = new Intent(Launcher.this, FolderIconReorderActivity.class);
+								i.putExtra(FolderIconReorderActivity.EXTRA_FOLDER_INFO_ID, ((UserFolderInfo) info).id);
+								Launcher.this.startActivity(i);
+							}
+						});
+			}
 			if (info instanceof ApplicationInfo) {
 				qa.addItem(
 						getResources().getDrawable(

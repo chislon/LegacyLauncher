@@ -16,11 +16,17 @@
 
 package com.wordpress.chislonchow.legacylauncher;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +38,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wordpress.chislonchow.legacylauncher.catalogue.AppListInfo;
 import com.wordpress.chislonchow.legacylauncher.widgets.ReorderTouchInterpolator;
 
 public class FolderIconReorderActivity extends ListActivity {
 
+	protected final static String EXTRA_FOLDER_INFO_ID = "EXTRA_FOLDER_INFO_ID";
+	
 	private ListView mList;
 
 	private boolean mDirty = false;
+
+	private static final Collator sCollator = Collator.getInstance();
 
 	UserFolderInfo mFolderInfo;
 
@@ -52,7 +63,7 @@ public class FolderIconReorderActivity extends ListActivity {
 		Bundle extras = getIntent().getExtras(); 
 
 		if (extras != null) {
-			final long id = extras.getLong(UserFolder.EXTRA_FOLDER_INFO_ID);
+			final long id = extras.getLong(EXTRA_FOLDER_INFO_ID);
 			final LauncherModel launcherModel = Launcher.getLauncherModel();
 			if (launcherModel==null || id==0) {
 				finish();
@@ -70,8 +81,7 @@ public class FolderIconReorderActivity extends ListActivity {
 
 		((ReorderTouchInterpolator) mList).setDropListener(mDropListener);
 
-		setListAdapter(new FolderIconAdapter(this, mFolderInfo.contents));
-
+		setListAdapter(new FolderIconAdapter(this));
 
 		Button button;
 		button = (Button) findViewById(R.id.button_folder_icon_done);
@@ -79,6 +89,23 @@ public class FolderIconReorderActivity extends ListActivity {
 			@Override
 			public void onClick(View v) {
 				finish();
+			}
+		});
+		button = (Button) findViewById(R.id.button_folder_icon_sort);
+		button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new AlertDialog.Builder(FolderIconReorderActivity.this)
+				.setMessage(R.string.dialog_folder_icon_reorder_sort)
+				.setPositiveButton(android.R.string.ok, 
+						new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,
+							int which) {
+						sortFolderIcons();
+					}
+				})
+				.setNegativeButton(android.R.string.cancel, null)
+				.show();
 			}
 		});
 	}
@@ -109,25 +136,19 @@ public class FolderIconReorderActivity extends ListActivity {
 	};
 
 	private class FolderIconAdapter extends BaseAdapter {
-		private Context mContext;
 
 		private LayoutInflater mInflater;
 
-		ArrayList<ApplicationInfo> mFolderContents;
-
-		public FolderIconAdapter(Context c, ArrayList<ApplicationInfo> folderContents) {
-			mContext = c;
-			mInflater = LayoutInflater.from(mContext);
-
-			mFolderContents = folderContents;
+		public FolderIconAdapter(Context context) {
+			mInflater = LayoutInflater.from(context);
 		}
 
 		public int getCount() {
-			return mFolderContents.size();
+			return mFolderInfo.contents.size();
 		}
 
 		public Object getItem(int position) {
-			return mFolderContents.get(position);
+			return mFolderInfo.contents.get(position);
 		}
 
 		public long getItemId(int position) {
@@ -136,13 +157,13 @@ public class FolderIconReorderActivity extends ListActivity {
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 			final View v;
-			if(convertView == null) {
+			if (convertView == null) {
 				v = mInflater.inflate(R.layout.order_folder_icon_list_item, null);
 			} else {
 				v = convertView;
 			}
 
-			ApplicationInfo appInfo = mFolderContents.get(position);
+			ApplicationInfo appInfo = mFolderInfo.contents.get(position);
 
 			final TextView name = (TextView)v.findViewById(R.id.name);
 			final ImageView icon = (ImageView)v.findViewById(R.id.icon);
@@ -163,5 +184,21 @@ public class FolderIconReorderActivity extends ListActivity {
 		public boolean isEnabled(int position) { 
 			return false; 
 		} 
+	}
+
+	private void sortFolderIcons() {
+		if (mList.getChildCount() > 1) {
+			Comparator<ApplicationInfo> revert = Collections.reverseOrder(new FolderIconNameComparator());
+			Collections.sort(mFolderInfo.contents, revert);
+			mList.invalidateViews();
+			mDirty = true;
+		}
+	}
+
+	private static class FolderIconNameComparator implements Comparator<ApplicationInfo> {
+		public final int compare(ApplicationInfo a, ApplicationInfo b) {
+			int result = sCollator.compare(b.title, a.title);
+			return result;
+		}
 	}
 }
