@@ -17,6 +17,7 @@
 
 <resources>
 
+    <!-- Launcher dimensions -->
     <dimen name="scroll_zone">25dp</dimen>
     <dimen name="search_widget_inset">19dp</dimen>
     <dimen name="gesture_thumbnail_inset">8dp</dimen>
@@ -25,5 +26,11 @@
     <dimen name="cell_height">100dp</dimen>
     <dimen name="desktop_paginator_padding">10dp</dimen>
     <dimen name="counter_circle_padding">3dp</dimen>
+
+    <!-- Activity reorder dialog dimensions -->
+    <!-- height of a normal list item in edit playlist mode -->
+    <dimen name="normal_height">64dip</dimen>
+    <!-- height of an expanded list item in edit playlist mode -->
+    <dimen name="expanded_height">128dip</dimen>
 
 </resources>

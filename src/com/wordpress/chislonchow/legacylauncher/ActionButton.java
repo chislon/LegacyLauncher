@@ -114,7 +114,7 @@ DragListener, OnLongClickListener, DragSource {
 			accept = false;
 			break;
 		}
-		final LauncherModel model = Launcher.getModel();
+		final LauncherModel model = Launcher.getLauncherModel();
 		// TODO:ADW check this carefully
 		// We need to remove current item from database before adding the new
 		// one
@@ -292,7 +292,7 @@ DragListener, OnLongClickListener, DragSource {
 					&& Intent.ACTION_MAIN.equals(intent.getAction())
 					&& name != null
 					&& packageName.equals(name.getPackageName())) {
-				final Drawable icon = Launcher.getModel()
+				final Drawable icon = Launcher.getLauncherModel()
 						.getApplicationInfoIcon(mLauncher.getPackageManager(),
 								info, mLauncher);
 				Drawable myIcon = null;

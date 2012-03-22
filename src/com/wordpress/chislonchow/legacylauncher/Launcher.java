@@ -23,7 +23,7 @@ import static android.util.Log.w;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilter;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppGroupAdapter;
-import com.wordpress.chislonchow.legacylauncher.catalogue.AppInfoMList;
+import com.wordpress.chislonchow.legacylauncher.catalogue.AppInfoListActivity;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters.Catalog;
 import com.wordpress.chislonchow.legacylauncher.ui.NumberPicker;
 import com.wordpress.chislonchow.legacylauncher.R;
@@ -172,7 +172,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	static final int WALLPAPER_SCREENS_SPAN = 2;
 	static final int SCREEN_COUNT = 5;
-	static final int DEFAULT_SCREN = 2;
+	static final int DEFAULT_SCREEN = 2;
 	static final int NUMBER_CELLS_X = 4;
 	static final int NUMBER_CELLS_Y = 4;
 
@@ -216,10 +216,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	// Type: long
 	private static final String RUNTIME_STATE_PENDING_GROUP_PICK_ID = "launcher.rename_folder_id";
 
-	private static final LauncherModel sModel = new LauncherModel();
+	private static final LauncherModel sLauncherModel = new LauncherModel();
 
 	private static final Object sLock = new Object();
-	private static int sScreen = DEFAULT_SCREN;
+	private static int sScreen = DEFAULT_SCREEN;
 
 	private final BroadcastReceiver mApplicationsReceiver = new ApplicationsIntentReceiver();
 	private final BroadcastReceiver mCloseSystemDialogsReceiver = new CloseSystemDialogsIntentReceiver();
@@ -547,9 +547,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	private void startLoaders() {
-		boolean loadApplications = sModel.loadApplications(true, this,
+		boolean loadApplications = sLauncherModel.loadApplications(true, this,
 				mLocaleChanged);
-		sModel.loadUserItems(!mLocaleChanged, this, mLocaleChanged,
+		sLauncherModel.loadUserItems(!mLocaleChanged, this, mLocaleChanged,
 				loadApplications);
 
 		mRestoring = false;
@@ -815,7 +815,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		if (renameFolder) {
 			long id = savedState
 					.getLong(RUNTIME_STATE_PENDING_FOLDER_RENAME_ID);
-			mFolderInfo = sModel.getFolderById(this, id);
+			mFolderInfo = sLauncherModel.getFolderById(this, id);
 			mRestoring = true;
 		}
 		boolean groupPick = savedState.getBoolean(
@@ -1109,13 +1109,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		final ApplicationInfo info = addShortcut(this, data, cellInfo, false);
 
 		if (!mRestoring) {
-			sModel.addDesktopItem(info);
+			sLauncherModel.addDesktopItem(info);
 
 			final View view = createShortcut(info);
 			mWorkspace.addInCurrentScreen(view, cellInfo.cellX, cellInfo.cellY,
 					1, 1, insertAtFirst);
-		} else if (sModel.isDesktopLoaded()) {
-			sModel.addDesktopItem(info);
+		} else if (sLauncherModel.isDesktopLoaded()) {
+			sLauncherModel.addDesktopItem(info);
 		}
 	}
 
@@ -1493,8 +1493,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mAllAppsGrid.clearTextFilter();
 		mAllAppsGrid.setAdapter(null);
 
-		sModel.unbind();
-		sModel.abortLoaders();
+		sLauncherModel.unbind();
+		sLauncherModel.abortLoaders();
 		mWorkspace.unbindWidgetScrollableViews();
 		getContentResolver().unregisterContentObserver(mObserver);
 		getContentResolver().unregisterContentObserver(mWidgetObserver);
@@ -1588,17 +1588,18 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			return false;
 
 		super.onCreateOptionsMenu(menu);
-		/*
+
 		menu.add(MENU_GROUP_ADD, MENU_ADD, 0, R.string.menu_add)
 		.setIcon(android.R.drawable.ic_menu_add)
 		.setAlphabeticShortcut('A');
-		 */
 
 		// CCHOW CHANGE START
 		// disable wallpaper menu item
+		/*
 		menu.add(MENU_GROUP_ADD, MENU_WALLPAPER_SETTINGS, 0,
 				R.string.menu_wallpaper) .setIcon(android.R.drawable.ic_menu_gallery)
 				.setAlphabeticShortcut('W');
+		 */
 		// CCHOW CHANGE END
 
 		menu.add(MENU_GROUP_ADD, MENU_EDIT, 0, R.string.menu_edit_desktop)
@@ -1666,15 +1667,14 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		super.onPrepareOptionsMenu(menu);
 		if (mIsEditMode || mIsWidgetEditMode || showingPreviews)
 			return false;
-		// CCHOW let's not care about whether or not the workspace is empty
-		/*
+
 		// We can't trust the view state here since views we may not be done
 		// binding.
 		// Get the vacancy state from the model instead.
 		mMenuAddInfo = mWorkspace.findAllVacantCellsFromModel();
 		menu.setGroupEnabled(MENU_GROUP_ADD, mMenuAddInfo != null
 				&& mMenuAddInfo.valid);
-		 */
+
 		boolean forceHidden = getResources().getBoolean(
 				R.bool.force_hidden_settings);
 		boolean showmenu = true;
@@ -1810,22 +1810,22 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	private void showAppPickerList(boolean isNew) {
 
-		final AppCatalogueFilter flt = sModel.getApplicationsAdapter()
+		final AppCatalogueFilter flt = sLauncherModel.getApplicationsAdapter()
 				.getCatalogueFilter();
 		if (!flt.isUserGroup()) {
 			Toast.makeText(this, getString(R.string.app_group_config_error),
 					Toast.LENGTH_SHORT).show();
 			return;
 		}
-		Intent i = new Intent(this, AppInfoMList.class);
-		i.putExtra(AppInfoMList.EXTRA_CATALOGUE_INDEX,
+		Intent i = new Intent(this, AppInfoListActivity.class);
+		i.putExtra(AppInfoListActivity.EXTRA_CATALOGUE_INDEX,
 				flt.getCurrentFilterIndex());
-		i.putExtra(AppInfoMList.EXTRA_CATALOGUE_NEW, isNew);
+		i.putExtra(AppInfoListActivity.EXTRA_CATALOGUE_NEW, isNew);
 		startActivityForResult(i, REQUEST_SHOW_APP_LIST);
 	}
 
 	void showDeleteGrpDialog() {
-		if (!sModel.getApplicationsAdapter().getCatalogueFilter().isUserGroup()) {
+		if (!sLauncherModel.getApplicationsAdapter().getCatalogueFilter().isUserGroup()) {
 			Toast.makeText(this, getString(R.string.app_group_remove_error),
 					Toast.LENGTH_SHORT).show();
 			return;
@@ -2016,8 +2016,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				LauncherSettings.Favorites.CONTAINER_DESKTOP,
 				mWorkspace.getCurrentScreen(), cellInfo.cellX, cellInfo.cellY,
 				false);
-		sModel.addDesktopItem(folderInfo);
-		sModel.addFolder(folderInfo);
+		sLauncherModel.addDesktopItem(folderInfo);
+		sLauncherModel.addFolder(folderInfo);
 
 		// Create the view
 		FolderIcon newFolder = FolderIcon
@@ -2038,7 +2038,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		final LiveFolderInfo info = addLiveFolder(this, data, cellInfo, false);
 
 		if (!mRestoring) {
-			sModel.addDesktopItem(info);
+			sLauncherModel.addDesktopItem(info);
 
 			final View view = LiveFolderIcon.fromXml(R.layout.live_folder_icon,
 					this, (ViewGroup) mWorkspace.getChildAt(mWorkspace
@@ -2047,8 +2047,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				((TextView) view).setTypeface(themeFont);
 			mWorkspace.addInCurrentScreen(view, cellInfo.cellX, cellInfo.cellY,
 					1, 1, insertAtFirst);
-		} else if (sModel.isDesktopLoaded()) {
-			sModel.addDesktopItem(info);
+		} else if (sLauncherModel.isDesktopLoaded()) {
+			sLauncherModel.addDesktopItem(info);
 		}
 	}
 
@@ -2099,7 +2099,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		LauncherModel.addItemToDatabase(context, info,
 				LauncherSettings.Favorites.CONTAINER_DESKTOP, cellInfo.screen,
 				cellInfo.cellX, cellInfo.cellY, notify);
-		sModel.addFolder(info);
+		sLauncherModel.addFolder(info);
 
 		return info;
 	}
@@ -2296,7 +2296,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 */
 	private void onFavoritesChanged() {
 		mDesktopLocked = true;
-		sModel.loadUserItems(false, this, false, false);
+		sLauncherModel.loadUserItems(false, this, false, false);
 	}
 
 	/**
@@ -2324,7 +2324,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private void bindDesktopItems(ArrayList<ItemInfo> shortcuts,
 			ArrayList<LauncherAppWidgetInfo> appWidgets) {
 
-		final ApplicationsAdapter drawerAdapter = sModel
+		final ApplicationsAdapter drawerAdapter = sLauncherModel
 				.getApplicationsAdapter();
 		if (shortcuts == null || appWidgets == null || drawerAdapter == null) {
 			if (LauncherModel.DEBUG_LOADERS)
@@ -2455,7 +2455,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					.getLongArray(RUNTIME_STATE_USER_FOLDERS);
 			if (userFolders != null) {
 				for (long folderId : userFolders) {
-					final FolderInfo info = sModel.findFolderById(folderId);
+					final FolderInfo info = sLauncherModel.findFolderById(folderId);
 					if (info != null) {
 						openFolder(info);
 					}
@@ -2641,7 +2641,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	/**
-	 * Opens the user fodler described by the specified tag. The opening of the
+	 * Opens the user folder described by the specified tag. The opening of the
 	 * folder is animated relative to the specified View. If the View is null,
 	 * no animation is played.
 	 * 
@@ -2743,8 +2743,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		return true;
 	}
 
-	public static LauncherModel getModel() {
-		return sModel;
+	public static LauncherModel getLauncherModel() {
+		return sLauncherModel;
 	}
 
 	void closeAllApplications() {
@@ -2825,7 +2825,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	private void deleteCurrentGroup() {
-		int index = sModel.getApplicationsAdapter().getCatalogueFilter()
+		int index = sLauncherModel.getApplicationsAdapter().getCatalogueFilter()
 				.getCurrentFilterIndex();
 		AppCatalogueFilters.getInstance().dropGroup(index);
 		checkActionButtonsSpecialMode();
@@ -2834,7 +2834,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		/*
 		showSwitchGrp();
 		 */
-		sModel.getApplicationsAdapter().getCatalogueFilter()
+		sLauncherModel.getApplicationsAdapter().getCatalogueFilter()
 		.setCurrentGroupIndex(-1);
 		MyLauncherSettingsHelper.setCurrentAppCatalog(Launcher.this,
 				-1);
@@ -2920,12 +2920,12 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			final String name = mInput.getText().toString();
 			if (!TextUtils.isEmpty(name)) {
 				// Make sure we have the right folder info
-				mFolderInfo = sModel.findFolderById(mFolderInfo.id);
+				mFolderInfo = sLauncherModel.findFolderById(mFolderInfo.id);
 				mFolderInfo.title = name;
 				LauncherModel.updateItemInDatabase(Launcher.this, mFolderInfo);
 
 				if (mDesktopLocked) {
-					sModel.loadUserItems(false, Launcher.this, false, false);
+					sLauncherModel.loadUserItems(false, Launcher.this, false, false);
 				} else {
 					final FolderIcon folderIcon = (FolderIcon) mWorkspace
 							.getViewForTag(mFolderInfo);
@@ -2934,7 +2934,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						getWorkspace().requestLayout();
 					} else {
 						mDesktopLocked = true;
-						sModel.loadUserItems(false, Launcher.this, false, false);
+						sLauncherModel.loadUserItems(false, Launcher.this, false, false);
 					}
 				}
 			}
@@ -3010,7 +3010,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			if (action == AppGroupAdapter.APP_GROUP_ADD) {
 				showNewGrpDialog();
 			} else {
-				sModel.getApplicationsAdapter().getCatalogueFilter()
+				sLauncherModel.getApplicationsAdapter().getCatalogueFilter()
 				.setCurrentGroupIndex(action);
 				MyLauncherSettingsHelper.setCurrentAppCatalog(Launcher.this,
 						action);
@@ -3060,7 +3060,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								name);
 						MyLauncherSettingsHelper.setCurrentAppCatalog(Launcher.this,
 								newGroupIndex);
-						sModel.getApplicationsAdapter().getCatalogueFilter()
+						sLauncherModel.getApplicationsAdapter().getCatalogueFilter()
 						.setCurrentGroupIndex(newGroupIndex);
 						checkActionButtonsSpecialMode();
 						LauncherModel.mApplicationsAdapter.updateDataSet();
@@ -3308,7 +3308,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							if (LauncherModel.DEBUG_LOADERS) {
 								d(LauncherModel.LOG_TAG, "  --> remove package");
 							}
-							sModel.removePackage(Launcher.this, packageName);
+							sLauncherModel.removePackage(Launcher.this, packageName);
 						}
 						// else, we are replacing the package, so a
 						// PACKAGE_ADDED will be sent
@@ -3318,13 +3318,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							if (LauncherModel.DEBUG_LOADERS) {
 								d(LauncherModel.LOG_TAG, "  --> add package");
 							}
-							sModel.addPackage(Launcher.this, packageName);
+							sLauncherModel.addPackage(Launcher.this, packageName);
 						} else {
 							if (LauncherModel.DEBUG_LOADERS) {
 								d(LauncherModel.LOG_TAG,
 										"  --> update package " + packageName);
 							}
-							sModel.updatePackage(Launcher.this, packageName);
+							sLauncherModel.updatePackage(Launcher.this, packageName);
 							updateShortcutsForPackage(packageName);
 						}
 					}
@@ -3334,7 +3334,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						d(LauncherModel.LOG_TAG, "  --> sync package "
 								+ packageName);
 					}
-					sModel.syncPackage(Launcher.this, packageName);
+					sLauncherModel.syncPackage(Launcher.this, packageName);
 				}
 			} else {
 				// ADW: Damn, this should be only for froyo!!!
@@ -3346,7 +3346,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						return;
 					} else {
 						for (int i = 0; i < packages.length; i++) {
-							sModel.addPackage(Launcher.this, packages[i]);
+							sLauncherModel.addPackage(Launcher.this, packages[i]);
 							updateShortcutsForPackage(packages[i]);
 						}
 					}
@@ -3358,7 +3358,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						return;
 					} else {
 						for (int i = 0; i < packages.length; i++) {
-							sModel.removePackage(Launcher.this, packages[i]);
+							sLauncherModel.removePackage(Launcher.this, packages[i]);
 							// ADW: We tell desktop to update packages
 							// (probably will load the standard android icon)
 							// to show the user the app is no more available.
@@ -4187,9 +4187,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					mWorkspace.getCurrentScreen());
 			mWorkspace.lock();
 			if (filter != null)
-				sModel.getApplicationsAdapter().setCatalogueFilter(filter);
+				sLauncherModel.getApplicationsAdapter().setCatalogueFilter(filter);
 			else
-				sModel.getApplicationsAdapter().setCatalogueFilter(
+				sLauncherModel.getApplicationsAdapter().setCatalogueFilter(
 						AppCatalogueFilters.getInstance().getDrawerFilter());
 			// mDesktopLocked=true;
 			mWorkspace.invalidate();
@@ -4201,9 +4201,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			if (mDesktopIndicator != null)
 				mDesktopIndicator.hide();
 		} else if (filter != null)
-			sModel.getApplicationsAdapter().setCatalogueFilter(filter);
+			sLauncherModel.getApplicationsAdapter().setCatalogueFilter(filter);
 		else
-			sModel.getApplicationsAdapter().setCatalogueFilter(
+			sLauncherModel.getApplicationsAdapter().setCatalogueFilter(
 					AppCatalogueFilters.getInstance().getDrawerFilter());
 	}
 
@@ -4552,7 +4552,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mWorkspace.getCurrentScreen(), xy[0], xy[1], false);
 
 		if (!mRestoring) {
-			sModel.addDesktopAppWidget(launcherInfo);
+			sLauncherModel.addDesktopAppWidget(launcherInfo);
 
 			// Perform actual inflation because we're live
 			launcherInfo.hostView = mAppWidgetHost.createView(this,
@@ -4563,8 +4563,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 			mWorkspace.addInCurrentScreen(launcherInfo.hostView, xy[0], xy[1],
 					launcherInfo.spanX, launcherInfo.spanY, insertAtFirst);
-		} else if (sModel.isDesktopLoaded()) {
-			sModel.addDesktopAppWidget(launcherInfo);
+		} else if (sLauncherModel.isDesktopLoaded()) {
+			sLauncherModel.addDesktopAppWidget(launcherInfo);
 		}
 		// finish load a widget, send it an intent
 		if (appWidgetInfo != null)
@@ -4575,7 +4575,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 * private void realAddSearch(Widget info,final CellLayout.CellInfo
 	 * cellInfo,final int[] xy,int spanX,int spanY){ if (!findSlot(cellInfo, xy,
 	 * spanX, spanY)) return; info.spanX=spanX; info.spanY=spanY;
-	 * sModel.addDesktopItem(info); LauncherModel.addItemToDatabase(this, info,
+	 * sLauncherModel.addDesktopItem(info); LauncherModel.addItemToDatabase(this, info,
 	 * LauncherSettings.Favorites.CONTAINER_DESKTOP,
 	 * mWorkspace.getCurrentScreen(), xy[0], xy[1], false);
 	 * 
@@ -4702,7 +4702,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			String name = data.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);
 			if (!TextUtils.isEmpty(name)) {
 				// Make sure we have the right folder info
-				folderInfo = getModel().findFolderById(folderInfo.id);
+				folderInfo = getLauncherModel().findFolderById(folderInfo.id);
 				folderInfo.title = name;
 
 				Bitmap bitmap = data
@@ -4720,7 +4720,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				if (!isWorkspaceLocked()) {
 					mDesktopLocked = true;
 				}
-				getModel().loadUserItems(false, this, false, false);
+				getLauncherModel().loadUserItems(false, this, false, false);
 			}
 		} else {
 			ApplicationInfo info = LauncherModel.loadApplicationInfoById(this,
@@ -4736,7 +4736,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							Utilities.createBitmapThumbnail(bitmap, this));
 				} else if (info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION) {
 					// well we need one so get the app's icon
-					icon = sModel.getApplicationInfoIcon(getPackageManager(),
+					icon = sLauncherModel.getApplicationInfoIcon(getPackageManager(),
 							info, this);
 					if (icon instanceof BitmapDrawable) {
 						icon = new FastBitmapDrawable(
@@ -5092,7 +5092,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						checkRect.set(tmpposition[0], tmpposition[1],
 								tmpposition[0] + tmpspans[0],
 								tmpposition[1] + tmpspans[1]);
-						boolean ocupada = getModel().ocuppiedArea(
+						boolean ocupada = getLauncherModel().ocuppiedArea(
 								screen.getScreen(), appWidgetId,
 								checkRect);
 						if (!ocupada) {
@@ -5153,7 +5153,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	void navigateCatalogs(final int direction) {
-		ApplicationsAdapter drawerAdapter = sModel.getApplicationsAdapter();
+		ApplicationsAdapter drawerAdapter = sLauncherModel.getApplicationsAdapter();
 		if (drawerAdapter == null)
 			return;
 
@@ -5241,7 +5241,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					((CounterImageView) view).setCounter(counter, color);
 				// else if
 				view.invalidate();
-				sModel.updateCounterDesktopItem(info, counter, color);
+				sLauncherModel.updateCounterDesktopItem(info, counter, color);
 			}
 		}
 	}
@@ -5256,7 +5256,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			updateCounters(mRAB, packageName, counter, color);
 			updateCounters(mLAB2, packageName, counter, color);
 			updateCounters(mRAB2, packageName, counter, color);
-			sModel.updateCounterForPackage(this, packageName, counter, color);
+			sLauncherModel.updateCounterForPackage(this, packageName, counter, color);
 		}
 	}
 
@@ -5324,7 +5324,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							android.R.drawable.ic_menu_delete),
 							R.string.menu_delete, new OnClickListener() {
 						public void onClick(View v) {
-							final LauncherModel model = Launcher.getModel();
+							final LauncherModel model = Launcher.getLauncherModel();
 							boolean removedFromFolder = false;
 							if (info.container == LauncherSettings.Favorites.CONTAINER_DESKTOP) {
 								if (info instanceof LauncherAppWidgetInfo) {
@@ -5334,7 +5334,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								}
 							} else {
 								// in a folder?
-								FolderInfo source = sModel.getFolderById(
+								FolderInfo source = sLauncherModel.getFolderById(
 										Launcher.this, info.container);
 								if (source instanceof UserFolderInfo) {
 									final UserFolderInfo userFolderInfo = (UserFolderInfo) source;

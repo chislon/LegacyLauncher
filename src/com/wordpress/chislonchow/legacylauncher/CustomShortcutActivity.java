@@ -109,16 +109,16 @@ public class CustomShortcutActivity extends Activity implements OnClickListener 
 			finish();
 		}
 
-		setContentView(R.layout.custom_shirtcuts);
+		setContentView(R.layout.custom_shortcuts);
 		btPickActivity=(Button) findViewById(R.id.pick_activity);
 		btPickActivity.setOnClickListener(this);
 		btPickIcon=(ImageButton) findViewById(R.id.pick_icon);
 		btPickIcon.setOnClickListener(this);
 		btPickIcon.setEnabled(false);
-		btOk=(Button) findViewById(R.id.shirtcut_ok);
+		btOk=(Button) findViewById(R.id.shortcut_ok);
 		btOk.setEnabled(false);
 		btOk.setOnClickListener(this);
-		edLabel=(EditText) findViewById(R.id.shirtcut_label);
+		edLabel=(EditText) findViewById(R.id.shortcut_label);
 		mPackageManager=getPackageManager();
 		mIconSize=(int) getResources().getDimension(android.R.dimen.app_icon_size);
 	    loadFromItemInfo(getItemInfo());
@@ -444,16 +444,16 @@ public class CustomShortcutActivity extends Activity implements OnClickListener 
 
 		Dialog createDialog() {
 		    mAdapter = new ArrayAdapter<String>(CustomShortcutActivity.this, R.layout.add_list_item);
-		    mAdapter.add(getString(R.string.shirtcuts_select_picture));
-		    mAdapter.add(getString(R.string.shirtcuts_crop_picture));
-            mAdapter.add(getString(R.string.shirtcuts_icon_packs));
+		    mAdapter.add(getString(R.string.shortcuts_select_picture));
+		    mAdapter.add(getString(R.string.shortcuts_crop_picture));
+            mAdapter.add(getString(R.string.shortcuts_icon_packs));
             if ( mIconResource != null )
             {
-                mAdapter.add(getString(R.string.shirtcuts_restore_original));
+                mAdapter.add(getString(R.string.shortcuts_restore_original));
             }
 
 		    final AlertDialog.Builder builder = new AlertDialog.Builder(CustomShortcutActivity.this);
-		    builder.setTitle(getString(R.string.shirtcuts_select_icon_type));
+		    builder.setTitle(getString(R.string.shortcuts_select_icon_type));
 		    builder.setAdapter(mAdapter, this);
 
 		    builder.setInverseBackgroundForced(false);
@@ -498,7 +498,7 @@ public class CustomShortcutActivity extends Activity implements OnClickListener 
 			case 2:
 				//Icon packs
 				Intent packIntent=new Intent(ACTION_ADW_PICK_ICON);
-				startActivityForResult(Intent.createChooser(packIntent, getString(R.string.shirtcuts_select_icon_pack)), PICK_FROM_ICON_PACK);
+				startActivityForResult(Intent.createChooser(packIntent, getString(R.string.shortcuts_select_icon_pack)), PICK_FROM_ICON_PACK);
 				break;
 
             case 3:

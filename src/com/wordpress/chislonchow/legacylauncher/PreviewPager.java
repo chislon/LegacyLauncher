@@ -189,7 +189,7 @@ public class PreviewPager extends ViewGroup {
 	private String getCurrentTitle()
 	{
 		String groupTitle = null;
-		final ApplicationsAdapter drawerAdapter = Launcher.getModel().getApplicationsAdapter();
+		final ApplicationsAdapter drawerAdapter = Launcher.getLauncherModel().getApplicationsAdapter();
 		if (drawerAdapter != null)
 		{
 		    int index = drawerAdapter.getCatalogueFilter().getCurrentFilterIndex();

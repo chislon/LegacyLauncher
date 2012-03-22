@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.20 Beta</string>
+    <string name="app_version">0.22 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -362,17 +362,17 @@
     <string name="message_cannot_swap_desktop_screen">Unable to swap desktop screens</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_edit_desktop">Edit Desktop</string>
-    <string name="pref_label_shirtcuts">Custom shortcut</string>
+    <string name="pref_label_shortcuts">Custom shortcut</string>
     <string name="pref_label_activities">Activities</string>
-    <string name="shirtcut_header">Select desired application activity to launch.\nOptionally select a custom icon.</string>
-    <string name="shirtcut_pick_activity">Pick an activity</string>
-    <string name="shirtcut_label">Label</string>
-    <string name="shirtcuts_select_picture">Select picture</string>
-    <string name="shirtcuts_crop_picture">Select and crop picture</string>
-    <string name="shirtcuts_icon_packs">ADWTheme IconPacks</string>
-    <string name="shirtcuts_select_icon_type">Select icon type</string>
-    <string name="shirtcuts_select_icon_pack">Select icon pack</string>
-    <string name="shirtcuts_restore_original">Restore Original</string>
+    <string name="shortcut_header">Select desired application activity to launch.\nOptionally select a custom icon.</string>
+    <string name="shortcut_pick_activity">Pick an activity</string>
+    <string name="shortcut_label">Label</string>
+    <string name="shortcuts_select_picture">Select picture</string>
+    <string name="shortcuts_crop_picture">Select and crop picture</string>
+    <string name="shortcuts_icon_packs">ADWTheme IconPacks</string>
+    <string name="shortcuts_select_icon_type">Select icon type</string>
+    <string name="shortcuts_select_icon_pack">Select icon pack</string>
+    <string name="shortcuts_restore_original">Restore Original</string>
 
     <!-- Catalogs strings -->
     <string name="selectAll">Select all</string>
@@ -483,5 +483,10 @@
     <string name="color3_summary">picker with alpha slider</string>
     <string name="color4_title">Color 4</string>
     <string name="color4_summary">color set with HEX code in xml</string>
+
+    <!-- Activity Reorder -->
+    <string name="activity_label_reorder_activity">"Rearranging Folder: "</string>
+    <string name="toast_folder_icon_reorder_finished">"Changes have been saved to the folder "</string>
+    <string name="button_folder_icon_reorder_rename">"Rename"</string>
 
 </resources>

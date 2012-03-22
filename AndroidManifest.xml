@@ -19,7 +19,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wordpress.chislonchow.legacylauncher"
-    android:versionCode="20"
+    android:versionCode="22"
     android:versionName="@string/app_version" >
 
     <uses-sdk
@@ -95,8 +95,14 @@
             android:label="@string/pref_label_activities" />
         <activity
             android:name=".CustomShortcutActivity"
-            android:label="@string/pref_label_shirtcuts"
+            android:label="@string/pref_label_shortcuts"
             android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".FolderIconReorderActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard"
+            android:label="@string/activity_label_reorder_activity"
+            android:noHistory="true" />
+
         <!-- Enable system-default search mode for any activity in Home -->
         <meta-data
             android:name="android.app.default_searchable"
@@ -119,7 +125,7 @@
             android:writePermission="com.android.launcher.permission.WRITE_SETTINGS" />
 
         <activity
-            android:name=".catalogue.AppInfoMList"
+            android:name=".catalogue.AppInfoListActivity"
             android:configChanges="orientation|keyboardHidden|keyboard"
             android:noHistory="true" />
     </application>

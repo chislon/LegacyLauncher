@@ -19,7 +19,7 @@ package com.wordpress.chislonchow.legacylauncher.catalogue;
 import android.graphics.drawable.Drawable;
 
 //this class is for app group support only
-class AppListInfo {
+public class AppListInfo {
     String title;
     String className;
     long firstInstallTime;

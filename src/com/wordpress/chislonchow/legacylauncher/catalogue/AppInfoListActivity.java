@@ -54,9 +54,9 @@ import com.wordpress.chislonchow.legacylauncher.R;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters.Catalog;
 import com.wordpress.chislonchow.legacylauncher.catalogue.ApplicationListAdapter.SortType;
 
-public class AppInfoMList extends ListActivity implements
+public class AppInfoListActivity extends ListActivity implements
 View.OnCreateContextMenuListener, View.OnClickListener {
-	private static final String TAG = "AppInfoMList";
+	private static final String TAG = "AppInfoListActivity";
 	private static final boolean DBG = false;
 	public static final String EXTRA_CATALOGUE_INDEX = "EXTRA_CATALOGUE_INDEX";
 	public static final String EXTRA_CATALOGUE_NEW = "EXTRA_CATALOGUE_NEW";
@@ -152,9 +152,9 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 		final TextView tv = (TextView) findViewById(R.id.text_select_all);
 
 		/* button info */
-		mOkButton = ((Button) findViewById(R.id.Button_ok_app_list));
+		mOkButton = ((Button) findViewById(R.id.button_ok_app_list));
 		mOkButton.setOnClickListener(this);
-		mCancelButton = ((Button) findViewById(R.id.Button_cancel_app_list));
+		mCancelButton = ((Button) findViewById(R.id.button_cancel_app_list));
 		mCancelButton.setOnClickListener(this);
 
 		CheckBox cb = (CheckBox) findViewById(R.id.checkAll);
@@ -186,7 +186,7 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 	public void onPause() {
 		// handle catalog deletion if the flag was set
 		if (mCatalogPrepareDelete) {
-			LauncherModel sModel = Launcher.getModel();
+			LauncherModel sModel = Launcher.getLauncherModel();
 			AppCatalogueFilters.getInstance().dropGroup(mGroupSelectedIndex);
 			sModel.getApplicationsAdapter().getCatalogueFilter().setCurrentGroupIndex(-1);
 			MyLauncherSettingsHelper.setCurrentAppCatalog(this, -1);
@@ -245,9 +245,9 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 					public void onClick(DialogInterface dialog,
 							int whichButton) {
 						if (mCatalogueNew) {
-							Toast.makeText(AppInfoMList.this, R.string.app_group_add_abort, Toast.LENGTH_SHORT).show();
+							Toast.makeText(AppInfoListActivity.this, R.string.app_group_add_abort, Toast.LENGTH_SHORT).show();
 						} else {
-							Toast.makeText(AppInfoMList.this, R.string.app_group_remove_success, Toast.LENGTH_SHORT).show();
+							Toast.makeText(AppInfoListActivity.this, R.string.app_group_remove_success, Toast.LENGTH_SHORT).show();
 							mCatalogPrepareDelete = true;
 						}
 						finish();

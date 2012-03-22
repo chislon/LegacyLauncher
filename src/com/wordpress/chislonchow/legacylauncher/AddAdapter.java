@@ -79,7 +79,7 @@ public class AddAdapter extends BaseAdapter {
         mItems.add(new ListItem(res, R.string.group_shortcuts,
                 R.drawable.ic_launcher_shortcut, ITEM_SHORTCUT));
 
-        mItems.add(new ListItem(res, R.string.pref_label_shirtcuts,
+        mItems.add(new ListItem(res, R.string.pref_label_shortcuts,
                 R.drawable.ic_launcher_shortcut, ITEM_ANYCUT));
 
         mItems.add(new ListItem(res, R.string.group_widgets,

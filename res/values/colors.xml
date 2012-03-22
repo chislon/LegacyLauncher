@@ -18,13 +18,18 @@
 */
 -->
 <resources>
-    <color name="window_background">#FF191919</color>
-    <color name="grid_dark_background">#EB191919</color>     
-    <color name="delete_color_filter">#A5FF0000</color>
 
+    <!-- Launcher colors -->
+
+    <color name="window_background">#FF191919</color>
+    <color name="grid_dark_background">#EB191919</color>
+    <color name="delete_color_filter">#A5FF0000</color>
     <color name="appwidget_error_color">#FCCC</color>
     <color name="snag_callout_color">#F444</color>
-
     <color name="gesture_color">#ff0563c1</color>
     <color name="uncertain_gesture_color">#ff848484</color>
+
+    <!-- Activity reorder dialog colors -->
+    <color name="dragndrop_background">#e0103010</color>
+
 </resources>

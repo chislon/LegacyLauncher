@@ -18,33 +18,30 @@
 -->
 
 <com.wordpress.chislonchow.legacylauncher.LiveFolder xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical">
-    
+    android:orientation="vertical" >
+
     <Button
         android:id="@+id/folder_close"
-    	android:background="@drawable/box_launcher_top"
-        android:gravity="left|center_vertical"
-        android:textSize="14sp"
-        android:textColor="#404040"
-        android:textStyle="bold"
         android:layout_width="fill_parent"
-    	android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/box_launcher_top"
+        android:gravity="left|center_vertical"
+        android:textColor="#404040"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
     <GridView
         android:id="@+id/folder_content"
         android:layout_width="fill_parent"
-    	android:layout_height="0dip"
-    	android:layout_weight="1"
-            
-        android:cacheColorHint="#00000000"
+        android:layout_height="0dip"
+        android:layout_weight="1"
         android:background="@drawable/box_launcher_bottom"
-
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:scrollbarStyle="insideInset"
+        android:cacheColorHint="#00000000"
         android:drawSelectorOnTop="false"
         android:listSelector="@drawable/grid_selector"
-
-        android:verticalSpacing="10dip"
-        android:numColumns="5" />
+        android:numColumns="5"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarStyle="insideInset"
+        android:verticalSpacing="10dip" />
 
 </com.wordpress.chislonchow.legacylauncher.LiveFolder>

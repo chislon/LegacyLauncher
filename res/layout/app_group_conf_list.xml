@@ -4,19 +4,18 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:background="#AAAAAAAA"
-        android:gravity="left"
-        android:orientation="horizontal" >
+        android:background="@android:drawable/dark_header" >
 
         <TextView
+            android:id="@+id/sortTypeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="2.0dip"
-            android:gravity="left"
             android:text="@string/sortType"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -24,17 +23,19 @@
             android:id="@+id/sortType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/sortTypeText"
             android:background="@android:drawable/btn_default"
-            android:gravity="left"
             android:prompt="@string/sortType" />
 
         <ToggleButton
             android:id="@+id/sortDirection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/sortType"
             android:background="@drawable/togglebutton_arrows_up_down"
-            android:gravity="left"
             android:textOff=""
             android:textOn="" />
 
@@ -42,8 +43,8 @@
             android:id="@+id/text_select_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:gravity="right"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/checkAll"
             android:text="@string/selectAll"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -51,39 +52,41 @@
             android:id="@+id/checkAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0" >
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" >
         </CheckBox>
-    </LinearLayout>
+    </RelativeLayout>
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dip"
         android:layout_weight="1"
         android:transcriptMode="normal" >
     </ListView>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:orientation="horizontal" >
+        android:background="@android:drawable/bottom_bar" >
 
         <Button
-            android:id="@+id/Button_cancel_app_list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:id="@+id/button_cancel_app_list"
+            android:layout_width="150.0dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5.0dip"
             android:text="@android:string/cancel" >
         </Button>
 
         <Button
-            android:id="@+id/Button_ok_app_list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:id="@+id/button_ok_app_list"
+            android:layout_width="150.0dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5.0dip"
             android:text="@string/done" >
         </Button>
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

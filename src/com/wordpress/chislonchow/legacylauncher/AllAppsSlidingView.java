@@ -424,7 +424,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		holder.setTag(pageNum);
 
 		addViewInLayout(holder, getChildCount(), holderParams, true);
-		if(pageNum==mCurrentScreen && isAnimating){
+		if(pageNum==mCurrentScreen && isAnimating && holder != null) {
 			if(mStatus==STATUS_OPEN)
 				holder.open(isAnimating);
 			else
@@ -1898,9 +1898,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		if (holder==null) {
 			isAnimating=animate;
 		} else {
-			if(mBlockLayouts){
-				//XXX: this is causing issues with drawing if the view has gone back to the first screen during close!
-				//snapToDestination();
+			if(mBlockLayouts) {
+				snapToDestination();
 				holder.open(animate);
 			} else {
 				isAnimating=animate;
@@ -2174,11 +2173,13 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 			findCurrentHolder();
 			final AllAppsSlidingViewHolderLayout holder=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
-			holder.setHolderStatus(AllAppsSlidingViewHolderLayout.HOLDER_CLOSED);
+			if (holder != null)
+				holder.setHolderStatus(AllAppsSlidingViewHolderLayout.HOLDER_CLOSED);
 		} else {
 			findCurrentHolder();
 			final AllAppsSlidingViewHolderLayout holder=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
-			holder.setHolderStatus(AllAppsSlidingViewHolderLayout.HOLDER_OPENED);
+			if (holder != null)
+				holder.setHolderStatus(AllAppsSlidingViewHolderLayout.HOLDER_OPENED);
 
 			mPager.setVisibility(VISIBLE);
 		}

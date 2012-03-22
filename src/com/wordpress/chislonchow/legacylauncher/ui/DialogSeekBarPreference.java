@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class PersistentDialogSeekBarPreference extends DialogPreference implements
+public class DialogSeekBarPreference extends DialogPreference implements
 SeekBar.OnSeekBarChangeListener {
 	private static final String androidns = "http://schemas.android.com/apk/res/android";
 
@@ -29,7 +29,7 @@ SeekBar.OnSeekBarChangeListener {
 	private int mInterval = DEFAULT_INTERVAL;
 	private int mTmpValue;
 
-	public PersistentDialogSeekBarPreference(Context context, AttributeSet attrs) {
+	public DialogSeekBarPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		setPersistent(true);
 

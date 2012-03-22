@@ -111,7 +111,7 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 
 		if (item.container == -1) return;
 
-		final LauncherModel model = Launcher.getModel();
+		final LauncherModel model = Launcher.getLauncherModel();
 		if (item.container == LauncherSettings.Favorites.CONTAINER_DESKTOP) {
 			if (item instanceof LauncherAppWidgetInfo) {
 				model.removeDesktopAppWidget((LauncherAppWidgetInfo) item);

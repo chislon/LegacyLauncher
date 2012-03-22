@@ -13,7 +13,7 @@ import java.nio.channels.FileChannel;
 import java.util.List;
 
 import com.wordpress.chislonchow.legacylauncher.R;
-import com.wordpress.chislonchow.legacylauncher.ui.PersistentDialogSeekBarPreference;
+import com.wordpress.chislonchow.legacylauncher.ui.DialogSeekBarPreference;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -87,42 +87,42 @@ OnPreferenceChangeListener {
 		icPref.setIcon(getResources().getDrawable(R.drawable.ic_settings_desktop));
 		 */
 		// dialog seek bar preferences
-		PersistentDialogSeekBarPreference dialogSeekBarPref = (PersistentDialogSeekBarPreference) findPreference("desktopColumns");
+		DialogSeekBarPreference dialogSeekBarPref = (DialogSeekBarPreference) findPreference("desktopColumns");
 		dialogSeekBarPref.setMin(3);
-		dialogSeekBarPref = (PersistentDialogSeekBarPreference) findPreference("desktopRows");
+		dialogSeekBarPref = (DialogSeekBarPreference) findPreference("desktopRows");
 		dialogSeekBarPref.setMin(3);
 		
-		dialogSeekBarPref = (PersistentDialogSeekBarPreference) findPreference("drawerColumnsPortrait");
+		dialogSeekBarPref = (DialogSeekBarPreference) findPreference("drawerColumnsPortrait");
 		dialogSeekBarPref.setMin(1);
-		PersistentDialogSeekBarPreference rowsPortrait = (PersistentDialogSeekBarPreference) findPreference("drawerRowsPortrait");
+		DialogSeekBarPreference rowsPortrait = (DialogSeekBarPreference) findPreference("drawerRowsPortrait");
 		rowsPortrait.setMin(1);
-		PersistentDialogSeekBarPreference columnsLandscape = (PersistentDialogSeekBarPreference) findPreference("drawerColumnsLandscape");
+		DialogSeekBarPreference columnsLandscape = (DialogSeekBarPreference) findPreference("drawerColumnsLandscape");
 		columnsLandscape.setMin(1);
-		PersistentDialogSeekBarPreference rowsLandscape = (PersistentDialogSeekBarPreference) findPreference("drawerRowsLandscape");
+		DialogSeekBarPreference rowsLandscape = (DialogSeekBarPreference) findPreference("drawerRowsLandscape");
 		rowsLandscape.setMin(1);
 
-		PersistentDialogSeekBarPreference dSPref;
-		dSPref = (PersistentDialogSeekBarPreference) findPreference("animationSpeed");
+		DialogSeekBarPreference dSPref;
+		dSPref = (DialogSeekBarPreference) findPreference("animationSpeed");
 		dSPref.setMin(300);
 		dSPref.setInterval(50);
-		dSPref =  (PersistentDialogSeekBarPreference) findPreference("drawerLabelTextSize");
+		dSPref =  (DialogSeekBarPreference) findPreference("drawerLabelTextSize");
 		dSPref.setMin(8);
-		dSPref = (PersistentDialogSeekBarPreference) findPreference("desktopLabelSize");
+		dSPref = (DialogSeekBarPreference) findPreference("desktopLabelSize");
 		dSPref.setMin(8);
-		dSPref = (PersistentDialogSeekBarPreference) findPreference("desktopSpeed");
+		dSPref = (DialogSeekBarPreference) findPreference("desktopSpeed");
 		dSPref.setInterval(50);
-		dSPref = (PersistentDialogSeekBarPreference) findPreference("desktopBounce");
+		dSPref = (DialogSeekBarPreference) findPreference("desktopBounce");
 		dSPref.setInterval(10);
-		dSPref = (PersistentDialogSeekBarPreference) findPreference("desktopSnap");
+		dSPref = (DialogSeekBarPreference) findPreference("desktopSnap");
 		dSPref.setInterval(50);
 
-		dSPref = (PersistentDialogSeekBarPreference) findPreference("pageHorizontalMargin");
+		dSPref = (DialogSeekBarPreference) findPreference("pageHorizontalMargin");
 		dSPref.setInterval(5);
-		dSPref = (PersistentDialogSeekBarPreference) findPreference("notifSize");
+		dSPref = (DialogSeekBarPreference) findPreference("notifSize");
 		dSPref.setMin(10);
-		dSPref = (PersistentDialogSeekBarPreference) findPreference("uiScaleAB");
+		dSPref = (DialogSeekBarPreference) findPreference("uiScaleAB");
 		dSPref.setMin(1);
-		dSPref = (PersistentDialogSeekBarPreference) findPreference("folderTextSize");
+		dSPref = (DialogSeekBarPreference) findPreference("folderTextSize");
 		dSPref.setMin(8);
 
 		ListPreference desktopIndicator = (ListPreference) findPreference("uiDesktopIndicatorType");
@@ -210,10 +210,10 @@ OnPreferenceChangeListener {
 			rowsPortrait.setEnabled(true);
 			rowsLandscape.setEnabled(true);
 			margin.setEnabled(true);
-			dSPref = (PersistentDialogSeekBarPreference) findPreference("drawerSpeed");
+			dSPref = (DialogSeekBarPreference) findPreference("drawerSpeed");
 			dSPref.setInterval(50);
 			dSPref.setEnabled(true);
-			dSPref = (PersistentDialogSeekBarPreference) findPreference("drawerSnap");
+			dSPref = (DialogSeekBarPreference) findPreference("drawerSnap");
 			dSPref.setEnabled(true);
 			dSPref.setInterval(50);
 			findPreference("drawerOvershoot").setEnabled(true);
@@ -221,10 +221,10 @@ OnPreferenceChangeListener {
 			rowsPortrait.setEnabled(false);
 			rowsLandscape.setEnabled(false);
 			margin.setEnabled(false);
-			dSPref = (PersistentDialogSeekBarPreference) findPreference("drawerSpeed");
+			dSPref = (DialogSeekBarPreference) findPreference("drawerSpeed");
 			dSPref.setInterval(50);
 			dSPref.setEnabled(false);
-			dSPref = (PersistentDialogSeekBarPreference) findPreference("drawerSnap");
+			dSPref = (DialogSeekBarPreference) findPreference("drawerSnap");
 			dSPref.setEnabled(false);
 			dSPref.setInterval(50);
 			findPreference("drawerOvershoot").setEnabled(false);

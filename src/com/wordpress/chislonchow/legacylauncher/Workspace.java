@@ -465,7 +465,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 			int countX = group.getCountX();
 			int countY = group.getCountY();
 			boolean occupied[][] = new boolean[countX][countY];
-			Launcher.getModel().findAllOccupiedCells(occupied, countX, countY, mCurrentScreen);
+			Launcher.getLauncherModel().findAllOccupiedCells(occupied, countX, countY, mCurrentScreen);
 			return group.findAllVacantCellsFromOccupied(occupied, countX, countY);
 		}
 		return null;
@@ -1346,7 +1346,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 		cellLayout.onDropChild(view, mTargetCell);
 		CellLayout.LayoutParams lp = (CellLayout.LayoutParams) view.getLayoutParams();
 
-		final LauncherModel model = Launcher.getModel();
+		final LauncherModel model = Launcher.getLauncherModel();
 		model.addDesktopItem(info);
 		LauncherModel.addOrMoveItemInDatabase(mLauncher, info,
 				LauncherSettings.Favorites.CONTAINER_DESKTOP, mCurrentScreen, lp.cellX, lp.cellY);
@@ -1447,7 +1447,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 				final CellLayout cellLayout = (CellLayout) getChildAt(mDragInfo.screen);
 				cellLayout.removeView(mDragInfo.cell);
 				final Object tag = mDragInfo.cell.getTag();
-				Launcher.getModel().removeDesktopItem((ItemInfo) tag);
+				Launcher.getLauncherModel().removeDesktopItem((ItemInfo) tag);
 			}
 		} else {
 			if (mDragInfo != null) {
@@ -1603,7 +1603,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 
 	void removeShortcutsForPackage(String packageName) {
 		final ArrayList<View> childrenToRemove = new ArrayList<View>();
-		final LauncherModel model = Launcher.getModel();
+		final LauncherModel model = Launcher.getLauncherModel();
 		final int count = getChildCount();
 
 		for (int i = 0; i < count; i++) {
@@ -1734,7 +1734,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 							Intent.ACTION_MAIN.equals(intent.getAction()) && name != null &&
 							packageName.equals(name.getPackageName())) {
 
-						final Drawable icon = Launcher.getModel().getApplicationInfoIcon(
+						final Drawable icon = Launcher.getLauncherModel().getApplicationInfoIcon(
 								mLauncher.getPackageManager(), info, mLauncher);
 						if (icon != null && icon != info.icon) {
 							info.icon.setCallback(null);
@@ -1758,7 +1758,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 								Intent.ACTION_MAIN.equals(intent.getAction()) && name != null &&
 								packageName.equals(name.getPackageName())) {
 
-							final Drawable icon = Launcher.getModel().getApplicationInfoIcon(
+							final Drawable icon = Launcher.getLauncherModel().getApplicationInfoIcon(
 									mLauncher.getPackageManager(), appInfo, mLauncher);
 							boolean folderUpdated=false;
 							if (icon != null && icon != appInfo.icon) {
@@ -2151,7 +2151,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 			return;
 		final CellLayout layout = (CellLayout) getChildAt(screen);
 		int childCount = layout.getChildCount();
-		final LauncherModel model = Launcher.getModel();
+		final LauncherModel model = Launcher.getLauncherModel();
 		for (int j = 0; j < childCount; j++) {
 			final View view = layout.getChildAt(j);
 			Object tag = view.getTag();
@@ -2270,7 +2270,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 							packageName.equals(name.getPackageName())) {
 						((BubbleTextView) view).setCounter(counter, color);
 						view.invalidate();
-						Launcher.getModel().updateCounterDesktopItem(info, counter, color);
+						Launcher.getLauncherModel().updateCounterDesktopItem(info, counter, color);
 					}
 				}
 			}
