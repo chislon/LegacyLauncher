@@ -5,6 +5,8 @@
 -&lt;b>NOTICE:&lt;/b> To add/remove screens press MENU/Edit Desktop&lt;br>&lt;br>
 -&lt;b>NOTICE:&lt;/b> To add new icons/widgets/folders/shortcuts, long-press on a blank part of the desktop&lt;br>&lt;br>
 --------------&lt;br>&lt;br>
+&lt;b>Version 0.25:&lt;/b>&lt;br>
+- Fix for another possible NPE force close, tweak to password lock input field.&lt;br>&lt;br>
 &lt;b>Version 0.24:&lt;/b>&lt;br>
 - Folder icon order rearranger (while unlocked, long-press folder on desktop->Rearrange), several minor fixes&lt;br>&lt;br>
 &lt;b>Version 0.21:&lt;/b>&lt;br>

@@ -2,6 +2,7 @@ package com.wordpress.chislonchow.legacylauncher;
 
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.Spanned;
 import android.util.Log;
 
@@ -91,7 +92,7 @@ OnPreferenceChangeListener {
 		dialogSeekBarPref.setMin(3);
 		dialogSeekBarPref = (DialogSeekBarPreference) findPreference("desktopRows");
 		dialogSeekBarPref.setMin(3);
-		
+
 		dialogSeekBarPref = (DialogSeekBarPreference) findPreference("drawerColumnsPortrait");
 		dialogSeekBarPref.setMin(1);
 		DialogSeekBarPreference rowsPortrait = (DialogSeekBarPreference) findPreference("drawerRowsPortrait");
@@ -245,13 +246,14 @@ OnPreferenceChangeListener {
 					}
 				});
 		 */
-		
+
 		// launcher lock password implementation
 		Preference launcherLockPassword = findPreference("launcherLockPassword");
 		launcherLockPassword.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 				final EditText input = new EditText(mContext);
 				input.setMaxLines(1);
+				input.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 				input.setHint(getString(R.string.hint_password_new));
 				final int maxLength = 32;  
 				InputFilter[] FilterArray = new InputFilter[2];  

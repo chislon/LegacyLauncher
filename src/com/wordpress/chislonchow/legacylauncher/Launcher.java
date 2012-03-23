@@ -92,6 +92,7 @@ import android.os.Vibrator;
 import android.provider.LiveFolders;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -1746,6 +1747,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					// ask for the password securely
 					final EditText input = new EditText(this);
 					input.setMaxLines(1);
+					input.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 					input.setHint(getString(R.string.hint_password_old));
 					final int maxLength = 32;  
 					InputFilter[] FilterArray = new InputFilter[2];  
@@ -4115,6 +4117,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 * ADW: Functions to handle Apps Grid
 	 */
 	public void showAllApps(boolean animated, AppCatalogueFilter filter) {
+		final ApplicationsAdapter appAdapter = sLauncherModel.getApplicationsAdapter();
+		if (appAdapter != null) {
+			if (filter != null) {
+				appAdapter.setCatalogueFilter(filter);
+			} else {
+				appAdapter.setCatalogueFilter(
+						AppCatalogueFilters.getInstance().getDrawerFilter());
+			}
+		}
+		
 		if (!allAppsOpen && mAllAppsGrid != null) {
 			if (getWindow().getDecorView().getWidth() > getWindow()
 					.getDecorView().getHeight()) {
@@ -4183,11 +4195,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mWorkspace.enableChildrenCache(mWorkspace.getCurrentScreen(),
 					mWorkspace.getCurrentScreen());
 			mWorkspace.lock();
-			if (filter != null)
-				sLauncherModel.getApplicationsAdapter().setCatalogueFilter(filter);
-			else
-				sLauncherModel.getApplicationsAdapter().setCatalogueFilter(
-						AppCatalogueFilters.getInstance().getDrawerFilter());
+
 			// mDesktopLocked=true;
 			mWorkspace.invalidate();
 			checkActionButtonsSpecialMode();
@@ -4197,11 +4205,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mNextView.setVisibility(View.GONE);
 			if (mDesktopIndicator != null)
 				mDesktopIndicator.hide();
-		} else if (filter != null)
-			sLauncherModel.getApplicationsAdapter().setCatalogueFilter(filter);
-		else
-			sLauncherModel.getApplicationsAdapter().setCatalogueFilter(
-					AppCatalogueFilters.getInstance().getDrawerFilter());
+		}
 	}
 
 	private void checkActionButtonsSpecialMode() {
