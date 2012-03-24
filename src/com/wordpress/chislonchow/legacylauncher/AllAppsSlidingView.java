@@ -1186,7 +1186,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	 * Returns the selector {@link android.graphics.drawable.Drawable} that is used to draw the
 	 * selection in the list.
 	 *
-	 * @return the drawable used to display the selector
+	 * @return the drawable used to mDisplay the selector
 	 */
 	public Drawable getSelector() {
 		return mSelector;

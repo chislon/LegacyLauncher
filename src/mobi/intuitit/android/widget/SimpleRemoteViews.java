@@ -496,7 +496,7 @@ public class SimpleRemoteViews implements Parcelable {
    }
 
    /**
-    * Create a new RemoteViews object that will display the views contained
+    * Create a new RemoteViews object that will mDisplay the views contained
     * in the specified layout file.
     * 
     * @param packageName Name of the package that contains the layout resource
@@ -619,7 +619,7 @@ public class SimpleRemoteViews implements Parcelable {
     *             time should be based off of
     *             {@link android.os.SystemClock#elapsedRealtime SystemClock.elapsedRealtime()}.
     * @param format The Chronometer format string, or null to
-    *               simply display the timer value.
+    *               simply mDisplay the timer value.
     * @param started True if you want the clock to be started, false if not.
     */
    public void setChronometer(int viewId, long base, String format, boolean started) {

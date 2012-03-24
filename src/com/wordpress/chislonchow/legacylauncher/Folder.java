@@ -101,6 +101,7 @@ OnLongClickListener {
 			//Action Buttons
 			Launcher.loadThemeResource(themeResources,themePackage,"box_launcher_top",mCloseButton,Launcher.THEME_ITEM_BACKGROUND);
 			Launcher.loadThemeResource(themeResources,themePackage,"box_launcher_bottom",mContent,Launcher.THEME_ITEM_BACKGROUND);
+			
 			int grid_selector_id=themeResources.getIdentifier("grid_selector", "drawable", themePackage);
 			if(grid_selector_id!=0){
 				mContent.setSelector(themeResources.getDrawable(grid_selector_id));
@@ -184,7 +185,7 @@ OnLongClickListener {
 	 * Sets the adapter used to populate the content area. The adapter must only
 	 * contains ApplicationInfo items.
 	 *
-	 * @param adapter The list of applications to display in the folder.
+	 * @param adapter The list of applications to mDisplay in the folder.
 	 */
 	void setContentAdapter(BaseAdapter adapter) {
 		mContent.setAdapter(adapter);

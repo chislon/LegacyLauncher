@@ -79,7 +79,7 @@ public class MultiTouchController<T> {
 	 */
 	private static final float MAX_MULTITOUCH_DIM_JUMP_SIZE = 40.0f;
 
-	/** The smallest possible distance between multitouch points (used to avoid div-by-zero errors and display glitches) */
+	/** The smallest possible distance between multitouch points (used to avoid div-by-zero errors and mDisplay glitches) */
 	private static final float MIN_MULTITOUCH_SEPARATION = 30.0f;
 
 	/** The max number of touch points that can be present on the screen at once */

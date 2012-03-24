@@ -229,7 +229,7 @@ class LauncherSettings {
         static final String URI = "uri";
 
         /**
-         * The display mode if the item is a live folder.
+         * The mDisplay mode if the item is a live folder.
          * <P>Type: INTEGER</P>
          *
          * @see android.provider.LiveFolders#DISPLAY_MODE_GRID

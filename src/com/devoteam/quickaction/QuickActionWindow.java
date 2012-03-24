@@ -23,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 
 /**
- * A class that can display, as a popup badge, a collection 
+ * A class that can mDisplay, as a popup badge, a collection 
  * of QuickActionItems
  * 
  * Based on the great work done by Mohd Faruq

@@ -135,7 +135,7 @@ public class BubbleTextView extends CounterTextView {
 		}
 
 
-		// scale padding to display 
+		// scale padding to mDisplay 
 		final float scale = context.getResources().getDisplayMetrics().density;
 		mCornerRadius *= scale;
 		mPaddingH *= scale;

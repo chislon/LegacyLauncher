@@ -34,7 +34,7 @@ class LiveFolderInfo extends FolderInfo {
     Uri uri;
 
     /**
-     * The live folder's display type.
+     * The live folder's mDisplay type.
      */
     int displayMode;
 

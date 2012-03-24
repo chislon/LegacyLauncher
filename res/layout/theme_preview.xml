@@ -5,6 +5,30 @@
     android:orientation="vertical"
     android:padding="4.0dip" >
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/ThemeApply"
+            android:layout_width="150.0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5.0dip"
+            android:onClick="applyTheme"
+            android:text="@string/pref_themes_apply_theme" />
+
+        <Button
+            android:id="@+id/ThemeSearch"
+            android:layout_width="150.0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="right"
+            android:layout_margin="5.0dip"
+            android:onClick="getThemes"
+            android:text="@string/pref_themes_get_themes" />
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/ThemeTitle"
         android:layout_width="fill_parent"
@@ -23,20 +47,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_launcher_shortcut" />
-
-    <Button
-        android:layout_marginTop="8.0dp"
-        android:id="@+id/ThemeApply"
-        android:layout_width="150.0dp"
-        android:layout_height="wrap_content"
-        android:onClick="applyTheme"
-        android:text="@string/pref_themes_apply_theme" />
-
-    <Button
-        android:id="@+id/ThemeSearch"
-        android:layout_width="150.0dp"
-        android:layout_height="wrap_content"
-        android:onClick="getThemes"
-        android:text="@string/pref_themes_get_themes" />
 
 </LinearLayout>

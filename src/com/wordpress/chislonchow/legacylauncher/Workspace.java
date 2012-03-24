@@ -498,7 +498,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 		}
 	}
 	private void centerWallpaperOffset(){
-		mWallpaperManager.setWallpaperOffsetSteps(0.5f, 0 );
+		mWallpaperManager.setWallpaperOffsetSteps(0.5f, 0);
 		mWallpaperManager.setWallpaperOffsets(getWindowToken(), 0.5f, 0);
 	}
 	private void updateWallpaperOffset(int scrollRange) {
@@ -583,7 +583,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 			//ADW lets center the wallpaper when there's only one screen...
 			if(!mWallpaperScroll || getChildCount()==1)x=(getScrollX()-(mWallpaperWidth/2)+(getRight()/2));
 			final int y=mWallpaperY;
-			if (x > 0 || y > 0) { // if the bitmap does not fill the entire window
+			if (x > 0 || y > 0) { // if the bitmap does not fill the entire window, fill it with black
 				canvas.drawColor(0xff000000);
 			}
 			canvas.drawBitmap(mWallpaperDrawable.getBitmap(), x, y, mPaint);

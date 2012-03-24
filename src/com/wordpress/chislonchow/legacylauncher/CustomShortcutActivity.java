@@ -234,9 +234,7 @@ public class CustomShortcutActivity extends Activity implements OnClickListener 
 					InputStream is = getContentResolver().openInputStream(
 							photoUri);
 					BitmapFactory.Options opts = new BitmapFactory.Options();
-					Bitmap bitmap;
 					opts.inJustDecodeBounds = true;
-					bitmap = BitmapFactory.decodeStream(is, null, opts);
 
 					BitmapFactory.Options ops2 = new BitmapFactory.Options();
 					int width = mIconSize;

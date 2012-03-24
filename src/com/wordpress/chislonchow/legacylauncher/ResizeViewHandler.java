@@ -30,7 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 
-// This class is used by CropImage to display a highlighted cropping rectangle
+// This class is used by CropImage to mDisplay a highlighted cropping rectangle
 // overlayed with the image. There are two coordinate spaces in use. One is
 // image, another is screen. computeLayout() uses mMatrix to map from image
 // space to screen space.

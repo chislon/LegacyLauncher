@@ -3,6 +3,7 @@ package com.wordpress.chislonchow.legacylauncher;
 import com.wordpress.chislonchow.legacylauncher.DragController.DragListener;
 import com.wordpress.chislonchow.legacylauncher.R;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +11,10 @@ import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -31,19 +34,27 @@ DragListener, OnLongClickListener, DragSource {
 	public boolean mInterceptClicks = false;
 	private DragController mDragger;
 
+	private int mDimMax, mDimMin;
+	private Display mDisplay;
+
+	private static final int STATUS_BAR_HEIGHT = 20;	// pixels
+	private static final int ACTION_BUTTON_COUNT = 5;
+
 	public ActionButton(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
+		final float scale = getResources().getDisplayMetrics().density;
+		mDisplay = ((Activity) context).getWindowManager().getDefaultDisplay();
+		mDimMax = Math.min(mDisplay.getWidth(), mDisplay.getHeight()) / 5;
+		mDimMin = (int) (mDimMax - STATUS_BAR_HEIGHT * scale / 5);
 	}
 
 	public ActionButton(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
-		// TODO Auto-generated constructor stub
 	}
 
 	public ActionButton(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		// TODO Auto-generated constructor stub
 		setHapticFeedbackEnabled(true);
 		TypedArray a = context.obtainStyledAttributes(attrs,
 				R.styleable.ActionButton, defStyle, 0);
@@ -52,6 +63,23 @@ DragListener, OnLongClickListener, DragSource {
 				R.drawable.lab_rab_empty_bg);
 		a.recycle();
 		this.setOnLongClickListener(this);
+
+		final float scale = getResources().getDisplayMetrics().density;
+		mDisplay = ((Activity) context).getWindowManager().getDefaultDisplay();
+		mDimMax = Math.min(mDisplay.getWidth(), mDisplay.getHeight()) / ACTION_BUTTON_COUNT;
+		mDimMin = (int) (mDimMax - STATUS_BAR_HEIGHT * scale / ACTION_BUTTON_COUNT);
+	}
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {		
+		if (mDisplay.getWidth() > mDisplay.getHeight()) {
+			this.setLayoutParams(new LinearLayout.LayoutParams(mDimMin, mDimMin));
+			this.setMeasuredDimension(mDimMin, mDimMin);
+		} else {
+			this.setLayoutParams(new LinearLayout.LayoutParams(mDimMax, mDimMax));
+			this.setMeasuredDimension(mDimMax, mDimMax);
+		}
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 
 	public boolean acceptDrop(DragSource source, int x, int y, int xOffset,
@@ -64,7 +92,6 @@ DragListener, OnLongClickListener, DragSource {
 				return false;
 			}
 		}
-
 		return !specialMode;
 	}
 

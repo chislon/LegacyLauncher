@@ -248,7 +248,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	/**
 	 * ADW: now i use an ActionButton instead of a fixed app-drawer button
 	 */
-	private ActionButton mHandleView;
+	private ActionButton mMAB;
 	/**
 	 * mAllAppsGrid will be "AllAppsGridView" or "AllAppsSlidingView" depending
 	 * on user settings, so I cast it later.
@@ -388,6 +388,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 */
 	private boolean mDockHide = false;
 
+	// Display
+	private Display mDisplay;
+
 	// DRAWER STYLES
 	private final int[] mDrawerStyles = { 
 			R.layout.old_drawer,
@@ -413,6 +416,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		changeOrientation(MyLauncherSettingsHelper.getDesktopOrientation(this));
 		super.onCreate(savedInstanceState);
 		mInflater = getLayoutInflater();
+
+		mDisplay = getWindowManager().getDefaultDisplay();
 
 		AppCatalogueFilters.getInstance().init(this);
 		LauncherActions.getInstance().init(this);
@@ -559,15 +564,18 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	private void setWallpaperDimension() {
-		WallpaperManager wpm = (WallpaperManager) getSystemService(WALLPAPER_SERVICE);
+		final int maxDim = Math.max(mDisplay.getWidth(), mDisplay.getHeight());
+		final int minDim = Math.min(mDisplay.getWidth(), mDisplay.getHeight());
 
-		Display display = getWindowManager().getDefaultDisplay();
-		boolean isPortrait = display.getWidth() < display.getHeight();
+		final int width = Math.max((int) (minDim * WALLPAPER_SCREENS_SPAN), maxDim);
+		final int height = maxDim;
 
-		final int width = isPortrait ? display.getWidth() : display.getHeight();
-		final int height = isPortrait ? display.getHeight() : display
-				.getWidth();
-		wpm.suggestDesiredDimensions(width * WALLPAPER_SCREENS_SPAN, height);
+		new Thread("setWallpaperDimension") {
+			public void run() {
+				final WallpaperManager wpm = (WallpaperManager) getSystemService(WALLPAPER_SERVICE);
+				wpm.suggestDesiredDimensions(width, height);
+			}
+		}.start();
 	}
 
 	@Override
@@ -653,19 +661,20 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		 */
 		// ADW: Use custom settings to change number of columns (and rows for
 		// SlidingGrid) depending on phone rotation
+		/*
 		int orientation = getResources().getConfiguration().orientation;
 		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-			mAllAppsGrid.setNumColumns(MyLauncherSettingsHelper
-					.getColumnsPortrait(Launcher.this));
-			mAllAppsGrid.setNumRows(MyLauncherSettingsHelper
-					.getRowsPortrait(Launcher.this));
-			mAllAppsGrid.setPageHorizontalMargin(MyLauncherSettingsHelper
-					.getPageHorizontalMargin(Launcher.this));
-		} else {
+		 */
+		if (mDisplay.getWidth() > mDisplay.getHeight()) {
 			mAllAppsGrid.setNumColumns(MyLauncherSettingsHelper
 					.getColumnsLandscape(Launcher.this));
 			mAllAppsGrid.setNumRows(MyLauncherSettingsHelper
 					.getRowsLandscape(Launcher.this));
+		} else {
+			mAllAppsGrid.setNumColumns(MyLauncherSettingsHelper
+					.getColumnsPortrait(Launcher.this));
+			mAllAppsGrid.setNumRows(MyLauncherSettingsHelper
+					.getRowsPortrait(Launcher.this));
 		}
 
 		mWorkspace.setWallpaper(false);
@@ -847,13 +856,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mAllAppsGrid = (Drawer) tmp.inflate();
 		mDeleteZone = (DeleteZone) dragLayer.findViewById(R.id.delete_zone);
 
-		mHandleView = (ActionButton) dragLayer.findViewById(R.id.btn_mab);
-		mHandleView.setFocusable(true);
-		mHandleView.setLauncher(this);
-		mHandleView.setOnClickListener(this);
-		dragLayer.addDragListener(mHandleView);
+		mMAB = (ActionButton) dragLayer.findViewById(R.id.btn_mab);
+		mMAB.setFocusable(true);
+		mMAB.setLauncher(this);
+		mMAB.setOnClickListener(this);
+		dragLayer.addDragListener(mMAB);
 		/*
-		 * mHandleView.setOnTriggerListener(new OnTriggerListener() { public
+		 * mMAB.setOnTriggerListener(new OnTriggerListener() { public
 		 * void onTrigger(View v, int whichHandle) { mDockBar.open(); } public
 		 * void onGrabbedStateChange(View v, boolean grabbedState) { } public
 		 * void onClick(View v) { if (allAppsOpen) { closeAllApps(true); } else
@@ -902,7 +911,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mPreviousView.setOnLongClickListener(this);
 		mNextView.setOnLongClickListener(this);
 
-		mHandleView.setDragger(dragLayer);
+		mMAB.setDragger(dragLayer);
 		mLAB.setDragger(dragLayer);
 		mRAB.setDragger(dragLayer);
 		mRAB2.setDragger(dragLayer);
@@ -910,8 +919,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 		// ADW linearlayout with apptray, lab and rab
 		mDrawerToolbar = findViewById(R.id.drawer_toolbar);
-		mHandleView.setNextFocusUpId(R.id.drag_layer);
-		mHandleView.setNextFocusLeftId(R.id.drag_layer);
+		mMAB.setNextFocusUpId(R.id.drag_layer);
+		mMAB.setNextFocusLeftId(R.id.drag_layer);
 		mLAB.setNextFocusUpId(R.id.drag_layer);
 		mLAB.setNextFocusLeftId(R.id.drag_layer);
 		mRAB.setNextFocusUpId(R.id.drag_layer);
@@ -958,9 +967,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			loadThemeResource(themeResources, themePackage, "rab2_bg", mRAB2,
 					THEME_ITEM_BACKGROUND);
 			loadThemeResource(themeResources, themePackage, "mab_bg",
-					mHandleView, THEME_ITEM_BACKGROUND);
+					mMAB, THEME_ITEM_BACKGROUND);
 			// App drawer button
-			// loadThemeResource(themeResources,themePackage,"handle_icon",mHandleView,THEME_ITEM_FOREGROUND);
+			// loadThemeResource(themeResources,themePackage,"handle_icon",mMAB,THEME_ITEM_FOREGROUND);
 			// View appsBg=findViewById(R.id.appsBg);
 			// loadThemeResource(themeResources,themePackage,"handle",appsBg,THEME_ITEM_BACKGROUND);
 			// Deletezone
@@ -1136,9 +1145,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		Bundle extras = data.getExtras();
 		final int appWidgetId = extras.getInt(
 				AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-
-		if (LOGD)
-			d(LOG_TAG, "dumping extras content=" + extras.toString());
 
 		final AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager
 				.getAppWidgetInfo(appWidgetId);
@@ -1867,7 +1873,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mLAB2.reloadIcon(packageName);
 			mRAB.reloadIcon(packageName);
 			mRAB2.reloadIcon(packageName);
-			mHandleView.reloadIcon(packageName);
+			mMAB.reloadIcon(packageName);
 		}
 	}
 
@@ -2383,7 +2389,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mRAB2.UpdateLaunchInfo(item);
 				break;
 			case LauncherSettings.Favorites.CONTAINER_MAB:
-				mHandleView.UpdateLaunchInfo(item);
+				mMAB.UpdateLaunchInfo(item);
 				break;
 			default:
 				switch (item.itemType) {
@@ -2570,7 +2576,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			navigateCatalogs(Integer.parseInt(tag.toString()));
 			return;
 		}
-		// TODO:ADW Check whether to display a toast if clicked mLAB or mRAB
+		// TODO:ADW Check whether to show a toast if clicked mLAB or mRAB
 		// withount binding
 		if (tag == null && v instanceof ActionButton) {
 			Toast t = Toast.makeText(this, R.string.toast_no_application_def,
@@ -2751,7 +2757,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	View getDrawerHandle() {
-		return mHandleView;
+		return mMAB;
 	}
 
 	/*
@@ -3559,6 +3565,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mAllAppsGrid.setSpeed(MyLauncherSettingsHelper.getDrawerSpeed(this));
 				mAllAppsGrid.setSnap(MyLauncherSettingsHelper.getDrawerSnap(this));
 				mAllAppsGrid.setOvershoot(MyLauncherSettingsHelper.getDrawerOvershoot(this));
+				mAllAppsGrid.setPageHorizontalMargin(MyLauncherSettingsHelper
+						.getPageHorizontalMargin(Launcher.this));
 			}
 		}
 		mWallpaperHack = MyLauncherSettingsHelper.getWallpaperHack(this);
@@ -3591,7 +3599,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mLAB.updateIcon();
 			mRAB2.updateIcon();
 			mLAB2.updateIcon();
-			mHandleView.updateIcon();
+			mMAB.updateIcon();
 		}
 
 		fullScreen(mHideStatusBar);
@@ -3633,7 +3641,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		default:
 			break;
 		}
-		mHandleView.hideBg(mHideABBg);
+		mMAB.hideBg(mHideABBg);
 		mRAB.hideBg(mHideABBg);
 		mLAB.hideBg(mHideABBg);
 		mRAB2.hideBg(mHideABBg);
@@ -3905,7 +3913,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			} else {
 				dismissPreview(mNextView);
 				dismissPreview(mPreviousView);
-				dismissPreview(mHandleView);
+				dismissPreview(mMAB);
 				for (int i = 0; i < mWorkspace.getChildCount(); i++) {
 					View cell = mWorkspace.getChildAt(i);
 					cell.setDrawingCacheEnabled(false);
@@ -4126,7 +4134,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						AppCatalogueFilters.getInstance().getDrawerFilter());
 			}
 		}
-		
+
 		if (!allAppsOpen && mAllAppsGrid != null) {
 			if (getWindow().getDecorView().getWidth() > getWindow()
 					.getDecorView().getHeight()) {
@@ -4137,9 +4145,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					mDrawerToolbar.setVisibility(View.GONE);
 				} else {
 					mDrawerToolbar.setVisibility(View.VISIBLE);
-					mHandleView.setNextFocusUpId(R.id.drag_layer);
+					mMAB.setNextFocusUpId(R.id.drag_layer);
 
-					mHandleView.setNextFocusLeftId(R.id.drag_layer);
+					mMAB.setNextFocusLeftId(R.id.drag_layer);
 
 					mLAB.setNextFocusUpId(R.id.drag_layer);
 					mLAB.setNextFocusLeftId(R.id.all_apps_view);
@@ -4167,8 +4175,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				if (hideDock) {
 					mDrawerToolbar.setVisibility(View.GONE);
 				} else {
-					mHandleView.setNextFocusUpId(R.id.all_apps_view);
-					mHandleView.setNextFocusLeftId(R.id.drag_layer);
+					mMAB.setNextFocusUpId(R.id.all_apps_view);
+					mMAB.setNextFocusLeftId(R.id.drag_layer);
 
 					mLAB.setNextFocusUpId(R.id.all_apps_view);
 					mLAB.setNextFocusLeftId(R.id.drag_layer);
@@ -4224,8 +4232,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mDrawerToolbar.setVisibility(View.VISIBLE);
 			}
 
-			mHandleView.setNextFocusUpId(R.id.drag_layer);
-			mHandleView.setNextFocusLeftId(R.id.drag_layer);
+			mMAB.setNextFocusUpId(R.id.drag_layer);
+			mMAB.setNextFocusLeftId(R.id.drag_layer);
 			mLAB.setNextFocusUpId(R.id.drag_layer);
 			mLAB.setNextFocusLeftId(R.id.drag_layer);
 			mRAB.setNextFocusUpId(R.id.drag_layer);
@@ -4411,7 +4419,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mWorkspace.moveToDefaultScreen();
 			} else {
 				if (!showingPreviews && mPreviewsEnable) {
-					showPreviews(mHandleView, 0, mWorkspace.mHomeScreens);
+					showPreviews(mMAB, 0, mWorkspace.mHomeScreens);
 				} else {
 					dismissPreviews();
 				}
@@ -4419,7 +4427,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			break;
 		case BIND_PREVIEWS:
 			if (!showingPreviews && mPreviewsEnable) {
-				showPreviews(mHandleView, 0, mWorkspace.mHomeScreens);
+				showPreviews(mMAB, 0, mWorkspace.mHomeScreens);
 			} else {
 				dismissPreviews();
 			}
@@ -4761,7 +4769,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				LauncherModel.updateItemInDatabase(this, info);
 
 				if (info.container == LauncherSettings.Favorites.CONTAINER_MAB)
-					mHandleView.UpdateLaunchInfo(info);
+					mMAB.UpdateLaunchInfo(info);
 				else if (info.container == LauncherSettings.Favorites.CONTAINER_LAB)
 					mLAB.UpdateLaunchInfo(info);
 				else if (info.container == LauncherSettings.Favorites.CONTAINER_LAB2)
@@ -5252,7 +5260,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		if (packageName != null && packageName.length() > 0) {
 			mWorkspace.updateCountersForPackage(packageName, counter, color);
 			// ADW: Update ActionButtons icons
-			updateCounters(mHandleView, packageName, counter, color);
+			updateCounters(mMAB, packageName, counter, color);
 			updateCounters(mLAB, packageName, counter, color);
 			updateCounters(mRAB, packageName, counter, color);
 			updateCounters(mLAB2, packageName, counter, color);

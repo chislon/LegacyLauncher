@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.25 Beta</string>
+    <string name="app_version">0.26 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -347,13 +347,13 @@
     <string name="pref_title_theme_settings">Themes</string>
     <string name="pref_summary_theme_settings">Select visual themes</string>
     <string name="pref_title_theme_package">Select theme</string>
-    <string name="pref_summary_theme_package">Choose your theme for Launcher</string>
+    <string name="pref_summary_theme_package">Choose ADW theme</string>
     <string name="pref_title_theme_preview">Theme Default</string>
     <string name="pref_summary_theme_preview">Preview of selected theme</string>
     <string name="pref_title_theme_icons">Use theme icons</string>
     <string name="pref_summary_theme_icons">Deselect to use standard icons</string>
-    <string name="pref_themes_apply_theme">Apply ADW Theme</string>
-    <string name="pref_themes_get_themes">Get ADW Themes</string>
+    <string name="pref_themes_apply_theme">Apply theme</string>
+    <string name="pref_themes_get_themes">Get themes</string>
     <string name="pref_title_wallpaper_scrolling">Wallpaper Scrolling</string>
     <string name="pref_summary_wallpaper_scrolling">Allow wallpaper to move while scrolling screens</string>
     <string name="message_delete_desktop_screen">Remove this screen and all of its content?</string>
@@ -490,5 +490,8 @@
     <string name="button_folder_icon_reorder_sort">"Sort by name"</string>
     <string name="dialog_folder_icon_reorder_sort">"Sort all icons in folder by name?"</string>
     <string name="menu_folder_icon_reorder">"Rearrange"</string>
+
+    <!-- Progress dialog -->
+    <string name="dialog_please_wait">"Please wait&#8230;"</string>
 
 </resources>

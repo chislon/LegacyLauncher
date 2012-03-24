@@ -38,6 +38,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -534,146 +535,166 @@ OnPreferenceChangeListener {
 		themeListPref.setEntryValues(values);
 		PreviewPreference themePreview = (PreviewPreference) findPreference("themePreview");
 		themePreview.setTheme(themePackage);
-		themeListPref.setSummary(themePreview.getThemeName());
+	}
+
+	private ProgressDialog progressDialogTheme;
+	@Override
+	protected void onStop() {
+		super.onStop();
+		// prevent memory leak and dismiss any progress dialogs
+		if (progressDialogTheme != null) {
+			if (progressDialogTheme.isShowing()) {
+				progressDialogTheme.dismiss();
+			}
+		}
 	}
 
 	public void applyTheme(View v) {
-		PreviewPreference themePreview = (PreviewPreference) findPreference("themePreview");
-		String packageName = themePreview.getValue().toString();
-		// this time we really save the themepackagename
-		SharedPreferences sp = getPreferenceManager().getSharedPreferences();
-		SharedPreferences.Editor editor = sp.edit();
-		editor.putString("themePackageName", packageName);
-		// and update the preferences from the theme
-		// TODO:ADW maybe this should be optional for the user
-		if (!packageName.equals(Launcher.THEME_DEFAULT)) {
-			Resources themeResources = null;
-			try {
-				themeResources = getPackageManager()
-						.getResourcesForApplication(packageName.toString());
-			} catch (NameNotFoundException e) {
-				// e.printStackTrace();
-			}
-			if (themeResources != null) {
-				int config_ui_ab_hide_bgId = themeResources.getIdentifier(
-						"config_ui_ab_hide_bg", "bool", packageName.toString());
-				if (config_ui_ab_hide_bgId != 0) {
-					boolean config_ui_ab_hide_bg = themeResources
-							.getBoolean(config_ui_ab_hide_bgId);
-					editor.putBoolean("uiABBg", config_ui_ab_hide_bg);
-				}
-				int config_new_selectorsId = themeResources.getIdentifier(
-						"config_new_selectors", "bool", packageName.toString());
-				if (config_new_selectorsId != 0) {
-					boolean config_new_selectors = themeResources
-							.getBoolean(config_new_selectorsId);
-					editor.putBoolean("uiNewSelectors", config_new_selectors);
-				}
-				int config_drawer_labelsId = themeResources.getIdentifier(
-						"config_drawer_labels", "bool", packageName.toString());
-				if (config_drawer_labelsId != 0) {
-					boolean config_drawer_labels = themeResources
-							.getBoolean(config_drawer_labelsId);
-					editor.putBoolean("drawerLabels", config_drawer_labels);
-				}
-				int config_fade_drawer_labelsId = themeResources.getIdentifier(
-						"config_fade_drawer_labels", "bool",
-						packageName.toString());
-				if (config_fade_drawer_labelsId != 0) {
-					boolean config_fade_drawer_labels = themeResources
-							.getBoolean(config_fade_drawer_labelsId);
-					editor.putBoolean("fadeDrawerLabels",
-							config_fade_drawer_labels);
-				}
-				int config_desktop_indicatorId = themeResources.getIdentifier(
-						"config_desktop_indicator", "bool",
-						packageName.toString());
-				if (config_desktop_indicatorId != 0) {
-					boolean config_desktop_indicator = themeResources
-							.getBoolean(config_desktop_indicatorId);
-					editor.putBoolean("uiDesktopIndicator",
-							config_desktop_indicator);
-				}
-				int config_highlights_colorId = themeResources.getIdentifier(
-						"config_highlights_color", "integer",
-						packageName.toString());
-				if (config_highlights_colorId != 0) {
-					int config_highlights_color = themeResources
-							.getInteger(config_highlights_colorId);
-					editor.putInt("highlights_color", config_highlights_color);
-				}
-				int config_highlights_color_focusId = themeResources
-						.getIdentifier("config_highlights_color_focus",
-								"integer", packageName.toString());
-				if (config_highlights_color_focusId != 0) {
-					int config_highlights_color_focus = themeResources
-							.getInteger(config_highlights_color_focusId);
-					editor.putInt("highlights_color_focus",
-							config_highlights_color_focus);
-				}
-				int config_drawer_colorId = themeResources.getIdentifier(
-						"config_drawer_color", "integer",
-						packageName.toString());
-				if (config_drawer_colorId != 0) {
-					int config_drawer_color = themeResources
-							.getInteger(config_drawer_colorId);
-					editor.putInt("drawer_color", config_drawer_color);
-				}
-				int config_desktop_indicator_typeId = themeResources
-						.getIdentifier("config_desktop_indicator_type",
-								"string", packageName.toString());
-				if (config_desktop_indicator_typeId != 0) {
-					String config_desktop_indicator_type = themeResources
-							.getString(config_desktop_indicator_typeId);
-					editor.putString("uiDesktopIndicatorType",
-							config_desktop_indicator_type);
-				}
-				int config_ab_scale_factorId = themeResources.getIdentifier(
-						"config_ab_scale_factor", "integer",
-						packageName.toString());
-				if (config_ab_scale_factorId != 0) {
-					int config_ab_scale_factor = themeResources
-							.getInteger(config_ab_scale_factorId);
-					editor.putInt("uiScaleAB", config_ab_scale_factor);
-				}
-				int dock_styleId = themeResources.getIdentifier(
-						"main_dock_style", "string", packageName.toString());
-				if (dock_styleId != 0) {
-					String dock_style = themeResources.getString(dock_styleId);
-					editor.putString("main_dock_style", dock_style);
-					if (Integer.valueOf(dock_style) == Launcher.DOCK_STYLE_5
-							|| Integer.valueOf(dock_style) == Launcher.DOCK_STYLE_NONE)
-						editor.putBoolean("uiDots", false);
-				}
-				// TODO:ADW We set the theme wallpaper. We should add this as
-				// optional...
-				int wallpaperId = themeResources.getIdentifier(
-						"theme_wallpaper", "drawable", packageName.toString());
-				if (wallpaperId != 0) {
-					Options mOptions = new BitmapFactory.Options();
-					mOptions.inDither = false;
-					mOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
-					Bitmap wallpaper = null;
+		// we need to load the theme here
+		if (progressDialogTheme == null || !progressDialogTheme.isShowing()) {
+			progressDialogTheme = ProgressDialog.show(this, null, getString(R.string.dialog_please_wait), true, false);
+		}
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				PreviewPreference themePreview = (PreviewPreference) findPreference("themePreview");
+				String packageName = themePreview.getValue().toString();
+				// this time we really save the themepackagename
+				SharedPreferences sp = getPreferenceManager().getSharedPreferences();
+				SharedPreferences.Editor editor = sp.edit();
+				editor.putString("themePackageName", packageName);
+				// and update the preferences from the theme
+				// TODO:ADW maybe this should be optional for the user
+				if (!packageName.equals(Launcher.THEME_DEFAULT)) {
+					Resources themeResources = null;
 					try {
-						wallpaper = BitmapFactory.decodeResource(
-								themeResources, wallpaperId, mOptions);
-					} catch (OutOfMemoryError e) {
+						themeResources = getPackageManager()
+								.getResourcesForApplication(packageName.toString());
+					} catch (NameNotFoundException e) {
+						// e.printStackTrace();
 					}
-					if (wallpaper != null) {
-						try {
-							WallpaperManager wpm = (WallpaperManager) getSystemService(WALLPAPER_SERVICE);
-							// wpm.setResource(mImages.get(position));
-							wpm.setBitmap(wallpaper);
-							wallpaper.recycle();
-						} catch (Exception e) {
+					if (themeResources != null) {
+						int config_ui_ab_hide_bgId = themeResources.getIdentifier(
+								"config_ui_ab_hide_bg", "bool", packageName.toString());
+						if (config_ui_ab_hide_bgId != 0) {
+							boolean config_ui_ab_hide_bg = themeResources
+									.getBoolean(config_ui_ab_hide_bgId);
+							editor.putBoolean("uiABBg", config_ui_ab_hide_bg);
+						}
+						int config_new_selectorsId = themeResources.getIdentifier(
+								"config_new_selectors", "bool", packageName.toString());
+						if (config_new_selectorsId != 0) {
+							boolean config_new_selectors = themeResources
+									.getBoolean(config_new_selectorsId);
+							editor.putBoolean("uiNewSelectors", config_new_selectors);
+						}
+						int config_drawer_labelsId = themeResources.getIdentifier(
+								"config_drawer_labels", "bool", packageName.toString());
+						if (config_drawer_labelsId != 0) {
+							boolean config_drawer_labels = themeResources
+									.getBoolean(config_drawer_labelsId);
+							editor.putBoolean("drawerLabels", config_drawer_labels);
+						}
+						int config_fade_drawer_labelsId = themeResources.getIdentifier(
+								"config_fade_drawer_labels", "bool",
+								packageName.toString());
+						if (config_fade_drawer_labelsId != 0) {
+							boolean config_fade_drawer_labels = themeResources
+									.getBoolean(config_fade_drawer_labelsId);
+							editor.putBoolean("fadeDrawerLabels",
+									config_fade_drawer_labels);
+						}
+						int config_desktop_indicatorId = themeResources.getIdentifier(
+								"config_desktop_indicator", "bool",
+								packageName.toString());
+						if (config_desktop_indicatorId != 0) {
+							boolean config_desktop_indicator = themeResources
+									.getBoolean(config_desktop_indicatorId);
+							editor.putBoolean("uiDesktopIndicator",
+									config_desktop_indicator);
+						}
+						int config_highlights_colorId = themeResources.getIdentifier(
+								"config_highlights_color", "integer",
+								packageName.toString());
+						if (config_highlights_colorId != 0) {
+							int config_highlights_color = themeResources
+									.getInteger(config_highlights_colorId);
+							editor.putInt("highlights_color", config_highlights_color);
+						}
+						int config_highlights_color_focusId = themeResources
+								.getIdentifier("config_highlights_color_focus",
+										"integer", packageName.toString());
+						if (config_highlights_color_focusId != 0) {
+							int config_highlights_color_focus = themeResources
+									.getInteger(config_highlights_color_focusId);
+							editor.putInt("highlights_color_focus",
+									config_highlights_color_focus);
+						}
+						int config_drawer_colorId = themeResources.getIdentifier(
+								"config_drawer_color", "integer",
+								packageName.toString());
+						if (config_drawer_colorId != 0) {
+							int config_drawer_color = themeResources
+									.getInteger(config_drawer_colorId);
+							editor.putInt("drawer_color", config_drawer_color);
+						}
+						int config_desktop_indicator_typeId = themeResources
+								.getIdentifier("config_desktop_indicator_type",
+										"string", packageName.toString());
+						if (config_desktop_indicator_typeId != 0) {
+							String config_desktop_indicator_type = themeResources
+									.getString(config_desktop_indicator_typeId);
+							editor.putString("uiDesktopIndicatorType",
+									config_desktop_indicator_type);
+						}
+						int config_ab_scale_factorId = themeResources.getIdentifier(
+								"config_ab_scale_factor", "integer",
+								packageName.toString());
+						if (config_ab_scale_factorId != 0) {
+							int config_ab_scale_factor = themeResources
+									.getInteger(config_ab_scale_factorId);
+							editor.putInt("uiScaleAB", config_ab_scale_factor);
+						}
+						int dock_styleId = themeResources.getIdentifier(
+								"main_dock_style", "string", packageName.toString());
+						if (dock_styleId != 0) {
+							String dock_style = themeResources.getString(dock_styleId);
+							editor.putString("main_dock_style", dock_style);
+							if (Integer.valueOf(dock_style) == Launcher.DOCK_STYLE_5
+									|| Integer.valueOf(dock_style) == Launcher.DOCK_STYLE_NONE)
+								editor.putBoolean("uiDots", false);
+						}
+						// TODO:ADW We set the theme wallpaper. We should add this as
+						// optional...
+						int wallpaperId = themeResources.getIdentifier(
+								"theme_wallpaper", "drawable", packageName.toString());
+						if (wallpaperId != 0) {
+							Options mOptions = new BitmapFactory.Options();
+							mOptions.inDither = false;
+							mOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
+							Bitmap wallpaper = null;
+							try {
+								wallpaper = BitmapFactory.decodeResource(
+										themeResources, wallpaperId, mOptions);
+							} catch (OutOfMemoryError e) {
+							}
+							if (wallpaper != null) {
+								try {
+									final WallpaperManager wpm = (WallpaperManager) getSystemService(WALLPAPER_SERVICE);
+									// wpm.setResource(mImages.get(position));
+									wpm.setBitmap(wallpaper);
+									wallpaper.recycle();
+								} catch (Exception e) {
+								}
+							}
 						}
 					}
 				}
+				editor.commit();
+				finish();
 			}
-		}
-
-		editor.commit();
-		finish();
+		}).start();
 	}
 
 	@Override
@@ -712,7 +733,6 @@ OnPreferenceChangeListener {
 		if (key.equals("themePackageName")) {
 			PreviewPreference themePreview = (PreviewPreference) findPreference("themePreview");
 			themePreview.setTheme(newValue.toString());
-			preference.setSummary(themePreview.getThemeName());
 			return false;
 		} else if (key.equals("swipedownActions")) {
 			// lets launch app picker if the user selected to launch an app on

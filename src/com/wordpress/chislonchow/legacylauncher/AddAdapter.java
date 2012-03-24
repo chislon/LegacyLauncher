@@ -73,14 +73,8 @@ public class AddAdapter extends BaseAdapter {
         // Create default actions
         Resources res = launcher.getResources();
         
-        mItems.add(new ListItem(res, R.string.launcher_actions,
-                R.drawable.all_apps_button, ITEM_LAUNCHER_ACTION));
-        
         mItems.add(new ListItem(res, R.string.group_shortcuts,
                 R.drawable.ic_launcher_shortcut, ITEM_SHORTCUT));
-
-        mItems.add(new ListItem(res, R.string.pref_label_shortcuts,
-                R.drawable.ic_launcher_shortcut, ITEM_ANYCUT));
 
         mItems.add(new ListItem(res, R.string.group_widgets,
                 R.drawable.ic_launcher_appwidget, ITEM_APPWIDGET));
@@ -90,6 +84,12 @@ public class AddAdapter extends BaseAdapter {
         
         mItems.add(new ListItem(res, R.string.group_wallpapers,
                 R.drawable.ic_launcher_wallpaper, ITEM_WALLPAPER));
+        
+        mItems.add(new ListItem(res, R.string.launcher_actions,
+                R.drawable.all_apps_button, ITEM_LAUNCHER_ACTION));
+        
+        mItems.add(new ListItem(res, R.string.pref_label_shortcuts,
+                R.drawable.ic_launcher_shortcut, ITEM_ANYCUT));
 
     }
 
