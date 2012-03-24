@@ -95,7 +95,7 @@ final class Utilities {
         if (width > 0 && height > 0) {
             if (width < iconWidth || height < iconHeight || scale != 1.0f) {
                 final float ratio = (float) iconWidth / iconHeight;
-
+                // It's too big, scale it down.
                 if (iconWidth > iconHeight) {
                     height = (int) (width / ratio);
                 } else if (iconHeight > iconWidth) {

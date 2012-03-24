@@ -483,7 +483,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			localeConfiguration.mcc = mcc;
 			localeConfiguration.mnc = mnc;
 
-			writeConfiguration(this, localeConfiguration);
+			new Thread("WriteLocaleConfiguration") {
+				public void run() {
+					writeConfiguration(Launcher.this, localeConfiguration);
+				}
+			}.start();
 		}
 	}
 

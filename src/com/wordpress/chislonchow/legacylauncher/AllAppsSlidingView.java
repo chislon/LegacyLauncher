@@ -98,6 +98,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private GestureDetector gestureDetector;
 	private View.OnTouchListener gestureListener;
 
+	private long lastTouchTime = -1;
+
 	/**
 	 * Should be used by subclasses to listen to changes in the dataset
 	 */
@@ -564,52 +566,52 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 				mScroller.abortAnimation();
 			}
 			mTouchState = TOUCH_STATE_DOWN;
-			child = pointToView((int) x, (int) y);
-			if (child!=null) {
-				// FIXME Debounce
-				if (mPendingCheckForTap == null) {
-					mPendingCheckForTap = new CheckForTap();
+
+			final long thisTime = System.currentTimeMillis();
+			// Debounce this press with a tap duration
+			if (thisTime - lastTouchTime > ViewConfiguration.getTapTimeout()) {
+				lastTouchTime = thisTime;
+				child = pointToView((int) x, (int) y);
+				if (child!=null) {
+					if (mPendingCheckForTap == null) {
+						mPendingCheckForTap = new CheckForTap();
+					}
+					postDelayed(mPendingCheckForTap, ViewConfiguration.getTapTimeout());
+					// Remember where the motion event started
+					mCheckTapPosition = getPositionForView(child);
 				}
-				postDelayed(mPendingCheckForTap, ViewConfiguration.getTapTimeout());
-				// Remember where the motion event started
-				mCheckTapPosition = getPositionForView(child);
 			}
 			// Remember where the motion event started
 			//mLastMotionX = x;	// CCHOW THIS IS DONE AT TOUCH INTERCEPTION
 			break;
 		case MotionEvent.ACTION_MOVE:
-			if (mTouchState == TOUCH_STATE_SCROLLING || mTouchState == TOUCH_STATE_DOWN) {
+			// Scroll to follow the motion event
+			final int deltaX = (int) (mLastMotionX - x);
+			final int deltaY = (int) (mLastMotionY - y);
+			final int xDiff = (int) Math.abs(deltaX);
+			final int yDiff = (int) Math.abs(deltaY);
 
-				// Scroll to follow the motion event
-				final int deltaX = (int) (mLastMotionX - x);
-				final int deltaY = (int) (mLastMotionY - y);
-
-				final int xDiff = (int) Math.abs(deltaX);
-				final int yDiff = (int) Math.abs(deltaY);
-
-				// significant movement
-				if ((xDiff > mTouchSlop) || (yDiff > mTouchSlop)) {
-					mTouchState = TOUCH_STATE_SCROLLING;
-					// If xDiff > yDiff means the finger path pitch is smaller than 45deg so we assume the user want to scroll X axis
-					if (xDiff > yDiff) {
-						// Scroll if the user moved far enough along the X axis
-						mLastMotionX = x;
-						if (deltaX < 0) {
-
-							int availableToScroll = getScrollX();
-							availableToScroll += (mScrollingOvershoot? mPageWidth : 0);
-							if ((availableToScroll > 0) && (availableToScroll > -deltaX)) {
-								scrollBy(deltaX, 0);
-							}
-						} else if (deltaX > 0) {
-							int availableToScroll = ((mTotalScreens - 1)*mPageWidth) - getScrollX();
-							availableToScroll += (mScrollingOvershoot? mPageWidth : 0);
-							if ((availableToScroll > 0) && (availableToScroll > deltaX)) {
-								scrollBy(deltaX, 0);
-							}
+			// significant movement
+			if ((xDiff > mTouchSlop) || (yDiff > mTouchSlop) || mTouchState == TOUCH_STATE_SCROLLING) {
+				mTouchState = TOUCH_STATE_SCROLLING;
+				// If xDiff > yDiff means the finger path pitch is smaller than 45deg so we assume the user want to scroll X axis
+				if (xDiff > yDiff) {
+					// Scroll if the user moved far enough along the X axis
+					mLastMotionX = x;
+					if (deltaX < 0) {
+						int availableToScroll = getScrollX();
+						availableToScroll += (mScrollingOvershoot? mPageWidth : 0);
+						if ((availableToScroll > 0) && (availableToScroll > -deltaX)) {
+							scrollBy(deltaX, 0);
+						}
+					} else if (deltaX > 0) {
+						int availableToScroll = ((mTotalScreens - 1)*mPageWidth) - getScrollX();
+						availableToScroll += (mScrollingOvershoot? mPageWidth : 0);
+						if ((availableToScroll > 0) && (availableToScroll > deltaX)) {
+							scrollBy(deltaX, 0);
 						}
 					}
-				}		
+				}
 			}
 			break;
 		case MotionEvent.ACTION_UP:
@@ -1503,6 +1505,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 						setPressed(true);
 						setSelection(mCheckTapPosition);
 						positionSelector(child);
+
 						final int longPressTimeout = ViewConfiguration.getLongPressTimeout();
 						final boolean longClickable = isLongClickable();
 
@@ -1522,7 +1525,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 								mPendingCheckForLongPress = new CheckForLongPress();
 							}
 							mPendingCheckForLongPress.rememberWindowAttachCount();
-							postDelayed(mPendingCheckForLongPress, longPressTimeout);
+							postDelayed(mPendingCheckForLongPress, longPressTimeout - ViewConfiguration.getTapTimeout());
 						} else {
 							mTouchState = TOUCH_STATE_DONE_WAITING;
 						}
@@ -1613,17 +1616,21 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 				final int longPressPosition = motionPosition;
 				final long longPressId = mAdapter.getItemId(motionPosition);
 
-				boolean handled = false;
-				if (sameWindow() && !mDataChanged) {
-					handled = performLongPress(child, longPressPosition, longPressId);
-				}
-				if (handled) {
-					mTouchState = TOUCH_STATE_REST;
+				if (mTouchState != TOUCH_STATE_TAP) {
 					child.setPressed(false);
 				} else {
-					mTouchState = TOUCH_STATE_DONE_WAITING;
-				}
+					boolean handled = false;
+					if (sameWindow() && !mDataChanged) {
+						handled = performLongPress(child, longPressPosition, longPressId);
+					}
+					if (handled) {
+						mTouchState = TOUCH_STATE_REST;
+						child.setPressed(false);
+					} else {
+						mTouchState = TOUCH_STATE_DONE_WAITING;
+					}
 
+				}
 			}
 		}
 	}

@@ -113,8 +113,6 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 	private boolean mLocked;
 
 	private int mTouchSlop;
-	private int mMaximumVelocity;
-
 	final Rect mDrawerBounds = new Rect();
 	final Rect mClipBounds = new Rect();
 	int mDrawerContentHeight;
@@ -239,7 +237,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 		mPaint.setDither(false);
 		final ViewConfiguration configuration = ViewConfiguration.get(getContext());
 		mTouchSlop = configuration.getScaledTouchSlop();
-		mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
+		configuration.getScaledMaximumFlingVelocity();
 
 		//Wysie: Use MultiTouchController only for multitouch events
 		multiTouchController = new MultiTouchController<Object>(this, false);
@@ -952,7 +950,7 @@ MultiTouchObjectCanvas<Object>, FlingListener {
 			mAllowLongPress = true;
 
 			thisTime = System.currentTimeMillis();
-			if (thisTime - lastTouchTime < 250) {
+			if (thisTime - lastTouchTime < ViewConfiguration.getDoubleTapTimeout()) {
 				mTouchState = TOUCH_DOUBLE_TAP_GESTURE;
 				lastTouchTime = -1;
 				return true;

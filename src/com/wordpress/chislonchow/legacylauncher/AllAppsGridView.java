@@ -332,7 +332,6 @@ DragSource, Drawer {
 
 		if (animate) {
 			isAnimating = true;
-
 			Animation ani;
 			if (mDrawerZoom) {
 				ani = AnimationUtils.loadAnimation(getContext(), R.anim.all_apps_zoom_out);

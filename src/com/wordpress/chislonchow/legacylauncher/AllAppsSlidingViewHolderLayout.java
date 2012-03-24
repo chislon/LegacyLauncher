@@ -134,7 +134,7 @@ public class AllAppsSlidingViewHolderLayout extends ViewGroup {
 	 */
 	@Override
 	public void draw(Canvas canvas) {
-		if (mStatus != HOLDER_CLOSED){
+		if (mStatus != HOLDER_CLOSED) {
 			super.draw(canvas);
 		}
 	}
@@ -147,12 +147,12 @@ public class AllAppsSlidingViewHolderLayout extends ViewGroup {
 		if(mIconSize==0){
 			mIconSize=tmp[1].getIntrinsicHeight()+child.getPaddingTop();
 		}
+		child.setDrawingCacheEnabled(true);
 		// lower quality when drawing
 		if(isAnimating) {
 			//postInvalidate();
 
 			if(mDrawLabels) {
-				child.setDrawingCacheEnabled(true);
 				child.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
 				b = child.getDrawingCache();
 

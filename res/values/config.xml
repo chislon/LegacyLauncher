@@ -93,14 +93,14 @@
     <integer name="config_desktop_columns">1</integer>
     <integer name="config_desktop_rows">1</integer>
 
-    <bool name="config_autosize_icons">false</bool>
+    <bool name="config_autosize_icons">true</bool>
     <bool name="config_drawer_labels">true</bool>
     <bool name="config_drawer_label_color_override">false</bool>
 
     <integer name="config_drawer_label_color">0xffffffff</integer>
 
     <!-- config min value is 8, so it will add 8 to whatever value you set here -->
-    <integer name="config_drawer_label_size">6</integer>
+    <integer name="config_drawer_label_size">5</integer>
 
     <bool name="config_drawer_label_bold">false</bool>
     <bool name="config_desktop_indicator">true</bool>

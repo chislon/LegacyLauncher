@@ -39,12 +39,13 @@ public class AddAdapter extends BaseAdapter {
     
     private final ArrayList<ListItem> mItems = new ArrayList<ListItem>();
     
-    public static final int ITEM_LAUNCHER_ACTION = 0;
-    public static final int ITEM_SHORTCUT = 1;
-    public static final int ITEM_ANYCUT = 2;
-    public static final int ITEM_APPWIDGET = 3;
-    public static final int ITEM_LIVE_FOLDER = 4;
-    public static final int ITEM_WALLPAPER = 5;
+    protected static final int ITEM_SHORTCUT = 0;
+    protected static final int ITEM_APPWIDGET = 1;
+    protected static final int ITEM_LIVE_FOLDER = 2;
+    protected static final int ITEM_WALLPAPER = 3;
+    protected static final int ITEM_LAUNCHER_ACTION = 4;
+    protected static final int ITEM_ANYCUT = 5;
+
     private Typeface themeFont=null;
     /**
      * Specific item in our list.

@@ -47,7 +47,7 @@ public class PreviewsHolder extends ViewGroup {
                             MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST),
                             MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST));
 
-                    final int childw = child.getMeasuredWidth();
+                    //final int childw = child.getMeasuredWidth();
                     line_height = Math.max(line_height, child.getMeasuredHeight() + lp.vertical_spacing);
                     //xpos += childw + lp.horizontal_spacing;
                 }
