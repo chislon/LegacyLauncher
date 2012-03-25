@@ -175,6 +175,8 @@
     <string name="pref_title_folder_text_size">Folder text size</string>
     <string name="pref_summary_folder_text_size">Set folder text size</string>
     <string name="pref_dialog_folder_text_size">Set folder text size</string>
+    <string name="pref_title_folder_animate">Animate folders</string>
+    <string name="pref_summary_folder_animate">Set folder open/close animations</string>
 
     <!-- Desktop action preferences -->
     <string name="pref_title_desktop_actions">Desktop Actions</string>
@@ -361,6 +363,7 @@
     <string name="message_cannot_add_desktop_screen">Unable to add more desktop screens</string>
     <string name="message_cannot_swap_desktop_screen">Unable to swap desktop screens</string>
     <string name="menu_edit">Edit</string>
+    <string name="menu_resize_widget">Resize</string>
     <string name="menu_edit_desktop">Edit Desktop</string>
     <string name="pref_label_shortcuts">Custom shortcut</string>
     <string name="pref_label_activities">Activities</string>
@@ -492,6 +495,6 @@
     <string name="menu_folder_icon_reorder">"Rearrange"</string>
 
     <!-- Progress dialog -->
-    <string name="dialog_please_wait">"Please wait&#8230;"</string>
+    <string name="dialog_please_wait">"Please wait…"</string>
 
 </resources>

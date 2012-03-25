@@ -6,7 +6,7 @@
 -&lt;b>NOTICE:&lt;/b> To add new icons/widgets/folders/shortcuts, long-press on a blank part of the desktop&lt;br>&lt;br>
 --------------&lt;br>&lt;br>
 &lt;b>Version 0.26:&lt;/b>&lt;br>
-- Adjust dock scaling for use on more displays. Adjust theme setting.&lt;br>&lt;br>
+- Various fixes including dock scaling on some devices&lt;br>&lt;br>
 &lt;b>Version 0.25:&lt;/b>&lt;br>
 - Fix for another possible NPE force close, tweak to password lock input field.&lt;br>&lt;br>
 &lt;b>Version 0.24:&lt;/b>&lt;br>

@@ -148,7 +148,7 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 		if (item instanceof ApplicationInfo || item instanceof LauncherAppWidgetInfo){
 			mUninstallTarget = true;
 			mHandler.removeCallbacks(mShowUninstaller);
-			mHandler.postDelayed(mShowUninstaller, 1000);
+			mHandler.postDelayed(mShowUninstaller, 2000);
 		}
 	}
 

@@ -192,14 +192,14 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 	 * @author adw
 	 *
 	 */
-	private class SliderIndicator extends View{
+	private class SliderIndicator extends View {
 		public static final int INDICATOR_HEIGHT=4;
 		private RectF mRect;
 		private Paint mPaint;
 		private int mTotalItems=5;
 		public SliderIndicator(Context context) {
 			super(context);
-			mPaint=new Paint();
+			mPaint=new Paint(Paint.ANTI_ALIAS_FLAG);
 			mPaint.setColor(mIndicatorColor);
 			mRect=new RectF(0, 0, 5, INDICATOR_HEIGHT);
 		}

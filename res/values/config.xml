@@ -58,7 +58,7 @@
     <string name="config_swipeup_actions">0</string>
     <string name="config_doubletap_actions">0</string>
 
-    <bool name="config_drawer_animated">false</bool>
+    <bool name="config_drawer_animated">true</bool>
     <!-- config_desktop_screens min value is 1, so it will add 1 to whatever value you set here -->
     <integer name="config_desktop_screens">2</integer>
     <integer name="config_default_screen">1</integer>
@@ -67,14 +67,15 @@
     <bool name="config_previews_enable">true</bool>
     <bool name="config_previews_spread">true</bool>
     <bool name="config_ui_dots">false</bool>
+    <bool name="config_folder_animate">true</bool>
     <bool name="config_ui_close_folder">true</bool>
 
     <!-- config_ui_close_folder min is 8, so it will add 8 to whatever value you set here -->
     <integer name="config_folder_text_size">6</integer>
 
     <bool name="config_ui_ab_hide_bg">true</bool>
-    <!-- config_animation_speed min is 300, so it will add 300 to whatever value you set here -->
     <bool name="config_drawer_zoom">false</bool>
+    <!-- config_animation_speed min is 300, so it will add 300 to whatever value you set here -->
 
     <integer name="config_animation_speed">250</integer>
     <!-- config_ui_ab_scale is a float value between 0.1 and 1.0. Set here the default .X -->
@@ -119,7 +120,7 @@
     <string name="config_screen_cache">2</string>
 
     <bool name="config_nag_screen">true</bool>
-    <bool name="config_drawerCatalogFlingNavigate">false</bool>
+    <bool name="config_drawer_catalog_fling_navigate">false</bool>
     <bool name="config_drawer_navigate_catalogs">true</bool>
     <bool name="config_drawer_ungroup_catalog">false</bool>
     <bool name="config_drawer_title_catalogs">true</bool>

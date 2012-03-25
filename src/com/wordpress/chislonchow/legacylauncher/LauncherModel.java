@@ -1729,7 +1729,7 @@ public class LauncherModel {
 
 		cr.update(LauncherSettings.Favorites.getContentUri(item.id, false), values, null, null);
 	}
-	boolean ocuppiedArea(int screen,int id,Rect rect){
+	boolean isWidgetOverlapping(int screen,int id,Rect rect){
 		final ArrayList<ItemInfo>desktopItems=mDesktopItems;
 		int count =desktopItems.size();
 		Rect r=new Rect();

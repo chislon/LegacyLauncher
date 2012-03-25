@@ -132,6 +132,11 @@ public final class MyLauncherSettingsHelper {
 		boolean newD = sp.getBoolean("uiDots", context.getResources().getBoolean(R.bool.config_ui_dots));
 		return newD;
 	}
+	public static boolean getFolderAnimate(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("folderAnimate", context.getResources().getBoolean(R.bool.config_folder_animate));
+		return newD;
+	}
 	public static boolean getUICloseFolder(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("uiCloseFolder", context.getResources().getBoolean(R.bool.config_ui_close_folder));
@@ -561,7 +566,7 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static boolean getDrawerCatalogsFlingNavigation(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("drawerCatalogFlingNavigate", context.getResources().getBoolean(R.bool.config_drawerCatalogFlingNavigate));
+		boolean newD = sp.getBoolean("drawerCatalogFlingNavigate", context.getResources().getBoolean(R.bool.config_drawer_catalog_fling_navigate));
 		return newD;
 	}
 	public static boolean getDrawerUngroupCatalog(Context context) {

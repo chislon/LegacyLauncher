@@ -1,12 +1,17 @@
-<set xmlns:android="http://schemas.android.com/apk/res/android" android:shareInterpolator="false">
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shareInterpolator="false" >
+
     <alpha
+        android:duration="@android:integer/config_shortAnimTime"
         android:fromAlpha="0.0"
-        android:toAlpha="1.0"
-        android:duration="500" 
-        android:interpolator="@android:anim/decelerate_interpolator" />
-	<translate xmlns:android="http://schemas.android.com/apk/res/android"
-		android:fromYDelta="50%p"
-		android:toYDelta="0%p"
-		android:duration="500"
-		android:interpolator="@android:anim/overshoot_interpolator" /> 
+        android:interpolator="@android:anim/decelerate_interpolator"
+        android:toAlpha="1.0" />
+
+    <translate
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:duration="500"
+        android:fromYDelta="50%p"
+        android:interpolator="@android:anim/overshoot_interpolator"
+        android:toYDelta="0%p" />
+
 </set>

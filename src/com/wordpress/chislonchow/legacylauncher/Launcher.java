@@ -112,6 +112,7 @@ import android.view.ViewStub;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -292,7 +293,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	/**
 	 * ADW: A lot of properties to store the custom settings
 	 */
-	private boolean allowDrawerAnimations = false;
+	private boolean mDrawerAnimate = true;
 	private boolean mPreviewsEnable = true;
 	private boolean mPreviewsNew = true;
 	private boolean mHideStatusBar = false;
@@ -310,6 +311,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	protected boolean mUseDrawerTitleCatalog = false;
 	protected int mTransitionStyle = 1;
 	private int mAppDrawerPadding = -1;
+
+	private boolean mFolderAnimate = true;
 
 	private boolean mLauncherLocked = false;
 
@@ -363,7 +366,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private boolean mIsEditMode = false;
 	private View mScreensEditor = null;
 	private boolean mIsWidgetEditMode = false;
-	private LauncherAppWidgetInfo mlauncherAppWidgetInfo = null;
 	// /TODO:ADW. Current code fully ready for upto 9
 	// but need to add more drawables for the desktop dots...
 	// or completely redo the desktop dots implementation
@@ -2291,6 +2293,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	void closeFolder(Folder folder) {
+		if (mFolderAnimate)
+			folder.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out_fast));
 		folder.getInfo().opened = false;
 		ViewGroup parent = (ViewGroup) folder.getParent();
 		if (parent != null) {
@@ -2668,6 +2672,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		} else {
 			return;
 		}
+
+		if (mFolderAnimate)
+			openFolder.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in_fast));
 
 		openFolder.setDragger(mDragLayer);
 		openFolder.setLauncher(this);
@@ -3533,7 +3540,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 * Update variables
 	 */
 	private void updateAlmostNexusVars() {
-		allowDrawerAnimations = MyLauncherSettingsHelper
+		mDrawerAnimate = MyLauncherSettingsHelper
 				.getDrawerAnimated(Launcher.this);
 		mPreviewsNew = MyLauncherSettingsHelper.getPreviewsNew(this);
 		mPreviewsEnable = MyLauncherSettingsHelper.getPreviewsEnable(this);
@@ -3543,6 +3550,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mDoubletapAction = MyLauncherSettingsHelper.getDoubleTapActions(this);
 		mHideStatusBar = MyLauncherSettingsHelper.getHideStatusbar(this);
 		mShowDots = MyLauncherSettingsHelper.getUIDots(this);
+		mFolderAnimate = MyLauncherSettingsHelper.getFolderAnimate(this);
 		mDockStyle = MyLauncherSettingsHelper.getDockStyle(this);
 		mDockHide = MyLauncherSettingsHelper.getDockHide(this);
 		mAutoCloseFolder = MyLauncherSettingsHelper.getUICloseFolder(this);
@@ -4212,7 +4220,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mWorkspace.invalidate();
 			checkActionButtonsSpecialMode();
 			mAllAppsGrid.setUngroupMode(mUseDrawerUngroupCatalog);
-			mAllAppsGrid.open(animated && allowDrawerAnimations);
+			mAllAppsGrid.open(animated && mDrawerAnimate);
 			mPreviousView.setVisibility(View.GONE);
 			mNextView.setVisibility(View.GONE);
 			if (mDesktopIndicator != null)
@@ -4265,7 +4273,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			if (mDesktopIndicator != null)
 				mDesktopIndicator.show();
 
-			mAllAppsGrid.close(animated && allowDrawerAnimations);
+			mAllAppsGrid.close(animated && mDrawerAnimate);
 			mAllAppsGrid.clearTextFilter();
 		}
 	}
@@ -5017,28 +5025,27 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	protected boolean isEditMode() {
 		return mIsEditMode;
 	}
+	
+	private LauncherAppWidgetInfo mLauncherAppWidgetInfo = null;
 
 	protected void editWidget(final View widget) {
 		if (mWorkspace != null) {
 			mIsWidgetEditMode = true;
 			final CellLayout screen = (CellLayout) mWorkspace
 					.getChildAt(mWorkspace.getCurrentScreen());
+			
 			if (screen != null) {
-				mlauncherAppWidgetInfo = (LauncherAppWidgetInfo) widget
-						.getTag();
+				mLauncherAppWidgetInfo = (LauncherAppWidgetInfo) widget.getTag();
 
 				final Intent motosize = new Intent(
 						"com.motorola.blur.home.ACTION_SET_WIDGET_SIZE");
-				final int appWidgetId = ((AppWidgetHostView) widget)
-						.getAppWidgetId();
-				final AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager
-						.getAppWidgetInfo(appWidgetId);
+				final int appWidgetId = ((AppWidgetHostView) widget).getAppWidgetId();
+				final AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
 				if (appWidgetInfo != null) {
 					motosize.setComponent(appWidgetInfo.provider);
 				}
 				motosize.putExtra("appWidgetId", appWidgetId);
-				motosize.putExtra("com.motorola.blur.home.EXTRA_NEW_WIDGET",
-						true);
+				motosize.putExtra("com.motorola.blur.home.EXTRA_NEW_WIDGET", true);
 				final int minw = (mWorkspace.getWidth()
 						- screen.getLeftPadding() - screen.getRightPadding())
 						/ screen.getCountX();
@@ -5048,14 +5055,14 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mScreensEditor = new ResizeViewHandler(this);
 				// Create a default HightlightView if we found no face in the
 				// picture.
-				int width = (mlauncherAppWidgetInfo.spanX * minw);
-				int height = (mlauncherAppWidgetInfo.spanY * minh);
+				int width = (mLauncherAppWidgetInfo.spanX * minw);
+				int height = (mLauncherAppWidgetInfo.spanY * minh);
 
 				final Rect screenRect = new Rect(0, 0, mWorkspace.getWidth()
 						- screen.getRightPadding(), mWorkspace.getHeight()
 						- screen.getBottomPadding());
-				final int x = mlauncherAppWidgetInfo.cellX * minw;
-				final int y = mlauncherAppWidgetInfo.cellY * minh;
+				final int x = mLauncherAppWidgetInfo.cellX * minw;
+				final int y = mLauncherAppWidgetInfo.cellY * minh;
 				final int[] spans = new int[] { 1, 1 };
 				final int[] position = new int[] { 1, 1 };
 				final CellLayout.LayoutParams lp = (CellLayout.LayoutParams) widget
@@ -5063,13 +5070,64 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				RectF widgetRect = new RectF(x, y, x + width, y + height);
 				((ResizeViewHandler) mScreensEditor).setup(null, screenRect,
 						widgetRect, false, false, minw - 10, minh - 10);
+				
 				mDragLayer.addView(mScreensEditor);
+				
+				final Rect checkRect = new Rect();
 				((ResizeViewHandler) mScreensEditor)
 				.setOnValidateSizingRect(new ResizeViewHandler.OnSizeChangedListener() {
-
 					@Override
 					public void onTrigger(RectF r) {
 						if (r != null) {
+
+							int[] tmpspans = {
+									Math.max(
+											Math.round(r.width() / (minw)),
+											1),
+											Math.max(
+													Math.round(r.height() / (minh)),
+													1) };
+							int[] tmpposition = {
+									Math.round(r.left / minw),
+									Math.round(r.top / minh) };
+							checkRect.set(tmpposition[0], tmpposition[1],
+									tmpposition[0] + tmpspans[0],
+									tmpposition[1] + tmpspans[1]);
+							final boolean widgetCollision = getLauncherModel().isWidgetOverlapping(
+									screen.getScreen(), appWidgetId, checkRect);
+							if (!widgetCollision) {
+								((ResizeViewHandler) mScreensEditor)
+								.setColliding(false);
+							} else {
+								((ResizeViewHandler) mScreensEditor)
+								.setColliding(true);
+							}
+							if (tmpposition[0] != position[0]
+									|| tmpposition[1] != position[1]
+											|| tmpspans[0] != spans[0]
+													|| tmpspans[1] != spans[1]) {
+								if (!widgetCollision) {
+									position[0] = tmpposition[0];
+									position[1] = tmpposition[1];
+									spans[0] = tmpspans[0];
+									spans[1] = tmpspans[1];
+									lp.cellX = position[0];
+									lp.cellY = position[1];
+									lp.cellHSpan = spans[0];
+									lp.cellVSpan = spans[1];
+									widget.setLayoutParams(lp);
+									mLauncherAppWidgetInfo.cellX = lp.cellX;
+									mLauncherAppWidgetInfo.cellY = lp.cellY;
+									mLauncherAppWidgetInfo.spanX = lp.cellHSpan;
+									mLauncherAppWidgetInfo.spanY = lp.cellVSpan;
+									widget.setTag(mLauncherAppWidgetInfo);
+									// send the broadcast
+									motosize.putExtra("spanX", spans[0]);
+									motosize.putExtra("spanY", spans[1]);
+									Launcher.this.sendBroadcast(motosize);
+								}
+							}
+							
 							final float left = Math
 									.round(r.left / minw) * minw;
 							final float top = Math.round(r.top / minh)
@@ -5087,39 +5145,37 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						}
 					}
 				});
-				final Rect checkRect = new Rect();
+				
 				((ResizeViewHandler) mScreensEditor)
 				.setOnSizeChangedListener(new ResizeViewHandler.OnSizeChangedListener() {
 					@Override
 					public void onTrigger(RectF r) {
+
 						int[] tmpspans = {
 								Math.max(
-										Math.round(r.width() / (minw)),
-										1),
-										Math.max(
-												Math.round(r.height() / (minh)),
-												1) };
+										Math.round(r.width() / (minw)), 1),
+										Math.max(Math.round(r.height() / (minh)), 1) };
 						int[] tmpposition = {
 								Math.round(r.left / minw),
 								Math.round(r.top / minh) };
 						checkRect.set(tmpposition[0], tmpposition[1],
 								tmpposition[0] + tmpspans[0],
 								tmpposition[1] + tmpspans[1]);
-						boolean ocupada = getLauncherModel().ocuppiedArea(
-								screen.getScreen(), appWidgetId,
-								checkRect);
-						if (!ocupada) {
+						final boolean widgetCollision = getLauncherModel().isWidgetOverlapping(
+								screen.getScreen(), appWidgetId, checkRect);
+						if (!widgetCollision) {
 							((ResizeViewHandler) mScreensEditor)
 							.setColliding(false);
 						} else {
 							((ResizeViewHandler) mScreensEditor)
 							.setColliding(true);
 						}
+						/*
 						if (tmpposition[0] != position[0]
 								|| tmpposition[1] != position[1]
 										|| tmpspans[0] != spans[0]
 												|| tmpspans[1] != spans[1]) {
-							if (!ocupada) {
+							if (!widgetCollision) {
 								position[0] = tmpposition[0];
 								position[1] = tmpposition[1];
 								spans[0] = tmpspans[0];
@@ -5129,19 +5185,18 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								lp.cellHSpan = spans[0];
 								lp.cellVSpan = spans[1];
 								widget.setLayoutParams(lp);
-								mlauncherAppWidgetInfo.cellX = lp.cellX;
-								mlauncherAppWidgetInfo.cellY = lp.cellY;
-								mlauncherAppWidgetInfo.spanX = lp.cellHSpan;
-								mlauncherAppWidgetInfo.spanY = lp.cellVSpan;
-								widget.setTag(mlauncherAppWidgetInfo);
+								mLauncherAppWidgetInfo.cellX = lp.cellX;
+								mLauncherAppWidgetInfo.cellY = lp.cellY;
+								mLauncherAppWidgetInfo.spanX = lp.cellHSpan;
+								mLauncherAppWidgetInfo.spanY = lp.cellVSpan;
+								widget.setTag(mLauncherAppWidgetInfo);
 								// send the broadcast
 								motosize.putExtra("spanX", spans[0]);
 								motosize.putExtra("spanY", spans[1]);
 								Launcher.this.sendBroadcast(motosize);
-								Log.d("RESIZEHANDLER",
-										"sent resize broadcast");
 							}
 						}
+						*/
 					}
 				});
 			}
@@ -5150,13 +5205,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	private void stopWidgetEdit() {
 		mIsWidgetEditMode = false;
-		if (mlauncherAppWidgetInfo != null) {
-			LauncherModel.resizeItemInDatabase(this, mlauncherAppWidgetInfo,
+		if (mLauncherAppWidgetInfo != null) {
+			LauncherModel.resizeItemInDatabase(this, mLauncherAppWidgetInfo,
 					LauncherSettings.Favorites.CONTAINER_DESKTOP,
-					mlauncherAppWidgetInfo.screen,
-					mlauncherAppWidgetInfo.cellX, mlauncherAppWidgetInfo.cellY,
-					mlauncherAppWidgetInfo.spanX, mlauncherAppWidgetInfo.spanY);
-			mlauncherAppWidgetInfo = null;
+					mLauncherAppWidgetInfo.screen,
+					mLauncherAppWidgetInfo.cellX, mLauncherAppWidgetInfo.cellY,
+					mLauncherAppWidgetInfo.spanX, mLauncherAppWidgetInfo.spanY);
+			mLauncherAppWidgetInfo = null;
 		}
 		// Remove the resizehandler view
 		if (mScreensEditor != null) {
@@ -5412,8 +5467,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			} else if (info instanceof LauncherAppWidgetInfo) {
 				qa.addItem(
 						getResources().getDrawable(
-								android.R.drawable.ic_menu_edit),
-								R.string.menu_edit, new OnClickListener() {
+								R.drawable.ic_menu_resize),
+								R.string.menu_resize_widget, new OnClickListener() {
 							public void onClick(View v) {
 								editWidget(view);
 								qa.dismiss();

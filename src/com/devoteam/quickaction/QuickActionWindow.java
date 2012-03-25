@@ -89,6 +89,7 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 		
 		// Prepare track entrance animation
 		mTrackAnim = AnimationUtils.loadAnimation(mContext, R.anim.quickaction);
+		/*
 		mTrackAnim.setInterpolator(new Interpolator() {
 			public float getInterpolation(float t) {
 				// Pushes past the target area, then snaps back into place.
@@ -96,7 +97,8 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 				final float inner = (t * 1.55f) - 1.1f;
 				return 1.2f - inner * inner;
 			}
-		});	
+		});
+		*/	
 	}
 	
 	/**
