@@ -19,12 +19,12 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wordpress.chislonchow.legacylauncher"
-    android:versionCode="26"
+    android:versionCode="27"
     android:versionName="@string/app_version" >
 
     <uses-sdk
         android:maxSdkVersion="10"
-        android:minSdkVersion="6" />
+        android:minSdkVersion="7" />
 
     <permission
         android:name="com.android.launcher.permission.INSTALL_SHORTCUT"

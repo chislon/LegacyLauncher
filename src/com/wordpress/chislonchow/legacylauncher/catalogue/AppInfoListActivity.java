@@ -19,6 +19,7 @@ package com.wordpress.chislonchow.legacylauncher.catalogue;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -277,6 +278,7 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 	}
 
 	/* update app into */
+	@SuppressLint("NewApi")
 	private void updateAppList() {
 
 		ArrayList<ApplicationInfo> appInfos = ApplicationsAdapter.allItems;

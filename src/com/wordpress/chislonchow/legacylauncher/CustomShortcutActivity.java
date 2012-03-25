@@ -435,8 +435,7 @@ public class CustomShortcutActivity extends Activity implements OnClickListener 
 		}
 	}
     protected class IconTypeDialog implements DialogInterface.OnClickListener,
-	    DialogInterface.OnCancelListener, DialogInterface.OnDismissListener,
-	    DialogInterface.OnShowListener {
+	    DialogInterface.OnCancelListener, DialogInterface.OnDismissListener {
 
 		private ArrayAdapter<String> mAdapter;
 
@@ -459,7 +458,6 @@ public class CustomShortcutActivity extends Activity implements OnClickListener 
 		    AlertDialog dialog = builder.create();
 		    dialog.setOnCancelListener(this);
 		    dialog.setOnDismissListener(this);
-		    dialog.setOnShowListener(this);
 		    return dialog;
 		}
 		public void onCancel(DialogInterface dialog) {
@@ -530,8 +528,6 @@ public class CustomShortcutActivity extends Activity implements OnClickListener 
 				break;
 			}
 			cleanup();
-		}
-		public void onShow(DialogInterface dialog) {
 		}
 	}
 

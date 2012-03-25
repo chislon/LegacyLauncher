@@ -115,6 +115,7 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 			break;
 		}
 	}
+	
 	public void indicate(float percent){
 		setVisibility(View.VISIBLE);
 		int position=Math.round(mItems*percent);
@@ -133,6 +134,7 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 			mHandler.postDelayed(mAutoHide, mVisibleTime);
 		mCurrent=position;
 	}
+	
 	public void fullIndicate(int position){
 		setVisibility(View.VISIBLE);
 		switch(mIndicatorType){
@@ -178,14 +180,13 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 			}else{
 				try{
 					//This little thing seems to be making some androids piss off
-					if(!mAnimation.hasEnded())mAnimation.cancel();
+					if(!mAnimation.hasEnded())mAnimation.setStartTime(Long.MIN_VALUE);
 				}catch (NoSuchMethodError e) {
 				}
 			}
 			startAnimation(mAnimation);				   
 		}
 	};	
-
 
 	/**
 	 * Simple line Indicator for desktop scrolling
@@ -239,6 +240,7 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 			setVisibility(View.VISIBLE);
 		}
 	}
+	
 	private void loadThemeColors(Context context){
 		//ADW: Load the specified theme
 		String themePackage=MyLauncherSettingsHelper.getThemePackageName(context, Launcher.THEME_DEFAULT);

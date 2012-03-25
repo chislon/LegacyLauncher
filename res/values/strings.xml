@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.26 Beta</string>
+    <string name="app_version">0.27 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -42,10 +42,6 @@
     <string name="rename_folder_label">Folder name</string>
     <!-- Title of dialog box -->
     <string name="rename_folder_title">Rename folder</string>
-    <!-- Buttons in Rename folder dialog box -->
-    <string name="rename_action">OK</string>
-    <!-- Buttons in Rename folder dialog box -->
-    <string name="cancel_action">Cancel</string>
 
     <!-- Shortcuts -->
     <skip />
@@ -99,7 +95,7 @@
     <skip />
 
     <!-- Text to show user in place of a gadget when we can't display it properly -->
-    <string name="gadget_error_text">Problem loading widget</string>
+    <string name="gadget_error_text">Widget not loaded</string>
 
     <!-- ADW Settings -->
     <string name="launcher_label_settings">Legacy Launcher Setup</string>
@@ -402,10 +398,14 @@
     <string name="create_group_success">""New catalog: "</string>
     <string name="create_group_fail">Failed to create catalog, name not accepted.</string>
     <string name="show_catalog">Show Catalog \"%s\"</string>
+
+    <!-- Misc preferences strings -->
     <string name="pref_title_launcher_restart">Restart</string>
     <string name="pref_summary_launcher_restart">Close and restart Legacy Launcher</string>
     <string name="pref_title_launcher_manage">Manage</string>
     <string name="pref_summary_launcher_manage">Manage Legacy Launcher from Android settings</string>
+
+    <!-- Lock strings -->
     <string name="pref_title_lock_screen">Launcher Lock</string>
     <string name="pref_title_lock">Enable Lock</string>
     <string name="pref_summary_lock">Lockdown launcher</string>

@@ -2817,6 +2817,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			})
 			.setNegativeButton(android.R.string.cancel, null).create();
 		case DIALOG_PICK_GROUPS:
+			
 			return new PickGrpDialog().createDialog();
 		default:
 			return null;
@@ -2908,13 +2909,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					cleanup();
 				}
 			});
-			builder.setNegativeButton(getString(R.string.cancel_action),
+			builder.setNegativeButton(getString(android.R.string.cancel),
 					new Dialog.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					cleanup();
 				}
 			});
-			builder.setPositiveButton(getString(R.string.rename_action),
+			builder.setPositiveButton(getString(android.R.string.ok),
 					new Dialog.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					changeFolderName();
@@ -3059,13 +3060,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					cleanup();
 				}
 			});
-			builder.setNegativeButton(getString(R.string.cancel_action),
+			builder.setNegativeButton(getString(android.R.string.cancel),
 					new Dialog.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					cleanup();
 				}
 			});
-			builder.setPositiveButton(getString(R.string.rename_action),
+			builder.setPositiveButton(getString(android.R.string.ok),
 					new Dialog.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					final String name = mInput.getText().toString().trim();
@@ -3598,7 +3599,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private void updateAlmostNexusUI() {
 		if (mIsEditMode || mIsWidgetEditMode)
 			return;
+
 		updateAlmostNexusVars();
+
 		float uiScaleAB = MyLauncherSettingsHelper.getuiScaleAB(this);
 		boolean tint = MyLauncherSettingsHelper.getUIABTint(this);
 		int tintcolor = MyLauncherSettingsHelper.getUIABTintColor(this);
@@ -4334,6 +4337,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private boolean shouldRestart() {
 		try {
 			if (mShouldRestart) {
+
 				android.os.Process.killProcess(android.os.Process.myPid());
 				finish();
 				startActivity(getIntent());
@@ -4347,8 +4351,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
 		// ADW: Try to add the restart flag here instead on preferences activity
-		if (MyLauncherSettingsHelper.needsRestart(key)) {
+		if (MyLauncherSettingsHelper.needsRestart(key) || mShouldRestart) {
 			mShouldRestart = true;
+
 		} else {
 			// TODO: ADW Move here all the updates instead on
 			// updateAlmostNexusUI()
@@ -4381,6 +4386,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						.getDockStyle(this);
 				if (dockStyle == DOCK_STYLE_NONE || mDockStyle == DOCK_STYLE_NONE) {
 					mShouldRestart = true;
+					return;	// we are going to be restarting onResume, so abandon remaining execution
 				}
 			} else if (key.equals("deleteZoneLocation")) {
 				int dz = MyLauncherSettingsHelper.getDeletezoneStyle(this);
@@ -5020,12 +5026,14 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mDragLayer.removeView(mScreensEditor);
 			mScreensEditor = null;
 		}
+		// dumb workaround to force desktop indicator redraw
+		mWorkspace.snapToScreen(sScreen);
 	}
 
 	protected boolean isEditMode() {
 		return mIsEditMode;
 	}
-	
+
 	private LauncherAppWidgetInfo mLauncherAppWidgetInfo = null;
 
 	protected void editWidget(final View widget) {
@@ -5033,7 +5041,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mIsWidgetEditMode = true;
 			final CellLayout screen = (CellLayout) mWorkspace
 					.getChildAt(mWorkspace.getCurrentScreen());
-			
+
 			if (screen != null) {
 				mLauncherAppWidgetInfo = (LauncherAppWidgetInfo) widget.getTag();
 
@@ -5070,9 +5078,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				RectF widgetRect = new RectF(x, y, x + width, y + height);
 				((ResizeViewHandler) mScreensEditor).setup(null, screenRect,
 						widgetRect, false, false, minw - 10, minh - 10);
-				
+
 				mDragLayer.addView(mScreensEditor);
-				
+
 				final Rect checkRect = new Rect();
 				((ResizeViewHandler) mScreensEditor)
 				.setOnValidateSizingRect(new ResizeViewHandler.OnSizeChangedListener() {
@@ -5127,7 +5135,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 									Launcher.this.sendBroadcast(motosize);
 								}
 							}
-							
+
 							final float left = Math
 									.round(r.left / minw) * minw;
 							final float top = Math.round(r.top / minh)
@@ -5145,7 +5153,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						}
 					}
 				});
-				
+
 				((ResizeViewHandler) mScreensEditor)
 				.setOnSizeChangedListener(new ResizeViewHandler.OnSizeChangedListener() {
 					@Override
@@ -5196,7 +5204,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								Launcher.this.sendBroadcast(motosize);
 							}
 						}
-						*/
+						 */
 					}
 				});
 			}
