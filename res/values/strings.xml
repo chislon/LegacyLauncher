@@ -29,8 +29,7 @@
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
     <string name="chooser_wallpaper">Select wallpaper from</string>
-    <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->
-    <string name="wallpaper_instructions">Set wallpaper</string>
+
     <!-- Displayed when user selects a shortcut for an app that was uninstalled -->
     <string name="activity_not_found">Application is not installed on your phone.</string>
     <!-- List item for configuring the current wallpaper -->
@@ -130,7 +129,6 @@
     <string name="pref_title_desktop_transition">Transition Animation</string>
     <string name="pref_summary_desktop_transition">Transistion animation for changing screens</string>
     <string name="pref_title_desktop_wallpaper">Wallpaper</string>
-    <string name="pref_title_desktop_appearance">Appearance</string>
     <string name="pref_title_enable_previews">Desktop previews</string>
     <string name="pref_summary_enable_previews">Enable desktop previews</string>
     <string name="pref_title_spread_previews">Spread previews</string>
@@ -262,10 +260,8 @@
     <string name="pref_title_hide_icon_labels">Hide icon labels</string>
     <string name="pref_summary_hide_icon_labels">Hide desktop icon labels</string>
     <string name="pref_title_main_dock_style">Number of icons</string>
-    <string name="pref_summary_main_dock_style">Number of configurable dock icons</string>
     <string name="pref_title_main_dock_lock_mab">Lock center dock icon</string>
     <string name="pref_summary_main_dock_lock_mab">Prevent changes to center dock icon</string>
-    <string name="toast_main_dock_lock_mab">Center dock icon locked</string>
     <string name="pref_title_ab_tint">Dock icons tint</string>
     <string name="pref_summary_ab_tint">Perform color tinting on dock icons</string>
     <string name="pref_title_ab_tint_color">Tint color</string>
@@ -321,10 +317,9 @@
     <string name="pref_summary_autosize_icons">Stretch icons/widgets to prevent overlap</string>
     <string name="pref_title_drawer_labels">Show app labels</string>
     <string name="pref_summary_drawer_labels">Show the labels on app tray</string>
-    <string name="widget_config_dialog_title">Widget span</string>
-    <string name="widget_config_dialog_summary">Number of rows/columns widget spans across</string>
-    <string name="widget_columns">Columns</string>
-    <string name="widget_rows">Rows</string>
+    <string name="widget_config_dialog_summary">Choose number of columns and rows for the new widget</string>
+    <string name="widget_columns">Widget Columns</string>
+    <string name="widget_rows">Widget Rows</string>
     <string name="pref_title_screen_cache">Scrolling Cache</string>
     <string name="pref_summary_screen_cache">Improves rendering speed but uses more memory</string>
     <string name="pref_title_desktop_indicator">Show screen indicator</string>
@@ -382,14 +377,12 @@
     <string name="app_group_no_items_modify">"No items selected, remove current catalog?"</string>
     <string name="app_group_all">"All"</string>
     <string name="app_group_un">"All (Uncataloged)"</string>
-    <string name="app_group_config_confirm">"Save changes to catalog?"</string>
     <string name="app_group_add">"Add Catalog"</string>
     <string name="app_group_add_abort">"Add catalog aborted"</string>
     <string name="app_group_delete">"Remove catalog"</string>
     <string name="app_group_delete_long">"Really remove current catalog?"</string>
     <string name="app_group_choose">"Choose Catalog"</string>
     <string name="app_group_config">"Modify Catalog"</string>
-    <string name="app_group_rename">"New Catalog"</string>
     <string name="app_group_config_error">"Cannot modify this catalog"</string>
     <string name="app_group_remove_error">"Cannot remove this catalog"</string>
     <string name="app_group_remove_success">"Catalog removed"</string>
@@ -417,7 +410,6 @@
     <string name="dialog_lock_password_get">Enter lock password</string>
     <string name="toast_password_clear">Lock password cleared</string>
     <string name="toast_password_set">"Password set to: "</string>
-    <string name="toast_password_accept">Lock password cleared</string>
     <string name="toast_launcher_lock">"Launcher locked"</string>
     <string name="toast_launcher_unlock">"Launcher unlocked"</string>
     <string name="lock_password_invalid">Invalid lock password</string>
@@ -425,7 +417,6 @@
 
     <!-- Backup and Restore -->
     <string name="pref_title_import_export">Backup and Restore</string>
-    <string name="pref_summary_import_export">Launcher settings data, desktop icon placement</string>
     <string name="pref_title_xml">Launcher Settings Data</string>
     <string name="pref_title_xml_import">Restore settings</string>
     <string name="pref_summary_xml_import">Restore from /sdcard/legacy_launcher_settings.xml</string>
@@ -475,17 +466,6 @@
 
     <!-- Color Picker -->
     <string name="press_color_to_apply">Press on Color to apply</string>
-
-    <!-- Color Picker Preferences -->
-    <string name="pref_category">Category</string>
-    <string name="color1_title">Color 1</string>
-    <string name="color1_summary">black color by default, set by reference</string>
-    <string name="color2_title">Color 2</string>
-    <string name="color2_summary">not persistent color\nalpha slider added via code</string>
-    <string name="color3_title">Color 3</string>
-    <string name="color3_summary">picker with alpha slider</string>
-    <string name="color4_title">Color 4</string>
-    <string name="color4_summary">color set with HEX code in xml</string>
 
     <!-- Activity Reorder -->
     <string name="activity_label_reorder_activity">"Rearranging Folder: "</string>

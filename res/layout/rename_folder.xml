@@ -33,8 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:scrollHorizontally="true"
-        android:autoText="false"
-        android:capitalize="none"
+        android:inputType="textNoSuggestions"
         android:gravity="fill_horizontal"
         android:maxLength="30"
         android:textAppearance="?android:attr/textAppearanceMedium" />

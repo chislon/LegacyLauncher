@@ -18,7 +18,6 @@
 <resources>
 
     <bool name="force_hidden_settings">false</bool>
-    <bool name="config_desktop_rotation">true</bool>
 
     <integer name="config_desktop_speed">400</integer>
     <integer name="config_desktop_bounce">0</integer>
@@ -142,7 +141,5 @@
     <bool name="config_wallpaper_scroll">false</bool>
 
     <string name="config_deletezone_style">1</string>
-
-    <bool name="config_close_apps_dockbar">true</bool>
 
 </resources>

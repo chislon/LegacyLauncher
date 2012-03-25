@@ -16,6 +16,7 @@
 
 package com.wordpress.chislonchow.legacylauncher;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetManager;
@@ -694,29 +695,34 @@ public class LauncherProvider extends ContentProvider {
 			return i;
 		}
 
+		@SuppressLint("NewApi")
 		private boolean addAppShortcut(SQLiteDatabase db, ContentValues values, TypedArray a,
 				PackageManager packageManager, Intent intent) {
 
-			ActivityInfo info;
+			ActivityInfo info = null;
 			String packageName = a.getString(R.styleable.Favorite_packageName);
 			String className = a.getString(R.styleable.Favorite_className);
 			try {
-				ComponentName cn;
+				ComponentName cn = null;
 				try {
 					cn = new ComponentName(packageName, className);
 					info = packageManager.getActivityInfo(cn, 0);
+					intent.setComponent(cn);
 				} catch (PackageManager.NameNotFoundException nnfe) {
-					String[] packages = packageManager.currentToCanonicalPackageNames(
-							new String[] { packageName });
-					cn = new ComponentName(packages[0], className);
-					info = packageManager.getActivityInfo(cn, 0);
+					if (android.os.Build.VERSION.SDK_INT >= 8) {
+						String[] packages = packageManager.currentToCanonicalPackageNames(
+								new String[] { packageName });
+						cn = new ComponentName(packages[0], className);
+						info = packageManager.getActivityInfo(cn, 0);
+						intent.setComponent(cn);
+					}
 				}
 
-				intent.setComponent(cn);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
 						Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 				values.put(Favorites.INTENT, intent.toUri(0));
-				values.put(Favorites.TITLE, info.loadLabel(packageManager).toString());
+				if (info != null)
+					values.put(Favorites.TITLE, info.loadLabel(packageManager).toString());
 				values.put(Favorites.ITEM_TYPE, Favorites.ITEM_TYPE_APPLICATION);
 				values.put(Favorites.SPANX, 1);
 				values.put(Favorites.SPANY, 1);
@@ -766,6 +772,7 @@ public class LauncherProvider extends ContentProvider {
 			return addAppWidget(db, values, cn, 2, 2);
 		}
 
+		@SuppressLint("NewApi")
 		private boolean addAppWidget(SQLiteDatabase db, ContentValues values, TypedArray a,
 				PackageManager packageManager) {
 
@@ -781,9 +788,11 @@ public class LauncherProvider extends ContentProvider {
 			try {
 				packageManager.getReceiverInfo(cn, 0);
 			} catch (Exception e) {
-				String[] packages = packageManager.currentToCanonicalPackageNames(
-						new String[] { packageName });
-				cn = new ComponentName(packages[0], className);
+				if (android.os.Build.VERSION.SDK_INT >= 8) {
+					String[] packages = packageManager.currentToCanonicalPackageNames(
+							new String[] { packageName });
+					cn = new ComponentName(packages[0], className);
+				}
 				try {
 					packageManager.getReceiverInfo(cn, 0);
 				} catch (Exception e1) {

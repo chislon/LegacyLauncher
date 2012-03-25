@@ -24,7 +24,8 @@
 
     <uses-sdk
         android:maxSdkVersion="10"
-        android:minSdkVersion="7" />
+        android:minSdkVersion="7"
+        android:targetSdkVersion="8" />
 
     <permission
         android:name="com.android.launcher.permission.INSTALL_SHORTCUT"

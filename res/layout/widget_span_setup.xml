@@ -14,54 +14,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- -->
-<LinearLayout 
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:id="@+id/layout_root"
-	>
-	<LinearLayout 
-		android:orientation="horizontal"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:padding="10dp"
-		android:layout_weight="1.0"
-		>
-	    <TextView
-	        android:id="@+id/text_columns_span"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent" 
-	        android:layout_weight="1.0"
-	        android:gravity="center_horizontal"
-	        android:text="@string/widget_columns"/>
-	    <TextView
-	        android:id="@+id/text_rows_span"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
-	        android:layout_weight="1.0"
-	        android:gravity="center_horizontal"
-	        android:text="@string/widget_rows"/>
-	    
-	</LinearLayout>
-	<LinearLayout 
-		android:orientation="horizontal"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:padding="10dp"
-		android:layout_weight="1.0"
-		>
-	    <com.wordpress.chislonchow.legacylauncher.ui.NumberPicker
-	        android:id="@+id/widget_columns_span"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent" 
-	        android:layout_weight="1.0"/>
-	    <com.wordpress.chislonchow.legacylauncher.ui.NumberPicker
-	        android:id="@+id/widget_rows_span"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
-	        android:layout_weight="1.0" />
-	    
-	</LinearLayout>
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/text_columns_span"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center_horizontal"
+            android:text="@string/widget_columns" />
+
+        <TextView
+            android:id="@+id/text_rows_span"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center_horizontal"
+            android:text="@string/widget_rows" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <com.wordpress.chislonchow.legacylauncher.ui.NumberPicker
+            android:id="@+id/widget_columns_span"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="4.0dp"
+            android:layout_marginRight="2.0dp"
+            android:layout_weight="1.0" />
+
+        <com.wordpress.chislonchow.legacylauncher.ui.NumberPicker
+            android:id="@+id/widget_rows_span"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="2.0dp"
+            android:layout_marginRight="4.0dp"
+            android:layout_weight="1.0" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -34,8 +34,8 @@ DragListener, OnLongClickListener, DragSource {
 	public boolean mInterceptClicks = false;
 	private DragController mDragger;
 
-	private int mDimMax, mDimMin;
 	private Display mDisplay;
+	private LinearLayout.LayoutParams mLpWide, mLpNarrow;
 
 	private static final int STATUS_BAR_HEIGHT = 20;	// pixels
 	private static final int ACTION_BUTTON_COUNT = 5;
@@ -45,8 +45,10 @@ DragListener, OnLongClickListener, DragSource {
 		// TODO Auto-generated constructor stub
 		final float scale = getResources().getDisplayMetrics().density;
 		mDisplay = ((Activity) context).getWindowManager().getDefaultDisplay();
-		mDimMax = Math.min(mDisplay.getWidth(), mDisplay.getHeight()) / 5;
-		mDimMin = (int) (mDimMax - STATUS_BAR_HEIGHT * scale / 5);
+		final int dimMax = Math.min(mDisplay.getWidth(), mDisplay.getHeight()) / 5;
+		final int dimMin = (int) (dimMax - STATUS_BAR_HEIGHT * scale / 5);
+		mLpWide = new LinearLayout.LayoutParams(dimMin, dimMin);
+		mLpNarrow = new LinearLayout.LayoutParams(dimMax, dimMax);
 	}
 
 	public ActionButton(Context context, AttributeSet attrs) {
@@ -66,18 +68,21 @@ DragListener, OnLongClickListener, DragSource {
 
 		final float scale = getResources().getDisplayMetrics().density;
 		mDisplay = ((Activity) context).getWindowManager().getDefaultDisplay();
-		mDimMax = Math.min(mDisplay.getWidth(), mDisplay.getHeight()) / ACTION_BUTTON_COUNT;
-		mDimMin = (int) (mDimMax - STATUS_BAR_HEIGHT * scale / ACTION_BUTTON_COUNT);
+		
+		final int dimMax = Math.min(mDisplay.getWidth(), mDisplay.getHeight()) / ACTION_BUTTON_COUNT;
+		final int dimMin = (int) (dimMax - STATUS_BAR_HEIGHT * scale / ACTION_BUTTON_COUNT);
+		mLpWide = new LinearLayout.LayoutParams(dimMin, dimMin);
+		mLpNarrow = new LinearLayout.LayoutParams(dimMax, dimMax);
 	}
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {		
 		if (mDisplay.getWidth() > mDisplay.getHeight()) {
-			this.setLayoutParams(new LinearLayout.LayoutParams(mDimMin, mDimMin));
-			this.setMeasuredDimension(mDimMin, mDimMin);
+			this.setLayoutParams(mLpWide);
+			this.setMeasuredDimension(mLpWide.height, mLpWide.height);
 		} else {
-			this.setLayoutParams(new LinearLayout.LayoutParams(mDimMax, mDimMax));
-			this.setMeasuredDimension(mDimMax, mDimMax);
+			this.setLayoutParams(mLpNarrow);
+			this.setMeasuredDimension(mLpNarrow.width, mLpNarrow.width);
 		}
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}

@@ -1,8 +1,6 @@
 
 package com.devoteam.quickaction;
 
-import com.wordpress.chislonchow.legacylauncher.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -13,14 +11,15 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+
+import com.wordpress.chislonchow.legacylauncher.R;
 
 /**
  * A class that can mDisplay, as a popup badge, a collection 
@@ -33,9 +32,9 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	private final Context mContext;
 	private final LayoutInflater mInflater;
 	private final WindowManager mWindowManager;
-	
+
 	View contentView;
-	
+
 	private int mScreenWidth;
 	private int mShadowHoriz;
 	private ImageView mArrowUp;
@@ -45,48 +44,48 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 
 	private View mPView;
 	private Rect mAnchor;
-		
-    /**
-     * Creates a new Instance of the QuickActionWindow
-     * 
-     * @param context Context to use, usually your Appication or your Activity
-     * @param pView The view you want to anchor the window on (the parent)
-     * @param rect Rectangle defining the view area
-     */
+
+	/**
+	 * Creates a new Instance of the QuickActionWindow
+	 * 
+	 * @param context Context to use, usually your Appication or your Activity
+	 * @param pView The view you want to anchor the window on (the parent)
+	 * @param rect Rectangle defining the view area
+	 */
 	public QuickActionWindow(Context context, View pView, Rect rect) {
 		super(context);
-		
+
 		mPView = pView;
 		mAnchor = rect;
-		
+
 		mContext = context;
 		mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 		mInflater = ((Activity)mContext).getLayoutInflater();
-		
+
 		contentView = mInflater.inflate(R.layout.quickaction, null);
 		super.setContentView(contentView);
-		
+
 		mScreenWidth = mWindowManager.getDefaultDisplay().getWidth();
-		
+
 		setWindowLayoutMode(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		
+
 		final Resources res = mContext.getResources();
 		mShadowHoriz = res.getDimensionPixelSize(R.dimen.quickaction_shadow_horiz);
-		
+
 		setWidth(mScreenWidth + mShadowHoriz + mShadowHoriz);
 		setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-		
+
 		setBackgroundDrawable(new ColorDrawable(0));
-		
+
 		mArrowUp = (ImageView) contentView.findViewById(R.id.arrow_up);
 		mArrowDown = (ImageView) contentView.findViewById(R.id.arrow_down);
-		
+
 		mTrack = (ViewGroup) contentView.findViewById(R.id.quickaction);
-		
+
 		setFocusable(true);
 		setTouchable(true);
 		setOutsideTouchable(true);
-		
+
 		// Prepare track entrance animation
 		mTrackAnim = AnimationUtils.loadAnimation(mContext, R.anim.quickaction);
 		/*
@@ -98,9 +97,9 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 				return 1.2f - inner * inner;
 			}
 		});
-		*/	
+		 */	
 	}
-	
+
 	/**
 	 * Adds an item to the QuickActionWindow
 	 * 
@@ -114,11 +113,11 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 		view.setImageDrawable(drawable);
 		view.setText(text);
 		view.setOnClickListener(l);
-		
+
 		final int index = mTrack.getChildCount() - 1;
 		mTrack.addView(view, index);
 	}
-	
+
 	/**
 	 * Adds an item to the QuickActionWindow
 	 * 
@@ -129,7 +128,7 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	public void addItem(int drawable, String text, OnClickListener l) {
 		addItem(mContext.getResources().getDrawable(drawable), text, l);
 	}
-	
+
 	/**
 	 * Adds an item to the QuickActionWindow
 	 * 
@@ -140,7 +139,7 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	public void addItem(Drawable drawable, int resid, OnClickListener l) {
 		addItem(drawable, mContext.getResources().getString(resid), l);
 	}
-	
+
 	/**
 	 * Adds an item to the QuickActionWindow
 	 * 
@@ -168,7 +167,7 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 
 		hideArrow.setVisibility(View.INVISIBLE);
 	}
-	
+
 	/**
 	 * Shows the quick actions window
 	 * 
@@ -176,22 +175,22 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	 */
 	public void show(int requestedX) {
 		super.showAtLocation(mPView, Gravity.NO_GRAVITY, 0, 0);
-		
+
 		// Calculate properly to position the popup the correctly based on height of popup
 		if (isShowing()) {
 			int x, y, windowAnimations;
 			this.getContentView().measure(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 			final int blockHeight = this.getContentView().getMeasuredHeight();
-			
+
 			x = -mShadowHoriz;
-			
+
 			if (mAnchor.top > blockHeight) {
 				// Show downwards callout when enough room, aligning bottom block
 				// edge with top of anchor area, and adjusting to inset arrow.
 				showArrow(R.id.arrow_down, requestedX);
 				y = mAnchor.top - blockHeight;
 				windowAnimations = R.style.QuickActionAboveAnimation;
-	
+
 			} else {
 				// Otherwise show upwards callout, aligning block top with bottom of
 				// anchor area, and adjusting to inset arrow.
@@ -199,13 +198,13 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 				y = mAnchor.bottom;
 				windowAnimations = R.style.QuickActionBelowAnimation;
 			}
-			
+
 			setAnimationStyle(windowAnimations);
 			mTrack.startAnimation(mTrackAnim);
 			this.update(x, y, -1, -1);
 		}
 	}
-	
+
 	/**
 	 * Shows the quick actions window
 	 */
@@ -223,18 +222,18 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 
 		return false;
 	}
-	
+
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	@Override
 	public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		return false;

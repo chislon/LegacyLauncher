@@ -33,6 +33,9 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 	private int mVisibleTime=300;
 	private Animation mAnimation;
 	private Handler mHandler=new Handler();
+	
+	private LinearLayout.LayoutParams mLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+	
 	public DesktopIndicator(Context context) {
 		super(context);
 		loadThemeColors(context);
@@ -97,20 +100,16 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		// TODO Auto-generated method stub
-		LinearLayout.LayoutParams params;
 		switch(mIndicatorType){
 		case INDICATOR_TYPE_PAGER:
-			params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 			mIndicator.measure(getWidth(), 20);
-			mIndicator.setLayoutParams(params);
+			mIndicator.setLayoutParams(mLp);
 			mIndicator.layout(0, 0, getWidth(), 20);
 			break;
 		case INDICATOR_TYPE_SLIDER_BOTTOM:
 		case INDICATOR_TYPE_SLIDER_TOP:
-			params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 			mIndicator.measure(getWidth(), SliderIndicator.INDICATOR_HEIGHT);
-			mIndicator.setLayoutParams(params);
+			mIndicator.setLayoutParams(mLp);
 			mIndicator.layout(0, 0, getWidth(), SliderIndicator.INDICATOR_HEIGHT);
 			break;
 		}

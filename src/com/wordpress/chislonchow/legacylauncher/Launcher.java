@@ -83,6 +83,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -316,6 +317,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	private boolean mLauncherLocked = false;
 
+	private AlertDialog alertDialog;
+
 	public boolean getPreviewsEnable() {
 		return mPreviewsEnable;
 	}
@@ -430,7 +433,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mAppWidgetHost.startListening();
 
 		if (PROFILE_STARTUP) {
-			android.os.Debug.startMethodTracing("/sdcard/launcher");
+			android.os.Debug.startMethodTracing(Environment.getExternalStorageDirectory().getPath() + "/launcher");
 		}
 		updateAlmostNexusVars();
 		checkForLocaleChange();
@@ -739,6 +742,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// is triggered
 		// ADW: it should be done only on certain circumstances
 		// closeDrawer(false);
+
+		// Dismiss some dialogs here
+		if (alertDialog != null) {
+			if (alertDialog.isShowing()) {
+				alertDialog.dismiss();
+			}
+		}
 	}
 
 	@Override
@@ -748,7 +758,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mBinder.mTerminate = true;
 		}
 		if (PROFILE_ROTATE) {
-			android.os.Debug.startMethodTracing("/sdcard/launcher-rotate");
+			android.os.Debug.startMethodTracing(Environment.getExternalStorageDirectory().getPath() + "/launcher-rotate");
 		}
 		return null;
 	}
@@ -1161,7 +1171,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				appWidgetInfo.minHeight);
 		final CellLayout.CellInfo cInfo = cellInfo;
 		AlertDialog.Builder builder;
-		final AlertDialog alertDialog;
 
 		final View span_dlg_layout = View.inflate(Launcher.this,
 				R.layout.widget_span_setup, null);
@@ -1175,11 +1184,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		nrows.setCurrent(spans[1]);
 		builder = new AlertDialog.Builder(Launcher.this);
 		builder.setView(span_dlg_layout);
+		Toast.makeText(this, getString(R.string.widget_config_dialog_summary), Toast.LENGTH_SHORT).show();
 		alertDialog = builder.create();
-		alertDialog.setTitle(getResources().getString(
-				R.string.widget_config_dialog_title));
-		alertDialog.setMessage(getResources().getString(
-				R.string.widget_config_dialog_summary));
+		alertDialog.setMessage(null);
+		alertDialog.setTitle(null);
 		alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources()
 				.getString(android.R.string.ok),
 				new DialogInterface.OnClickListener() {
@@ -2817,7 +2825,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			})
 			.setNegativeButton(android.R.string.cancel, null).create();
 		case DIALOG_PICK_GROUPS:
-			
+
 			return new PickGrpDialog().createDialog();
 		default:
 			return null;
@@ -2860,12 +2868,14 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	private void showSwitchGrp() {
 		removeDialog(DIALOG_CHOOSE_GROUP);
+		mWorkspace.lock();
 		showDialog(DIALOG_CHOOSE_GROUP);
 	}
 
 	private void showAddDialog(CellLayout.CellInfo cellInfo) {
 		mAddItemCellInfo = cellInfo;
 		mWaitingForResult = true;
+		mWorkspace.lock();
 		showDialog(DIALOG_CREATE_SHORTCUT);
 	}
 
@@ -2924,11 +2934,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			builder.setView(layout);
 
 			final AlertDialog dialog = builder.create();
-			dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-				public void onShow(DialogInterface dialog) {
-					mWorkspace.lock();
-				}
-			});
 
 			return dialog;
 		}
@@ -2992,7 +2997,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			AlertDialog dialog = builder.create();
 			dialog.setOnCancelListener(this);
 			dialog.setOnDismissListener(this);
-			dialog.setOnShowListener(this);
 			return dialog;
 		}
 
@@ -3095,15 +3099,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 			final AlertDialog dialog = builder.create();
 
-			dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-				public void onShow(DialogInterface dialog) {
-					mWorkspace.lock();
-					mInput.requestFocus();
-					InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					inputManager.showSoftInput(mInput, 0);
-				}
-			});
-
 			return dialog;
 		}
 
@@ -3121,6 +3116,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			if (mPickGroupInfo != null) {
 				// reopen the pick dialog
 				mWaitingForResult = true;
+				mWorkspace.lock();
 				showDialog(DIALOG_PICK_GROUPS);
 			}
 		}
@@ -3132,7 +3128,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 */
 	private class CreateShortcut implements DialogInterface.OnClickListener,
 	DialogInterface.OnCancelListener,
-	DialogInterface.OnDismissListener, DialogInterface.OnShowListener {
+	DialogInterface.OnDismissListener {
 
 		private AddAdapter mAdapter;
 
@@ -3151,7 +3147,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			AlertDialog dialog = builder.create();
 			dialog.setOnCancelListener(this);
 			dialog.setOnDismissListener(this);
-			dialog.setOnShowListener(this);
 
 			return dialog;
 		}
@@ -5496,6 +5491,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							if (info instanceof LiveFolderInfo) {
 								mFolderInfo = (FolderInfo)info;
 								mWaitingForResult = true;
+								mWorkspace.lock();
 								showDialog(DIALOG_RENAME_FOLDER);
 							} else {
 								editShortcut(info);
@@ -5544,7 +5540,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 		// found the package and it's not an ADW internal shortcut
 		if (infoPackage != null && !isADWShortcut) {
-			if (!(info instanceof FolderInfo)) {
+			if (info instanceof ApplicationInfo) {
 				qa.addItem(
 						getResources().getDrawable(
 								android.R.drawable.ic_menu_agenda),
@@ -5554,6 +5550,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								mQaw = null;
 								mPickGroupInfo = (ApplicationInfo) info;
 								mWaitingForResult = true;
+								mWorkspace.lock();
 								showDialog(DIALOG_PICK_GROUPS);
 							}
 						});
@@ -5705,7 +5702,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	protected class PickGrpDialog implements
 	DialogInterface.OnMultiChoiceClickListener,
 	DialogInterface.OnCancelListener,
-	DialogInterface.OnDismissListener, DialogInterface.OnShowListener,
+	DialogInterface.OnDismissListener, 
 	DialogInterface.OnClickListener {
 		private List<Catalog> mAllGroups;
 		private boolean[] inGroup;
@@ -5748,7 +5745,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			AlertDialog dialog = builder.create();
 			dialog.setOnCancelListener(this);
 			dialog.setOnDismissListener(this);
-			dialog.setOnShowListener(this);
 			return dialog;
 		}
 
@@ -5786,10 +5782,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				edit.commit();
 			}
 			cleanup();
-		}
-
-		public void onShow(DialogInterface dialog) {
-			getWorkspace().lock();
 		}
 
 		@Override

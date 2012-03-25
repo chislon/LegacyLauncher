@@ -19,9 +19,6 @@
 
     <!-- Launcher dimensions -->
     <dimen name="scroll_zone">25dp</dimen>
-    <dimen name="search_widget_inset">19dp</dimen>
-    <dimen name="gesture_thumbnail_inset">8dp</dimen>
-    <dimen name="gesture_thumbnail_size">64dp</dimen>
     <dimen name="cell_width">80dp</dimen>
     <dimen name="cell_height">100dp</dimen>
     <dimen name="desktop_paginator_padding">10dp</dimen>
