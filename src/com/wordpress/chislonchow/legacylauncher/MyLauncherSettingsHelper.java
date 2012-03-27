@@ -62,8 +62,9 @@ public final class MyLauncherSettingsHelper {
 
 	public static boolean needsRestart(String key){
 		for(int i=0;i<restart_keys.length;i++) {
-			if(restart_keys[i].equals(key))
+			if(restart_keys[i].equals(key)) {
 				return true;
+			}
 		}
 		return false;
 	}

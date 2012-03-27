@@ -45,7 +45,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private static final int DEFAULT_SCREEN = 0;
 	private static final int INVALID_SCREEN = -1;
 
-	private static final int SNAP_VELOCITY = 600;
+	private static final int SNAP_VELOCITY = 400;
 
 	private int mScaledSnapVelocity = SNAP_VELOCITY;
 
@@ -63,6 +63,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 	private final static int TOUCH_STATE_REST = 0;
 	private final static int TOUCH_STATE_SCROLLING = 1;
+	private final static int TOUCH_STATE_ABOUT_TO_SCROLL = 2;
 	static final int TOUCH_STATE_DOWN = 3;
 	static final int TOUCH_STATE_TAP = 4;
 	static final int TOUCH_STATE_DONE_WAITING = 5;
@@ -464,6 +465,11 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		makePage(addPage);
 	}
 
+	/* 
+	 * This is giving ACTION_DOWN always for some reason on any touch
+	 * (non-Javadoc)
+	 * @see android.view.ViewGroup#onInterceptTouchEvent(android.view.MotionEvent)
+	 */
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 
@@ -472,54 +478,14 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		 * If we return true, onTouchEvent will be called and we do the actual
 		 * scrolling there.
 		 */
-
-		/*
-		 * Shortcut the most recurring case: the user is in the dragging
-		 * state and he is moving his finger.  We want to intercept this
-		 * motion.
-		 */
-
+		
 		final int action = ev.getAction();
-
-		if ((action == MotionEvent.ACTION_MOVE) && (mTouchState != TOUCH_STATE_REST)) {
-			return true;
-		}
-
-		final float x = ev.getX();
-		final float y = ev.getY();
 
 		switch (action) {
 		case MotionEvent.ACTION_MOVE:
-			/*
-			 * mIsBeingDragged == false, otherwise the shortcut would have caught it. Check
-			 * whether the user has moved far enough from his original down touch.
-			 */
-
-			/*
-			 * Locally do absolute value. mLastMotionX is set to the y value
-			 * of the down event.
-			 */
-			final int xDiff = (int) Math.abs(x - mLastMotionX);
-			final int yDiff = (int) Math.abs(y - mLastMotionY);
-
-			final int touchSlop = mTouchSlop;
-			boolean xMoved = xDiff > touchSlop;
-			boolean yMoved = yDiff > touchSlop;
-
-			if (xMoved || yMoved) {
-				// If xDiff > yDiff means the finger path pitch is smaller than 45deg so we assume the user want to scroll X axis
-				if (xDiff > yDiff) {
-					// Scroll if the user moved far enough along the X axis
-					mTouchState = TOUCH_STATE_SCROLLING;
-				}
-			}
 			break;
-
 		case MotionEvent.ACTION_DOWN:
-
 			// Remember location of down touch
-			mLastMotionX = x;
-			mLastMotionY = y;
 
 			/*
 			 * If being flinged and user touches the screen, initiate drag;
@@ -558,6 +524,9 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		final View child;
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
+			mLastMotionX = x;
+			mLastMotionY = y;
+
 			/*
 			 * If being flinged and user touches, stop the fling. isFinished
 			 * will be false if being flinged.
@@ -584,7 +553,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			// Remember where the motion event started
 			//mLastMotionX = x;	// CCHOW THIS IS DONE AT TOUCH INTERCEPTION
 			break;
-		case MotionEvent.ACTION_MOVE:
+		case MotionEvent.ACTION_MOVE:			
 			// Scroll to follow the motion event
 			final int deltaX = (int) (mLastMotionX - x);
 			final int deltaY = (int) (mLastMotionY - y);
@@ -592,12 +561,11 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			final int yDiff = (int) Math.abs(deltaY);
 
 			// significant movement
-			if ((xDiff > mTouchSlop) || (yDiff > mTouchSlop) || mTouchState == TOUCH_STATE_SCROLLING) {
-				mTouchState = TOUCH_STATE_SCROLLING;
+			if ((xDiff > mTouchSlop) || (yDiff > mTouchSlop) ||  mTouchState == TOUCH_STATE_SCROLLING) {
 				// If xDiff > yDiff means the finger path pitch is smaller than 45deg so we assume the user want to scroll X axis
-				if (xDiff > yDiff) {
+				if (xDiff > yDiff || mTouchState == TOUCH_STATE_SCROLLING) {
+					mTouchState = TOUCH_STATE_SCROLLING;	// also cancels pending long-presses
 					// Scroll if the user moved far enough along the X axis
-					mLastMotionX = x;
 					if (deltaX < 0) {
 						int availableToScroll = getScrollX();
 						availableToScroll += (mScrollingOvershoot? mPageWidth : 0);
@@ -611,11 +579,15 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 							scrollBy(deltaX, 0);
 						}
 					}
+				} else {
+					mTouchState = TOUCH_STATE_ABOUT_TO_SCROLL;	// cancels pending long-presses
 				}
 			}
+			mLastMotionX = x;
+			mLastMotionY = y;
 			break;
 		case MotionEvent.ACTION_UP:
-			if (mTouchState == TOUCH_STATE_SCROLLING) {
+			if (mTouchState == TOUCH_STATE_SCROLLING) {				
 				final VelocityTracker velocityTracker = mVelocityTracker;
 				velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
 				int velocityX = (int) velocityTracker.getXVelocity();
@@ -642,12 +614,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 				 */
 
 				if (velocityX > mScaledSnapVelocity && currentScreen > 0) {
-					// Fling hard enough to move left
-					//snapToScreen(destinationScreen);
-					snapToScreen(currentScreen-1);
+					snapToScreen(currentScreen - 1);
 				} else if (velocityX < -mScaledSnapVelocity && currentScreen < (mTotalScreens - 1)) {
-					// Fling hard enough to move right
-					//snapToScreen(destinationScreen);
 					snapToScreen(currentScreen + 1);
 				} else {
 					snapToDestination();

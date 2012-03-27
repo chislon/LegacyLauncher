@@ -35,12 +35,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wordpress.chislonchow.legacylauncher.widgets.ReorderTouchInterpolator;
+import com.wordpress.chislonchow.legacylauncher.widgets.DraggableListView;
 
 public class FolderIconReorderActivity extends ListActivity {
 
 	protected final static String EXTRA_FOLDER_INFO_ID = "EXTRA_FOLDER_INFO_ID";
-	
+
 	private ListView mList;
 
 	private boolean mDirty = false;
@@ -75,7 +75,8 @@ public class FolderIconReorderActivity extends ListActivity {
 
 		mList = getListView();
 
-		((ReorderTouchInterpolator) mList).setDropListener(mDropListener);
+		DraggableListView dragList = (DraggableListView) mList;
+		dragList.setDropListener(mDropListener);
 
 		setListAdapter(new FolderIconAdapter(this));
 
@@ -108,7 +109,9 @@ public class FolderIconReorderActivity extends ListActivity {
 
 	@Override
 	public void onDestroy() {
-		((ReorderTouchInterpolator) mList).setDropListener(null);
+		DraggableListView dragList = (DraggableListView) mList;
+		dragList.setDropListener(null);
+
 		setListAdapter(null);
 		if (mDirty) {
 			Toast.makeText(this, getString(R.string.toast_folder_icon_reorder_finished) + mFolderInfo.title, Toast.LENGTH_SHORT).show();
@@ -116,7 +119,7 @@ public class FolderIconReorderActivity extends ListActivity {
 		super.onDestroy();
 	}
 
-	private ReorderTouchInterpolator.DropListener mDropListener = new ReorderTouchInterpolator.DropListener() {
+	private DraggableListView.DropListener mDropListener = new DraggableListView.DropListener() {
 		public void drop(int from, int to) {
 
 			// move the icon

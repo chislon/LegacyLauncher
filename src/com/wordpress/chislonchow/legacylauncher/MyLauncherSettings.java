@@ -552,15 +552,17 @@ OnPreferenceChangeListener {
 			progressDialogTheme = ProgressDialog.show(this, null, getString(R.string.dialog_please_wait), true, false);
 		}
 
+		PreviewPreference themePreview = (PreviewPreference) findPreference("themePreview");
+		final String packageName = themePreview.getValue().toString();
+		// this time we really save the themepackagename
+		final SharedPreferences sp = getPreferenceManager().getSharedPreferences();
+		final SharedPreferences.Editor editor = sp.edit();
+		editor.putString("themePackageName", packageName);	// save this last so we alert the onshared preferences to toggle restart right away, or else drawer_color is the first to be committed since it is an integer
+		editor.commit();
+		
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				PreviewPreference themePreview = (PreviewPreference) findPreference("themePreview");
-				String packageName = themePreview.getValue().toString();
-				// this time we really save the themepackagename
-				SharedPreferences sp = getPreferenceManager().getSharedPreferences();
-				SharedPreferences.Editor editor = sp.edit();
-				editor.putString("themePackageName", packageName);
 				// and update the preferences from the theme
 				// TODO:ADW maybe this should be optional for the user
 				if (!packageName.equals(Launcher.THEME_DEFAULT)) {
@@ -571,6 +573,7 @@ OnPreferenceChangeListener {
 					} catch (NameNotFoundException e) {
 						// e.printStackTrace();
 					}
+
 					if (themeResources != null) {
 						int config_ui_ab_hide_bgId = themeResources.getIdentifier(
 								"config_ui_ab_hide_bg", "bool", packageName.toString());
