@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="changelog">&lt;b>Thanks for downloading Legacy Launcher!&lt;/b>&lt;br>&lt;br>
--&lt;b>NOTICE:&lt;/b> This is a beta release! &lt;br>&lt;br>
-- To begin to customize your launcher, press Menu→Setup Launcher&lt;br>&lt;br>
-- To add/remove desktop screens press Menu→Edit Desktop&lt;br>
+    <string name="changelog">&lt;b>Thanks for trying Legacy Launcher!&lt;/b>&lt;br>&lt;br>
+-&lt;b>NOTICE:&lt;/b> Look at the \'Guide\' if you are new! &lt;br>&lt;br>
 --------------&lt;br>
 -&lt;b>Recent changes&lt;/b>&lt;br>
 Version 0.29:&lt;br>

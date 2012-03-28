@@ -360,7 +360,7 @@ OnPreferenceChangeListener {
 			// Debugging options
 			addPreferencesFromResource(R.xml.debugging_settings);
 		}
-		
+
 		// Guide screen
 		Preference pref = findPreference("userGuide");
 		pref
@@ -569,7 +569,7 @@ OnPreferenceChangeListener {
 		final SharedPreferences.Editor editor = sp.edit();
 		editor.putString("themePackageName", packageName);	// save this last so we alert the onshared preferences to toggle restart right away, or else drawer_color is the first to be committed since it is an integer
 		editor.commit();
-		
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

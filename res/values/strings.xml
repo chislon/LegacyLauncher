@@ -31,7 +31,7 @@
     <string name="chooser_wallpaper">Select wallpaper from</string>
 
     <!-- Displayed when user selects a shortcut for an app that was uninstalled -->
-    <string name="activity_not_found">Application is not installed on your phone.</string>
+    <string name="activity_not_found">Failed to launch the application requested. Maybe it is not installed on your phone.</string>
     <!-- List item for configuring the current wallpaper -->
     <string name="configure_wallpaper">Configure\u2026</string>
 
@@ -525,6 +525,17 @@
     <string name="text_guide_6">&lt;b>A)&lt;/b> When finished with \'Launcher Setup\' and desktop layout, prevent unwanted changes to the desktop by applying the lock function. Press the \'Menu\' button from the desktop→\'Lock\'. &lt;br>&lt;br>&lt;b>B)&lt;/b> Choose \'Unlock\' when locked to unlock. &lt;br>&lt;br>&lt;b>C)&lt;/b> Also access the lock function with \'Launcher Setup\'→\'Launcher Lock\'. &lt;br>&lt;br>&lt;br>&lt;b>D)&lt;/b>Passwords can be set in \'Launcher Setup\'. &lt;br>If you have forgotten your password, you can clear all data for Legacy Launcher. This can typically be done by entering \'Settings\' from the desktop→\'Settings\'→&lt;br>\'Applications\'→\'Manage applications\'→&lt;br>\'Legacy Launcher\'→\'Clear data\'.</string>
     <string name="text_guide_7">You can backup or restore options by accessing the \'Backup and restore\' preference found in \'Legacy Launcher Setup\' as shown.&lt;br>&lt;br>&lt;br>&lt;i>This is the end of the guide. You can access this again from \'Launcher Setup\'→\
         User Guide\'.&lt;/i></string>
-    <string name="text_guide_8">Legacy Launcher is based on code from the following open-source projects&lt;br>&lt;br>Cyanogenmod ADW Launcher (https://github.com/CyanogenMod/android_packages_apps_ADWLauncher)&lt;br>&lt;br>ColorPickerPreference&lt;br>&lt;br>(https://github.com/attenzione/android-ColorPickerPreference/)&lt;br>&lt;br>CWAC TouchListView&lt;br>&lt;br>(https://github.com/commonsguy/cwac-touchlist)&lt;br>&lt;br>Android Open-Source Project (http://android.com)</string>
+    <string name="text_guide_8">Legacy Launcher is based the following open-source projects:&lt;br>&lt;br>
+&lt;a href=\'https://github.com/CyanogenMod/android_packages_apps_ADWLauncher\'>Cyanogenmod ADWLauncher&lt;&lt;/a>&lt;br>&lt;br>
+&lt;a href=\'https://github.com/attenzione/android-ColorPickerPreference/\'>ColorPickerPreference&lt;&lt;/a>&lt;br>&lt;br>
+&lt;a href=\'https://github.com/commonsguy/cwac-touchlist\'>CWAC Touchlist&lt;&lt;/a>&lt;br>&lt;br>
+&lt;a href=\'http://android.com\'>Android Open Source Project&lt;&lt;/a>&lt;br>&lt;br>
+Links to original ADWLauncher&lt;br>&lt;br>
+&lt;a href=\'https://play.google.com/store/apps/details?id=org.adw.launcher\'>ADWLauncher Free&lt;&lt;/a>&lt;br>&lt;br>
+&lt;a href=\'https://play.google.com/store/apps/details?id=org.adwfreak.launcher\'>ADWLauncher EX&lt;&lt;/a>&lt;br>&lt;br>
+ADWThemes in this guide:&lt;br>&lt;br>
+&lt;a href=\'https://play.google.com/store/apps/details?id=jp.hyoromo.adwtheme.miku\'>Miku Hatsune&lt;&lt;/a>&lt;br>&lt;br>
+&lt;a href=\'https://play.google.com/store/apps/details?id=com.gfxandroid.honeycomb\'>Honeycomb&lt;&lt;/a>&lt;br>&lt;br>
+&lt;a href=\'https://play.google.com/store/apps/details?id=com.dtanquary.blackglassadwtheme\'>Black Glass&lt;&lt;/a>&lt;br>&lt;br></string>
 
 </resources>

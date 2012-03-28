@@ -7,14 +7,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 public class GuideActivity extends Activity implements OnClickListener {
 
 	private int mCurrentPage = 0;
-
-
 
 	private ImageView mImageView;
 	private TextView mTextView;
@@ -71,6 +70,7 @@ public class GuideActivity extends Activity implements OnClickListener {
 		mButton.setOnClickListener(this);
 		mImageView = (ImageView) findViewById(R.id.dialog_guide_image);
 		mTextView = (TextView) findViewById(R.id.dialog_guide_text);
+		mTextView.setMovementMethod(LinkMovementMethod.getInstance());
 		updateToPage(mCurrentPage);
 	}
 
