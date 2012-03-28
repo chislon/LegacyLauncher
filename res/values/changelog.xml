@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="changelog">-&lt;b>NOTICE:&lt;/b> This is a beta release with no support &lt;br>&lt;br>
--&lt;b>NOTICE:&lt;/b> To add/remove screens press MENU/Edit Desktop&lt;br>&lt;br>
--&lt;b>NOTICE:&lt;/b> To add new icons/widgets/folders/shortcuts, long-press on a blank part of the desktop&lt;br>&lt;br>
---------------&lt;br>&lt;br>
-&lt;b>Version 0.29:&lt;/b>&lt;br>
-- Bug fixes&lt;br>&lt;br>
-&lt;b>Version 0.28:&lt;/b>&lt;br>
-- Attempt to fix force close reported by user&lt;br>&lt;br>
-&lt;b>Version 0.27:&lt;/b>&lt;br>
-- Android lint and compatibility changes&lt;br>&lt;br>
-&lt;b>Version 0.26:&lt;/b>&lt;br>
-- Various fixes including dock scaling on some devices&lt;br>&lt;br>
+    <string name="changelog">&lt;b>Thanks for downloading Legacy Launcher!&lt;/b>&lt;br>&lt;br>
+-&lt;b>NOTICE:&lt;/b> This is a beta release! &lt;br>&lt;br>
+- To begin to customize your launcher, press Menu→Setup Launcher&lt;br>&lt;br>
+- To add/remove desktop screens press Menu→Edit Desktop&lt;br>
+--------------&lt;br>
+-&lt;b>Recent changes&lt;/b>&lt;br>
+Version 0.29:&lt;br>
+- Bug fixes and added user guide&lt;br>&lt;br>
+
 March 2012, Chislon Chow</string>
 
 </resources>

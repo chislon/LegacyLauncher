@@ -128,6 +128,10 @@
             android:name=".catalogue.AppInfoListActivity"
             android:configChanges="orientation|keyboardHidden|keyboard"
             android:noHistory="true" />
+        <activity
+            android:name=".GuideActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard"
+            android:noHistory="true" />
     </application>
 
 </manifest>

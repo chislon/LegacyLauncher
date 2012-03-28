@@ -23,6 +23,7 @@ import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -299,6 +300,7 @@ public class DraggableListView extends ListView {
 					}
 					int speed = 0;
 					adjustScrollBounds(y);
+
 					if (y > mLowerBound) {
 						// scroll the list up a bit
 						speed = (int) ((y > (mHeight + mLowerBound) / 2 ? 16 : 4) * mScale);
@@ -310,7 +312,7 @@ public class DraggableListView extends ListView {
 						int ref = pointToPosition(0, mHeight / 2);
 						if (ref == AdapterView.INVALID_POSITION) {
 							//we hit a divider or an invisible view, check somewhere else
-							ref = pointToPosition(0, mHeight / 2 + getDividerHeight() + 64);
+							ref = pointToPosition(0, (int) (mHeight / 2 + getDividerHeight() + 64 * mScale));
 						}
 						View v = getChildAt(ref - getFirstVisiblePosition());
 						if (v!= null) {

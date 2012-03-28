@@ -465,11 +465,6 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		makePage(addPage);
 	}
 
-	/* 
-	 * This is giving ACTION_DOWN always for some reason on any touch
-	 * (non-Javadoc)
-	 * @see android.view.ViewGroup#onInterceptTouchEvent(android.view.MotionEvent)
-	 */
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 
@@ -478,14 +473,31 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		 * If we return true, onTouchEvent will be called and we do the actual
 		 * scrolling there.
 		 */
-		
+
+		/*
+		 * Shortcut the most recurring case: the user is in the dragging
+		 * state and he is moving his finger.  We want to intercept this
+		 * motion.
+		 */
+
 		final int action = ev.getAction();
+
+		if ((action == MotionEvent.ACTION_MOVE) && (mTouchState != TOUCH_STATE_REST)) {
+			return true;
+		}
+
+		final float x = ev.getX();
+		final float y = ev.getY();
 
 		switch (action) {
 		case MotionEvent.ACTION_MOVE:
 			break;
+
 		case MotionEvent.ACTION_DOWN:
+
 			// Remember location of down touch
+			mLastMotionX = x;
+			mLastMotionY = y;
 
 			/*
 			 * If being flinged and user touches the screen, initiate drag;
@@ -524,9 +536,6 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		final View child;
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
-			mLastMotionX = x;
-			mLastMotionY = y;
-
 			/*
 			 * If being flinged and user touches, stop the fling. isFinished
 			 * will be false if being flinged.
@@ -551,9 +560,9 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 				}
 			}
 			// Remember where the motion event started
-			//mLastMotionX = x;	// CCHOW THIS IS DONE AT TOUCH INTERCEPTION
+			// mLastMotionX = x;
 			break;
-		case MotionEvent.ACTION_MOVE:			
+		case MotionEvent.ACTION_MOVE:
 			// Scroll to follow the motion event
 			final int deltaX = (int) (mLastMotionX - x);
 			final int deltaY = (int) (mLastMotionY - y);
@@ -561,11 +570,15 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			final int yDiff = (int) Math.abs(deltaY);
 
 			// significant movement
-			if ((xDiff > mTouchSlop) || (yDiff > mTouchSlop) ||  mTouchState == TOUCH_STATE_SCROLLING) {
+			if ((xDiff > mTouchSlop) || (yDiff > mTouchSlop) || mTouchState == TOUCH_STATE_SCROLLING) {
+				if (mTouchState != TOUCH_STATE_SCROLLING) {
+					mTouchState = TOUCH_STATE_ABOUT_TO_SCROLL;	// cancels pending long-presses without screwing up smooth scroll
+				}
 				// If xDiff > yDiff means the finger path pitch is smaller than 45deg so we assume the user want to scroll X axis
 				if (xDiff > yDiff || mTouchState == TOUCH_STATE_SCROLLING) {
-					mTouchState = TOUCH_STATE_SCROLLING;	// also cancels pending long-presses
 					// Scroll if the user moved far enough along the X axis
+					mLastMotionX = x;	// used in calculations
+					mTouchState = TOUCH_STATE_SCROLLING;
 					if (deltaX < 0) {
 						int availableToScroll = getScrollX();
 						availableToScroll += (mScrollingOvershoot? mPageWidth : 0);
@@ -579,20 +592,16 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 							scrollBy(deltaX, 0);
 						}
 					}
-				} else {
-					mTouchState = TOUCH_STATE_ABOUT_TO_SCROLL;	// cancels pending long-presses
 				}
 			}
-			mLastMotionX = x;
-			mLastMotionY = y;
 			break;
 		case MotionEvent.ACTION_UP:
-			if (mTouchState == TOUCH_STATE_SCROLLING) {				
+			if (mTouchState == TOUCH_STATE_SCROLLING || mTouchState == TOUCH_STATE_ABOUT_TO_SCROLL) {				
 				final VelocityTracker velocityTracker = mVelocityTracker;
 				velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
-				int velocityX = (int) velocityTracker.getXVelocity();
-
-				final int currentScreen = mCurrentScreen;
+				final int velocityX = (int) velocityTracker.getXVelocity();
+	            final int velocityY = (int) velocityTracker.getYVelocity();
+	            final boolean significantXMovement = Math.abs(velocityX) > Math.abs(velocityY);
 
 				//multipage scroll does not scroll fast enough  right now :(
 				/*
@@ -613,10 +622,12 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 				} else
 				 */
 
-				if (velocityX > mScaledSnapVelocity && currentScreen > 0) {
-					snapToScreen(currentScreen - 1);
-				} else if (velocityX < -mScaledSnapVelocity && currentScreen < (mTotalScreens - 1)) {
-					snapToScreen(currentScreen + 1);
+				if (velocityX > mScaledSnapVelocity && mCurrentScreen > 0 && significantXMovement) {
+					// Fling hard enough to move left
+					snapToScreen(mCurrentScreen-1);
+				} else if (velocityX < -mScaledSnapVelocity && mCurrentScreen < (mTotalScreens - 1) && significantXMovement) {
+					// Fling hard enough to move right
+					snapToScreen(mCurrentScreen + 1);
 				} else {
 					snapToDestination();
 				}

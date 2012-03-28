@@ -4,6 +4,8 @@ import com.wordpress.chislonchow.legacylauncher.R;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.text.Html;
@@ -527,7 +529,7 @@ public final class MyLauncherSettingsHelper {
 	 *
 	 */
 	public static class ChangelogDialogBuilder {
-		public static AlertDialog create( Context context ) throws NameNotFoundException {
+		public static AlertDialog create(final Context context, boolean shouldShow) throws NameNotFoundException {
 
 			String aboutTitle = String.format("%s Changelog", context.getString(R.string.app_version));
 			Spanned aboutText = Html.fromHtml(context.getString(R.string.changelog, TextView.BufferType.SPANNABLE));
@@ -546,8 +548,21 @@ public final class MyLauncherSettingsHelper {
 			// Set up the final string
 			message.setText(aboutText);
 
-			return new AlertDialog.Builder(context).setTitle(aboutTitle).setCancelable(true).setIcon(R.drawable.ic_launcher_home).setPositiveButton(
-					context.getString(android.R.string.ok), null).setView(mainView).create();
+			AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context)
+			.setTitle(aboutTitle).setCancelable(true)
+			.setIcon(R.drawable.ic_launcher_home)
+			.setPositiveButton(context.getString(android.R.string.ok), null);
+			
+			if (shouldShow) {
+				alertBuilder.setNegativeButton(context.getString(R.string.button_guide), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						// Write your code here to execute after dialog closed
+						context.startActivity(new Intent(context, GuideActivity.class));
+					}
+				});
+			}
+
+			return alertBuilder.setView(mainView).create();
 		}
 	}
 

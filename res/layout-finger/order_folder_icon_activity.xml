@@ -21,20 +21,10 @@
     android:gravity="center_vertical"
     android:orientation="vertical" >
 
-    <com.wordpress.chislonchow.legacylauncher.widgets.DraggableListView
-        android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:drawSelectorOnTop="false"
-        android:fastScrollEnabled="true"
-        android:fillViewport="true"
-        android:textSize="18sp" />
-
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/bottom_bar" >
+        android:background="@android:drawable/dark_header" >
 
         <Button
             android:id="@+id/button_folder_icon_sort"
@@ -54,5 +44,14 @@
             android:text="@string/done" >
         </Button>
     </RelativeLayout>
+
+    <com.wordpress.chislonchow.legacylauncher.widgets.DraggableListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:drawSelectorOnTop="false"
+        android:fastScrollEnabled="true"
+        android:textSize="18sp" />
 
 </LinearLayout>

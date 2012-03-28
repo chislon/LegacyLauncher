@@ -669,6 +669,10 @@
             android:key="app_version"
             android:summary="@string/app_version"
             android:title="@string/pref_title_app_version" />
+        <Preference
+            android:key="userGuide"
+            android:summary="@string/pref_summary_guide"
+            android:title="@string/pref_title_guide" />
     </PreferenceCategory>
 
 </PreferenceScreen>

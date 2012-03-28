@@ -360,15 +360,25 @@ OnPreferenceChangeListener {
 			// Debugging options
 			addPreferencesFromResource(R.xml.debugging_settings);
 		}
+		
+		// Guide screen
+		Preference pref = findPreference("userGuide");
+		pref
+		.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference preference) {
+				startActivity(new Intent(mContext, GuideActivity.class));
+				return false;
+			}
+		});
 
 		// Changelog screen
-		Preference app_version = findPreference("app_version");
-		app_version
+		pref = findPreference("app_version");
+		pref
 		.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 				try {
 					AlertDialog builder = MyLauncherSettingsHelper.ChangelogDialogBuilder
-							.create(mContext);
+							.create(mContext, false);
 					builder.show();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -377,8 +387,8 @@ OnPreferenceChangeListener {
 			}
 		});
 		// End restart/reset
-		Preference exportToXML = findPreference("xml_export");
-		exportToXML
+		pref = findPreference("xml_export");
+		pref
 		.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 				AlertDialog alertDialog = new AlertDialog.Builder(
@@ -409,8 +419,8 @@ OnPreferenceChangeListener {
 			}
 		});
 
-		Preference importFromXML = findPreference("xml_import");
-		importFromXML
+		pref = findPreference("xml_import");
+		pref
 		.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 				AlertDialog alertDialog = new AlertDialog.Builder(
@@ -442,8 +452,8 @@ OnPreferenceChangeListener {
 			}
 		});
 
-		Preference exportConfig = findPreference("db_export");
-		exportConfig
+		pref = findPreference("db_export");
+		pref
 		.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 				AlertDialog alertDialog = new AlertDialog.Builder(
@@ -475,8 +485,8 @@ OnPreferenceChangeListener {
 			}
 		});
 
-		Preference importConfig = findPreference("db_import");
-		importConfig
+		pref = findPreference("db_import");
+		pref
 		.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 				AlertDialog alertDialog = new AlertDialog.Builder(

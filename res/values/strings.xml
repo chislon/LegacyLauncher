@@ -271,13 +271,13 @@
 
     <!-- Other preferences -->
     <string name="pref_title_application_settings">More</string>
-    <string name="pref_title_build_info">Build Information</string>
+    <string name="pref_title_build_info">Launcher Information</string>
     <string name="pref_title_app_version">Version</string>
     <string name="drop_to_uninstall">Drop to Uninstall</string>
     <string name="toast_widgets_not_supported">Widgets not supported\u2026 sorry!</string>
     <string name="toast_unknown_item">Unknown item. We can\'t add unknown item types!</string>
     <string name="toast_no_application_def">No application set, drop something here!</string>
-    <string name="title_dialog_xml">Launcher Settings</string>
+    <string name="title_dialog_xml">Launcher Setup</string>
     <string name="import_export_sdcard_unmounted">SD card not mounted!</string>
 
     <!-- XML Import/Export strings -->
@@ -417,7 +417,7 @@
 
     <!-- Backup and Restore -->
     <string name="pref_title_import_export">Backup and Restore</string>
-    <string name="pref_title_xml">Launcher Settings Data</string>
+    <string name="pref_title_xml">Launcher Setup Data</string>
     <string name="pref_title_xml_import">Restore settings</string>
     <string name="pref_summary_xml_import">Restore from /sdcard/legacy_launcher_settings.xml</string>
     <string name="pref_title_xml_export">Backup settings</string>
@@ -476,5 +476,55 @@
 
     <!-- Progress dialog -->
     <string name="dialog_please_wait">"Please wait…"</string>
+
+    <!-- Guide activity -->
+    <string name="button_guide">"Guide"</string>
+    <string name="pref_title_guide">"User Guide"</string>
+    <string name="pref_summary_guide">"Learn to use Legacy Launcher"</string>
+    <string name="button_continue">"Continue"</string>
+    <string name="button_back">"Back"</string>
+    <string name="button_finish">"Finish"</string>
+    <string name="title_guide_0">"Legacy Launcher Starter Guide"</string>
+    <string name="title_guide_1">"1) What's What?"</string>
+    <string name="title_guide_2">"2) Desktop Icons and Widgets"</string>
+    <string name="title_guide_3">"3) Number of Screens"</string>
+    <string name="title_guide_4">"4) Setup and Customize"</string>
+    <string name="title_guide_5">"5) Themes"</string>
+    <string name="title_guide_6">"6) Lock Things in Place"</string>
+    <string name="title_guide_7">"7) Backup and Restore"</string>
+    <string name="title_guide_8">"8) Credits"</string>
+    <string name="text_guide_0">&lt;b>Legacy Launcher Guide Contents&lt;/b>&lt;br>&lt;br>
+    &lt;b>1)&lt;/b> What\'s What?&lt;br>
+    &lt;b>2)&lt;/b> Add Icons and Widgets&lt;br>
+    &lt;b>3)&lt;/b> Number of Screens&lt;br>
+    &lt;b>4)&lt;/b> Setup and Customize&lt;br>
+    &lt;b>5)&lt;/b> Themes&lt;br>
+    &lt;b>6)&lt;/b> Lock Things in Place&lt;br>
+    &lt;b>7)&lt;/b> Backup and Restore&lt;br>
+    &lt;b>8)&lt;/b> Credits&lt;br>&lt;br>
+    &lt;i>Proceed through these pages to learn to use Legacy Launcher&lt;/i></string>
+    <string name="text_guide_1">These are the names Legacy Launcher uses for the corresponding visual interface elements:&lt;br>&lt;br>
+    &lt;b>A)&lt;/b> Desktop &lt;br>configurable workspace containing common items&lt;br>&lt;br>
+    &lt;b>B)&lt;/b> Icons&lt;br>&lt;br>
+    &lt;b>C)&lt;/b> Widgets&lt;br>&lt;br>
+    &lt;b>D)&lt;/b> Dock&lt;br>can be configured to display 1/3/5 icons. Contents of the center dock are locked by default, but this can be changed in \'Launcher Setup\'.&lt;br>&lt;br>  
+    &lt;b>E)&lt;/b> Application Tray&lt;br>drawer, grid of installed applications&lt;br>&lt;br></string>
+    <string name="text_guide_2">&lt;b>A)&lt;/b> To add icons/widgets to the desktop, perform a long-press on an empty grid space on the desktop&lt;br>&lt;br>
+    &lt;b>B)&lt;/b> You may also add icons/widgets by pressing the \'Menu\' button→\'Add\' item as shown.&lt;br>&lt;br>
+    &lt;b>C)&lt;/b> After a widget has been selected, choose a size for the new widget. If there is insufficient room on the desktop, the new widget will not appear on the desktop.&lt;br>&lt;br>
+    &lt;b>D)&lt;/b> To resize a widget after it has been added, perform a long-press on the widget itself→\'Resize\' from the popup menu. Then drag the arrows to resize the widget, and finish by pressing the \'Back\' button.&lt;br>&lt;br></string>
+    <string name="text_guide_3">Add or remove desktop screens: \'Menu\'→\'Edit Desktop\'. Number of screens selectable is between 1 to 7. When finished editing, press \'Back\' to return to the desktop:&lt;br>&lt;br>
+    &lt;b>A)&lt;/b> Add desktop screen&lt;br>&lt;br>
+    &lt;b>B)&lt;/b> Remove desktop screen&lt;br>&lt;br>
+    &lt;b>C)&lt;/b> Swap desktop screens left/right&lt;br>&lt;br>
+    &lt;b>D)&lt;/b> Set default desktop screen&lt;br>&lt;br></string>
+    <string name="text_guide_4">"Go to \'Launcher Setup\' to make further changes to your configuration. To get there, press the \'Menu\' button from the desktop."</string>
+    <string name="text_guide_5">"The look-and-feel of the launcher can be changed by installing compatible themes.&lt;br>&lt;br>
+    &lt;b>A)&lt;/b> Select \'Themes\' from \'Launcher Setup\'.&lt;br>&lt;br>
+    &lt;b>B)&lt;/b> The easiest way to get more themes is via the Google Play Store."</string>
+    <string name="text_guide_6">&lt;b>A)&lt;/b> When finished with \'Launcher Setup\' and desktop layout, prevent unwanted changes to the desktop by applying the lock function. Press the \'Menu\' button from the desktop→\'Lock\'. &lt;br>&lt;br>&lt;b>B)&lt;/b> Choose \'Unlock\' when locked to unlock. &lt;br>&lt;br>&lt;b>C)&lt;/b> Also access the lock function with \'Launcher Setup\'→\'Launcher Lock\'. &lt;br>&lt;br>&lt;br>&lt;b>D)&lt;/b>Passwords can be set in \'Launcher Setup\'. &lt;br>If you have forgotten your password, you can clear all data for Legacy Launcher. This can typically be done by entering \'Settings\' from the desktop→\'Settings\'→&lt;br>\'Applications\'→\'Manage applications\'→&lt;br>\'Legacy Launcher\'→\'Clear data\'.</string>
+    <string name="text_guide_7">You can backup or restore options by accessing the \'Backup and restore\' preference found in \'Legacy Launcher Setup\' as shown.&lt;br>&lt;br>&lt;br>&lt;i>This is the end of the guide. You can access this again from \'Launcher Setup\'→\
+        User Guide\'.&lt;/i></string>
+    <string name="text_guide_8">Legacy Launcher is based on code from the following open-source projects&lt;br>&lt;br>Cyanogenmod ADW Launcher (https://github.com/CyanogenMod/android_packages_apps_ADWLauncher)&lt;br>&lt;br>ColorPickerPreference&lt;br>&lt;br>(https://github.com/attenzione/android-ColorPickerPreference/)&lt;br>&lt;br>CWAC TouchListView&lt;br>&lt;br>(https://github.com/commonsguy/cwac-touchlist)&lt;br>&lt;br>Android Open-Source Project (http://android.com)</string>
 
 </resources>

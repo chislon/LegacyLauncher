@@ -2510,11 +2510,12 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 
 		mDesktopLocked = false;
+		final boolean showChangeLog = MyLauncherSettingsHelper.shouldShowChangelog(this);
 		// ADW: Show the changelog screen if needed
-		if (MyLauncherSettingsHelper.shouldShowChangelog(this)) {
+		if (showChangeLog) {
 			try {
 				AlertDialog builder = MyLauncherSettingsHelper.ChangelogDialogBuilder
-						.create(this);
+						.create(this, showChangeLog);
 				builder.show();
 			} catch (Exception e) {
 				e.printStackTrace();

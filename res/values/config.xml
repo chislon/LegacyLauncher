@@ -59,8 +59,8 @@
 
     <bool name="config_drawer_animated">true</bool>
     <!-- config_desktop_screens min value is 1, so it will add 1 to whatever value you set here -->
-    <integer name="config_desktop_screens">2</integer>
-    <integer name="config_default_screen">1</integer>
+    <integer name="config_desktop_screens">4</integer>
+    <integer name="config_default_screen">2</integer>
 
     <bool name="config_hide_statusbar">false</bool>
     <bool name="config_previews_enable">true</bool>
@@ -138,7 +138,7 @@
 
     <integer name="config_ab_tint_color">0xffffffff</integer>
 
-    <bool name="config_wallpaper_scroll">false</bool>
+    <bool name="config_wallpaper_scroll">true</bool>
 
     <string name="config_deletezone_style">1</string>
 

@@ -25,6 +25,8 @@
     <color name="delete_color_filter">#A5FF0000</color>
     <color name="appwidget_error_color">#FCCC</color>
     <color name="snag_callout_color">#F444</color>
+    <color name="guide_background">#FF292929</color>
+    <color name="guide_text">#FFFFFFFF</color>
 
     <!-- Activity reorder dialog colors -->
     <color name="dragndrop_background">#e0103010</color>

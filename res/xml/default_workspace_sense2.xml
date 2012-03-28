@@ -11,8 +11,8 @@
 	xmlns:launcher="http://schemas.android.com/apk/res/com.wordpress.chislonchow.legacylauncher">
 
 	<!-- LAB -->
-	<favorite launcher:packageName="com.android.htcdialer"
-		launcher:className="com.android.htcdialer.Dialer"
+	<favorite launcher:packageName="com.android.htccontacts"
+		launcher:className="com.android.htccontacts.DialerTabActivity"
 		launcher:screen="-1" launcher:x="-1" launcher:y="-1"
 		launcher:container="-300" />
 	<!-- LAB2 -->
