@@ -359,7 +359,6 @@
     <string name="hint_add_right_desktop">Add screen to right</string>
     <string name="hint_swap_left_desktop">Swap current screen with left screen</string>
     <string name="hint_swap_right_desktop">Swap current screen with right screen</string>
-    <string name="desktop_prefix">"Screen: "</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_resize_widget">Resize</string>
     <string name="menu_edit_desktop">Edit Desktop</string>

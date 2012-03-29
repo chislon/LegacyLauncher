@@ -1542,9 +1542,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mDragLayer.removeView(mScreensEditor);
 			mScreensEditor = null;
 		}
-		
+
 		//set nulls
-		mWorkspace = null;
 		mAppWidgetHost = null;
 	}
 
@@ -3651,6 +3650,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 		fullScreen(mHideStatusBar);
 
+		// dots
 		if (!showingPreviews) {
 			if (!isAllAppsVisible()) {
 				mNextView.setVisibility(mShowDots ? View.VISIBLE : View.GONE);
@@ -3658,33 +3658,27 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			}
 		}
 
+		// dock setup
 		switch (mDockStyle) {
 		case DOCK_STYLE_1:
 			mRAB.setVisibility(View.GONE);
 			mLAB.setVisibility(View.GONE);
 			mRAB2.setVisibility(View.GONE);
 			mLAB2.setVisibility(View.GONE);
-			if (!showingPreviews)
-				mDrawerToolbar.setVisibility(View.VISIBLE);
 			break;
 		case DOCK_STYLE_3:
 			mRAB.setVisibility(View.VISIBLE);
 			mLAB.setVisibility(View.VISIBLE);
 			mRAB2.setVisibility(View.GONE);
 			mLAB2.setVisibility(View.GONE);
-			if (!showingPreviews)
-				mDrawerToolbar.setVisibility(View.VISIBLE);
 			break;
 		case DOCK_STYLE_5:
 			mRAB.setVisibility(View.VISIBLE);
 			mLAB.setVisibility(View.VISIBLE);
 			mRAB2.setVisibility(View.VISIBLE);
 			mLAB2.setVisibility(View.VISIBLE);
-			if (!showingPreviews)
-				mDrawerToolbar.setVisibility(View.VISIBLE);
 			break;
 		case DOCK_STYLE_NONE:
-			mDrawerToolbar.setVisibility(View.GONE);
 		default:
 			break;
 		}
@@ -3693,9 +3687,37 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mLAB.hideBg(mHideABBg);
 		mRAB2.hideBg(mHideABBg);
 		mLAB2.hideBg(mHideABBg);
+		
+		final boolean hideDock = (mDockStyle == DOCK_STYLE_NONE) || mDockHide;
+
+		if (hideDock || showingPreviews) {
+			mDrawerToolbar.setVisibility(View.GONE);
+		} else {
+			mDrawerToolbar.setVisibility(View.VISIBLE);
+		}
+		// init the padding for the dock
+		if (getWindow().getDecorView().getWidth() > getWindow()
+				.getDecorView().getHeight()) {
+			final int dockSize = (hideDock ? 0 : mDrawerToolbar.getMeasuredWidth());
+			if (dockSize != mAppDrawerPadding) {
+				mAppDrawerPadding = dockSize;
+				mAllAppsGrid.setPadding(0, 0, mAppDrawerPadding, 0);
+			}
+		} else {
+			final int dockSize = (hideDock ? 0 : mDrawerToolbar.getMeasuredHeight());
+
+			if (dockSize != mAppDrawerPadding) {
+				mAppDrawerPadding = dockSize;
+				mAllAppsGrid.setPadding(0, 0, 0, mAppDrawerPadding);
+			}
+		}
+		
+		// wallpaper setup
 		if (mWorkspace != null) {
 			mWorkspace.setWallpaperHack(mWallpaperHack);
 		}
+		
+		// desktop indicator setup
 		if (mDesktopIndicator != null) {
 			mDesktopIndicator.setType(MyLauncherSettingsHelper
 					.getDesktopIndicatorType(this));
@@ -4183,11 +4205,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 
 		if (!allAppsOpen && mAllAppsGrid != null) {
+			final boolean hideDock = (mDockStyle == DOCK_STYLE_NONE) || mDockHide;
 			if (getWindow().getDecorView().getWidth() > getWindow()
 					.getDecorView().getHeight()) {
 				// landscape
-				final boolean hideDock = (mDockStyle == DOCK_STYLE_NONE) || mDockHide;
-
 				if (hideDock) {
 					mDrawerToolbar.setVisibility(View.GONE);
 				} else {
@@ -4217,8 +4238,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				}
 			} else {
 				// portrait
-				final boolean hideDock = (mDockStyle == DOCK_STYLE_NONE) || mDockHide;
-
 				if (hideDock) {
 					mDrawerToolbar.setVisibility(View.GONE);
 				} else {
@@ -4264,8 +4283,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	private void checkActionButtonsSpecialMode() {
+
 		boolean showSpecialMode = mUseDrawerCatalogNavigation
-				&& allAppsOpen
+				&& allAppsOpen 
 				&& AppCatalogueFilters.getInstance().getUserCatalogueCount() > 0;
 				mLAB.setSpecialMode(showSpecialMode);
 				mRAB.setSpecialMode(showSpecialMode);
@@ -4273,7 +4293,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	private void closeAllApps(boolean animated) {
 		if (allAppsOpen && mAllAppsGrid != null) {
-			if ((mDockStyle == DOCK_STYLE_NONE)) {
+			if (mDockStyle == DOCK_STYLE_NONE) {
 				mDrawerToolbar.setVisibility(View.GONE);
 			} else {
 				mDrawerToolbar.setVisibility(View.VISIBLE);

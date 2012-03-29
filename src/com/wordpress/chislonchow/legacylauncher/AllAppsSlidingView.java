@@ -220,7 +220,9 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		else return false;
 	}
 
-	private void initView() {		
+	private void initView() {
+		mScroller = new Scroller(getContext());
+
 		final float scale = getContext().getResources().getDisplayMetrics().density;
 		mScaledSnapVelocity = (int) (scale * SNAP_VELOCITY);
 
@@ -235,7 +237,6 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		setFocusable(true);
 		setFocusableInTouchMode(true);
 		setWillNotDraw(false);
-		mScroller = new Scroller(getContext());
 		mCurrentScreen = DEFAULT_SCREEN;
 		mScroller.forceFinished(true);
 		mPaint = new Paint();
@@ -600,8 +601,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 				final VelocityTracker velocityTracker = mVelocityTracker;
 				velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
 				final int velocityX = (int) velocityTracker.getXVelocity();
-	            final int velocityY = (int) velocityTracker.getYVelocity();
-	            final boolean significantXMovement = Math.abs(velocityX) > Math.abs(velocityY);
+				final int velocityY = (int) velocityTracker.getYVelocity();
+				final boolean significantXMovement = Math.abs(velocityX) > Math.abs(velocityY);
 
 				//multipage scroll does not scroll fast enough  right now :(
 				/*
@@ -714,6 +715,12 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		boolean handled=commonKey(keyCode, 1, event);
 		switch (keyCode) {
+		case KeyEvent.KEYCODE_DPAD_LEFT:
+			handled = arrowScroll(FOCUS_LEFT);
+			break;
+		case KeyEvent.KEYCODE_DPAD_RIGHT:
+			handled = arrowScroll(FOCUS_RIGHT);
+			break;
 		case KeyEvent.KEYCODE_DPAD_CENTER:
 		case KeyEvent.KEYCODE_ENTER:
 			if (isPressed() && mSelectedPosition >= 0 && mAdapter != null &&
@@ -745,10 +752,12 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		if (action != KeyEvent.ACTION_UP) {
 			if (mSelectedPosition < 0) {
 				switch (keyCode) {
+				case KeyEvent.KEYCODE_DPAD_RIGHT:
+					resurrectSelectionAlternate();
+					return true;
 				case KeyEvent.KEYCODE_DPAD_UP:
 				case KeyEvent.KEYCODE_DPAD_DOWN:
 				case KeyEvent.KEYCODE_DPAD_LEFT:
-				case KeyEvent.KEYCODE_DPAD_RIGHT:
 				case KeyEvent.KEYCODE_DPAD_CENTER:
 				case KeyEvent.KEYCODE_SPACE:
 				case KeyEvent.KEYCODE_ENTER:
@@ -757,14 +766,6 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 				}
 			}
 			switch (keyCode) {
-			case KeyEvent.KEYCODE_DPAD_LEFT:
-				handled = arrowScroll(FOCUS_LEFT);
-				break;
-
-			case KeyEvent.KEYCODE_DPAD_RIGHT:
-				handled = arrowScroll(FOCUS_RIGHT);
-				break;
-
 			case KeyEvent.KEYCODE_DPAD_UP:
 				handled = arrowScroll(FOCUS_UP);
 				break;
@@ -808,41 +809,69 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	 * @return whether selection was moved
 	 */
 	boolean arrowScroll(int direction) {
+
+		final long thisTime = System.currentTimeMillis();
+
+		if (thisTime - lastTouchTime < 50) {	//50ms debounce
+			return false;
+		}
+		lastTouchTime = thisTime;
+
 		final int selectedPosition = (mSelectedPosition==INVALID_POSITION)?0:mSelectedPosition;
 		final int numColumns = mNumColumns;
-		final int numRows=mNumRows;
+		final int numRows = mNumRows;
 		int rowPos;
 		int colPos;
-
 		boolean moved = false;
 		final AllAppsSlidingViewHolderLayout h=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
 
 		colPos = (selectedPosition%numColumns);
 		int lastColPos=mNumColumns;//(h.getChildCount()-1)%numColumns;
 		rowPos = (selectedPosition/numColumns);
-		int lastRowPos=mNumRows;//(h.getChildCount()-1)/numColumns;
+
+		int lastRowPos=h.getChildCount()/numColumns;
+
 		switch (direction) {
 		case FOCUS_UP:
 			if (rowPos > 0) {
 				rowPos--;
-				moved = true;
+			} else if ((colPos > (h.getChildCount()%numColumns - 1)) && lastRowPos > 0) {
+				if (rowPos == lastRowPos - 1) {
+					moved = false;
+					break;
+				}
+				rowPos = lastRowPos - 1;
+			} else {
+				if (rowPos == lastRowPos) {
+					moved = false;
+					break;
+				}
+				rowPos = lastRowPos;
 			}
+			moved = true;
 			break;
 		case FOCUS_DOWN:
-			if (rowPos < numRows-1 && rowPos <lastRowPos) {
+			if (rowPos < (lastRowPos-1)) {
 				rowPos++;
-				moved = true;
+			} else if ((colPos <= (h.getChildCount()%numColumns - 1)) && (rowPos < lastRowPos)) {
+				rowPos++;
+			} else {
+				if (rowPos == 0) {
+					moved = false;
+					break;
+				}
+				rowPos = 0;
 			}
+			moved = true;
 			break;
 		case FOCUS_LEFT:
 			if (colPos > 0) {
 				colPos--;
 				moved = true;
 			}else{
-				if(mCurrentScreen>0){
+				if(mCurrentScreen>0) {
 					setSelection(INVALID_POSITION);
 					snapToScreen(mCurrentScreen-1);
-					invalidate();
 					return true;
 				}
 			}
@@ -851,11 +880,10 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			if (colPos < numColumns-1 && colPos < lastColPos) {
 				colPos++;
 				moved = true;
-			}else{
-				if(mCurrentScreen<mTotalScreens-1){
+			} else {
+				if (mCurrentScreen < mTotalScreens-1) {
 					setSelection(INVALID_POSITION);
 					snapToScreen(mCurrentScreen+1);
-					invalidate();
 					return true;
 				}
 			}
@@ -897,6 +925,32 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		}
 		return true;
 	}
+
+	/**
+	 * Attempt to bring the selection back if the user is switching from touch
+	 * to trackball mode
+	 * @return Whether selection was set to something.
+	 */
+	boolean resurrectSelectionAlternate() {
+		if(getChildCount()<=0){
+			return false;
+		}
+		final AllAppsSlidingViewHolderLayout h=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
+		if(h!=null && h instanceof AllAppsSlidingViewHolderLayout){
+			final int childCount = h.getChildCount();
+
+			if (childCount <= 0) {
+				return false;
+			}
+			for(int i=0;i<childCount;i++){
+				h.getChildAt(i).setPressed(false);
+			}
+			positionSelector(h.getChildAt(Math.min(childCount - 1, mNumColumns - 1)));
+			setSelection(Math.min(childCount - 1, mNumColumns - 1));
+		}
+		return true;
+	}
+
 	public View getViewAtPosition(int pos){
 		View v = null;
 		int position=pos;
@@ -1043,7 +1097,6 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	}
 	@Override
 	public void setSelection(int position) {
-		// TODO Auto-generated method stub
 		mSelectedPosition=position;
 		invalidate();
 	}
@@ -1116,12 +1169,14 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	 * @return True if the selector should be shown
 	 */
 	boolean shouldShowSelector() {
-		return (hasFocus() && !isInTouchMode()) || touchModeDrawsInPressedState();
+		return (mScroller.isFinished() && hasFocus() && !isInTouchMode()) || touchModeDrawsInPressedState();
 	}
 
 	private void drawSelector(Canvas canvas) {
+
 		if (shouldShowSelector() && mSelectorRect != null && !mSelectorRect.isEmpty()) {
 			final Drawable selector = mSelector;
+
 			selector.setBounds(mSelectorRect);
 			selector.setState(getDrawableState());
 			selector.draw(canvas);
