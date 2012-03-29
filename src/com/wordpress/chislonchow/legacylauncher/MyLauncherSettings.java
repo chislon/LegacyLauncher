@@ -69,6 +69,8 @@ OnPreferenceChangeListener {
 	private static final int REQUEST_SWIPE_UP_APP_CHOOSER = 2;
 	private static final int REQUEST_DOUBLE_TAP_APP_CHOOSER = 3;
 
+	private AlertDialog mAlertDialog;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO: ADW should i read stored values after
@@ -229,21 +231,6 @@ OnPreferenceChangeListener {
 			findPreference("drawerOvershoot").setEnabled(false);
 		}
 		mContext = this;
-		/*
-		final CheckBoxPreference lockOptionMenuDeviceSettings = (CheckBoxPreference) findPreference("lockOptionMenuDeviceSettings");
-		lockOptionMenuDeviceSettings.setOnPreferenceClickListener(
-				new OnPreferenceClickListener() {
-					public boolean onPreferenceClick(Preference preference) {
-						if (lockOptionMenuDeviceSettings.isChecked()) {
-							new AlertDialog.Builder(mContext)
-							.setMessage(R.string.pref_summary_lock_option_settings)
-							.setPositiveButton(android.R.string.ok, null)
-							.show();
-						}
-						return false;
-					}
-				});
-		 */
 
 		// launcher lock password implementation
 		Preference launcherLockPassword = findPreference("launcherLockPassword");
@@ -269,7 +256,7 @@ OnPreferenceChangeListener {
 					}
 				}; 
 				input.setFilters(FilterArray); 				
-				new AlertDialog.Builder(mContext)
+				mAlertDialog = new AlertDialog.Builder(mContext)
 				.setMessage(R.string.dialog_lock_password_set)
 				.setView(input)
 				.setPositiveButton(android.R.string.ok,
@@ -288,8 +275,8 @@ OnPreferenceChangeListener {
 						}
 					}
 				})
-				.setNegativeButton(android.R.string.cancel, null)
-				.show();
+				.setNegativeButton(android.R.string.cancel, null).create();
+				mAlertDialog.show();
 				return false;
 			}
 		});
@@ -310,7 +297,7 @@ OnPreferenceChangeListener {
 		Preference restart = findPreference("launcherRestart");
 		restart.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
-				new AlertDialog.Builder(mContext)
+				mAlertDialog = new AlertDialog.Builder(mContext)
 				.setMessage(R.string.pref_summary_launcher_restart)
 				.setPositiveButton(android.R.string.ok,
 						new DialogInterface.OnClickListener() {
@@ -320,8 +307,8 @@ OnPreferenceChangeListener {
 						finish();
 					}
 				})
-				.setNegativeButton(android.R.string.cancel, null)
-				.show();
+				.setNegativeButton(android.R.string.cancel, null).create();
+				mAlertDialog.show();
 				return false;
 			}
 		});
@@ -391,30 +378,23 @@ OnPreferenceChangeListener {
 		pref
 		.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
-				AlertDialog alertDialog = new AlertDialog.Builder(
-						mContext).create();
-				alertDialog.setTitle(R.string.title_dialog_xml);
-				alertDialog.setMessage(getResources().getString(
-						R.string.message_dialog_export));
-				alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-						getResources().getString(android.R.string.ok),
-						new DialogInterface.OnClickListener() {
+				mAlertDialog = new AlertDialog.Builder(mContext)
+				.setTitle(R.string.title_dialog_xml)
+				.setMessage(R.string.message_dialog_export)
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog,
 							int which) {
 						new ExportPrefsTask().execute();
 					}
-				});
-				alertDialog.setButton(
-						DialogInterface.BUTTON_NEGATIVE,
-						getResources().getString(
-								android.R.string.cancel),
-								new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
+				})
+				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,
+							int which) {
 
-							}
-						});
-				alertDialog.show();
+					}
+				})
+				.create();
+				mAlertDialog.show();
 				return true;
 			}
 		});
@@ -423,31 +403,24 @@ OnPreferenceChangeListener {
 		pref
 		.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
-				AlertDialog alertDialog = new AlertDialog.Builder(
-						mContext).create();
-				alertDialog.setTitle(getResources().getString(
-						R.string.title_dialog_xml));
-				alertDialog.setMessage(getResources().getString(
-						R.string.message_dialog_import));
-				alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-						getResources().getString(android.R.string.ok),
-						new DialogInterface.OnClickListener() {
+				mAlertDialog = new AlertDialog.Builder(
+						mContext)
+				.setTitle(getResources().getString(R.string.title_dialog_xml))
+				.setMessage(R.string.message_dialog_import)
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog,
 							int which) {
 						new ImportPrefsTask().execute();
 					}
-				});
-				alertDialog.setButton(
-						DialogInterface.BUTTON_NEGATIVE,
-						getResources().getString(
-								android.R.string.cancel),
-								new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
+				})
+				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,
+							int which) {
 
-							}
-						});
-				alertDialog.show();
+					}
+				})
+				.create();
+				mAlertDialog.show();
 				return true;
 			}
 		});
@@ -456,31 +429,23 @@ OnPreferenceChangeListener {
 		pref
 		.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
-				AlertDialog alertDialog = new AlertDialog.Builder(
-						mContext).create();
-				alertDialog.setTitle(getResources().getString(
-						R.string.title_dialog_xml));
-				alertDialog.setMessage(getResources().getString(
-						R.string.message_dialog_export_config));
-				alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-						getResources().getString(android.R.string.ok),
-						new DialogInterface.OnClickListener() {
+				mAlertDialog = new AlertDialog.Builder(mContext)
+				.setTitle(R.string.title_dialog_xml)
+				.setMessage(R.string.message_dialog_export_config)
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog,
 							int which) {
 						new ExportDatabaseTask().execute();
 					}
-				});
-				alertDialog.setButton(
-						DialogInterface.BUTTON_NEGATIVE,
-						getResources().getString(
-								android.R.string.cancel),
-								new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
+				})
+				.setNegativeButton(android.R.string.cancel,new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,
+							int which) {
 
-							}
-						});
-				alertDialog.show();
+					}
+				})
+				.create();
+				mAlertDialog.show();
 				return true;
 			}
 		});
@@ -489,31 +454,23 @@ OnPreferenceChangeListener {
 		pref
 		.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
-				AlertDialog alertDialog = new AlertDialog.Builder(
-						mContext).create();
-				alertDialog.setTitle(getResources().getString(
-						R.string.title_dialog_xml));
-				alertDialog.setMessage(getResources().getString(
-						R.string.message_dialog_import_config));
-				alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-						getResources().getString(android.R.string.ok),
-						new DialogInterface.OnClickListener() {
+				mAlertDialog = new AlertDialog.Builder(mContext)
+				.setTitle(R.string.title_dialog_xml)
+				.setMessage(R.string.message_dialog_import_config)
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog,
 							int which) {
 						new ImportDatabaseTask().execute();
 					}
-				});
-				alertDialog.setButton(
-						DialogInterface.BUTTON_NEGATIVE,
-						getResources().getString(
-								android.R.string.cancel),
-								new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
+				})
+				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,
+							int which) {
 
-							}
-						});
-				alertDialog.show();
+					}
+				})
+				.create();
+				mAlertDialog.show();
 				return true;
 			}
 		});
@@ -1228,5 +1185,16 @@ OnPreferenceChangeListener {
 							e);
 		}
 		finish();
+	}
+
+	@Override
+	public void onDestroy() {
+		if (mAlertDialog != null) {
+			if (mAlertDialog.isShowing()) {
+				mAlertDialog.dismiss();
+				mAlertDialog = null;
+			}
+		}
+		super.onDestroy();
 	}
 }

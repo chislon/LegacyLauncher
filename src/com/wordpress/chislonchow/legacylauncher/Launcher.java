@@ -191,6 +191,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	static final int DIALOG_DELETE_GROUP_CONFIRM = 5;
 	static final int DIALOG_PICK_GROUPS = 6;
 	static final int DIALOG_ADD_WIDGET_FAILURE = 7;
+	static final int DIALOG_GET_LAUNCHER_UNLOCK_PASSWORD = 8;
 
 	private static final String PREFERENCES = "launcher.preferences";
 
@@ -420,6 +421,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			+ ".ManageApplications");
 	private String mAppManageLabel;
 
+	// password prefs
+	ObscuredSharedPreferences mObscurePrefs;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		changeOrientation(MyLauncherSettingsHelper.getDesktopOrientation(this));
@@ -467,6 +471,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		getSharedPreferences("launcher.preferences.almostnexus",
 				Context.MODE_PRIVATE).registerOnSharedPreferenceChangeListener(
 						this);
+		mObscurePrefs = new ObscuredSharedPreferences( 
+				this, this.getSharedPreferences("secure", Context.MODE_PRIVATE) );
 	}
 
 	private void checkForLocaleChange() {
@@ -737,11 +743,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// TODO Auto-generated method stub
 		super.onStop();
 		dismissQuickActionWindow();
-		if (mAlertDialog != null) {
-			if (mAlertDialog.isShowing()) {
-				mAlertDialog.dismiss();
-			}
-		}
 	}
 
 	@Override
@@ -1505,6 +1506,12 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	public void onDestroy() {
 		super.onDestroy();
 
+		if (mAlertDialog != null) {
+			if (mAlertDialog.isShowing()) {
+				mAlertDialog.dismiss();
+			}
+		}
+
 		mDestroyed = true;
 		// ADW: unregister the sharedpref listener
 		getSharedPreferences("launcher.preferences.almostnexus",
@@ -1538,9 +1545,12 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			unregisterReceiver(mCounterReceiver);
 		mWorkspace.unregisterProvider();
 
-		if (mScreensEditor != null) {
-			mDragLayer.removeView(mScreensEditor);
-			mScreensEditor = null;
+		// remove screen editor view
+		if (mDragLayer != null) {
+			if (mScreensEditor != null) {
+				mDragLayer.removeView(mScreensEditor);
+				mScreensEditor = null;
+			}
 		}
 
 		//set nulls
@@ -1777,55 +1787,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		case MENU_LOCK_DESKTOP:
 			// toggle icons locked
 			if (mLauncherLocked) {
-				final ObscuredSharedPreferences oPrefs = new ObscuredSharedPreferences( 
-						this, this.getSharedPreferences("secure", Context.MODE_PRIVATE) );
-
-				final String passSecure = oPrefs.getString("pw", null);
+				final String passSecure = mObscurePrefs.getString("pw", null);
 				if (passSecure != null && passSecure.length() > 0) {
-
-					// ask for the password securely
-					final EditText input = new EditText(this);
-					input.setMaxLines(1);
-					input.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-					input.setHint(getString(R.string.hint_password_old));
-					final int maxLength = 32;  
-					InputFilter[] FilterArray = new InputFilter[2];  
-					FilterArray[0] = new InputFilter.LengthFilter(maxLength);  
-					FilterArray[1] = new InputFilter() { 
-						@Override
-						public CharSequence filter(CharSequence source, int start,
-								int end, Spanned dest, int dstart, int dend) {
-							for (int i = start; i < end; i++) { 
-								if (Character.isWhitespace((source.charAt(i)))) { 
-									return ""; 
-								}
-							} 
-							return null; 
-						}
-					}; 
-					input.setFilters(FilterArray);
-					mAlertDialog = new AlertDialog.Builder(this)
-					.setMessage(R.string.dialog_lock_password_get)
-					.setView(input)
-					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							Editable value = input.getText(); 
-							if (value.toString().equals(passSecure)) {
-								// password valid unlock
-								Toast.makeText(Launcher.this, R.string.toast_launcher_unlock, Toast.LENGTH_SHORT).show();
-								mLauncherLocked = false;
-								// commit setting
-								MyLauncherSettingsHelper.setLauncherLocked(Launcher.this, mLauncherLocked);
-							} else {
-								Vibrator vibrateService = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-								if (vibrateService != null)
-									vibrateService.vibrate(1000);// vibrate for ~1000 seconds
-
-								// password invalid
-								Toast.makeText(Launcher.this, getString(R.string.lock_password_invalid), Toast.LENGTH_SHORT).show();
-							}
-						}
-					}).setNegativeButton(android.R.string.cancel, null).show();
+					showDialog(DIALOG_GET_LAUNCHER_UNLOCK_PASSWORD);
 				} else {
 					// no password was set, so unlock right away
 					Toast.makeText(this, R.string.toast_launcher_unlock, Toast.LENGTH_SHORT).show();
@@ -2525,9 +2489,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// ADW: Show the changelog screen if needed
 		if (showChangeLog) {
 			try {
-				AlertDialog builder = MyLauncherSettingsHelper.ChangelogDialogBuilder
-						.create(this, showChangeLog);
-				builder.show();
+				mAlertDialog = MyLauncherSettingsHelper.ChangelogDialogBuilder.create(this, showChangeLog);
+				mAlertDialog.show();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -2863,6 +2826,52 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					.setMessage(
 							getString(R.string.scrollable_api_required))
 							.create();
+		case DIALOG_GET_LAUNCHER_UNLOCK_PASSWORD:
+			// ask for the password securely
+			final EditText input = new EditText(this);
+			input.setMaxLines(1);
+			input.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+			input.setHint(getString(R.string.hint_password_old));
+			final int maxLength = 32;  
+			InputFilter[] FilterArray = new InputFilter[2];  
+			FilterArray[0] = new InputFilter.LengthFilter(maxLength);  
+			FilterArray[1] = new InputFilter() { 
+				@Override
+				public CharSequence filter(CharSequence source, int start,
+						int end, Spanned dest, int dstart, int dend) {
+					for (int i = start; i < end; i++) { 
+						if (Character.isWhitespace((source.charAt(i)))) { 
+							return ""; 
+						}
+					} 
+					return null; 
+				}
+			}; 
+			input.setFilters(FilterArray);
+			mAlertDialog = new AlertDialog.Builder(this)
+			.setMessage(R.string.dialog_lock_password_get)
+			.setView(input)
+			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					Editable value = input.getText();
+					final String passSecure = mObscurePrefs.getString("pw", null);
+					if (value.toString().equals(passSecure)) {
+						// password valid unlock
+						Toast.makeText(Launcher.this, R.string.toast_launcher_unlock, Toast.LENGTH_SHORT).show();
+						mLauncherLocked = false;
+						// commit setting
+						MyLauncherSettingsHelper.setLauncherLocked(Launcher.this, mLauncherLocked);
+					} else {
+						Vibrator vibrateService = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+						if (vibrateService != null)
+							vibrateService.vibrate(1000);// vibrate for ~1000 seconds
+
+						// password invalid
+						Toast.makeText(Launcher.this, getString(R.string.lock_password_invalid), Toast.LENGTH_SHORT).show();
+					}
+				}
+			}).setNegativeButton(android.R.string.cancel, null).create();
+			return mAlertDialog;
 		default:
 			return null;
 		}
@@ -3687,15 +3696,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mLAB.hideBg(mHideABBg);
 		mRAB2.hideBg(mHideABBg);
 		mLAB2.hideBg(mHideABBg);
-		
-		final boolean hideDock = (mDockStyle == DOCK_STYLE_NONE) || mDockHide;
 
-		if (hideDock || showingPreviews) {
+		if (mDockStyle == DOCK_STYLE_NONE || showingPreviews || (mDockHide && allAppsOpen)) {
 			mDrawerToolbar.setVisibility(View.GONE);
 		} else {
 			mDrawerToolbar.setVisibility(View.VISIBLE);
 		}
+
 		// init the padding for the dock
+		final boolean hideDock = (mDockStyle == DOCK_STYLE_NONE) || mDockHide;
+
 		if (getWindow().getDecorView().getWidth() > getWindow()
 				.getDecorView().getHeight()) {
 			final int dockSize = (hideDock ? 0 : mDrawerToolbar.getMeasuredWidth());
@@ -3711,12 +3721,12 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mAllAppsGrid.setPadding(0, 0, 0, mAppDrawerPadding);
 			}
 		}
-		
+
 		// wallpaper setup
 		if (mWorkspace != null) {
 			mWorkspace.setWallpaperHack(mWallpaperHack);
 		}
-		
+
 		// desktop indicator setup
 		if (mDesktopIndicator != null) {
 			mDesktopIndicator.setType(MyLauncherSettingsHelper
@@ -3726,7 +3736,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			if (mWorkspace != null) {
 				mDesktopIndicator.setItems(mWorkspace.getChildCount());
 			}
-			if (isAllAppsVisible()) {
+			if (allAppsOpen) {
 				if (mDesktopIndicator != null)
 					mDesktopIndicator.hide();
 			}

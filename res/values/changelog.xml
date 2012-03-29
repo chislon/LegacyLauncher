@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="changelog">&lt;b>Thanks for trying Legacy Launcher!&lt;/b>&lt;br>&lt;br>
+    <string name="changelog">&lt;b>Thanks for using Legacy Launcher!&lt;/b>&lt;br>&lt;br>
 -&lt;b>NOTICE:&lt;/b> Look at the \'Guide\' if you are new! &lt;br>&lt;br>
 --------------&lt;br>
 -&lt;b>Recent changes&lt;/b>&lt;br>
-Version 0.30:&lt;br>
+Version 0.31:&lt;br>
 - Various bug fixes&lt;br>&lt;br>
 
 March 2012, Chislon Chow</string>

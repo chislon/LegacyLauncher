@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.30 Beta</string>
+    <string name="app_version">0.31 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -527,7 +527,7 @@
     <string name="text_guide_4">"Go to \'Launcher Setup\' to make further changes to your configuration. To get there, press the \'Menu\' button from the desktop."</string>
     <string name="text_guide_5">"The look-and-feel of the launcher can be changed by installing compatible themes.&lt;br>&lt;br>
     &lt;b>A)&lt;/b> Select \'Themes\' from \'Launcher Setup\'.&lt;br>&lt;br>
-    &lt;b>B)&lt;/b> The easiest way to get more themes is via the Google Play Store."</string>
+    &lt;b>B)&lt;/b> The easiest way to get more themes is via the Google Play Store.&lt;br>&lt;br>To apply dock backgrounds, please make sure that the dock background has not been hidden in the settings. "</string>
     <string name="text_guide_6">&lt;b>A)&lt;/b> When finished with \'Launcher Setup\' and desktop layout, prevent unwanted changes to the desktop by applying the lock function. Press the \'Menu\' button from the desktop→\'Lock\'. &lt;br>&lt;br>&lt;b>B)&lt;/b> Choose \'Unlock\' when locked to unlock. &lt;br>&lt;br>&lt;b>C)&lt;/b> Also access the lock function with \'Launcher Setup\'→\'Launcher Lock\'. &lt;br>&lt;br>&lt;br>&lt;b>D)&lt;/b>Passwords can be set in \'Launcher Setup\'. &lt;br>If you have forgotten your password, you can clear all data for Legacy Launcher. This can typically be done by entering \'Settings\' from the desktop→\'Settings\'→&lt;br>\'Applications\'→\'Manage applications\'→&lt;br>\'Legacy Launcher\'→\'Clear data\'.</string>
     <string name="text_guide_7">You can backup or restore options by accessing the \'Backup and restore\' preference found in \'Legacy Launcher Setup\' as shown.&lt;br>&lt;br>&lt;br>&lt;i>This is the end of the guide. You can access this again from \'Launcher Setup\'→\
         User Guide\'.&lt;/i></string>

@@ -24,35 +24,35 @@ public class ScreensAdapter extends BaseAdapter {
 		mWidth=width * .65f;
 		mHeight=height * .65f;
 	}
-	
+
 	public void addScreen(CellLayout screen){
 		if(mScreens==null)
 			mScreens=new ArrayList<CellLayout>();
 		mScreens.add(screen);
 		notifyDataSetChanged();
 	}
-	
+
 	public void addScreen(CellLayout screen, int position){
 		if(mScreens==null)
 			mScreens=new ArrayList<CellLayout>();
 		mScreens.add(position, screen);
 		notifyDataSetChanged();
 	}
-	
+
 	public void removeScreen(int position){
 		if(mScreens==null)
 			return;
 		mScreens.remove(position);
 		notifyDataSetChanged();
 	}
-	
+
 	public void swapScreens(int a, int b){
 		if(mScreens==null)
 			return;
 		Collections.swap(mScreens, a, b);
 		notifyDataSetChanged();
 	}
-	
+
 	public int getCount() {
 		return mScreens.size();
 	}
@@ -71,15 +71,14 @@ public class ScreensAdapter extends BaseAdapter {
 			convertView=new ImageView(mContext);
 			((ImageView)convertView).setLayoutParams(new Gallery.LayoutParams((int)mWidth,(int)mHeight));
 			((ImageView)convertView).setBackgroundResource(R.drawable.preview_bg);
-			
-			mScreens.get(position).setDrawingCacheEnabled(true);
-			Bitmap b=mScreens.get(position).getDrawingCache(true);
-			if(b!=null){
-				((ImageView)convertView).setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-				((ImageView)convertView).setImageBitmap(b);
-			}
 		}
-		
+		mScreens.get(position).setDrawingCacheEnabled(true);
+		Bitmap b=mScreens.get(position).getDrawingCache(true);
+		if(b!=null){
+			((ImageView)convertView).setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+			((ImageView)convertView).setImageBitmap(b);
+		}
+
 		return convertView;
 	}
 }

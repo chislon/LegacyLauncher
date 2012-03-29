@@ -48,6 +48,8 @@ public class FolderIconReorderActivity extends ListActivity {
 	private static final Collator sCollator = Collator.getInstance();
 
 	UserFolderInfo mFolderInfo;
+	
+	private AlertDialog mAlertDialog;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -92,7 +94,7 @@ public class FolderIconReorderActivity extends ListActivity {
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new AlertDialog.Builder(FolderIconReorderActivity.this)
+				mAlertDialog = new AlertDialog.Builder(FolderIconReorderActivity.this)
 				.setMessage(R.string.dialog_folder_icon_reorder_sort)
 				.setPositiveButton(android.R.string.ok, 
 						new DialogInterface.OnClickListener() {
@@ -101,14 +103,21 @@ public class FolderIconReorderActivity extends ListActivity {
 						sortFolderIcons();
 					}
 				})
-				.setNegativeButton(android.R.string.cancel, null)
-				.show();
+				.setNegativeButton(android.R.string.cancel, null).create();
+				mAlertDialog.show();
 			}
 		});
 	}
 
 	@Override
 	public void onDestroy() {
+		if (mAlertDialog != null) {
+			if (mAlertDialog.isShowing()) {
+				mAlertDialog.dismiss();
+				mAlertDialog = null;
+			}
+		}
+		
 		DraggableListView dragList = (DraggableListView) mList;
 		dragList.setDropListener(null);
 

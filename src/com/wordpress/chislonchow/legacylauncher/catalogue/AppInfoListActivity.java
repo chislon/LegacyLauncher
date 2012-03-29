@@ -62,6 +62,8 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 	public static final String EXTRA_CATALOGUE_INDEX = "EXTRA_CATALOGUE_INDEX";
 	public static final String EXTRA_CATALOGUE_NEW = "EXTRA_CATALOGUE_NEW";
 
+	private AlertDialog mAlertDialog;
+
 	// Custom Adapter used for managing items in the list
 	private ApplicationListAdapter mAppInfoAdapter;
 	// list of task info
@@ -241,7 +243,7 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 				} else {
 					alertBuilder.setTitle(R.string.app_group_no_items_modify);
 				}
-				alertBuilder.setPositiveButton(android.R.string.ok,
+				mAlertDialog = alertBuilder.setPositiveButton(android.R.string.ok,
 						new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog,
 							int whichButton) {
@@ -255,7 +257,8 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 						/* User clicked OK so do some stuff */
 					}
 				})
-				.setNegativeButton(android.R.string.cancel, null).create().show();
+				.setNegativeButton(android.R.string.cancel, null).create();
+				mAlertDialog.show();
 			} else {
 				setResult(RESULT_OK);
 				mCatalogPrepareDelete = false;
@@ -355,5 +358,16 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 		public void onNothingSelected(AdapterView<?> parent) {
 			// Do nothing.
 		}
+	}
+
+	@Override
+	public void onDestroy() {
+		if (mAlertDialog != null) {
+			if (mAlertDialog.isShowing()) {
+				mAlertDialog.dismiss();
+				mAlertDialog = null;
+			}
+		}
+		super.onDestroy();
 	}
 }
