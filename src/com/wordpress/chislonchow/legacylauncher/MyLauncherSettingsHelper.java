@@ -72,7 +72,7 @@ public final class MyLauncherSettingsHelper {
 	}
 	public static int getDesktopScreens(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		int screens = sp.getInt("desktopScreens", context.getResources().getInteger(R.integer.config_desktop_screens))+1;
+		int screens = sp.getInt("desktopScreens", context.getResources().getInteger(R.integer.config_desktops))+1;
 		return screens;
 	}
 	public static int getDefaultScreen(Context context) {

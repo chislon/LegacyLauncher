@@ -69,7 +69,7 @@ public class LiveFolder extends Folder {
         		    	intent.setSourceBounds(targetRect);
         		    }catch(NoSuchMethodError e){};
         		}        
-                mLauncher.startActivitySafely(intent);
+                mLauncher.startActivityAsNewTaskSafely(intent);
                 if (mLauncher.mAutoCloseFolder) {
                     mLauncher.closeFolder(this);
                 }
@@ -82,7 +82,7 @@ public class LiveFolder extends Folder {
     		    	holder.intent.setSourceBounds(targetRect);
     		    }catch(NoSuchMethodError e){};
     		}        
-            mLauncher.startActivitySafely(holder.intent);
+            mLauncher.startActivityAsNewTaskSafely(holder.intent);
             if (mLauncher.mAutoCloseFolder) {
                 mLauncher.closeFolder(this);
             }

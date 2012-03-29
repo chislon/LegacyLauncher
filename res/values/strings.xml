@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.29 Beta</string>
+    <string name="app_version">0.30 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -32,6 +32,8 @@
 
     <!-- Displayed when user selects a shortcut for an app that was uninstalled -->
     <string name="activity_not_found">Failed to launch the application requested. Maybe it is not installed on your phone.</string>
+    <!-- Displayed when user selects a shortcut for an app that cannot be accessed -->
+    <string name="activity_security_exception">Failed to launch the application requested. Access was denied.</string>
     <!-- List item for configuring the current wallpaper -->
     <string name="configure_wallpaper">Configure\u2026</string>
 
@@ -116,7 +118,7 @@
     <string name="pref_summary_hide_statusbar">Hides the statusbar</string>
     <string name="pref_title_looping">Screen Loop</string>
     <string name="pref_summary_looping">Screen looping (has visual side-effects)</string>
-    <string name="pref_title_default_screen">Default Screen</string>
+    <string name="pref_title_default_screen">Default screen set</string>
     <string name="pref_title_desktop_scrolling_speed">Scrolling time</string>
     <string name="pref_summary_desktop_scrolling_speed">Time to scroll across</string>
     <string name="pref_dialog_desktop_scrolling_speed">The lower the value, the faster flings will be</string>
@@ -274,9 +276,7 @@
     <string name="pref_title_build_info">Launcher Information</string>
     <string name="pref_title_app_version">Version</string>
     <string name="drop_to_uninstall">Drop to Uninstall</string>
-    <string name="toast_widgets_not_supported">Widgets not supported\u2026 sorry!</string>
     <string name="toast_unknown_item">Unknown item. We can\'t add unknown item types!</string>
-    <string name="toast_no_application_def">No application set, drop something here!</string>
     <string name="title_dialog_xml">Launcher Setup</string>
     <string name="import_export_sdcard_unmounted">SD card not mounted!</string>
 
@@ -349,10 +349,17 @@
     <string name="pref_themes_get_themes">Get themes</string>
     <string name="pref_title_wallpaper_scrolling">Wallpaper Scrolling</string>
     <string name="pref_summary_wallpaper_scrolling">Allow wallpaper to move while scrolling screens</string>
-    <string name="message_delete_desktop_screen">Remove this screen and all of its content?</string>
-    <string name="message_cannot_delete_desktop_screen">Unable to delete the last desktop screen</string>
-    <string name="message_cannot_add_desktop_screen">Unable to add more desktop screens</string>
-    <string name="message_cannot_swap_desktop_screen">Unable to swap desktop screens</string>
+    <string name="message_delete_desktop">Remove this screen and all of its content?</string>
+    <string name="message_cannot_delete_desktop">Unable to delete the last desktop screen</string>
+    <string name="message_cannot_add_desktop">Unable to add more desktop screens</string>
+    <string name="message_cannot_swap_desktop">Unable to swap desktop screens</string>
+    <string name="hint_delete_desktop">Remove this screen and all of its content</string>
+    <string name="hint_default_desktop">Set default screen</string>
+    <string name="hint_add_left_desktop">Add new screen to left</string>
+    <string name="hint_add_right_desktop">Add screen to right</string>
+    <string name="hint_swap_left_desktop">Swap current screen with left screen</string>
+    <string name="hint_swap_right_desktop">Swap current screen with right screen</string>
+    <string name="desktop_prefix">"Screen: "</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_resize_widget">Resize</string>
     <string name="menu_edit_desktop">Edit Desktop</string>

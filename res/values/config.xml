@@ -58,8 +58,8 @@
     <string name="config_doubletap_actions">0</string>
 
     <bool name="config_drawer_animated">true</bool>
-    <!-- config_desktop_screens min value is 1, so it will add 1 to whatever value you set here -->
-    <integer name="config_desktop_screens">4</integer>
+    <!-- config_desktops min value is 1, so it will add 1 to whatever value you set here -->
+    <integer name="config_desktops">4</integer>
     <integer name="config_default_screen">2</integer>
 
     <bool name="config_hide_statusbar">false</bool>

@@ -1758,7 +1758,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		ApplicationInfo app = (ApplicationInfo) getItemAtPosition(position);
-		mLauncher.startActivitySafely(app.intent);
+		mLauncher.startActivityAsNewTaskSafely(app.intent);
 	}
 
 	public boolean onItemLongClick(AdapterView<?> parent, View v,

@@ -131,7 +131,7 @@ OnLongClickListener {
 				app.intent.setSourceBounds(targetRect);
 			} catch(NoSuchMethodError e) {};
 		}        
-		mLauncher.startActivitySafely(app.intent);
+		mLauncher.startActivityAsNewTaskSafely(app.intent);
 		if (mLauncher.mAutoCloseFolder) {
 			mLauncher.closeFolder(this);
 		}

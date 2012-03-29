@@ -71,9 +71,7 @@
             android:id="@+id/quickaction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="4dip"
-            android:paddingTop="4dip" >
+            android:orientation="horizontal" >
 
             <ImageView
                 android:layout_width="wrap_content"

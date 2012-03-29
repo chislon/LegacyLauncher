@@ -117,7 +117,7 @@ DragSource, Drawer {
 		{
 			ApplicationInfo app = (ApplicationInfo) parent
 					.getItemAtPosition(position);
-			mLauncher.startActivitySafely(app.intent);
+			mLauncher.startActivityAsNewTaskSafely(app.intent);
 		}
 	}
 

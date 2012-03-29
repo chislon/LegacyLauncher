@@ -113,9 +113,12 @@ import android.view.ViewStub;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageView;
@@ -187,6 +190,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	static final int DIALOG_NEW_GROUP = 4;
 	static final int DIALOG_DELETE_GROUP_CONFIRM = 5;
 	static final int DIALOG_PICK_GROUPS = 6;
+	static final int DIALOG_ADD_WIDGET_FAILURE = 7;
 
 	private static final String PREFERENCES = "launcher.preferences";
 
@@ -317,7 +321,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	private boolean mLauncherLocked = false;
 
-	private AlertDialog alertDialog;
+	private AlertDialog mAlertDialog;
 
 	public boolean getPreviewsEnable() {
 		return mPreviewsEnable;
@@ -733,6 +737,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// TODO Auto-generated method stub
 		super.onStop();
 		dismissQuickActionWindow();
+		if (mAlertDialog != null) {
+			if (mAlertDialog.isShowing()) {
+				mAlertDialog.dismiss();
+			}
+		}
 	}
 
 	@Override
@@ -742,13 +751,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// is triggered
 		// ADW: it should be done only on certain circumstances
 		// closeDrawer(false);
-
-		// Dismiss some dialogs here
-		if (alertDialog != null) {
-			if (alertDialog.isShowing()) {
-				alertDialog.dismiss();
-			}
-		}
 	}
 
 	@Override
@@ -1185,10 +1187,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		builder = new AlertDialog.Builder(Launcher.this);
 		builder.setView(span_dlg_layout);
 		Toast.makeText(this, getString(R.string.widget_config_dialog_summary), Toast.LENGTH_SHORT).show();
-		alertDialog = builder.create();
-		alertDialog.setMessage(null);
-		alertDialog.setTitle(null);
-		alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources()
+		mAlertDialog = builder.create();
+		mAlertDialog.setMessage(null);
+		mAlertDialog.setTitle(null);
+		mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources()
 				.getString(android.R.string.ok),
 				new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
@@ -1198,9 +1200,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						insertAtFirst);
 			}
 		});
-		alertDialog.setCanceledOnTouchOutside(true);
-		alertDialog.setCancelable(true);
-		alertDialog.show();
+		mAlertDialog.setCanceledOnTouchOutside(true);
+		mAlertDialog.setCancelable(true);
+		mAlertDialog.show();
 	}
 
 	public LauncherAppWidgetHost getAppWidgetHost() {
@@ -1316,7 +1318,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			// An exception is thrown if the dialog is not visible, which is
 			// fine
 		}
-	}
+
+		try {
+			removeDialog(DIALOG_ADD_WIDGET_FAILURE);
+		} catch (Exception e) {
+			// An exception is thrown if the dialog is not visible, which is
+			// fine
+		}	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
@@ -1495,13 +1503,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	@Override
 	public void onDestroy() {
+		super.onDestroy();
+
 		mDestroyed = true;
 		// ADW: unregister the sharedpref listener
 		getSharedPreferences("launcher.preferences.almostnexus",
 				Context.MODE_PRIVATE)
 				.unregisterOnSharedPreferenceChangeListener(this);
-
-		super.onDestroy();
 
 		try {
 			mAppWidgetHost.stopListening();
@@ -1516,9 +1524,12 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mAllAppsGrid.clearTextFilter();
 		mAllAppsGrid.setAdapter(null);
 
+		// unbind items
 		sLauncherModel.unbind();
 		sLauncherModel.abortLoaders();
-		mWorkspace.unbindWidgetScrollableViews();
+
+		mWorkspace.unbindWidgetScrollableViews();	// removes views
+
 		getContentResolver().unregisterContentObserver(mObserver);
 		getContentResolver().unregisterContentObserver(mWidgetObserver);
 		unregisterReceiver(mApplicationsReceiver);
@@ -1526,6 +1537,15 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		if (mCounterReceiver != null)
 			unregisterReceiver(mCounterReceiver);
 		mWorkspace.unregisterProvider();
+
+		if (mScreensEditor != null) {
+			mDragLayer.removeView(mScreensEditor);
+			mScreensEditor = null;
+		}
+		
+		//set nulls
+		mWorkspace = null;
+		mAppWidgetHost = null;
 	}
 
 	@Override
@@ -1784,8 +1804,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							return null; 
 						}
 					}; 
-					input.setFilters(FilterArray); 
-					new AlertDialog.Builder(this)
+					input.setFilters(FilterArray);
+					mAlertDialog = new AlertDialog.Builder(this)
 					.setMessage(R.string.dialog_lock_password_get)
 					.setView(input)
 					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -1918,17 +1938,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					if (requiredApiVersion > LauncherMetadata.CurrentAPIVersion) {
 						onActivityResult(REQUEST_CREATE_APPWIDGET,
 								Activity.RESULT_CANCELED, data);
-						// Show a nice toast here to tell the user why the
+						// Show some information here to tell the user why the
 						// widget is rejected.
-						new AlertDialog.Builder(this)
-						.setTitle(R.string.app_version)
-						.setCancelable(true)
-						.setIcon(R.drawable.ic_launcher_home)
-						.setPositiveButton(
-								getString(android.R.string.ok), null)
-								.setMessage(
-										getString(R.string.scrollable_api_required))
-										.create().show();
+						showDialog(DIALOG_ADD_WIDGET_FAILURE);
 						return;
 					}
 				}
@@ -1966,7 +1978,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 * final int[] xy = mCellCoordinates; final int spanX = info.spanX; final
 	 * int spanY = info.spanY;
 	 * 
-	 * AlertDialog.Builder builder; AlertDialog alertDialog;
+	 * AlertDialog.Builder builder; AlertDialog mAlertDialog;
 	 * 
 	 * final View dlg_layout = View.inflate(Launcher.this,
 	 * R.layout.widget_span_setup, null); final NumberPicker
@@ -1977,17 +1989,17 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 * nrows.setRange(1, mWorkspace.currentDesktopRows());
 	 * nrows.setCurrent(spanY); builder = new
 	 * AlertDialog.Builder(Launcher.this); builder.setView(dlg_layout);
-	 * alertDialog = builder.create();
-	 * alertDialog.setTitle(getResources().getString
+	 * mAlertDialog = builder.create();
+	 * mAlertDialog.setTitle(getResources().getString
 	 * (R.string.widget_config_dialog_title));
-	 * alertDialog.setMessage(getResources
+	 * mAlertDialog.setMessage(getResources
 	 * ().getString(R.string.widget_config_dialog_summary));
-	 * alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+	 * mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
 	 * getResources().getString(android.R.string.ok), new
 	 * DialogInterface.OnClickListener() { public void onClick(DialogInterface
 	 * dialog, int which) { int spanX=ncols.getCurrent(); int
 	 * spanY=nrows.getCurrent(); realAddSearch(info,cellInfo,xy,spanX,spanY); }
-	 * }); alertDialog.show(); }
+	 * }); mAlertDialog.show(); }
 	 */
 
 	void processShortcut(Intent intent, int requestCodeApplication,
@@ -2594,11 +2606,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			return;
 		}
 		// TODO:ADW Check whether to show a toast if clicked mLAB or mRAB
-		// withount binding
+		// without binding
 		if (tag == null && v instanceof ActionButton) {
-			Toast t = Toast.makeText(this, R.string.toast_no_application_def,
-					Toast.LENGTH_SHORT);
-			t.show();
 			return;
 		}
 		if (tag instanceof ApplicationInfo) {
@@ -2613,13 +2622,31 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			} catch (NoSuchMethodError e) {
 			}
 			;
-			startActivitySafely(intent);
+			startActivityAsNewTaskSafely(intent);
 		} else if (tag instanceof FolderInfo) {
 			handleFolderClick((FolderInfo) tag);
 		}
 	}
 
-	void startActivitySafely(Intent intent) {
+	void startActivityAsSafely(Intent intent) {		try {
+		startActivity(intent);
+	} catch (ActivityNotFoundException e) {
+		Toast.makeText(this, R.string.activity_not_found,
+				Toast.LENGTH_SHORT).show();
+	} catch (SecurityException e) {
+		Toast.makeText(this, R.string.activity_security_exception,
+				Toast.LENGTH_SHORT).show();
+		e(LOG_TAG,
+				"Launcher does not have the permission to launch "
+						+ intent
+						+ ". Make sure to create a MAIN intent-filter for the corresponding activity "
+						+ "or use the exported attribute for this activity.",
+						e);
+	}
+	}
+
+
+	void startActivityAsNewTaskSafely(Intent intent) {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		try {
 			startActivity(intent);
@@ -2627,7 +2654,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			Toast.makeText(this, R.string.activity_not_found,
 					Toast.LENGTH_SHORT).show();
 		} catch (SecurityException e) {
-			Toast.makeText(this, R.string.activity_not_found,
+			Toast.makeText(this, R.string.activity_security_exception,
 					Toast.LENGTH_SHORT).show();
 			e(LOG_TAG,
 					"Launcher does not have the permission to launch "
@@ -2826,8 +2853,17 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			})
 			.setNegativeButton(android.R.string.cancel, null).create();
 		case DIALOG_PICK_GROUPS:
-
 			return new PickGrpDialog().createDialog();
+		case DIALOG_ADD_WIDGET_FAILURE:
+			return new AlertDialog.Builder(this)
+			.setTitle(null)
+			.setCancelable(true)
+			.setIcon(R.drawable.ic_launcher_home)
+			.setPositiveButton(
+					getString(android.R.string.ok), null)
+					.setMessage(
+							getString(R.string.scrollable_api_required))
+							.create();
 		default:
 			return null;
 		}
@@ -2965,8 +3001,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 
 		private void cleanup() {
-			mWorkspace.unlock();
 			try {
+				mWorkspace.unlock();
 				dismissDialog(DIALOG_RENAME_FOLDER);
 			} catch (Exception e) {
 				// Restarted while dialog or whatever causes
@@ -3011,8 +3047,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 
 		private void cleanup() {
-			mWorkspace.unlock();
 			try {
+				mWorkspace.unlock();
 				dismissDialog(DIALOG_CHOOSE_GROUP);
 			} catch (Exception e) {
 				// Restarted while dialog or whatever causes
@@ -3104,8 +3140,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 
 		private void cleanup() {
-			mWorkspace.unlock();
 			try {
+				mWorkspace.unlock();
 				dismissDialog(DIALOG_NEW_GROUP);
 			} catch (Exception e) {
 				// Restarted while dialog or whatever causes
@@ -3162,8 +3198,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 
 		private void cleanup() {
-			mWorkspace.unlock();
 			try {
+				mWorkspace.unlock();
 				dismissDialog(DIALOG_CREATE_SHORTCUT);
 			} catch (Exception e) {
 				// Restarted while dialog or whatever causes
@@ -3386,7 +3422,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	/**
-	 * Receives notifications when applications are added/removed.
+	 * Receives notifications when system dialogs are to be closed.
 	 */
 	private class CloseSystemDialogsIntentReceiver extends BroadcastReceiver {
 		@Override
@@ -4819,177 +4855,277 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				screens.addScreen((CellLayout) workspace.getChildAt(i));
 			}
 			mScreensEditor = mInflater.inflate(R.layout.screens_editor, null);
-			final Gallery gal = (Gallery) mScreensEditor
+			final Gallery gallery = (Gallery) mScreensEditor
 					.findViewById(R.id.gallery_screens);
-			gal.setCallbackDuringFling(false);
-			gal.setClickable(false);
-			gal.setAdapter(screens);
+			gallery.setCallbackDuringFling(false);
+			gallery.setClickable(false);
+			gallery.setAdapter(screens);
+
+			// buttons
+			final View deleteButton = mScreensEditor.findViewById(R.id.delete_screen);
+			final View addLeftButton = mScreensEditor.findViewById(R.id.add_left);
+			final View addRightButton = mScreensEditor.findViewById(R.id.add_right);
+			final View swapLeftButton = mScreensEditor.findViewById(R.id.swap_left);
+			final View swapRightButton = mScreensEditor.findViewById(R.id.swap_right);
+			final View setDefaultButton = mScreensEditor.findViewById(R.id.set_default);
+			final TextView screenEditorText = (TextView) mScreensEditor.findViewById(R.id.screen_counter);
+			final Animation fadeAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out_slow);
+
 			// Setup delete button event
-			View deleteButton = mScreensEditor.findViewById(R.id.delete_screen);
-			deleteButton
-			.setOnClickListener(new android.view.View.OnClickListener() {
-				AlertDialog alertDialog;
+			deleteButton.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+				public boolean onLongClick(View v) {
+					Toast.makeText(Launcher.this, R.string.hint_delete_desktop, Toast.LENGTH_SHORT).show();
+					return true;
+				}});
+			deleteButton.setVisibility((screens.getCount() > 1) ? View.VISIBLE : View.INVISIBLE);
+			deleteButton.setOnClickListener(new android.view.View.OnClickListener() {
 				public void onClick(View v) {
-					final int screenToDelete = gal
+					if (mAlertDialog != null) {
+						if (mAlertDialog.isShowing()) {
+							return;
+						}
+					}
+					final int screenToDelete = gallery
 							.getSelectedItemPosition();
 					if (workspace.getChildCount() > 1) {
+						mAlertDialog = new AlertDialog.Builder(
+								Launcher.this)
+						.setTitle(null)
+						.setMessage(R.string.message_delete_desktop)
+						.setPositiveButton(android.R.string.ok,
+								new DialogInterface.OnClickListener() {
+							public void onClick(
+									DialogInterface dialog,
+									int which) {
+								final int workspaceCount = workspace.getChildCount();
+								if (workspaceCount > screenToDelete) {
+									if (workspaceCount == 2) {
+										// two screens, but we are getting rid of one asap
+										deleteButton.setVisibility(View.INVISIBLE);
+										swapLeftButton.setVisibility(View.INVISIBLE);
+										swapRightButton.setVisibility(View.INVISIBLE);
+									}
+									workspace.removeScreen(screenToDelete);
+									screens.removeScreen(screenToDelete);
 
-						if (alertDialog != null)
-							if (alertDialog.isShowing())
-								return;
+									addLeftButton.setVisibility(View.VISIBLE);
+									addRightButton.setVisibility(View.VISIBLE);
 
-						alertDialog = new AlertDialog.Builder(
-								Launcher.this).create();
-						alertDialog.setTitle(getResources().getString(
-								R.string.title_dialog_xml));
-						alertDialog
-						.setMessage(getResources()
-								.getString(
-										R.string.message_delete_desktop_screen));
-						alertDialog.setButton(
-								DialogInterface.BUTTON_POSITIVE,
-								getResources().getString(
-										android.R.string.ok),
-										new DialogInterface.OnClickListener() {
-									public void onClick(
-											DialogInterface dialog,
-											int which) {
-										if (workspace.getChildCount() > 1) {
-											workspace.removeScreen(screenToDelete);
-											screens.removeScreen(screenToDelete);
-										} else {
-											Toast.makeText(
-													Launcher.this,
-													R.string.message_cannot_delete_desktop_screen,
-													Toast.LENGTH_LONG).show();
+									if (screenToDelete == 0) {
+										screenEditorText.setText("" + 1);
+									} else if (screenToDelete == (workspaceCount - 1)) {
+										screenEditorText.setText("" + (workspaceCount - 1));
+									} else {
+										if (screenToDelete == (workspaceCount - 2)) {
+											swapRightButton.setVisibility(View.INVISIBLE);
 										}
+										screenEditorText.setText("" + (screenToDelete + 1));
 									}
-								});
-						alertDialog.setButton(
-								DialogInterface.BUTTON_NEGATIVE,
-								getResources().getString(
-										android.R.string.cancel),
-										new DialogInterface.OnClickListener() {
-									public void onClick(
-											DialogInterface dialog,
-											int which) {
-									}
-								});
-						alertDialog.show();
+									screenEditorText.startAnimation(fadeAnimation);
+									screenEditorText.setVisibility(View.INVISIBLE);
+								}
+							}
+						})
+						.setNegativeButton(android.R.string.cancel,
+								new DialogInterface.OnClickListener() {
+							public void onClick(
+									DialogInterface dialog,
+									int which) {
+							}
+						})
+						.create();
+						mAlertDialog.show();
 					} else {
-						Toast.makeText(
-								Launcher.this,
-								R.string.message_cannot_delete_desktop_screen,
-								Toast.LENGTH_LONG).show();
+						if (mAlertDialog != null) {
+							if (mAlertDialog.isShowing()) {
+								return;
+							}
+						}
+						showSimpleAlertDialog(R.string.message_cannot_delete_desktop);
 					}
-
 				}
 			});
+
 			// Setup add buttons events
-			View addLeftButton = mScreensEditor.findViewById(R.id.add_left);
+			addLeftButton.setVisibility((screens.getCount() < MAX_SCREENS) ? View.VISIBLE : View.INVISIBLE);
+			addLeftButton.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+				public boolean onLongClick(View v) {
+					Toast.makeText(Launcher.this, R.string.hint_add_left_desktop, Toast.LENGTH_SHORT).show();
+					return true;
+				}});
 			addLeftButton
 			.setOnClickListener(new android.view.View.OnClickListener() {
 				public void onClick(View v) {
-					if (screens.getCount() < MAX_SCREENS) {
-						final int screenToAddLeft = gal
+					final int screenCount = screens.getCount();
+					if (screenCount < MAX_SCREENS) {
+						final int screenToAddLeft = gallery
 								.getSelectedItemPosition();
 						CellLayout newScreen = workspace
 								.addScreen(screenToAddLeft);
 						screens.addScreen(newScreen, screenToAddLeft);
+
+						screenEditorText.setText("" + (screenToAddLeft + 1));
+						screenEditorText.startAnimation(fadeAnimation);
+						screenEditorText.setVisibility(View.INVISIBLE);
+						if (screenCount < MAX_SCREENS - 1) {
+							addRightButton.setVisibility(View.VISIBLE);
+							addLeftButton.setVisibility(View.VISIBLE);
+						} else {
+							addRightButton.setVisibility(View.INVISIBLE);
+							addLeftButton.setVisibility(View.INVISIBLE);
+						}
+						deleteButton.setVisibility(View.VISIBLE);
+						swapLeftButton.setVisibility(View.VISIBLE);
 					} else {
-						Toast t = Toast
-								.makeText(
-										Launcher.this,
-										R.string.message_cannot_add_desktop_screen,
-										Toast.LENGTH_LONG);
-						t.show();
+						addRightButton.setVisibility(View.INVISIBLE);
+						addLeftButton.setVisibility(View.INVISIBLE);
+						if (mAlertDialog != null) {
+							if (mAlertDialog.isShowing()) {
+								return;
+							}
+						}
+						showSimpleAlertDialog(R.string.message_cannot_add_desktop);
 					}
 				}
 			});
-			View addRightButton = mScreensEditor.findViewById(R.id.add_right);
+
+			addRightButton.setVisibility((screens.getCount() < MAX_SCREENS) ? View.VISIBLE : View.INVISIBLE);
+			addRightButton.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+				public boolean onLongClick(View v) {
+					Toast.makeText(Launcher.this, R.string.hint_add_right_desktop, Toast.LENGTH_SHORT).show();
+					return true;
+				}});
 			addRightButton
 			.setOnClickListener(new android.view.View.OnClickListener() {
 				public void onClick(View v) {
-					if (screens.getCount() < MAX_SCREENS) {
-						final int screenToAddRight = gal
+					final int screenCount = screens.getCount();
+					if (screenCount < MAX_SCREENS) {
+						final int screenToAddRight = gallery
 								.getSelectedItemPosition();
 						CellLayout newScreen = workspace
 								.addScreen(screenToAddRight + 1);
 						screens.addScreen(newScreen,
 								screenToAddRight + 1);
+						screenEditorText.setText("" + (screenToAddRight + 1));
+						screenEditorText.startAnimation(fadeAnimation);
+						screenEditorText.setVisibility(View.INVISIBLE);
+						if (screenCount < MAX_SCREENS - 1) {
+							addRightButton.setVisibility(View.VISIBLE);
+							addLeftButton.setVisibility(View.VISIBLE);
+						} else {
+							addRightButton.setVisibility(View.INVISIBLE);
+							addLeftButton.setVisibility(View.INVISIBLE);
+						}
+						deleteButton.setVisibility(View.VISIBLE);
+						swapRightButton.setVisibility(View.VISIBLE);
 					} else {
-						Toast t = Toast
-								.makeText(
-										Launcher.this,
-										R.string.message_cannot_add_desktop_screen,
-										Toast.LENGTH_LONG);
-						t.show();
+						addRightButton.setVisibility(View.INVISIBLE);
+						addLeftButton.setVisibility(View.INVISIBLE);
+						if (mAlertDialog != null) {
+							if (mAlertDialog.isShowing()) {
+								return;
+							}
+						}
+						showSimpleAlertDialog(R.string.message_cannot_add_desktop);
 					}
 				}
 			});
 
-			final View swapLeftButton = mScreensEditor
-					.findViewById(R.id.swap_left);
+			swapLeftButton.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+				public boolean onLongClick(View v) {
+					Toast.makeText(Launcher.this, R.string.hint_swap_left_desktop, Toast.LENGTH_SHORT).show();
+					return true;
+				}});
 			swapLeftButton
 			.setOnClickListener(new android.view.View.OnClickListener() {
 				public void onClick(View v) {
-					int currentScreen = gal.getSelectedItemPosition();
+					int currentScreen = gallery.getSelectedItemPosition();
 					if (currentScreen > 0) {
 						workspace.swapScreens(currentScreen - 1,
 								currentScreen);
 						screens.swapScreens(currentScreen - 1,
 								currentScreen);
 					} else {
-						Toast t = Toast
-								.makeText(
-										Launcher.this,
-										R.string.message_cannot_swap_desktop_screen,
-										Toast.LENGTH_LONG);
-						t.show();
+						if (mAlertDialog != null) {
+							if (mAlertDialog.isShowing()) {
+								return;
+							}
+						}
+						showSimpleAlertDialog(R.string.message_cannot_swap_desktop);
 					}
 				}
 			});
-			final View swapRightButton = mScreensEditor
-					.findViewById(R.id.swap_right);
+
+			swapRightButton.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+				public boolean onLongClick(View v) {
+					Toast.makeText(Launcher.this, R.string.hint_swap_right_desktop, Toast.LENGTH_SHORT).show();
+					return true;
+				}});
 			swapRightButton
 			.setOnClickListener(new android.view.View.OnClickListener() {
 				public void onClick(View v) {
-					int currentScreen = gal.getSelectedItemPosition();
-					if (currentScreen < gal.getCount() - 1) {
+					int currentScreen = gallery.getSelectedItemPosition();
+					if (currentScreen < gallery.getCount() - 1) {
 						workspace.swapScreens(currentScreen,
 								currentScreen + 1);
 						screens.swapScreens(currentScreen,
 								currentScreen + 1);
 					} else {
-						Toast t = Toast
-								.makeText(
-										Launcher.this,
-										R.string.message_cannot_swap_desktop_screen,
-										Toast.LENGTH_LONG);
-						t.show();
+						if (mAlertDialog != null) {
+							if (mAlertDialog.isShowing()) {
+								return;
+							}
+						}
+						showSimpleAlertDialog(R.string.message_cannot_swap_desktop);
 					}
 				}
 			});
-			final View setDefaultButton = mScreensEditor
-					.findViewById(R.id.set_default);
+
+			setDefaultButton.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+				public boolean onLongClick(View v) {
+					Toast.makeText(Launcher.this, R.string.hint_default_desktop, Toast.LENGTH_SHORT).show();
+					return true;
+				}});
 			setDefaultButton
 			.setOnClickListener(new android.view.View.OnClickListener() {
 				public void onClick(View v) {
-					int currentScreen = gal.getSelectedItemPosition();
+					int currentScreen = gallery.getSelectedItemPosition();
 					if (currentScreen < mWorkspace.getChildCount()) {
 						mWorkspace.setDefaultScreen(currentScreen);
 						MyLauncherSettingsHelper.setDefaultScreen(
 								Launcher.this, currentScreen);
-						Toast t = Toast.makeText(Launcher.this,
-								R.string.pref_title_default_screen,
-								Toast.LENGTH_LONG);
-						t.show();
+						if (mAlertDialog != null) {
+							if (mAlertDialog.isShowing()) {
+								return;
+							}
+						}
+						showSimpleAlertDialog(R.string.pref_title_default_screen);
 					}
 				}
 			});
-			gal.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			gallery.setOnItemLongClickListener(new OnItemLongClickListener(){
+				@Override
+				public boolean onItemLongClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					screenEditorText.startAnimation(fadeAnimation);
+					screenEditorText.setVisibility(View.INVISIBLE);
+					return true;
+				}});
+			gallery.setOnItemClickListener(new OnItemClickListener(){
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					screenEditorText.startAnimation(fadeAnimation);
+					screenEditorText.setVisibility(View.INVISIBLE);
+				}});
+			gallery.setOnItemSelectedListener(new OnItemSelectedListener() {
 				public void onItemSelected(AdapterView<?> parent, View view,
 						int position, long id) {
+					screenEditorText.setText("" + (position + 1));
+					screenEditorText.startAnimation(fadeAnimation);
+					screenEditorText.setVisibility(View.INVISIBLE);
+
 					if (position <= 0) {
 						swapLeftButton.setVisibility(View.GONE);
 					} else {
@@ -5002,12 +5138,27 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					}
 				}
 
+				/* (non-Javadoc)
+				 * @see android.widget.AdapterView.OnItemSelectedListener#onNothingSelected(android.widget.AdapterView)
+				 */
+				@Override
 				public void onNothingSelected(AdapterView<?> arg0) {
+					// do nothing
 				}
 
 			});
 			mDragLayer.addView(mScreensEditor);
 		}
+	}
+
+	private void showSimpleAlertDialog(int msg_id) {
+		mAlertDialog = new AlertDialog.Builder(
+				Launcher.this)
+		.setTitle(null)
+		.setMessage(msg_id)
+		.setPositiveButton(android.R.string.ok, null)
+		.create();
+		mAlertDialog.show();
 	}
 
 	private void stopDesktopEdit() {
@@ -5334,7 +5485,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	@Override
 	public void startActivity(Intent intent) {
-		// TODO Auto-generated method stub
 		final ComponentName name = intent.getComponent();
 		if (name != null)
 			updateCountersForPackage(name.getPackageName(), 0, 0);
@@ -5344,7 +5494,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			Toast.makeText(this, R.string.activity_not_found,
 					Toast.LENGTH_SHORT).show();
 		} catch (SecurityException e) {
-			Toast.makeText(this, R.string.activity_not_found,
+			Toast.makeText(this, R.string.activity_security_exception,
 					Toast.LENGTH_SHORT).show();
 			e(LOG_TAG,
 					"Launcher does not have the permission to launch "
@@ -5358,8 +5508,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	QuickActionWindow mQaw;
 
 	public void dismissQuickActionWindow() {
-		if (mQaw != null && mQaw.isShowing()) {
-			mQaw.dismiss();
+		if (mQaw != null) {
+			if (mQaw.isShowing()) {
+				mQaw.dismiss();
+			}
 			mQaw = null;
 		}
 	}
@@ -5452,9 +5604,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 									((ViewGroup) view.getParent())
 									.removeView(view);
 							}
+							v.post(new Runnable() {
+								@Override
+								public void run() {
+									qa.dismiss();
 
-							qa.dismiss();
-							mQaw = null;
+								}
+							});
 						}
 					});
 			if (info instanceof ApplicationInfo) {
@@ -5464,8 +5620,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								R.string.menu_edit, new OnClickListener() {
 							public void onClick(View v) {
 								editShortcut((ApplicationInfo) info);
-								qa.dismiss();
-								mQaw = null;
+								v.post(new Runnable() {
+									@Override
+									public void run() {
+										qa.dismiss();
+
+									}
+								});
 							}
 						});
 			} else if (info instanceof LauncherAppWidgetInfo) {
@@ -5475,8 +5636,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								R.string.menu_resize_widget, new OnClickListener() {
 							public void onClick(View v) {
 								editWidget(view);
-								qa.dismiss();
-								mQaw = null;
+								v.post(new Runnable() {
+									@Override
+									public void run() {
+										qa.dismiss();
+
+									}
+								});
 							}
 						});
 			}
@@ -5497,8 +5663,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							} else {
 								editShortcut(info);
 							}
-							qa.dismiss();
-							mQaw = null;
+							v.post(new Runnable() {
+								@Override
+								public void run() {
+									qa.dismiss();
+
+								}
+							});
 						}
 					});
 			if (info instanceof LiveFolderInfo) {
@@ -5547,12 +5718,17 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								android.R.drawable.ic_menu_agenda),
 								R.string.app_group_choose, new OnClickListener() {
 							public void onClick(View v) {
-								qa.dismiss();
-								mQaw = null;
 								mPickGroupInfo = (ApplicationInfo) info;
 								mWaitingForResult = true;
 								mWorkspace.lock();
 								showDialog(DIALOG_PICK_GROUPS);
+								v.post(new Runnable() {
+									@Override
+									public void run() {
+										qa.dismiss();
+
+									}
+								});
 							}
 						});
 			}
@@ -5581,8 +5757,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								android.R.drawable.ic_menu_info_details),
 								mAppInfoLabel, new OnClickListener() {
 							public void onClick(View v) {
-								qa.dismiss();
-								mQaw = null;
+								v.post(new Runnable() {
+									@Override
+									public void run() {
+										qa.dismiss();
+
+									}
+								});
 								try {
 									Intent intent = new Intent();
 									final int apiLevel = Build.VERSION.SDK_INT;
@@ -5631,8 +5812,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				qa.addItem(mMarketIcon, (String) mMarketLabel,
 						new OnClickListener() {
 					public void onClick(View v) {
-						qa.dismiss();
-						mQaw = null;
+						v.post(new Runnable() {
+							@Override
+							public void run() {
+								qa.dismiss();
+
+							}
+						});
 						try {
 							Intent intent = new Intent(
 									Intent.ACTION_VIEW);
@@ -5760,9 +5946,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 		private void cleanup() {
 			mWaitingForResult = false;
-			mAllAppsGrid.updateAppGrp();
-			getWorkspace().unlock();
 			try {
+				mAllAppsGrid.updateAppGrp();
+				getWorkspace().unlock();
 				removeDialog(DIALOG_PICK_GROUPS);
 			} catch (Exception e) {
 				// Restarted while dialog or whatever causes

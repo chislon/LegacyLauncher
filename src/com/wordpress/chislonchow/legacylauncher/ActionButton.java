@@ -68,7 +68,7 @@ DragListener, OnLongClickListener, DragSource {
 
 		final float scale = getResources().getDisplayMetrics().density;
 		mDisplay = ((Activity) context).getWindowManager().getDefaultDisplay();
-		
+
 		final int dimMax = Math.min(mDisplay.getWidth(), mDisplay.getHeight()) / ACTION_BUTTON_COUNT;
 		final int dimMin = (int) (dimMax - STATUS_BAR_HEIGHT * scale / ACTION_BUTTON_COUNT);
 		mLpWide = new LinearLayout.LayoutParams(dimMin, dimMin);
@@ -87,6 +87,9 @@ DragListener, OnLongClickListener, DragSource {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.wordpress.chislonchow.legacylauncher.DropTarget#acceptDrop(com.wordpress.chislonchow.legacylauncher.DragSource, int, int, int, int, java.lang.Object)
+	 */
 	public boolean acceptDrop(DragSource source, int x, int y, int xOffset,
 			int yOffset, Object dragInfo) {
 
@@ -97,6 +100,13 @@ DragListener, OnLongClickListener, DragSource {
 				return false;
 			}
 		}
+
+		final ItemInfo info = (ItemInfo) dragInfo;
+		if (info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET) {
+			// do not eat widgets
+			return false;
+		}
+
 		return !specialMode;
 	}
 
@@ -119,6 +129,9 @@ DragListener, OnLongClickListener, DragSource {
 			int yOffset, Object dragInfo) {
 	}
 
+	/* (non-Javadoc)
+	 * @see com.wordpress.chislonchow.legacylauncher.DropTarget#onDrop(com.wordpress.chislonchow.legacylauncher.DragSource, int, int, int, int, java.lang.Object)
+	 */
 	public void onDrop(DragSource source, int x, int y, int xOffset,
 			int yOffset, Object dragInfo) {
 
@@ -134,9 +147,7 @@ DragListener, OnLongClickListener, DragSource {
 			// we do accept those
 			break;
 		case LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET:
-			Toast t = Toast.makeText(getContext(),
-					R.string.toast_widgets_not_supported, Toast.LENGTH_SHORT);
-			t.show();
+			// this should never happen, but just in case
 			accept = false;
 			break;
 		default:
@@ -212,6 +223,7 @@ DragListener, OnLongClickListener, DragSource {
 				// info.itemType);
 			}
 		}
+
 		setIcon(myIcon);
 		updateIcon();
 		invalidate();

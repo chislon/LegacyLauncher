@@ -1218,7 +1218,7 @@ OnPreferenceChangeListener {
 			Toast.makeText(this, R.string.activity_not_found,
 					Toast.LENGTH_SHORT).show();
 		} catch (SecurityException e) {
-			Toast.makeText(this, R.string.activity_not_found,
+			Toast.makeText(this, R.string.activity_security_exception,
 					Toast.LENGTH_SHORT).show();
 			Log.e("ADW",
 					"Launcher does not have the permission to launch "

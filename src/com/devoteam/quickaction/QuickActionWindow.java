@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 
@@ -40,7 +38,6 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	private ImageView mArrowUp;
 	private ImageView mArrowDown;
 	private ViewGroup mTrack;
-	private Animation mTrackAnim;
 
 	private View mPView;
 	private Rect mAnchor;
@@ -85,19 +82,6 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 		setFocusable(true);
 		setTouchable(true);
 		setOutsideTouchable(true);
-
-		// Prepare track entrance animation
-		mTrackAnim = AnimationUtils.loadAnimation(mContext, R.anim.quickaction);
-		/*
-		mTrackAnim.setInterpolator(new Interpolator() {
-			public float getInterpolation(float t) {
-				// Pushes past the target area, then snaps back into place.
-				// Equation for graphing: 1.2-((x*1.6)-1.1)^2
-				final float inner = (t * 1.55f) - 1.1f;
-				return 1.2f - inner * inner;
-			}
-		});
-		 */	
 	}
 
 	/**
@@ -166,6 +150,8 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 		param.leftMargin = requestedX - arrowWidth / 2;
 
 		hideArrow.setVisibility(View.INVISIBLE);
+		
+
 	}
 
 	/**
@@ -200,7 +186,6 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 			}
 
 			setAnimationStyle(windowAnimations);
-			mTrack.startAnimation(mTrackAnim);
 			this.update(x, y, -1, -1);
 		}
 	}
@@ -222,20 +207,18 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 
 		return false;
 	}
-
+	
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

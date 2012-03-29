@@ -80,7 +80,7 @@ public class CustomShortcutActivity extends Activity implements OnClickListener 
 			mBitmap = savedInstanceState.getParcelable("mBitmap");
 			mIntent = savedInstanceState.getParcelable("mIntent");
 			mIconResource = savedInstanceState.getParcelable("mIconResource");
-			mIconSize = savedInstanceState.getInt("mIconResource");
+			mIconSize = savedInstanceState.getInt("mIconSize");
 
 			if (mBitmap != null)
 				btPickIcon.setImageBitmap(mBitmap);
