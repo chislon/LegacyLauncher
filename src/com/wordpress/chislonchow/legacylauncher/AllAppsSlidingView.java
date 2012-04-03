@@ -1042,9 +1042,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		if (screenDelta == 0) {
 			durationOffset = mScrollingSnap;
 		}
-		mScrollingSpeed += durationOffset;
 
-		mScroller.startScroll(getScrollX(), 0, delta, 0, mScrollingSpeed);
+		mScroller.startScroll(getScrollX(), 0, delta, 0, mScrollingSpeed + durationOffset);
 		invalidate();
 	}
 

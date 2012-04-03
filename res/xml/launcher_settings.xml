@@ -143,7 +143,7 @@
                     android:dependency="uiHideLabels"
                     android:dialogMessage="@string/pref_dialog_desktop_label_size"
                     android:key="desktopLabelSize"
-                    android:max="16"
+                    android:max="17"
                     android:summary="@string/pref_summary_desktop_label_size"
                     android:title="@string/pref_title_desktop_label_size" />
 
@@ -233,25 +233,28 @@
                 android:key="previewsNew"
                 android:summary="@string/pref_summary_spread_previews"
                 android:title="@string/pref_title_spread_previews" />
-            <CheckBoxPreference
-                android:defaultValue="@bool/config_ui_close_folder"
-                android:key="uiCloseFolder"
-                android:summary="@string/pref_summary_closing_folder"
-                android:title="@string/pref_title_closing_folder" />
 
-            <com.wordpress.chislonchow.legacylauncher.ui.DialogSeekBarPreference
-                android:defaultValue="@integer/config_folder_text_size"
-                android:dialogMessage="@string/pref_dialog_folder_text_size"
-                android:key="folderTextSize"
-                android:max="16"
-                android:summary="@string/pref_summary_folder_text_size"
-                android:title="@string/pref_title_folder_text_size" />
+            <PreferenceCategory android:title="@string/pref_title_folder" >
+                <CheckBoxPreference
+                    android:defaultValue="@bool/config_ui_close_folder"
+                    android:key="uiCloseFolder"
+                    android:summary="@string/pref_summary_closing_folder"
+                    android:title="@string/pref_title_closing_folder" />
 
-            <CheckBoxPreference
-                android:defaultValue="@bool/config_folder_animate"
-                android:key="folderAnimate"
-                android:summary="@string/pref_summary_folder_animate"
-                android:title="@string/pref_title_folder_animate" />
+                <com.wordpress.chislonchow.legacylauncher.ui.DialogSeekBarPreference
+                    android:defaultValue="@integer/config_folder_text_size"
+                    android:dialogMessage="@string/pref_dialog_folder_text_size"
+                    android:key="folderTextSize"
+                    android:max="17"
+                    android:summary="@string/pref_summary_folder_text_size"
+                    android:title="@string/pref_title_folder_text_size" />
+
+                <CheckBoxPreference
+                    android:defaultValue="@bool/config_folder_animate"
+                    android:key="folderAnimate"
+                    android:summary="@string/pref_summary_folder_animate"
+                    android:title="@string/pref_title_folder_animate" />
+            </PreferenceCategory>
         </PreferenceScreen>
         <PreferenceScreen
             android:key="
@@ -406,7 +409,7 @@
                     android:dependency="drawerLabels"
                     android:dialogMessage="@string/pref_dialog_drawer_label_size"
                     android:key="drawerLabelTextSize"
-                    android:max="16"
+                    android:max="17"
                     android:summary="@string/pref_summary_drawer_label_size"
                     android:title="@string/pref_title_drawer_label_size" />
 
@@ -532,7 +535,7 @@
             android:defaultValue="@integer/config_notif_text_size"
             android:dialogMessage="@string/pref_dialog_notif_size"
             android:key="notifSize"
-            android:max="14"
+            android:max="15"
             android:summary="@string/pref_summary_notif_size"
             android:title="@string/pref_title_notif_size" />
 

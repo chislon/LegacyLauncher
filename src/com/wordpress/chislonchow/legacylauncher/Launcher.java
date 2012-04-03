@@ -1181,13 +1181,15 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				.findViewById(R.id.widget_columns_span);
 		ncols.setRange(1, mWorkspace.currentDesktopColumns());
 		ncols.setCurrent(spans[0]);
+
 		final NumberPicker nrows = (NumberPicker) span_dlg_layout
 				.findViewById(R.id.widget_rows_span);
+
 		nrows.setRange(1, mWorkspace.currentDesktopRows());
 		nrows.setCurrent(spans[1]);
 		builder = new AlertDialog.Builder(Launcher.this);
 		builder.setView(span_dlg_layout);
-		Toast.makeText(this, getString(R.string.widget_config_dialog_summary), Toast.LENGTH_SHORT).show();
+
 		mAlertDialog = builder.create();
 		mAlertDialog.setMessage(null);
 		mAlertDialog.setTitle(null);
@@ -2244,6 +2246,15 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				return true;
 			case KeyEvent.KEYCODE_HOME:
 				return true;
+			case KeyEvent.KEYCODE_DPAD_CENTER:
+				if (isPreviewing()) {
+					dismissPreviews();
+					return true;
+				}
+				if (mIsWidgetEditMode) {
+					stopWidgetEdit();
+					return true;
+				}
 			}
 		}
 
@@ -4875,8 +4886,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			if (workspace == null)
 				return;
 			workspace.enableChildrenCache(0, workspace.getChildCount());
-			hideDesktop(true);
 			workspace.lock();
+			hideDesktop(true);
+
 			// Load a gallery view
 			final ScreensAdapter screens = new ScreensAdapter(this, workspace
 					.getChildAt(0).getWidth(), workspace.getChildAt(0)
@@ -4885,8 +4897,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				screens.addScreen((CellLayout) workspace.getChildAt(i));
 			}
 			mScreensEditor = mInflater.inflate(R.layout.screens_editor, null);
-			final Gallery gallery = (Gallery) mScreensEditor
-					.findViewById(R.id.gallery_screens);
+			mScreensEditor.setAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_right));
+
+			final Gallery gallery = (Gallery) mScreensEditor.findViewById(R.id.gallery_screens);
 			gallery.setCallbackDuringFling(false);
 			gallery.setClickable(false);
 			gallery.setAdapter(screens);
@@ -4956,13 +4969,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								}
 							}
 						})
-						.setNegativeButton(android.R.string.cancel,
-								new DialogInterface.OnClickListener() {
-							public void onClick(
-									DialogInterface dialog,
-									int which) {
-							}
-						})
+						.setNegativeButton(android.R.string.cancel, null)
 						.create();
 						mAlertDialog.show();
 					} else {
@@ -5138,8 +5145,19 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				@Override
 				public boolean onItemLongClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					screenEditorText.startAnimation(fadeAnimation);
-					screenEditorText.setVisibility(View.INVISIBLE);
+					mAlertDialog = new AlertDialog.Builder(
+							Launcher.this)
+					.setTitle(null)
+					.setMessage(R.string.message_end_edit_desktop)
+					.setPositiveButton(android.R.string.ok,
+							new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {					
+							stopDesktopEdit();
+						}
+					})
+					.setNegativeButton(android.R.string.cancel, null)
+					.create();
+					mAlertDialog.show();
 					return true;
 				}});
 			gallery.setOnItemClickListener(new OnItemClickListener(){

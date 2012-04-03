@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.31 Beta</string>
+    <string name="app_version">0.32 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -106,7 +106,7 @@
     <string name="pref_title_desktop_config_preferences">Desktop Configuration</string>
     <string name="pref_summary_desktop_config_preferences">Layout, response</string>
     <string name="pref_title_desktop_extended_preferences">Desktop Extensions</string>
-    <string name="pref_summary_desktop_extended_preferences">Desktop extended functionality</string>
+    <string name="pref_summary_desktop_extended_preferences">Desktop previews, folders</string>
     <string name="pref_title_desktop_appearance_preferences">Desktop Appearance</string>
     <string name="pref_summary_desktop__preferences">Transitions, indicators, icons</string>
     <string name="pref_title_desktop_icon_widget_preferences">Desktop Icons and Widgets</string>
@@ -166,6 +166,7 @@
     <string name="pref_title_desktop_icon_label_padding_category">Icon Label Background Padding</string>
 
     <!-- Folder preferences -->
+    <string name="pref_title_folder">Folders</string>
     <string name="pref_title_closing_folder">Auto-close folders</string>
     <string name="pref_summary_closing_folder">Auto-close folder after app launch</string>
     <string name="pref_title_folder_text_size">Folder text size</string>
@@ -317,7 +318,6 @@
     <string name="pref_summary_autosize_icons">Stretch icons/widgets to prevent overlap</string>
     <string name="pref_title_drawer_labels">Show app labels</string>
     <string name="pref_summary_drawer_labels">Show the labels on app tray</string>
-    <string name="widget_config_dialog_summary">Choose number of columns and rows for the new widget</string>
     <string name="widget_columns">Widget Columns</string>
     <string name="widget_rows">Widget Rows</string>
     <string name="pref_title_screen_cache">Scrolling Cache</string>
@@ -351,6 +351,7 @@
     <string name="pref_summary_wallpaper_scrolling">Allow wallpaper to move while scrolling screens</string>
     <string name="message_delete_desktop">Remove this screen and all of its content?</string>
     <string name="message_cannot_delete_desktop">Unable to delete the last desktop screen</string>
+    <string name="message_end_edit_desktop">Finish editing desktops?</string>
     <string name="message_cannot_add_desktop">Unable to add more desktop screens</string>
     <string name="message_cannot_swap_desktop">Unable to swap desktop screens</string>
     <string name="hint_delete_desktop">Remove this screen and all of its content</string>

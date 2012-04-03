@@ -71,12 +71,12 @@ public class ScreensAdapter extends BaseAdapter {
 			convertView=new ImageView(mContext);
 			((ImageView)convertView).setLayoutParams(new Gallery.LayoutParams((int)mWidth,(int)mHeight));
 			((ImageView)convertView).setBackgroundResource(R.drawable.preview_bg);
-		}
-		mScreens.get(position).setDrawingCacheEnabled(true);
-		Bitmap b=mScreens.get(position).getDrawingCache(true);
-		if(b!=null){
-			((ImageView)convertView).setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-			((ImageView)convertView).setImageBitmap(b);
+			mScreens.get(position).setDrawingCacheEnabled(true);
+			Bitmap b=mScreens.get(position).getDrawingCache(true);
+			if(b!=null){
+				((ImageView)convertView).setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+				((ImageView)convertView).setImageBitmap(b);
+			}
 		}
 
 		return convertView;
