@@ -17,11 +17,11 @@
 <com.wordpress.chislonchow.legacylauncher.CounterTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/name"
     android:layout_width="fill_parent"
-    android:layout_height="94dip"
+    android:layout_height="95dip"
 
     android:paddingLeft="2dip"
     android:paddingRight="2dip"
-    android:paddingTop="1dip"
+    android:paddingTop="0dip"
     android:paddingBottom="0dip"
     android:drawablePadding="0dip"
 

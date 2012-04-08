@@ -194,7 +194,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	static final int DIALOG_GET_LAUNCHER_UNLOCK_PASSWORD = 8;
 
 	private static final String PREFERENCES = "launcher.preferences";
-	
+
 	// Type: int
 	private static final String RUNTIME_STATE_CURRENT_SCREEN = "launcher.current_screen";
 	// Type: boolean
@@ -3646,8 +3646,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 * Update variables
 	 */
 	private void updateAlmostNexusVars() {
-		mDrawerAnimate = MyLauncherSettingsHelper
-				.getDrawerAnimated(Launcher.this);
+		mDrawerAnimate = MyLauncherSettingsHelper.getDrawerAnimated(Launcher.this);
 		mPreviewsNew = MyLauncherSettingsHelper.getPreviewsNew(this);
 		mPreviewsEnable = MyLauncherSettingsHelper.getPreviewsEnable(this);
 		mHomeBinding = MyLauncherSettingsHelper.getHomeBinding(this);
@@ -3662,6 +3661,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mAutoCloseFolder = MyLauncherSettingsHelper.getUICloseFolder(this);
 		mHideABBg = MyLauncherSettingsHelper.getUIABBg(this);
 		mUiHideLabels = MyLauncherSettingsHelper.getUIHideLabels(this);
+
 		if (mWorkspace != null) {
 			mWorkspace.setSpeed(MyLauncherSettingsHelper.getDesktopSpeed(this));
 			mWorkspace.setBounceAmount(MyLauncherSettingsHelper
@@ -3786,18 +3786,14 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// init the padding for the dock
 		final boolean hideDock = (mDockStyle == DOCK_STYLE_NONE) || mDockHide;
 
-		if (getWindow().getDecorView().getWidth() > getWindow().getDecorView()
-				.getHeight()) {
-			final int dockSize = (hideDock ? 0 : mDrawerToolbar
-					.getMeasuredWidth());
+		if (isScreenLandscape()) {
+			final int dockSize = (hideDock ? 0 : mDrawerToolbar.getMeasuredWidth());
 			if (dockSize != mAppDrawerPadding) {
 				mAppDrawerPadding = dockSize;
 				mAllAppsGrid.setPadding(0, 0, mAppDrawerPadding, 0);
 			}
 		} else {
-			final int dockSize = (hideDock ? 0 : mDrawerToolbar
-					.getMeasuredHeight());
-
+			final int dockSize = (hideDock ? 0 : mDrawerToolbar.getMeasuredHeight());
 			if (dockSize != mAppDrawerPadding) {
 				mAppDrawerPadding = dockSize;
 				mAllAppsGrid.setPadding(0, 0, 0, mAppDrawerPadding);
@@ -4041,7 +4037,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mHideStatusBar = false;
 		}
 	}
-	
+
 	protected void fullScreenTemporary(boolean enable) {
 		if (enable) {
 			// go full screen
@@ -4059,7 +4055,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 		}
 	}
-	
+
 	protected void fullScreenRestore() {
 		fullScreenTemporary(mHideStatusBar);
 	}
@@ -4320,8 +4316,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		if (!allAppsOpen && mAllAppsGrid != null) {
 			final boolean hideDock = (mDockStyle == DOCK_STYLE_NONE)
 					|| mDockHide;
-			if (getWindow().getDecorView().getWidth() > getWindow()
-					.getDecorView().getHeight()) {
+			if (isScreenLandscape()) {
 				// landscape
 				if (hideDock) {
 					mDrawerToolbar.setVisibility(View.GONE);
@@ -5939,27 +5934,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 		// found the package and it's not an ADW internal shortcut
 		if (infoPackage != null && !isADWShortcut) {
-			if (info instanceof ApplicationInfo) {
-				qa.addItem(
-						getResources().getDrawable(
-								android.R.drawable.ic_menu_agenda),
-								R.string.app_group_choose, new OnClickListener() {
-							public void onClick(View v) {
-								mPickGroupInfo = (ApplicationInfo) info;
-								mWaitingForResult = true;
-								mWorkspace.lock();
-								showDialog(DIALOG_PICK_GROUPS);
-								v.post(new Runnable() {
-									@Override
-									public void run() {
-										qa.dismiss();
-
-									}
-								});
-							}
-						});
-			}
-
 			final String appPackage = infoPackage;
 			// get the application info label
 			if (mAppInfoLabel == null) {
@@ -6034,7 +6008,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					// this again
 				}
 			}
-			// if market, show it as an option
+			// if market is available, show it as an option
 			if (mMarketIcon != null && mMarketLabel != null) {
 				qa.addItem(mMarketIcon, (String) mMarketLabel,
 						new OnClickListener() {
@@ -6058,6 +6032,27 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						}
 					}
 				});
+			}
+			// application catalogs
+			if (info instanceof ApplicationInfo) {
+				qa.addItem(
+						getResources().getDrawable(
+								android.R.drawable.ic_menu_agenda),
+								R.string.app_group_choose, new OnClickListener() {
+							public void onClick(View v) {
+								mPickGroupInfo = (ApplicationInfo) info;
+								mWaitingForResult = true;
+								mWorkspace.lock();
+								showDialog(DIALOG_PICK_GROUPS);
+								v.post(new Runnable() {
+									@Override
+									public void run() {
+										qa.dismiss();
+
+									}
+								});
+							}
+						});
 			}
 		}
 		// rearrange user info folder item
@@ -6220,6 +6215,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	// gives screen orientation wrt display dimensions
 	protected boolean isScreenLandscape() {
+		/*
+		return getWindow().getDecorView().getWidth() > mDisplay.getHeight();
+		 */
 		return mDisplay.getWidth() > mDisplay.getHeight();
 	}
 }

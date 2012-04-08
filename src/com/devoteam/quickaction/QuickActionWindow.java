@@ -167,8 +167,8 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 			final int blockHeight = this.getContentView().getMeasuredHeight();
 
 			x = -mShadowHoriz;
-
-			if (mAnchor.top > blockHeight) {
+			
+			if (mAnchor.top > (blockHeight * 1.1)) {	// fudge this number a bit
 				// Show downwards callout when enough room, aligning bottom block
 				// edge with top of anchor area, and adjusting to inset arrow.
 				showArrow(R.id.arrow_down, requestedX);

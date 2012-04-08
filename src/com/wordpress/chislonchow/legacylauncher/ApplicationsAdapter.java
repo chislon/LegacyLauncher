@@ -46,7 +46,7 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 	private final LayoutInflater mInflater;
 	private Drawable mBackground;
 	private int mTextColor = 0;
-	private int mTextSize = 14;
+	private int mTextSize = 13;
 	private boolean mTextBold = false;
 
 	private boolean useThemeTextColor = false;

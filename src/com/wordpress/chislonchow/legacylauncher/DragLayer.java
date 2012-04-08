@@ -50,11 +50,11 @@ public class DragLayer extends FrameLayout implements DragController {
     private static final int SCROLL_DELAY = 600;
     private int mScrollZone = 25;	// this determines how easy it is to move from side to side
     private static final int ANIMATION_SCALE_UP_DURATION = 110;
-
+    
     private static final boolean PROFILE_DRAWING_DURING_DRAG = false;
 
-    // Number of pixels to add to the dragged item for scaling
-    private static final float DRAG_SCALE = 24.0f;
+    // Percentage to add to the dragged item for scaling
+    private static final float DRAG_SCALE = 1.25f;
 
     private boolean mDragging = false;
     private boolean mShouldDrop;
@@ -184,6 +184,7 @@ public class DragLayer extends FrameLayout implements DragController {
         if (PROFILE_DRAWING_DURING_DRAG) {
             android.os.Debug.startMethodTracing("Launcher");
         }
+        
         mTagPopup=v.getTag(R.id.TAG_PREVIEW);
 
         // Hide soft keyboard, if visible
@@ -228,8 +229,7 @@ public class DragLayer extends FrameLayout implements DragController {
 	        int height = viewBitmap.getHeight();
 	
 	        Matrix scale = new Matrix();
-	        float scaleFactor = v.getWidth();
-	        scaleFactor = (scaleFactor + DRAG_SCALE) /scaleFactor;
+	        float scaleFactor = DRAG_SCALE;
 	        scale.setScale(scaleFactor, scaleFactor);
 	
 	        mAnimationTo = 1.0f;
@@ -246,8 +246,7 @@ public class DragLayer extends FrameLayout implements DragController {
                 mDrawModeBitmap=false;
                 width = v.getWidth();
                 height = v.getHeight();
-                scaleFactor = v.getWidth();
-                scaleFactor = (scaleFactor + DRAG_SCALE) /scaleFactor;
+                scaleFactor = DRAG_SCALE;
                 mDrawWidth=(int) (v.getWidth()*scaleFactor);
                 mDrawHeight=(int) (v.getHeight()*scaleFactor);
                 mAnimationTo = 1.0f;
@@ -265,8 +264,7 @@ public class DragLayer extends FrameLayout implements DragController {
         	mDrawModeBitmap=false;
             int width = v.getWidth();
             int height = v.getHeight();
-            float scaleFactor = v.getWidth();
-            scaleFactor = (scaleFactor + DRAG_SCALE) /scaleFactor;
+            float scaleFactor = DRAG_SCALE;
             mDrawWidth=(int) (v.getWidth()*scaleFactor);
             mDrawHeight=(int) (v.getHeight()*scaleFactor);
             mAnimationTo = 1.0f;
@@ -506,7 +504,8 @@ public class DragLayer extends FrameLayout implements DragController {
             invalidate(rect);
 
             mLastDropTarget = dropTarget;
-            if(mTagPopup!=null){
+            
+            if(mTagPopup!=null) {
                 if(Math.abs(mOriginalX-mLastMotionX)>mScrollZone || Math.abs(mOriginalY-mLastMotionY)>mScrollZone){
                     final QuickActionWindow qa=(QuickActionWindow) mTagPopup;
                     qa.dismiss();

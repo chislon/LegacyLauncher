@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="ContentDescription" severity="ignore" />
+    <issue id="MissingTranslation">
+        <ignore path="res/values/changelog.xml" />
+    </issue>
 </lint>

@@ -641,38 +641,36 @@
                 android:key="themePreview"
                 android:layout="@layout/theme_preview" />
         </PreferenceScreen>
+        <PreferenceScreen
+            android:key="xmlPreferences"
+            android:title="@string/pref_title_import_export" >
+            <PreferenceCategory android:title="@string/pref_title_xml" >
+                <Preference
+                    android:key="xml_export"
+                    android:summary="@string/pref_summary_xml_export"
+                    android:title="@string/pref_title_xml_export" />
+                <Preference
+                    android:key="xml_import"
+                    android:summary="@string/pref_summary_xml_import"
+                    android:title="@string/pref_title_xml_import" />
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/pref_title_db" >
+                <Preference
+                    android:key="db_export"
+                    android:summary="@string/pref_summary_db_export"
+                    android:title="@string/pref_title_db_export" />
+                <Preference
+                    android:key="db_import"
+                    android:summary="@string/pref_summary_db_import"
+                    android:title="@string/pref_title_db_import" />
+            </PreferenceCategory>
+        </PreferenceScreen>
 
         <Preference
             android:key="launcherRestart"
             android:summary="@string/pref_summary_launcher_restart"
             android:title="@string/pref_title_launcher_restart" />
     </PreferenceCategory>
-
-    <PreferenceScreen
-        android:key="xmlPreferences"
-        android:title="@string/pref_title_import_export" >
-        <PreferenceCategory android:title="@string/pref_title_xml" >
-            <Preference
-                android:key="xml_export"
-                android:summary="@string/pref_summary_xml_export"
-                android:title="@string/pref_title_xml_export" />
-            <Preference
-                android:key="xml_import"
-                android:summary="@string/pref_summary_xml_import"
-                android:title="@string/pref_title_xml_import" />
-        </PreferenceCategory>
-        <PreferenceCategory android:title="@string/pref_title_db" >
-            <Preference
-                android:key="db_export"
-                android:summary="@string/pref_summary_db_export"
-                android:title="@string/pref_title_db_export" />
-            <Preference
-                android:key="db_import"
-                android:summary="@string/pref_summary_db_import"
-                android:title="@string/pref_title_db_import" />
-        </PreferenceCategory>
-    </PreferenceScreen>
-
     <PreferenceCategory android:title="@string/pref_title_build_info" >
         <Preference
             android:key="launcherManage"

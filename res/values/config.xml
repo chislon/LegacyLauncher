@@ -28,7 +28,7 @@
     <bool name="config_drawer_overshoot">false</bool>
 
     <!-- config_desktop_label_text_size min is 8, so it will add 8 to whatever value you set here -->
-    <integer name="config_desktop_label_text_size">6</integer>
+    <integer name="config_desktop_label_text_size">5</integer>
 
     <bool name="config_desktop_label_bold_text">false</bool>
     <bool name="config_desktop_label_padding_override">false</bool>
@@ -52,10 +52,10 @@
     <integer name="config_drawer_columns_landscape">4</integer>
     <integer name="config_drawer_rows_landscape">2</integer>
 
-    <string name="config_home_binding_actions">1</string>
-    <string name="config_swipedown_actions">0</string>
-    <string name="config_swipeup_actions">0</string>
-    <string name="config_doubletap_actions">0</string>
+    <string name="config_home_binding_actions" translatable="false">1</string>
+    <string name="config_swipedown_actions" translatable="false">0</string>
+    <string name="config_swipeup_actions" translatable="false">0</string>
+    <string name="config_doubletap_actions" translatable="false">0</string>
 
     <bool name="config_drawer_animated">true</bool>
     <!-- config_desktops min value is 1, so it will add 1 to whatever value you set here -->
@@ -70,7 +70,7 @@
     <bool name="config_ui_close_folder">true</bool>
 
     <!-- config_ui_close_folder min is 8, so it will add 8 to whatever value you set here -->
-    <integer name="config_folder_text_size">6</integer>
+    <integer name="config_folder_text_size">5</integer>
 
     <bool name="config_ui_ab_hide_bg">true</bool>
     <bool name="config_drawer_zoom">false</bool>
@@ -110,13 +110,13 @@
     <integer name="config_desktop_indicator_color">0x99FFFFFF</integer>
 
     <!-- 1=top dots, 2=top slider, 3=bottom slider -->
-    <string name="config_desktop_indicator_type">3</string>
-    <string name="config_desktop_transition">1</string>
+    <string name="config_desktop_indicator_type" translatable="false">3</string>
+    <string name="config_desktop_transition" translatable="false">1</string>
 
     <!-- 1=sensor, 2=portrait, 3=landscape -->
-    <string name="config_orientation_default">2</string>
+    <string name="config_orientation_default" translatable="false">2</string>
     <!-- 1=low quality,2=auto, 3=disabled -->
-    <string name="config_screen_cache">2</string>
+    <string name="config_screen_cache" translatable="false">2</string>
 
     <bool name="config_nag_screen">true</bool>
     <bool name="config_drawer_catalog_fling_navigate">false</bool>
@@ -127,14 +127,14 @@
     <!-- config_notif_text_size min is 10, so it will add 10 to whatever value you set here -->
     <integer name="config_notif_text_size">4</integer>
 
-    <string name="config_main_dock_style">2</string>
+    <string name="config_main_dock_style" translatable="false">2</string>
 
     <integer name="config_ab_selector_color">0xFF82B600</integer>
 
     <bool name="config_main_dock_drawer_hide">false</bool>
     <bool name="config_main_dock_lock_MAB">true</bool>
 
-    <string name="config_drawer_style">1</string>
+    <string name="config_drawer_style" translatable="false">1</string>
 
     <bool name="config_ab_tint">false</bool>
 
@@ -142,6 +142,6 @@
 
     <bool name="config_wallpaper_scroll">true</bool>
 
-    <string name="config_deletezone_style">3</string>
+    <string name="config_deletezone_style" translatable="false">1</string>
 
 </resources>

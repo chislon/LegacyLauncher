@@ -100,7 +100,7 @@ OnLongClickListener {
 		if(themeResources!=null) {
 			//Action Buttons
 			Launcher.loadThemeResource(themeResources,themePackage,"box_launcher_top",mCloseButton,Launcher.THEME_ITEM_BACKGROUND);
-			Launcher.loadThemeResource(themeResources,themePackage,"box_launcher_bottom",mContent,Launcher.THEME_ITEM_BACKGROUND);
+			Launcher.loadThemeResource(themeResources,themePackage,"box_launcher_bottom", (View) mContent.getParent(),Launcher.THEME_ITEM_BACKGROUND);
 			
 			int grid_selector_id=themeResources.getIdentifier("grid_selector", "drawable", themePackage);
 			if(grid_selector_id!=0){

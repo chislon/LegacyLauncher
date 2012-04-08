@@ -189,6 +189,7 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 
 			final int[] location = mLocation;
 			getLocationOnScreen(location);
+			
 			if(mPosition==POSITION_BOTTOM_SHRINK){
 				mLauncher.getWorkspace().setPadding(0, 0, 0, mStatusBarHeight);
 				mLauncher.setDockPadding(mStatusBarHeight);

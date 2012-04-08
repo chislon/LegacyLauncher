@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="changelog">&lt;b>Thanks for using Legacy Launcher!&lt;/b>&lt;br>&lt;br>
--&lt;b>NOTICE:&lt;/b> Look at the \'Guide\' if you are new! &lt;br>&lt;br>
+    <!-- Version Information -->
+    <string name="app_version" translatable="false">0.34</string>
+
+    <!-- Change Log -->
+
+    <string name="changelog" translatable="false">-&lt;b>NOTICE:&lt;/b>Look at the \'Guide\' if you are new! &lt;br>&lt;br>
 --------------&lt;br>
 -&lt;b>Recent changes&lt;/b>&lt;br>
-Version 0.33:&lt;br>
 - Add configurable dock icon selector colors &lt;br>&lt;br>
 - Remove non-working transparency option from dock icon tint&lt;br>&lt;br>
-- Delete zone tweaks &lt;br>&lt;br>
+- Delete zone tweaks for shrink top, shrink bottom &lt;br>&lt;br>
+- Folder overscroll bounds (patch from AOSP) &lt;br>&lt;br>
+- Add partial support for Chinese locales&lt;br>&lt;br>
 April 2012, Chislon Chow</string>
 
 </resources>
