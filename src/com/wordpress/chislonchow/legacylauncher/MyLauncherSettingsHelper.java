@@ -641,13 +641,18 @@ public final class MyLauncherSettingsHelper {
 		int newD = sp.getInt("uiABTintColor", context.getResources().getInteger(R.integer.config_ab_tint_color));
 		return newD;
 	}
+	public static int getUIABSelectorColor(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = sp.getInt("uiABSelectorColor", context.getResources().getInteger(R.integer.config_ab_selector_color));
+		return newD;
+	}
 	public static boolean getLauncherLocked(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("launcherLocked", false);
 		return newD;
 	}
 	public static void setLauncherLocked(Context context, boolean lock) {
-		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);;
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putBoolean("launcherLocked", lock);
 		editor.commit();

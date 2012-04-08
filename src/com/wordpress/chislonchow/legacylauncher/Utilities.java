@@ -16,26 +16,24 @@
 
 package com.wordpress.chislonchow.legacylauncher;
 
-import com.wordpress.chislonchow.legacylauncher.R;
-
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Matrix;
-import android.graphics.PixelFormat;
-import android.graphics.Canvas;
-import android.graphics.PaintFlagsDrawFilter;
-import android.graphics.Paint;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.content.res.Resources;
-import android.content.Context;
 
 /**
  * Various utilities shared amongst the Launcher's classes.
@@ -322,6 +320,44 @@ final class Utilities {
 			Bitmap endImage=Bitmap.createScaledBitmap(original, (int)(width*scaleTo), (int)(height*scaleTo), true);
 			original.recycle();
 			return new FastBitmapDrawable(endImage);
+		} catch (OutOfMemoryError e) {
+			return icon;
+		}
+	}
+
+	/**
+	 *  ADW Create an icon tinted selector
+	 *  Used for Action Buttons
+	 * @param icon
+	 * @param context
+	 * @param tint
+	 * @return
+	 */
+	static Drawable selectorDrawable(Drawable icon, int width, int height, int color){
+
+		Bitmap original;
+		try{
+			original= Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		} catch (OutOfMemoryError e) {
+			return icon;
+		}
+		Canvas canvas = new Canvas(original);
+		canvas.setBitmap(original);
+		icon.setBounds(0,0, width, height);
+		icon.draw(canvas);
+		Paint paint = new Paint(); 
+		LinearGradient shader = new LinearGradient(width/2, 0, width/2, 
+				height,
+				Color.argb(200, Color.red(color), Color.green(color), Color.blue(color)),
+				Color.argb(100, Color.red(color), Color.green(color), Color.blue(color)),
+				TileMode.CLAMP); 
+		paint.setShader(shader); 
+		paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+		canvas.drawRect(0, 0, width, 
+				height, paint);
+
+		try {
+			return new FastBitmapDrawable(original);
 		} catch (OutOfMemoryError e) {
 			return icon;
 		}

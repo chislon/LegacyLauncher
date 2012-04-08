@@ -24,7 +24,7 @@
     <!-- Application name -->
     <string name="application_name">Legacy Launcher</string>
     <!-- Version Information -->
-    <string name="app_version">0.32 Beta</string>
+    <string name="app_version">0.33 Beta</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
@@ -255,6 +255,7 @@
     <string name="pref_summary_dock_appearance">Icon size, dock background</string>
     <string name="pref_title_desktop_dots">Dock paging dots</string>
     <string name="pref_summary_desktop_dots">Show/hide dock paging dots</string>
+    <string name="pref_category_dock_icon">Dock Icon Appearance</string>
     <string name="pref_title_ab_scale_factor">Icon size</string>
     <string name="pref_summary_ab_scale_factor">Set the scaling size for icons</string>
     <string name="pref_dialog_ab_scale_factor">Set the scaling size for icons</string>
@@ -269,6 +270,8 @@
     <string name="pref_summary_ab_tint">Perform color tinting on dock icons</string>
     <string name="pref_title_ab_tint_color">Tint color</string>
     <string name="pref_summary_ab_tint_color">Change tinting color</string>
+    <string name="pref_title_ab_selector_color">Selector color</string>
+    <string name="pref_summary_ab_selector_color">Change selector color</string>
     <string name="pref_title_main_dock_drawer_hide">Hide dock in tray</string>
     <string name="pref_summary_main_dock_drawer_hide">Hide from view with open application tray</string>
 

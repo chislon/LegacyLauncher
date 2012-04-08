@@ -129,6 +129,8 @@
 
     <string name="config_main_dock_style">2</string>
 
+    <integer name="config_ab_selector_color">0xFF82B600</integer>
+
     <bool name="config_main_dock_drawer_hide">false</bool>
     <bool name="config_main_dock_lock_MAB">true</bool>
 
@@ -140,6 +142,6 @@
 
     <bool name="config_wallpaper_scroll">true</bool>
 
-    <string name="config_deletezone_style">1</string>
+    <string name="config_deletezone_style">3</string>
 
 </resources>

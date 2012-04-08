@@ -50,6 +50,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Process;
 
 /**
@@ -66,6 +68,12 @@ public class LauncherModel {
 	private static final int INITIAL_ICON_CACHE_CAPACITY = 50;
 
 	private static final Collator sCollator = Collator.getInstance();
+
+	private static final HandlerThread sWorkerThread = new HandlerThread("launcher-loader");
+	static {
+		sWorkerThread.start();
+	}
+	private static final Handler sWorker = new Handler(sWorkerThread.getLooper());
 
 	private boolean mApplicationsLoaded;
 	private boolean mDesktopItemsLoaded;
@@ -251,13 +259,18 @@ public class LauncherModel {
 		}
 	}
 
+	/**
+     * Add and remove icons for this package which has been updated.
+	 * @param launcher
+	 * @param packageName
+	 */
 	synchronized void updatePackage(Launcher launcher, String packageName) {
 		if (mApplicationsLoader != null && mApplicationsLoader.isRunning()) {
 			startApplicationsLoaderLocked(launcher, false);
 			return;
 		}
 
-		if (packageName != null && packageName.length() > 0 && mApplicationsAdapter!=null) {
+		if (packageName != null && packageName.length() > 0 && mApplicationsAdapter != null) {
 			final PackageManager packageManager = launcher.getPackageManager();
 			final ApplicationsAdapter adapter = mApplicationsAdapter;
 
@@ -1108,7 +1121,7 @@ public class LauncherModel {
 										resolver.update(
 												LauncherSettings.Favorites.CONTENT_URI_NO_NOTIFICATION,
 												values, "_id=?",
-														new String[] { String.valueOf(c.getLong(idIndex)) });
+												new String[] { String.valueOf(c.getLong(idIndex)) });
 
 										// changed = true;
 									}
@@ -1190,10 +1203,10 @@ public class LauncherModel {
 	 *
 	 * @return A UserFolderInfo if the folder exists or null otherwise.
 	 */
-	 FolderInfo findFolderById(long id) {
-		 if(mFolders==null)return null;
-		 return mFolders.get(id);
-	 }
+	FolderInfo findFolderById(long id) {
+		if(mFolders==null)return null;
+		return mFolders.get(id);
+	}
 
 	void addFolder(FolderInfo info) {
 		if(mFolders==null)return;
@@ -1511,6 +1524,7 @@ public class LauncherModel {
 		item.cellX = cellX;
 		item.cellY = cellY;
 
+		final Uri uri = LauncherSettings.Favorites.getContentUri(item.id, false);
 		final ContentValues values = new ContentValues();
 		final ContentResolver cr = context.getContentResolver();
 
@@ -1518,8 +1532,11 @@ public class LauncherModel {
 		values.put(LauncherSettings.Favorites.CELLX, item.cellX);
 		values.put(LauncherSettings.Favorites.CELLY, item.cellY);
 		values.put(LauncherSettings.Favorites.SCREEN, item.screen);
-
-		cr.update(LauncherSettings.Favorites.getContentUri(item.id, false), values, null, null);
+		sWorker.post(new Runnable() {
+			public void run() {
+				cr.update(uri, values, null, null);			
+			}
+		});
 	}
 
 	/**
@@ -1634,8 +1651,13 @@ public class LauncherModel {
 	 */
 	static void deleteItemFromDatabase(Context context, ItemInfo item) {
 		final ContentResolver cr = context.getContentResolver();
+		final Uri uriToDelete = LauncherSettings.Favorites.getContentUri(item.id, false);
 
-		cr.delete(LauncherSettings.Favorites.getContentUri(item.id, false), null, null);
+		sWorker.post(new Runnable() {
+			public void run() {
+				cr.delete(uriToDelete, null, null);
+			}
+		});
 	}
 
 

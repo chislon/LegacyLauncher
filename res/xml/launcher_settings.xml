@@ -494,32 +494,42 @@
             android:key="dockAppearancePreferences"
             android:summary="@string/pref_summary_dock_appearance"
             android:title="@string/pref_title_dock_appearance" >
-            <com.wordpress.chislonchow.legacylauncher.ui.DialogSeekBarPreference
-                android:defaultValue="7"
-                android:dialogMessage="@string/pref_dialog_ab_scale_factor"
-                android:key="uiScaleAB"
-                android:max="11"
-                android:summary="@string/pref_summary_ab_scale_factor"
-                android:title="@string/pref_title_ab_scale_factor" />
-
             <CheckBoxPreference
                 android:defaultValue="@bool/config_ui_ab_hide_bg"
                 android:key="uiABBg"
                 android:summary="@string/pref_summary_hide_ab_bg"
                 android:title="@string/pref_title_hide_ab_bg" />
-            <CheckBoxPreference
-                android:defaultValue="@bool/config_ab_tint"
-                android:key="uiABTint"
-                android:summary="@string/pref_summary_ab_tint"
-                android:title="@string/pref_title_ab_tint" />
 
-            <net.margaritov.preference.colorpicker.ColorPickerPreference
-                alphaSlider="true"
-                android:defaultValue="@integer/config_ab_tint_color"
-                android:dependency="uiABTint"
-                android:key="uiABTintColor"
-                android:summary="@string/pref_summary_ab_tint_color"
-                android:title="@string/pref_title_ab_tint_color" />
+            <PreferenceCategory android:title="@string/pref_category_dock_icon" >
+                <com.wordpress.chislonchow.legacylauncher.ui.DialogSeekBarPreference
+                    android:defaultValue="7"
+                    android:dialogMessage="@string/pref_dialog_ab_scale_factor"
+                    android:key="uiScaleAB"
+                    android:max="11"
+                    android:summary="@string/pref_summary_ab_scale_factor"
+                    android:title="@string/pref_title_ab_scale_factor" />
+
+                <net.margaritov.preference.colorpicker.ColorPickerPreference
+                    alphaSlider="false"
+                    android:defaultValue="@integer/config_ab_selector_color"
+                    android:key="uiABSelectorColor"
+                    android:summary="@string/pref_summary_ab_selector_color"
+                    android:title="@string/pref_title_ab_selector_color" />
+
+                <CheckBoxPreference
+                    android:defaultValue="@bool/config_ab_tint"
+                    android:key="uiABTint"
+                    android:summary="@string/pref_summary_ab_tint"
+                    android:title="@string/pref_title_ab_tint" />
+
+                <net.margaritov.preference.colorpicker.ColorPickerPreference
+                    alphaSlider="false"
+                    android:defaultValue="@integer/config_ab_tint_color"
+                    android:dependency="uiABTint"
+                    android:key="uiABTintColor"
+                    android:summary="@string/pref_summary_ab_tint_color"
+                    android:title="@string/pref_title_ab_tint_color" />
+            </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceScreen>
     <PreferenceScreen

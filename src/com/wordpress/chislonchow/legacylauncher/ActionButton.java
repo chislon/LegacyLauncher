@@ -1,8 +1,5 @@
 package com.wordpress.chislonchow.legacylauncher;
 
-import com.wordpress.chislonchow.legacylauncher.DragController.DragListener;
-import com.wordpress.chislonchow.legacylauncher.R;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,6 +7,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.View;
@@ -17,6 +15,8 @@ import android.view.View.OnLongClickListener;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
+
+import com.wordpress.chislonchow.legacylauncher.DragController.DragListener;
 
 public class ActionButton extends CounterImageView implements DropTarget,
 DragListener, OnLongClickListener, DragSource {
@@ -26,6 +26,7 @@ DragListener, OnLongClickListener, DragSource {
 	private Drawable bgResource;
 	private Drawable bgEmpty;
 	private Drawable mIconNormal;
+
 	private int mIconSpecial_id;
 	private Drawable mIconSpecial;
 	private boolean specialMode = false;
@@ -37,8 +38,12 @@ DragListener, OnLongClickListener, DragSource {
 	private Display mDisplay;
 	private LinearLayout.LayoutParams mLpWide, mLpNarrow;
 
-	private static final int STATUS_BAR_HEIGHT = 20;	// pixels
+	private StateListDrawable mStateListDrawable;
+
+	private static final int STATUS_BAR_HEIGHT = 25;	// pixels
 	private static final int ACTION_BUTTON_COUNT = 5;
+
+	private int mSelectorColor = 0xFF82B600;
 
 	public ActionButton(Context context) {
 		super(context);
@@ -359,7 +364,18 @@ DragListener, OnLongClickListener, DragSource {
 		}
 		mIconNormal = d;
 		if (!specialMode) {
-			setImageDrawable(mIconNormal);
+			if (mIconNormal != null) {
+				final Drawable iconSelected =  Utilities.selectorDrawable(mIconNormal, mIconNormal.getIntrinsicWidth(), mIconNormal.getIntrinsicHeight(), mSelectorColor);
+				mStateListDrawable = new StateListDrawable();
+				mStateListDrawable.addState(new int[] {android.R.attr.state_pressed}, iconSelected);
+				mStateListDrawable.addState(new int[] {android.R.attr.state_selected}, iconSelected);
+				mStateListDrawable.addState(new int[] {android.R.attr.state_focused}, iconSelected);
+				mStateListDrawable.addState(new int[] {}, mIconNormal);
+				setImageDrawable(mStateListDrawable);
+			} else {
+				mStateListDrawable = null;
+				setImageDrawable(null);
+			}
 		}
 	}
 
@@ -424,5 +440,9 @@ DragListener, OnLongClickListener, DragSource {
 
 	@Override
 	public void onDropCompleted(View target, boolean success) {
+	}
+
+	protected void setSelectorColor(int color) {
+		mSelectorColor = color;
 	}
 }

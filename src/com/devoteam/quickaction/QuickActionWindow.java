@@ -150,8 +150,6 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 		param.leftMargin = requestedX - arrowWidth / 2;
 
 		hideArrow.setVisibility(View.INVISIBLE);
-		
-
 	}
 
 	/**

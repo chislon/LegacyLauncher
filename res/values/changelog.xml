@@ -5,9 +5,10 @@
 -&lt;b>NOTICE:&lt;/b> Look at the \'Guide\' if you are new! &lt;br>&lt;br>
 --------------&lt;br>
 -&lt;b>Recent changes&lt;/b>&lt;br>
-Version 0.32:&lt;br>
-- Fix application tray scrolling speed slowdown bug&lt;br>&lt;br>
-
-March 2012, Chislon Chow</string>
+Version 0.33:&lt;br>
+- Add configurable dock icon selector colors &lt;br>&lt;br>
+- Remove non-working transparency option from dock icon tint&lt;br>&lt;br>
+- Delete zone tweaks &lt;br>&lt;br>
+April 2012, Chislon Chow</string>
 
 </resources>

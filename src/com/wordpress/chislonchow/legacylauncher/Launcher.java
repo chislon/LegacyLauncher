@@ -194,7 +194,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	static final int DIALOG_GET_LAUNCHER_UNLOCK_PASSWORD = 8;
 
 	private static final String PREFERENCES = "launcher.preferences";
-
+	
 	// Type: int
 	private static final String RUNTIME_STATE_CURRENT_SCREEN = "launcher.current_screen";
 	// Type: boolean
@@ -309,7 +309,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private float mUiScaleAB = 0.5f;
 	private boolean mUiABTint = false;
 	private int mUiABTintColor = 0xffffffff;
+	private int mUiABSelectorColor = 0xff82b600;
+
 	private boolean mUiHideLabels = false;
+
 	private boolean mWallpaperHack = true;
 	private DesktopIndicator mDesktopIndicator;
 	private boolean mUseDrawerCatalogNavigation = true;
@@ -402,10 +405,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private Display mDisplay;
 
 	// DRAWER STYLES
-	private final int[] mDrawerStyles = { 
-			R.layout.old_drawer,
-			R.layout.new_drawer 
-	};
+	private final int[] mDrawerStyles = { R.layout.old_drawer,
+			R.layout.new_drawer };
 	private int mDrawerStyle = 1;
 
 	// Quick Action Options
@@ -441,7 +442,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mAppWidgetHost.startListening();
 
 		if (PROFILE_STARTUP) {
-			android.os.Debug.startMethodTracing(Environment.getExternalStorageDirectory().getPath() + "/launcher");
+			android.os.Debug.startMethodTracing(Environment
+					.getExternalStorageDirectory().getPath() + "/launcher");
 		}
 		updateAlmostNexusVars();
 		checkForLocaleChange();
@@ -471,8 +473,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		getSharedPreferences("launcher.preferences.almostnexus",
 				Context.MODE_PRIVATE).registerOnSharedPreferenceChangeListener(
 						this);
-		mObscurePrefs = new ObscuredSharedPreferences( 
-				this, this.getSharedPreferences("secure", Context.MODE_PRIVATE) );
+		mObscurePrefs = new ObscuredSharedPreferences(this,
+				this.getSharedPreferences("secure", Context.MODE_PRIVATE));
 	}
 
 	private void checkForLocaleChange() {
@@ -586,7 +588,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		final int maxDim = Math.max(mDisplay.getWidth(), mDisplay.getHeight());
 		final int minDim = Math.min(mDisplay.getWidth(), mDisplay.getHeight());
 
-		final int width = Math.max((int) (minDim * WALLPAPER_SCREENS_SPAN), maxDim);
+		final int width = Math.max((int) (minDim * WALLPAPER_SCREENS_SPAN),
+				maxDim);
 		final int height = maxDim;
 
 		new Thread("setWallpaperDimension") {
@@ -642,7 +645,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			}
 		} else if (resultCode == RESULT_OK) {
 			switch (requestCode) {
-			case REQUEST_SHOW_APP_LIST: 
+			case REQUEST_SHOW_APP_LIST:
 				mAllAppsGrid.updateAppGrp();
 				showAllApps(true, null);
 				break;
@@ -650,9 +653,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				completeEditShortcut(data);
 				break;
 			}
-		} else if ((resultCode == RESULT_CANCELED) && (requestCode == REQUEST_SHOW_APP_LIST)) {
+		} else if ((resultCode == RESULT_CANCELED)
+				&& (requestCode == REQUEST_SHOW_APP_LIST)) {
 			checkActionButtonsSpecialMode();
-			mAllAppsGrid.updateAppGrp();			
+			mAllAppsGrid.updateAppGrp();
 			showAllApps(true, null);
 		} else if ((requestCode == REQUEST_PICK_APPWIDGET || requestCode == REQUEST_CREATE_APPWIDGET)
 				&& resultCode == RESULT_CANCELED && data != null) {
@@ -681,8 +685,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// ADW: Use custom settings to change number of columns (and rows for
 		// SlidingGrid) depending on phone rotation
 		/*
-		int orientation = getResources().getConfiguration().orientation;
-		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+		 * int orientation = getResources().getConfiguration().orientation; if
+		 * (orientation == Configuration.ORIENTATION_PORTRAIT) {
 		 */
 		if (mDisplay.getWidth() > mDisplay.getHeight()) {
 			mAllAppsGrid.setNumColumns(MyLauncherSettingsHelper
@@ -761,7 +765,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mBinder.mTerminate = true;
 		}
 		if (PROFILE_ROTATE) {
-			android.os.Debug.startMethodTracing(Environment.getExternalStorageDirectory().getPath() + "/launcher-rotate");
+			android.os.Debug.startMethodTracing(Environment
+					.getExternalStorageDirectory().getPath()
+					+ "/launcher-rotate");
 		}
 		return null;
 	}
@@ -881,11 +887,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mMAB.setOnClickListener(this);
 		dragLayer.addDragListener(mMAB);
 		/*
-		 * mMAB.setOnTriggerListener(new OnTriggerListener() { public
-		 * void onTrigger(View v, int whichHandle) { mDockBar.open(); } public
-		 * void onGrabbedStateChange(View v, boolean grabbedState) { } public
-		 * void onClick(View v) { if (allAppsOpen) { closeAllApps(true); } else
-		 * { showAllApps(true, null); } } });
+		 * mMAB.setOnTriggerListener(new OnTriggerListener() { public void
+		 * onTrigger(View v, int whichHandle) { mDockBar.open(); } public void
+		 * onGrabbedStateChange(View v, boolean grabbedState) { } public void
+		 * onClick(View v) { if (allAppsOpen) { closeAllApps(true); } else {
+		 * showAllApps(true, null); } } });
 		 */
 		mAllAppsGrid.setTextFilterEnabled(false);
 		mAllAppsGrid.setDragger(dragLayer);
@@ -985,8 +991,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					THEME_ITEM_BACKGROUND);
 			loadThemeResource(themeResources, themePackage, "rab2_bg", mRAB2,
 					THEME_ITEM_BACKGROUND);
-			loadThemeResource(themeResources, themePackage, "mab_bg",
-					mMAB, THEME_ITEM_BACKGROUND);
+			loadThemeResource(themeResources, themePackage, "mab_bg", mMAB,
+					THEME_ITEM_BACKGROUND);
 			// App drawer button
 			// loadThemeResource(themeResources,themePackage,"handle_icon",mMAB,THEME_ITEM_FOREGROUND);
 			// View appsBg=findViewById(R.id.appsBg);
@@ -1273,6 +1279,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		return info;
 	}
 
+	/**
+	 * 
+	 */
 	void closeSystemDialogs() {
 		getWindow().closeAllPanels();
 
@@ -1327,12 +1336,15 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		} catch (Exception e) {
 			// An exception is thrown if the dialog is not visible, which is
 			// fine
-		}	}
+		}
+	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onNewIntent(android.content.Intent)
+	 */
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-
 		// Close the menu
 		if (Intent.ACTION_MAIN.equals(intent.getAction())) {
 			closeSystemDialogs();
@@ -1437,7 +1449,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	protected void onSaveInstanceState(Bundle outState) {
 		// ADW: If we leave the menu open, on restoration it will try to auto
 		// find
-		// the ocupied cells. But this could happed before the workspace is
+		// the ocupied cells. But this could happen before the workspace is
 		// fully loaded,
 		// so it can cause a NPE cause of the way we load the desktop
 		// columns/rows count.
@@ -1537,7 +1549,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		sLauncherModel.unbind();
 		sLauncherModel.abortLoaders();
 
-		mWorkspace.unbindWidgetScrollableViews();	// removes views
+		mWorkspace.unbindWidgetScrollableViews(); // removes views
 
 		getContentResolver().unregisterContentObserver(mObserver);
 		getContentResolver().unregisterContentObserver(mWidgetObserver);
@@ -1555,7 +1567,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			}
 		}
 
-		//set nulls
+		// set nulls
 		mAppWidgetHost = null;
 	}
 
@@ -1576,7 +1588,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			super.startActivityForResult(intent, requestCode);
 		} catch (Exception e) {
 			Toast.makeText(this, R.string.activity_not_found,
-					Toast.LENGTH_SHORT).show();;
+					Toast.LENGTH_SHORT).show();
+			;
 		}
 	}
 
@@ -1648,18 +1661,20 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		.setAlphabeticShortcut('A');
 
 		menu.add(MENU_GROUP_WALLPAPER, MENU_WALLPAPER_SETTINGS, 0,
-				R.string.menu_wallpaper) .setIcon(android.R.drawable.ic_menu_gallery)
+				R.string.menu_wallpaper)
+				.setIcon(android.R.drawable.ic_menu_gallery)
 				.setAlphabeticShortcut('W');
 
-		menu.add(MENU_GROUP_LAUNCHER_SETUP, MENU_EDIT, 0, R.string.menu_edit_desktop)
-		.setIcon(android.R.drawable.ic_menu_edit)
-		.setAlphabeticShortcut('E');
+		menu.add(MENU_GROUP_LAUNCHER_SETUP, MENU_EDIT, 0,
+				R.string.menu_edit_desktop)
+				.setIcon(android.R.drawable.ic_menu_edit)
+				.setAlphabeticShortcut('E');
 
 		// CCHOW CHANGE START
 		// disable manage apps menu item
 		/*
-		 * // Manage apps for workspace
-		 * createManageApplications( menu, MENU_GROUP_NORMAL );
+		 * // Manage apps for workspace createManageApplications( menu,
+		 * MENU_GROUP_NORMAL );
 		 */
 		// CCHOW CHANGE END
 
@@ -1668,7 +1683,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				R.string.menu_launcher_settings)
 				.setIcon(R.drawable.ic_menu_launcher_settings)
 				.setAlphabeticShortcut('X');
-
 
 		menu.add(MENU_GROUP_NORMAL, MENU_LOCK_DESKTOP, 0, R.string.menu_lock)
 		.setIcon(R.drawable.ic_menu_block).setAlphabeticShortcut('X');
@@ -1698,13 +1712,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// .setIcon(R.drawable.ic_menu_notifications);
 
 		menu.add(MENU_GROUP_CATALOGUE, MENU_APP_DELETE_GRP, 0,
-				R.string.app_group_delete)
-				.setIcon(android.R.drawable.ic_menu_delete);
+				R.string.app_group_delete).setIcon(
+						android.R.drawable.ic_menu_delete);
 
 		// CCHOW CHANGE START
 		/*
-		// Manage apps for apps drawer
-		createManageApplications(menu, MENU_GROUP_CATALOGUE);
+		 * // Manage apps for apps drawer createManageApplications(menu,
+		 * MENU_GROUP_CATALOGUE);
 		 */
 		// CCHOW CHANGE END
 
@@ -1733,19 +1747,22 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		if (allAppsOpen)
 			showmenu = false;
 
-		menu.setGroupVisible(MENU_GROUP_ADD, !allAppsOpen  && !mLauncherLocked && mMenuAddInfo != null && mMenuAddInfo.valid);
-		menu.setGroupVisible(MENU_GROUP_WALLPAPER, !allAppsOpen  && !mLauncherLocked && !(mMenuAddInfo != null && mMenuAddInfo.valid));
+		menu.setGroupVisible(MENU_GROUP_ADD, !allAppsOpen && !mLauncherLocked
+				&& mMenuAddInfo != null && mMenuAddInfo.valid);
+		menu.setGroupVisible(MENU_GROUP_WALLPAPER, !allAppsOpen
+				&& !mLauncherLocked
+				&& !(mMenuAddInfo != null && mMenuAddInfo.valid));
 
-		menu.setGroupVisible(MENU_GROUP_LAUNCHER_SETUP, showmenu && !mLauncherLocked);
+		menu.setGroupVisible(MENU_GROUP_LAUNCHER_SETUP, showmenu
+				&& !mLauncherLocked);
 		menu.setGroupVisible(MENU_GROUP_NORMAL, !allAppsOpen);
-		menu.setGroupVisible(MENU_GROUP_CATALOGUE, allAppsOpen && !mLauncherLocked);
+		menu.setGroupVisible(MENU_GROUP_CATALOGUE, allAppsOpen
+				&& !mLauncherLocked);
 		if (mLauncherLocked) {
-			menu.findItem(MENU_LOCK_DESKTOP)
-			.setTitle(R.string.menu_unlock)
+			menu.findItem(MENU_LOCK_DESKTOP).setTitle(R.string.menu_unlock)
 			.setIcon(R.drawable.ic_menu_unblock);
 		} else {
-			menu.findItem(MENU_LOCK_DESKTOP)
-			.setTitle(R.string.menu_lock)
+			menu.findItem(MENU_LOCK_DESKTOP).setTitle(R.string.menu_lock)
 			.setIcon(R.drawable.ic_menu_block);
 		}
 		return true;
@@ -1794,17 +1811,21 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					showDialog(DIALOG_GET_LAUNCHER_UNLOCK_PASSWORD);
 				} else {
 					// no password was set, so unlock right away
-					Toast.makeText(this, R.string.toast_launcher_unlock, Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, R.string.toast_launcher_unlock,
+							Toast.LENGTH_SHORT).show();
 					mLauncherLocked = false;
 					// commit setting
-					MyLauncherSettingsHelper.setLauncherLocked(this, mLauncherLocked);
+					MyLauncherSettingsHelper.setLauncherLocked(this,
+							mLauncherLocked);
 				}
 			} else {
 				// lock if unlocked
-				Toast.makeText(this, R.string.toast_launcher_lock, Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, R.string.toast_launcher_lock,
+						Toast.LENGTH_SHORT).show();
 				mLauncherLocked = true;
 				// commit setting
-				MyLauncherSettingsHelper.setLauncherLocked(this, mLauncherLocked);
+				MyLauncherSettingsHelper.setLauncherLocked(this,
+						mLauncherLocked);
 			}
 			return true;
 		}
@@ -1829,7 +1850,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	void showDeleteGrpDialog() {
-		if (!sLauncherModel.getApplicationsAdapter().getCatalogueFilter().isUserGroup()) {
+		if (!sLauncherModel.getApplicationsAdapter().getCatalogueFilter()
+				.isUserGroup()) {
 			Toast.makeText(this, getString(R.string.app_group_remove_error),
 					Toast.LENGTH_SHORT).show();
 			return;
@@ -1881,7 +1903,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 				-1);
 
-		//String customWidget = data.getStringExtra(EXTRA_CUSTOM_WIDGET);
+		// String customWidget = data.getStringExtra(EXTRA_CUSTOM_WIDGET);
 
 		/*
 		 * if (SEARCH_WIDGET.equals(customWidget)) { // We don't need this any
@@ -2288,7 +2310,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	void closeFolder(Folder folder) {
 		if (mFolderAnimate)
-			folder.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out_fast));
+			folder.startAnimation(AnimationUtils.loadAnimation(this,
+					R.anim.fade_out_fast));
 		folder.getInfo().opened = false;
 		ViewGroup parent = (ViewGroup) folder.getParent();
 		if (parent != null) {
@@ -2462,7 +2485,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					.getLongArray(RUNTIME_STATE_USER_FOLDERS);
 			if (userFolders != null) {
 				for (long folderId : userFolders) {
-					final FolderInfo info = sLauncherModel.findFolderById(folderId);
+					final FolderInfo info = sLauncherModel
+							.findFolderById(folderId);
 					if (info != null) {
 						openFolder(info);
 					}
@@ -2496,11 +2520,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 
 		mDesktopLocked = false;
-		final boolean showChangeLog = MyLauncherSettingsHelper.shouldShowChangelog(this);
+		final boolean showChangeLog = MyLauncherSettingsHelper
+				.shouldShowChangelog(this);
 		// ADW: Show the changelog screen if needed
 		if (showChangeLog) {
 			try {
-				mAlertDialog = MyLauncherSettingsHelper.ChangelogDialogBuilder.create(this, showChangeLog);
+				mAlertDialog = MyLauncherSettingsHelper.ChangelogDialogBuilder
+						.create(this, showChangeLog);
 				mAlertDialog.show();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -2601,23 +2627,23 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 	}
 
-	void startActivityAsSafely(Intent intent) {		try {
-		startActivity(intent);
-	} catch (ActivityNotFoundException e) {
-		Toast.makeText(this, R.string.activity_not_found,
-				Toast.LENGTH_SHORT).show();
-	} catch (SecurityException e) {
-		Toast.makeText(this, R.string.activity_security_exception,
-				Toast.LENGTH_SHORT).show();
-		e(LOG_TAG,
-				"Launcher does not have the permission to launch "
-						+ intent
-						+ ". Make sure to create a MAIN intent-filter for the corresponding activity "
-						+ "or use the exported attribute for this activity.",
-						e);
+	void startActivityAsSafely(Intent intent) {
+		try {
+			startActivity(intent);
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(this, R.string.activity_not_found,
+					Toast.LENGTH_SHORT).show();
+		} catch (SecurityException e) {
+			Toast.makeText(this, R.string.activity_security_exception,
+					Toast.LENGTH_SHORT).show();
+			e(LOG_TAG,
+					"Launcher does not have the permission to launch "
+							+ intent
+							+ ". Make sure to create a MAIN intent-filter for the corresponding activity "
+							+ "or use the exported attribute for this activity.",
+							e);
+		}
 	}
-	}
-
 
 	void startActivityAsNewTaskSafely(Intent intent) {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -2683,7 +2709,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 
 		if (mFolderAnimate)
-			openFolder.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in_fast));
+			openFolder.startAnimation(AnimationUtils.loadAnimation(this,
+					R.anim.fade_in_fast));
 
 		openFolder.setDragger(mDragLayer);
 		openFolder.setLauncher(this);
@@ -2820,68 +2847,81 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				public void onClick(DialogInterface dialog,
 						int whichButton) {
 					deleteCurrentGroup();
-					Toast.makeText(Launcher.this, R.string.app_group_remove_success, Toast.LENGTH_SHORT).show();
+					Toast.makeText(Launcher.this,
+							R.string.app_group_remove_success,
+							Toast.LENGTH_SHORT).show();
 					/* User clicked OK so do some stuff */
 				}
-			})
-			.setNegativeButton(android.R.string.cancel, null).create();
+			}).setNegativeButton(android.R.string.cancel, null)
+			.create();
 		case DIALOG_PICK_GROUPS:
 			return new PickGrpDialog().createDialog();
 		case DIALOG_ADD_WIDGET_FAILURE:
-			return new AlertDialog.Builder(this)
-			.setTitle(null)
-			.setCancelable(true)
-			.setIcon(R.drawable.ic_launcher_home)
-			.setPositiveButton(
-					getString(android.R.string.ok), null)
-					.setMessage(
-							getString(R.string.scrollable_api_required))
-							.create();
+			return new AlertDialog.Builder(this).setTitle(null)
+					.setCancelable(true).setIcon(R.drawable.ic_launcher_home)
+					.setPositiveButton(getString(android.R.string.ok), null)
+					.setMessage(getString(R.string.scrollable_api_required))
+					.create();
 		case DIALOG_GET_LAUNCHER_UNLOCK_PASSWORD:
 			// ask for the password securely
 			final EditText input = new EditText(this);
 			input.setMaxLines(1);
 			input.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 			input.setHint(getString(R.string.hint_password_old));
-			final int maxLength = 32;  
-			InputFilter[] FilterArray = new InputFilter[2];  
-			FilterArray[0] = new InputFilter.LengthFilter(maxLength);  
-			FilterArray[1] = new InputFilter() { 
+			final int maxLength = 32;
+			InputFilter[] FilterArray = new InputFilter[2];
+			FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+			FilterArray[1] = new InputFilter() {
 				@Override
 				public CharSequence filter(CharSequence source, int start,
 						int end, Spanned dest, int dstart, int dend) {
-					for (int i = start; i < end; i++) { 
-						if (Character.isWhitespace((source.charAt(i)))) { 
-							return ""; 
+					for (int i = start; i < end; i++) {
+						if (Character.isWhitespace((source.charAt(i)))) {
+							return "";
 						}
-					} 
-					return null; 
+					}
+					return null;
 				}
-			}; 
+			};
 			input.setFilters(FilterArray);
 			mAlertDialog = new AlertDialog.Builder(this)
 			.setMessage(R.string.dialog_lock_password_get)
 			.setView(input)
-			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
+			.setPositiveButton(android.R.string.ok,
+					new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,
+						int whichButton) {
 					Editable value = input.getText();
-					final String passSecure = mObscurePrefs.getString("pw", null);
+					final String passSecure = mObscurePrefs
+							.getString("pw", null);
 					if (value.toString().equals(passSecure)) {
 						// password valid unlock
-						Toast.makeText(Launcher.this, R.string.toast_launcher_unlock, Toast.LENGTH_SHORT).show();
+						Toast.makeText(Launcher.this,
+								R.string.toast_launcher_unlock,
+								Toast.LENGTH_SHORT).show();
 						mLauncherLocked = false;
 						// commit setting
-						MyLauncherSettingsHelper.setLauncherLocked(Launcher.this, mLauncherLocked);
+						MyLauncherSettingsHelper
+						.setLauncherLocked(
+								Launcher.this,
+								mLauncherLocked);
 					} else {
 						Vibrator vibrateService = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 						if (vibrateService != null)
-							vibrateService.vibrate(1000);// vibrate for ~1000 seconds
+							vibrateService.vibrate(1000);// vibrate
+						// for
+						// ~1000
+						// seconds
 
 						// password invalid
-						Toast.makeText(Launcher.this, getString(R.string.lock_password_invalid), Toast.LENGTH_SHORT).show();
+						Toast.makeText(
+								Launcher.this,
+								getString(R.string.lock_password_invalid),
+								Toast.LENGTH_SHORT).show();
 					}
 				}
-			}).setNegativeButton(android.R.string.cancel, null).create();
+			}).setNegativeButton(android.R.string.cancel, null)
+			.create();
 			return mAlertDialog;
 		default:
 			return null;
@@ -2906,19 +2946,18 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	private void deleteCurrentGroup() {
-		int index = sLauncherModel.getApplicationsAdapter().getCatalogueFilter()
-				.getCurrentFilterIndex();
+		int index = sLauncherModel.getApplicationsAdapter()
+				.getCatalogueFilter().getCurrentFilterIndex();
 		AppCatalogueFilters.getInstance().dropGroup(index);
 		checkActionButtonsSpecialMode();
 
-		//CCHOW go to all apps catalog instead on remove group success
+		// CCHOW go to all apps catalog instead on remove group success
 		/*
-		showSwitchGrp();
+		 * showSwitchGrp();
 		 */
 		sLauncherModel.getApplicationsAdapter().getCatalogueFilter()
 		.setCurrentGroupIndex(-1);
-		MyLauncherSettingsHelper.setCurrentAppCatalog(Launcher.this,
-				-1);
+		MyLauncherSettingsHelper.setCurrentAppCatalog(Launcher.this, -1);
 		mAllAppsGrid.updateAppGrp();
 	}
 
@@ -3003,7 +3042,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				LauncherModel.updateItemInDatabase(Launcher.this, mFolderInfo);
 
 				if (mDesktopLocked) {
-					sLauncherModel.loadUserItems(false, Launcher.this, false, false);
+					sLauncherModel.loadUserItems(false, Launcher.this, false,
+							false);
 				} else {
 					final FolderIcon folderIcon = (FolderIcon) mWorkspace
 							.getViewForTag(mFolderInfo);
@@ -3012,7 +3052,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						getWorkspace().requestLayout();
 					} else {
 						mDesktopLocked = true;
-						sLauncherModel.loadUserItems(false, Launcher.this, false, false);
+						sLauncherModel.loadUserItems(false, Launcher.this,
+								false, false);
 					}
 				}
 			}
@@ -3129,24 +3170,33 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			builder.setPositiveButton(getString(android.R.string.ok),
 					new Dialog.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					final String name = mInput.getText().toString().trim();
+					final String name = mInput.getText().toString()
+							.trim();
 
 					if (!TextUtils.isEmpty(name)) {
 						// Make sure we have the right folder info
-						int newGroupIndex = AppCatalogueFilters.getInstance().createNewGroup(
-								name);
-						MyLauncherSettingsHelper.setCurrentAppCatalog(Launcher.this,
-								newGroupIndex);
-						sLauncherModel.getApplicationsAdapter().getCatalogueFilter()
+						int newGroupIndex = AppCatalogueFilters
+								.getInstance().createNewGroup(name);
+						MyLauncherSettingsHelper.setCurrentAppCatalog(
+								Launcher.this, newGroupIndex);
+						sLauncherModel.getApplicationsAdapter()
+						.getCatalogueFilter()
 						.setCurrentGroupIndex(newGroupIndex);
 						checkActionButtonsSpecialMode();
-						LauncherModel.mApplicationsAdapter.updateDataSet();
+						LauncherModel.mApplicationsAdapter
+						.updateDataSet();
 
 						// go to the modify apps screen immediately
-						Toast.makeText(Launcher.this, getString(R.string.create_group_success) + name, Toast.LENGTH_SHORT).show();
+						Toast.makeText(
+								Launcher.this,
+								getString(R.string.create_group_success)
+								+ name, Toast.LENGTH_SHORT)
+								.show();
 						showAppPickerList(true);
 					} else {
-						Toast.makeText(Launcher.this, R.string.create_group_fail, Toast.LENGTH_SHORT).show();
+						Toast.makeText(Launcher.this,
+								R.string.create_group_fail,
+								Toast.LENGTH_SHORT).show();
 					}
 					cleanup();
 				}
@@ -3183,8 +3233,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 * appropriate activity.
 	 */
 	private class CreateShortcut implements DialogInterface.OnClickListener,
-	DialogInterface.OnCancelListener,
-	DialogInterface.OnDismissListener {
+	DialogInterface.OnCancelListener, DialogInterface.OnDismissListener {
 
 		private AddAdapter mAdapter;
 
@@ -3376,7 +3425,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							if (LauncherModel.DEBUG_LOADERS) {
 								d(LauncherModel.LOG_TAG, "  --> remove package");
 							}
-							sLauncherModel.removePackage(Launcher.this, packageName);
+							sLauncherModel.removePackage(Launcher.this,
+									packageName);
 						}
 						// else, we are replacing the package, so a
 						// PACKAGE_ADDED will be sent
@@ -3386,13 +3436,15 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							if (LauncherModel.DEBUG_LOADERS) {
 								d(LauncherModel.LOG_TAG, "  --> add package");
 							}
-							sLauncherModel.addPackage(Launcher.this, packageName);
+							sLauncherModel.addPackage(Launcher.this,
+									packageName);
 						} else {
 							if (LauncherModel.DEBUG_LOADERS) {
 								d(LauncherModel.LOG_TAG,
 										"  --> update package " + packageName);
 							}
-							sLauncherModel.updatePackage(Launcher.this, packageName);
+							sLauncherModel.updatePackage(Launcher.this,
+									packageName);
 							updateShortcutsForPackage(packageName);
 						}
 					}
@@ -3414,7 +3466,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						return;
 					} else {
 						for (int i = 0; i < packages.length; i++) {
-							sLauncherModel.addPackage(Launcher.this, packages[i]);
+							sLauncherModel.addPackage(Launcher.this,
+									packages[i]);
 							updateShortcutsForPackage(packages[i]);
 						}
 					}
@@ -3426,7 +3479,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						return;
 					} else {
 						for (int i = 0; i < packages.length; i++) {
-							sLauncherModel.removePackage(Launcher.this, packages[i]);
+							sLauncherModel.removePackage(Launcher.this,
+									packages[i]);
 							// ADW: We tell desktop to update packages
 							// (probably will load the standard android icon)
 							// to show the user the app is no more available.
@@ -3609,8 +3663,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mHideABBg = MyLauncherSettingsHelper.getUIABBg(this);
 		mUiHideLabels = MyLauncherSettingsHelper.getUIHideLabels(this);
 		if (mWorkspace != null) {
-			mWorkspace
-			.setSpeed(MyLauncherSettingsHelper.getDesktopSpeed(this));
+			mWorkspace.setSpeed(MyLauncherSettingsHelper.getDesktopSpeed(this));
 			mWorkspace.setBounceAmount(MyLauncherSettingsHelper
 					.getDesktopBounce(this));
 			mWorkspace.setSnapAmount(MyLauncherSettingsHelper
@@ -3622,13 +3675,17 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mWorkspace.setWallpaperScroll(MyLauncherSettingsHelper
 					.getWallpaperScrolling(this));
 		}
-		int animationSpeed = MyLauncherSettingsHelper.getDrawerAnimationSpeed(this);
+		int animationSpeed = MyLauncherSettingsHelper
+				.getDrawerAnimationSpeed(this);
 		if (mAllAppsGrid != null) {
 			mAllAppsGrid.setAnimationSpeed(animationSpeed);
 			if (mDrawerStyle == 1) {
-				mAllAppsGrid.setSpeed(MyLauncherSettingsHelper.getDrawerSpeed(this));
-				mAllAppsGrid.setSnap(MyLauncherSettingsHelper.getDrawerSnap(this));
-				mAllAppsGrid.setOvershoot(MyLauncherSettingsHelper.getDrawerOvershoot(this));
+				mAllAppsGrid.setSpeed(MyLauncherSettingsHelper
+						.getDrawerSpeed(this));
+				mAllAppsGrid.setSnap(MyLauncherSettingsHelper
+						.getDrawerSnap(this));
+				mAllAppsGrid.setOvershoot(MyLauncherSettingsHelper
+						.getDrawerOvershoot(this));
 				mAllAppsGrid.setPageHorizontalMargin(MyLauncherSettingsHelper
 						.getPageHorizontalMargin(Launcher.this));
 			}
@@ -3656,11 +3713,21 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		float uiScaleAB = MyLauncherSettingsHelper.getuiScaleAB(this);
 		boolean tint = MyLauncherSettingsHelper.getUIABTint(this);
 		int tintcolor = MyLauncherSettingsHelper.getUIABTintColor(this);
-		if (uiScaleAB != mUiScaleAB || tint != mUiABTint
-				|| tintcolor != mUiABTintColor) {
+		int selectorColor = MyLauncherSettingsHelper.getUIABSelectorColor(this);
+
+		if (uiScaleAB != mUiScaleAB || tint != mUiABTint || tintcolor != mUiABTintColor || mUiABSelectorColor != selectorColor) {
+
 			mUiScaleAB = uiScaleAB;
 			mUiABTint = tint;
 			mUiABTintColor = tintcolor;
+			mUiABSelectorColor = selectorColor;
+
+			mRAB.setSelectorColor(selectorColor);
+			mLAB.setSelectorColor(selectorColor);
+			mRAB2.setSelectorColor(selectorColor);
+			mLAB2.setSelectorColor(selectorColor);
+			mMAB.setSelectorColor(selectorColor);
+
 			mRAB.updateIcon();
 			mLAB.updateIcon();
 			mRAB2.updateIcon();
@@ -3674,7 +3741,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		if (!showingPreviews) {
 			if (!isAllAppsVisible()) {
 				mNextView.setVisibility(mShowDots ? View.VISIBLE : View.GONE);
-				mPreviousView.setVisibility(mShowDots ? View.VISIBLE : View.GONE);
+				mPreviousView.setVisibility(mShowDots ? View.VISIBLE
+						: View.GONE);
 			}
 		}
 
@@ -3708,7 +3776,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mRAB2.hideBg(mHideABBg);
 		mLAB2.hideBg(mHideABBg);
 
-		if (mDockStyle == DOCK_STYLE_NONE || showingPreviews || (mDockHide && allAppsOpen)) {
+		if (mDockStyle == DOCK_STYLE_NONE || showingPreviews
+				|| (mDockHide && allAppsOpen)) {
 			mDrawerToolbar.setVisibility(View.GONE);
 		} else {
 			mDrawerToolbar.setVisibility(View.VISIBLE);
@@ -3717,15 +3786,17 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// init the padding for the dock
 		final boolean hideDock = (mDockStyle == DOCK_STYLE_NONE) || mDockHide;
 
-		if (getWindow().getDecorView().getWidth() > getWindow()
-				.getDecorView().getHeight()) {
-			final int dockSize = (hideDock ? 0 : mDrawerToolbar.getMeasuredWidth());
+		if (getWindow().getDecorView().getWidth() > getWindow().getDecorView()
+				.getHeight()) {
+			final int dockSize = (hideDock ? 0 : mDrawerToolbar
+					.getMeasuredWidth());
 			if (dockSize != mAppDrawerPadding) {
 				mAppDrawerPadding = dockSize;
 				mAllAppsGrid.setPadding(0, 0, mAppDrawerPadding, 0);
 			}
 		} else {
-			final int dockSize = (hideDock ? 0 : mDrawerToolbar.getMeasuredHeight());
+			final int dockSize = (hideDock ? 0 : mDrawerToolbar
+					.getMeasuredHeight());
 
 			if (dockSize != mAppDrawerPadding) {
 				mAppDrawerPadding = dockSize;
@@ -3928,15 +3999,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			d = Utilities.createIconThumbnail(
 					resources.getDrawable(R.drawable.ab_empty), this);
 		}
-		d = Utilities.scaledDrawable(d, this, mUiABTint, mUiScaleAB,
-				mUiABTintColor);
+		d = Utilities.scaledDrawable(d, this, mUiABTint, mUiScaleAB, mUiABTintColor);
 
 		return d;
 	}
 
 	Drawable createSmallActionButtonDrawable(Drawable d) {
-		d = Utilities.scaledDrawable(d, this, mUiABTint, mUiScaleAB,
-				mUiABTintColor);
+		d = Utilities.scaledDrawable(d, this, mUiABTint, mUiScaleAB, mUiABTintColor);
 		return d;
 	}
 
@@ -3972,6 +4041,28 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mHideStatusBar = false;
 		}
 	}
+	
+	protected void fullScreenTemporary(boolean enable) {
+		if (enable) {
+			// go full screen
+			WindowManager.LayoutParams attrs = getWindow().getAttributes();
+			attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+			getWindow().setAttributes(attrs);
+			getWindow().addFlags(
+					WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+		} else {
+			// go non-full screen
+			WindowManager.LayoutParams attrs = getWindow().getAttributes();
+			attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			getWindow().setAttributes(attrs);
+			getWindow().clearFlags(
+					WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+		}
+	}
+	
+	protected void fullScreenRestore() {
+		fullScreenTemporary(mHideStatusBar);
+	}
 
 	private void hideDesktop(boolean enable) {
 		if (enable) {
@@ -3979,7 +4070,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mDesktopIndicator.hide();
 			mNextView.setVisibility(View.INVISIBLE);
 			mPreviousView.setVisibility(View.INVISIBLE);
-			mDrawerToolbar.setVisibility(View.INVISIBLE);	//WAS VIEW>GONE
+			mDrawerToolbar.setVisibility(View.INVISIBLE); // WAS VIEW>GONE
 		} else {
 			if (mDesktopIndicator != null)
 				mDesktopIndicator.show();
@@ -4215,18 +4306,20 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 * ADW: Functions to handle Apps Grid
 	 */
 	public void showAllApps(boolean animated, AppCatalogueFilter filter) {
-		final ApplicationsAdapter appAdapter = sLauncherModel.getApplicationsAdapter();
+		final ApplicationsAdapter appAdapter = sLauncherModel
+				.getApplicationsAdapter();
 		if (appAdapter != null) {
 			if (filter != null) {
 				appAdapter.setCatalogueFilter(filter);
 			} else {
-				appAdapter.setCatalogueFilter(
-						AppCatalogueFilters.getInstance().getDrawerFilter());
+				appAdapter.setCatalogueFilter(AppCatalogueFilters.getInstance()
+						.getDrawerFilter());
 			}
 		}
 
 		if (!allAppsOpen && mAllAppsGrid != null) {
-			final boolean hideDock = (mDockStyle == DOCK_STYLE_NONE) || mDockHide;
+			final boolean hideDock = (mDockStyle == DOCK_STYLE_NONE)
+					|| mDockHide;
 			if (getWindow().getDecorView().getWidth() > getWindow()
 					.getDecorView().getHeight()) {
 				// landscape
@@ -4251,7 +4344,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					mRAB2.setNextFocusLeftId(R.id.all_apps_view);
 				}
 
-				final int dockSize = (hideDock ? 0 : mDrawerToolbar.getMeasuredWidth());
+				final int dockSize = (hideDock ? 0 : mDrawerToolbar
+						.getMeasuredWidth());
 
 				if (dockSize != mAppDrawerPadding) {
 					mAppDrawerPadding = dockSize;
@@ -4277,7 +4371,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					mRAB2.setNextFocusUpId(R.id.all_apps_view);
 					mRAB2.setNextFocusLeftId(R.id.drag_layer);
 				}
-				final int dockSize = (hideDock ? 0 : mDrawerToolbar.getMeasuredHeight());
+				final int dockSize = (hideDock ? 0 : mDrawerToolbar
+						.getMeasuredHeight());
 
 				if (dockSize != mAppDrawerPadding) {
 					mAppDrawerPadding = dockSize;
@@ -4306,7 +4401,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private void checkActionButtonsSpecialMode() {
 
 		boolean showSpecialMode = mUseDrawerCatalogNavigation
-				&& allAppsOpen 
+				&& allAppsOpen
 				&& AppCatalogueFilters.getInstance().getUserCatalogueCount() > 0;
 				mLAB.setSpecialMode(showSpecialMode);
 				mRAB.setSpecialMode(showSpecialMode);
@@ -4415,7 +4510,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				finish();
 				startActivity(getIntent());
 				return true;
-			} 
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -4431,7 +4526,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			// TODO: ADW Move here all the updates instead on
 			// updateAlmostNexusUI()
 			if (key.equals("homeOrientation")) {
-				changeOrientation(MyLauncherSettingsHelper.getDesktopOrientation(this));
+				changeOrientation(MyLauncherSettingsHelper
+						.getDesktopOrientation(this));
 			} else if (key.equals("notifReceiver")) {
 				boolean useNotifReceiver = MyLauncherSettingsHelper
 						.getNotifReceiver(this);
@@ -4455,18 +4551,19 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							mCounterReceiver.getFilter());
 				}
 			} else if (key.equals("main_dock_style")) {
-				int dockStyle = MyLauncherSettingsHelper
-						.getDockStyle(this);
-				if (dockStyle == DOCK_STYLE_NONE || mDockStyle == DOCK_STYLE_NONE) {
+				int dockStyle = MyLauncherSettingsHelper.getDockStyle(this);
+				if (dockStyle == DOCK_STYLE_NONE
+						|| mDockStyle == DOCK_STYLE_NONE) {
 					mShouldRestart = true;
-					return;	// we are going to be restarting onResume, so abandon remaining execution
+					return; // we are going to be restarting onResume, so
+					// abandon remaining execution
 				}
 			} else if (key.equals("deleteZoneLocation")) {
 				int dz = MyLauncherSettingsHelper.getDeletezoneStyle(this);
 				if (mDeleteZone != null)
 					mDeleteZone.setPosition(dz);
 			}
-			updateAlmostNexusUI();	// call rest
+			updateAlmostNexusUI(); // call rest
 		}
 	}
 
@@ -4569,8 +4666,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			case 2:
 				package_name = MyLauncherSettingsHelper
 				.getSwipeUpAppToLaunchPackageName(this);
-				name = MyLauncherSettingsHelper
-						.getSwipeUpAppToLaunchName(this);
+				name = MyLauncherSettingsHelper.getSwipeUpAppToLaunchName(this);
 				break;
 			case 3:
 				package_name = MyLauncherSettingsHelper
@@ -4675,7 +4771,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 * private void realAddSearch(Widget info,final CellLayout.CellInfo
 	 * cellInfo,final int[] xy,int spanX,int spanY){ if (!findSlot(cellInfo, xy,
 	 * spanX, spanY)) return; info.spanX=spanX; info.spanY=spanY;
-	 * sLauncherModel.addDesktopItem(info); LauncherModel.addItemToDatabase(this, info,
+	 * sLauncherModel.addDesktopItem(info);
+	 * LauncherModel.addItemToDatabase(this, info,
 	 * LauncherSettings.Favorites.CONTAINER_DESKTOP,
 	 * mWorkspace.getCurrentScreen(), xy[0], xy[1], false);
 	 * 
@@ -4836,8 +4933,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							Utilities.createBitmapThumbnail(bitmap, this));
 				} else if (info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION) {
 					// well we need one so get the app's icon
-					icon = sLauncherModel.getApplicationInfoIcon(getPackageManager(),
-							info, this);
+					icon = sLauncherModel.getApplicationInfoIcon(
+							getPackageManager(), info, this);
 					if (icon instanceof BitmapDrawable) {
 						icon = new FastBitmapDrawable(
 								((BitmapDrawable) icon).getBitmap());
@@ -4897,31 +4994,47 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				screens.addScreen((CellLayout) workspace.getChildAt(i));
 			}
 			mScreensEditor = mInflater.inflate(R.layout.screens_editor, null);
-			mScreensEditor.setAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_right));
+			mScreensEditor.setAnimation(AnimationUtils.loadAnimation(this,
+					R.anim.slide_in_right));
 
-			final Gallery gallery = (Gallery) mScreensEditor.findViewById(R.id.gallery_screens);
+			final Gallery gallery = (Gallery) mScreensEditor
+					.findViewById(R.id.gallery_screens);
 			gallery.setCallbackDuringFling(false);
 			gallery.setClickable(false);
 			gallery.setAdapter(screens);
 
 			// buttons
-			final View deleteButton = mScreensEditor.findViewById(R.id.delete_screen);
-			final View addLeftButton = mScreensEditor.findViewById(R.id.add_left);
-			final View addRightButton = mScreensEditor.findViewById(R.id.add_right);
-			final View swapLeftButton = mScreensEditor.findViewById(R.id.swap_left);
-			final View swapRightButton = mScreensEditor.findViewById(R.id.swap_right);
-			final View setDefaultButton = mScreensEditor.findViewById(R.id.set_default);
-			final TextView screenEditorText = (TextView) mScreensEditor.findViewById(R.id.screen_counter);
-			final Animation fadeAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out_slow);
+			final View deleteButton = mScreensEditor
+					.findViewById(R.id.delete_screen);
+			final View addLeftButton = mScreensEditor
+					.findViewById(R.id.add_left);
+			final View addRightButton = mScreensEditor
+					.findViewById(R.id.add_right);
+			final View swapLeftButton = mScreensEditor
+					.findViewById(R.id.swap_left);
+			final View swapRightButton = mScreensEditor
+					.findViewById(R.id.swap_right);
+			final View setDefaultButton = mScreensEditor
+					.findViewById(R.id.set_default);
+			final TextView screenEditorText = (TextView) mScreensEditor
+					.findViewById(R.id.screen_counter);
+			final Animation fadeAnimation = AnimationUtils.loadAnimation(this,
+					R.anim.fade_out_slow);
 
 			// Setup delete button event
-			deleteButton.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+			deleteButton
+			.setOnLongClickListener(new android.view.View.OnLongClickListener() {
 				public boolean onLongClick(View v) {
-					Toast.makeText(Launcher.this, R.string.hint_delete_desktop, Toast.LENGTH_SHORT).show();
+					Toast.makeText(Launcher.this,
+							R.string.hint_delete_desktop,
+							Toast.LENGTH_SHORT).show();
 					return true;
-				}});
-			deleteButton.setVisibility((screens.getCount() > 1) ? View.VISIBLE : View.INVISIBLE);
-			deleteButton.setOnClickListener(new android.view.View.OnClickListener() {
+				}
+			});
+			deleteButton.setVisibility((screens.getCount() > 1) ? View.VISIBLE
+					: View.INVISIBLE);
+			deleteButton
+			.setOnClickListener(new android.view.View.OnClickListener() {
 				public void onClick(View v) {
 					if (mAlertDialog != null) {
 						if (mAlertDialog.isShowing()) {
@@ -4934,43 +5047,64 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						mAlertDialog = new AlertDialog.Builder(
 								Launcher.this)
 						.setTitle(null)
-						.setMessage(R.string.message_delete_desktop)
-						.setPositiveButton(android.R.string.ok,
-								new DialogInterface.OnClickListener() {
-							public void onClick(
-									DialogInterface dialog,
-									int which) {
-								final int workspaceCount = workspace.getChildCount();
-								if (workspaceCount > screenToDelete) {
-									if (workspaceCount == 2) {
-										// two screens, but we are getting rid of one asap
-										deleteButton.setVisibility(View.INVISIBLE);
-										swapLeftButton.setVisibility(View.INVISIBLE);
-										swapRightButton.setVisibility(View.INVISIBLE);
-									}
-									workspace.removeScreen(screenToDelete);
-									screens.removeScreen(screenToDelete);
+						.setMessage(
+								R.string.message_delete_desktop)
+								.setPositiveButton(
+										android.R.string.ok,
+										new DialogInterface.OnClickListener() {
+											public void onClick(
+													DialogInterface dialog,
+													int which) {
+												final int workspaceCount = workspace
+														.getChildCount();
+												if (workspaceCount > screenToDelete) {
+													if (workspaceCount == 2) {
+														// two screens,
+														// but we are
+														// getting rid
+														// of one asap
+														deleteButton
+														.setVisibility(View.INVISIBLE);
+														swapLeftButton
+														.setVisibility(View.INVISIBLE);
+														swapRightButton
+														.setVisibility(View.INVISIBLE);
+													}
+													workspace
+													.removeScreen(screenToDelete);
+													screens.removeScreen(screenToDelete);
 
-									addLeftButton.setVisibility(View.VISIBLE);
-									addRightButton.setVisibility(View.VISIBLE);
+													addLeftButton
+													.setVisibility(View.VISIBLE);
+													addRightButton
+													.setVisibility(View.VISIBLE);
 
-									if (screenToDelete == 0) {
-										screenEditorText.setText("" + 1);
-									} else if (screenToDelete == (workspaceCount - 1)) {
-										screenEditorText.setText("" + (workspaceCount - 1));
-									} else {
-										if (screenToDelete == (workspaceCount - 2)) {
-											swapRightButton.setVisibility(View.INVISIBLE);
-										}
-										screenEditorText.setText("" + (screenToDelete + 1));
-									}
-									screenEditorText.startAnimation(fadeAnimation);
-									screenEditorText.setVisibility(View.INVISIBLE);
-								}
-							}
-						})
-						.setNegativeButton(android.R.string.cancel, null)
-						.create();
+													if (screenToDelete == 0) {
+														screenEditorText
+														.setText("" + 1);
+													} else if (screenToDelete == (workspaceCount - 1)) {
+														screenEditorText
+														.setText(""
+																+ (workspaceCount - 1));
+													} else {
+														if (screenToDelete == (workspaceCount - 2)) {
+															swapRightButton
+															.setVisibility(View.INVISIBLE);
+														}
+														screenEditorText
+														.setText(""
+																+ (screenToDelete + 1));
+													}
+													screenEditorText
+													.startAnimation(fadeAnimation);
+													screenEditorText
+													.setVisibility(View.INVISIBLE);
+												}
+											}
+										})
+										.setNegativeButton(
+												android.R.string.cancel, null)
+												.create();
 						mAlertDialog.show();
 					} else {
 						if (mAlertDialog != null) {
@@ -4984,12 +5118,18 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			});
 
 			// Setup add buttons events
-			addLeftButton.setVisibility((screens.getCount() < MAX_SCREENS) ? View.VISIBLE : View.INVISIBLE);
-			addLeftButton.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+			addLeftButton
+			.setVisibility((screens.getCount() < MAX_SCREENS) ? View.VISIBLE
+					: View.INVISIBLE);
+			addLeftButton
+			.setOnLongClickListener(new android.view.View.OnLongClickListener() {
 				public boolean onLongClick(View v) {
-					Toast.makeText(Launcher.this, R.string.hint_add_left_desktop, Toast.LENGTH_SHORT).show();
+					Toast.makeText(Launcher.this,
+							R.string.hint_add_left_desktop,
+							Toast.LENGTH_SHORT).show();
 					return true;
-				}});
+				}
+			});
 			addLeftButton
 			.setOnClickListener(new android.view.View.OnClickListener() {
 				public void onClick(View v) {
@@ -5001,14 +5141,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								.addScreen(screenToAddLeft);
 						screens.addScreen(newScreen, screenToAddLeft);
 
-						screenEditorText.setText("" + (screenToAddLeft + 1));
+						screenEditorText.setText(""
+								+ (screenToAddLeft + 1));
 						screenEditorText.startAnimation(fadeAnimation);
 						screenEditorText.setVisibility(View.INVISIBLE);
 						if (screenCount < MAX_SCREENS - 1) {
 							addRightButton.setVisibility(View.VISIBLE);
 							addLeftButton.setVisibility(View.VISIBLE);
 						} else {
-							addRightButton.setVisibility(View.INVISIBLE);
+							addRightButton
+							.setVisibility(View.INVISIBLE);
 							addLeftButton.setVisibility(View.INVISIBLE);
 						}
 						deleteButton.setVisibility(View.VISIBLE);
@@ -5026,12 +5168,18 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				}
 			});
 
-			addRightButton.setVisibility((screens.getCount() < MAX_SCREENS) ? View.VISIBLE : View.INVISIBLE);
-			addRightButton.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+			addRightButton
+			.setVisibility((screens.getCount() < MAX_SCREENS) ? View.VISIBLE
+					: View.INVISIBLE);
+			addRightButton
+			.setOnLongClickListener(new android.view.View.OnLongClickListener() {
 				public boolean onLongClick(View v) {
-					Toast.makeText(Launcher.this, R.string.hint_add_right_desktop, Toast.LENGTH_SHORT).show();
+					Toast.makeText(Launcher.this,
+							R.string.hint_add_right_desktop,
+							Toast.LENGTH_SHORT).show();
 					return true;
-				}});
+				}
+			});
 			addRightButton
 			.setOnClickListener(new android.view.View.OnClickListener() {
 				public void onClick(View v) {
@@ -5043,14 +5191,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								.addScreen(screenToAddRight + 1);
 						screens.addScreen(newScreen,
 								screenToAddRight + 1);
-						screenEditorText.setText("" + (screenToAddRight + 1));
+						screenEditorText.setText(""
+								+ (screenToAddRight + 1));
 						screenEditorText.startAnimation(fadeAnimation);
 						screenEditorText.setVisibility(View.INVISIBLE);
 						if (screenCount < MAX_SCREENS - 1) {
 							addRightButton.setVisibility(View.VISIBLE);
 							addLeftButton.setVisibility(View.VISIBLE);
 						} else {
-							addRightButton.setVisibility(View.INVISIBLE);
+							addRightButton
+							.setVisibility(View.INVISIBLE);
 							addLeftButton.setVisibility(View.INVISIBLE);
 						}
 						deleteButton.setVisibility(View.VISIBLE);
@@ -5068,15 +5218,20 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				}
 			});
 
-			swapLeftButton.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+			swapLeftButton
+			.setOnLongClickListener(new android.view.View.OnLongClickListener() {
 				public boolean onLongClick(View v) {
-					Toast.makeText(Launcher.this, R.string.hint_swap_left_desktop, Toast.LENGTH_SHORT).show();
+					Toast.makeText(Launcher.this,
+							R.string.hint_swap_left_desktop,
+							Toast.LENGTH_SHORT).show();
 					return true;
-				}});
+				}
+			});
 			swapLeftButton
 			.setOnClickListener(new android.view.View.OnClickListener() {
 				public void onClick(View v) {
-					int currentScreen = gallery.getSelectedItemPosition();
+					int currentScreen = gallery
+							.getSelectedItemPosition();
 					if (currentScreen > 0) {
 						workspace.swapScreens(currentScreen - 1,
 								currentScreen);
@@ -5093,15 +5248,20 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				}
 			});
 
-			swapRightButton.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+			swapRightButton
+			.setOnLongClickListener(new android.view.View.OnLongClickListener() {
 				public boolean onLongClick(View v) {
-					Toast.makeText(Launcher.this, R.string.hint_swap_right_desktop, Toast.LENGTH_SHORT).show();
+					Toast.makeText(Launcher.this,
+							R.string.hint_swap_right_desktop,
+							Toast.LENGTH_SHORT).show();
 					return true;
-				}});
+				}
+			});
 			swapRightButton
 			.setOnClickListener(new android.view.View.OnClickListener() {
 				public void onClick(View v) {
-					int currentScreen = gallery.getSelectedItemPosition();
+					int currentScreen = gallery
+							.getSelectedItemPosition();
 					if (currentScreen < gallery.getCount() - 1) {
 						workspace.swapScreens(currentScreen,
 								currentScreen + 1);
@@ -5118,15 +5278,20 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				}
 			});
 
-			setDefaultButton.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+			setDefaultButton
+			.setOnLongClickListener(new android.view.View.OnLongClickListener() {
 				public boolean onLongClick(View v) {
-					Toast.makeText(Launcher.this, R.string.hint_default_desktop, Toast.LENGTH_SHORT).show();
+					Toast.makeText(Launcher.this,
+							R.string.hint_default_desktop,
+							Toast.LENGTH_SHORT).show();
 					return true;
-				}});
+				}
+			});
 			setDefaultButton
 			.setOnClickListener(new android.view.View.OnClickListener() {
 				public void onClick(View v) {
-					int currentScreen = gallery.getSelectedItemPosition();
+					int currentScreen = gallery
+							.getSelectedItemPosition();
 					if (currentScreen < mWorkspace.getChildCount()) {
 						mWorkspace.setDefaultScreen(currentScreen);
 						MyLauncherSettingsHelper.setDefaultScreen(
@@ -5141,17 +5306,18 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				}
 			});
 
-			gallery.setOnItemLongClickListener(new OnItemLongClickListener(){
+			gallery.setOnItemLongClickListener(new OnItemLongClickListener() {
 				@Override
-				public boolean onItemLongClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					mAlertDialog = new AlertDialog.Builder(
-							Launcher.this)
+				public boolean onItemLongClick(AdapterView<?> parent,
+						View view, int position, long id) {
+					mAlertDialog = new AlertDialog.Builder(Launcher.this)
 					.setTitle(null)
 					.setMessage(R.string.message_end_edit_desktop)
 					.setPositiveButton(android.R.string.ok,
 							new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {					
+						public void onClick(
+								DialogInterface dialog,
+								int which) {
 							stopDesktopEdit();
 						}
 					})
@@ -5159,14 +5325,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					.create();
 					mAlertDialog.show();
 					return true;
-				}});
-			gallery.setOnItemClickListener(new OnItemClickListener(){
+				}
+			});
+			gallery.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					screenEditorText.startAnimation(fadeAnimation);
 					screenEditorText.setVisibility(View.INVISIBLE);
-				}});
+				}
+			});
 			gallery.setOnItemSelectedListener(new OnItemSelectedListener() {
 				public void onItemSelected(AdapterView<?> parent, View view,
 						int position, long id) {
@@ -5186,8 +5354,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					}
 				}
 
-				/* (non-Javadoc)
-				 * @see android.widget.AdapterView.OnItemSelectedListener#onNothingSelected(android.widget.AdapterView)
+				/*
+				 * (non-Javadoc)
+				 * 
+				 * @see android.widget.AdapterView.OnItemSelectedListener#
+				 * onNothingSelected(android.widget.AdapterView)
 				 */
 				@Override
 				public void onNothingSelected(AdapterView<?> arg0) {
@@ -5200,12 +5371,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	private void showSimpleAlertDialog(int msg_id) {
-		mAlertDialog = new AlertDialog.Builder(
-				Launcher.this)
-		.setTitle(null)
-		.setMessage(msg_id)
-		.setPositiveButton(android.R.string.ok, null)
-		.create();
+		mAlertDialog = new AlertDialog.Builder(Launcher.this).setTitle(null)
+				.setMessage(msg_id)
+				.setPositiveButton(android.R.string.ok, null).create();
 		mAlertDialog.show();
 	}
 
@@ -5238,17 +5406,21 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					.getChildAt(mWorkspace.getCurrentScreen());
 
 			if (screen != null) {
-				mLauncherAppWidgetInfo = (LauncherAppWidgetInfo) widget.getTag();
+				mLauncherAppWidgetInfo = (LauncherAppWidgetInfo) widget
+						.getTag();
 
 				final Intent motosize = new Intent(
 						"com.motorola.blur.home.ACTION_SET_WIDGET_SIZE");
-				final int appWidgetId = ((AppWidgetHostView) widget).getAppWidgetId();
-				final AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
+				final int appWidgetId = ((AppWidgetHostView) widget)
+						.getAppWidgetId();
+				final AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager
+						.getAppWidgetInfo(appWidgetId);
 				if (appWidgetInfo != null) {
 					motosize.setComponent(appWidgetInfo.provider);
 				}
 				motosize.putExtra("appWidgetId", appWidgetId);
-				motosize.putExtra("com.motorola.blur.home.EXTRA_NEW_WIDGET", true);
+				motosize.putExtra("com.motorola.blur.home.EXTRA_NEW_WIDGET",
+						true);
 				final int minw = (mWorkspace.getWidth()
 						- screen.getLeftPadding() - screen.getRightPadding())
 						/ screen.getCountX();
@@ -5285,19 +5457,22 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 							int[] tmpspans = {
 									Math.max(
-											Math.round(r.width() / (minw)),
-											1),
-											Math.max(
-													Math.round(r.height() / (minh)),
-													1) };
+											Math.round(r.width()
+													/ (minw)), 1),
+													Math.max(
+															Math.round(r.height()
+																	/ (minh)), 1) };
 							int[] tmpposition = {
 									Math.round(r.left / minw),
 									Math.round(r.top / minh) };
-							checkRect.set(tmpposition[0], tmpposition[1],
-									tmpposition[0] + tmpspans[0],
-									tmpposition[1] + tmpspans[1]);
-							final boolean widgetCollision = getLauncherModel().isWidgetOverlapping(
-									screen.getScreen(), appWidgetId, checkRect);
+							checkRect.set(tmpposition[0],
+									tmpposition[1], tmpposition[0]
+											+ tmpspans[0],
+											tmpposition[1] + tmpspans[1]);
+							final boolean widgetCollision = getLauncherModel()
+									.isWidgetOverlapping(
+											screen.getScreen(),
+											appWidgetId, checkRect);
 							if (!widgetCollision) {
 								((ResizeViewHandler) mScreensEditor)
 								.setColliding(false);
@@ -5327,7 +5502,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 									// send the broadcast
 									motosize.putExtra("spanX", spans[0]);
 									motosize.putExtra("spanY", spans[1]);
-									Launcher.this.sendBroadcast(motosize);
+									Launcher.this
+									.sendBroadcast(motosize);
 								}
 							}
 
@@ -5356,16 +5532,21 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 						int[] tmpspans = {
 								Math.max(
-										Math.round(r.width() / (minw)), 1),
-										Math.max(Math.round(r.height() / (minh)), 1) };
+										Math.round(r.width() / (minw)),
+										1),
+										Math.max(
+												Math.round(r.height() / (minh)),
+												1) };
 						int[] tmpposition = {
 								Math.round(r.left / minw),
 								Math.round(r.top / minh) };
 						checkRect.set(tmpposition[0], tmpposition[1],
 								tmpposition[0] + tmpspans[0],
 								tmpposition[1] + tmpspans[1]);
-						final boolean widgetCollision = getLauncherModel().isWidgetOverlapping(
-								screen.getScreen(), appWidgetId, checkRect);
+						final boolean widgetCollision = getLauncherModel()
+								.isWidgetOverlapping(
+										screen.getScreen(),
+										appWidgetId, checkRect);
 						if (!widgetCollision) {
 							((ResizeViewHandler) mScreensEditor)
 							.setColliding(false);
@@ -5374,31 +5555,25 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							.setColliding(true);
 						}
 						/*
-						if (tmpposition[0] != position[0]
-								|| tmpposition[1] != position[1]
-										|| tmpspans[0] != spans[0]
-												|| tmpspans[1] != spans[1]) {
-							if (!widgetCollision) {
-								position[0] = tmpposition[0];
-								position[1] = tmpposition[1];
-								spans[0] = tmpspans[0];
-								spans[1] = tmpspans[1];
-								lp.cellX = position[0];
-								lp.cellY = position[1];
-								lp.cellHSpan = spans[0];
-								lp.cellVSpan = spans[1];
-								widget.setLayoutParams(lp);
-								mLauncherAppWidgetInfo.cellX = lp.cellX;
-								mLauncherAppWidgetInfo.cellY = lp.cellY;
-								mLauncherAppWidgetInfo.spanX = lp.cellHSpan;
-								mLauncherAppWidgetInfo.spanY = lp.cellVSpan;
-								widget.setTag(mLauncherAppWidgetInfo);
-								// send the broadcast
-								motosize.putExtra("spanX", spans[0]);
-								motosize.putExtra("spanY", spans[1]);
-								Launcher.this.sendBroadcast(motosize);
-							}
-						}
+						 * if (tmpposition[0] != position[0] ||
+						 * tmpposition[1] != position[1] || tmpspans[0]
+						 * != spans[0] || tmpspans[1] != spans[1]) { if
+						 * (!widgetCollision) { position[0] =
+						 * tmpposition[0]; position[1] = tmpposition[1];
+						 * spans[0] = tmpspans[0]; spans[1] =
+						 * tmpspans[1]; lp.cellX = position[0]; lp.cellY
+						 * = position[1]; lp.cellHSpan = spans[0];
+						 * lp.cellVSpan = spans[1];
+						 * widget.setLayoutParams(lp);
+						 * mLauncherAppWidgetInfo.cellX = lp.cellX;
+						 * mLauncherAppWidgetInfo.cellY = lp.cellY;
+						 * mLauncherAppWidgetInfo.spanX = lp.cellHSpan;
+						 * mLauncherAppWidgetInfo.spanY = lp.cellVSpan;
+						 * widget.setTag(mLauncherAppWidgetInfo); //
+						 * send the broadcast motosize.putExtra("spanX",
+						 * spans[0]); motosize.putExtra("spanY",
+						 * spans[1]);
+						 * Launcher.this.sendBroadcast(motosize); } }
 						 */
 					}
 				});
@@ -5424,7 +5599,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	void navigateCatalogs(final int direction) {
-		ApplicationsAdapter drawerAdapter = sLauncherModel.getApplicationsAdapter();
+		ApplicationsAdapter drawerAdapter = sLauncherModel
+				.getApplicationsAdapter();
 		if (drawerAdapter == null)
 			return;
 
@@ -5527,7 +5703,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			updateCounters(mRAB, packageName, counter, color);
 			updateCounters(mLAB2, packageName, counter, color);
 			updateCounters(mRAB2, packageName, counter, color);
-			sLauncherModel.updateCounterForPackage(this, packageName, counter, color);
+			sLauncherModel.updateCounterForPackage(this, packageName, counter,
+					color);
 		}
 	}
 
@@ -5553,9 +5730,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 	}
 
-	QuickActionWindow mQaw;
+	private QuickActionWindow mQaw;
 
-	public void dismissQuickActionWindow() {
+	void dismissQuickActionWindow() {
 		if (mQaw != null) {
 			if (mQaw.isShowing()) {
 				mQaw.dismiss();
@@ -5564,13 +5741,14 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 	}
 
-	public void showQuickActionWindow(final ItemInfo info, final View view,
+	void showQuickActionWindow(final ItemInfo info, final View view,
 			PopupWindow.OnDismissListener onDismissListener) {
 		QuickActionWindow existingQA = (QuickActionWindow) view
 				.getTag(R.id.TAG_PREVIEW);
 		if (existingQA != null && existingQA.isShowing()) {
 			return;
 		}
+
 		int[] xy = new int[2];
 		// fills the array with the computed coordinates
 		view.getLocationInWindow(xy);
@@ -5598,7 +5776,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							android.R.drawable.ic_menu_delete),
 							R.string.menu_delete, new OnClickListener() {
 						public void onClick(View v) {
-							final LauncherModel model = Launcher.getLauncherModel();
+							final LauncherModel model = Launcher
+									.getLauncherModel();
 							boolean removedFromFolder = false;
 							if (info.container == LauncherSettings.Favorites.CONTAINER_DESKTOP) {
 								if (info instanceof LauncherAppWidgetInfo) {
@@ -5608,8 +5787,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								}
 							} else {
 								// in a folder?
-								FolderInfo source = sLauncherModel.getFolderById(
-										Launcher.this, info.container);
+								FolderInfo source = sLauncherModel
+										.getFolderById(Launcher.this,
+												info.container);
 								if (source instanceof UserFolderInfo) {
 									final UserFolderInfo userFolderInfo = (UserFolderInfo) source;
 									model.removeUserFolderItem(userFolderInfo,
@@ -5678,21 +5858,20 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							}
 						});
 			} else if (info instanceof LauncherAppWidgetInfo) {
-				qa.addItem(
-						getResources().getDrawable(
-								R.drawable.ic_menu_resize),
-								R.string.menu_resize_widget, new OnClickListener() {
-							public void onClick(View v) {
-								editWidget(view);
-								v.post(new Runnable() {
-									@Override
-									public void run() {
-										qa.dismiss();
+				qa.addItem(getResources()
+						.getDrawable(R.drawable.ic_menu_resize),
+						R.string.menu_resize_widget, new OnClickListener() {
+					public void onClick(View v) {
+						editWidget(view);
+						v.post(new Runnable() {
+							@Override
+							public void run() {
+								qa.dismiss();
 
-									}
-								});
 							}
 						});
+					}
+				});
 			}
 		}
 
@@ -5704,7 +5883,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					R.string.menu_edit, new OnClickListener() {
 						public void onClick(View v) {
 							if (info instanceof LiveFolderInfo) {
-								mFolderInfo = (FolderInfo)info;
+								mFolderInfo = (FolderInfo) info;
 								mWaitingForResult = true;
 								mWorkspace.lock();
 								showDialog(DIALOG_RENAME_FOLDER);
@@ -5886,12 +6065,15 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			final UserFolderInfo ufi = (UserFolderInfo) info;
 			if (!ufi.contents.isEmpty()) {
 				qa.addItem(
-						getResources().getDrawable(
-								R.drawable.ic_menu_grabber),
-								R.string.menu_folder_icon_reorder, new OnClickListener() {
+						getResources().getDrawable(R.drawable.ic_menu_grabber),
+						R.string.menu_folder_icon_reorder,
+						new OnClickListener() {
 							public void onClick(View v) {
-								Intent i = new Intent(Launcher.this, FolderIconReorderActivity.class);
-								i.putExtra(FolderIconReorderActivity.EXTRA_FOLDER_INFO_ID, ufi.id);
+								Intent i = new Intent(Launcher.this,
+										FolderIconReorderActivity.class);
+								i.putExtra(
+										FolderIconReorderActivity.EXTRA_FOLDER_INFO_ID,
+										ufi.id);
 								Launcher.this.startActivity(i);
 							}
 						});
@@ -5902,7 +6084,12 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	public void setDockPadding(int pad) {
-		mDrawerToolbar.setPadding(0, 0, 0, pad);
+		if (pad < 0) {
+			mDrawerToolbar.setPadding(0, -pad, 0, 0);
+		} else {
+			mDrawerToolbar.setPadding(0, 0, 0, pad);
+
+		}
 	}
 
 	public void createManageApplications(Menu menu, int menuGroupAlmostnexus) {
@@ -5937,8 +6124,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	protected class PickGrpDialog implements
 	DialogInterface.OnMultiChoiceClickListener,
 	DialogInterface.OnCancelListener,
-	DialogInterface.OnDismissListener, 
-	DialogInterface.OnClickListener {
+	DialogInterface.OnDismissListener, DialogInterface.OnClickListener {
 		private List<Catalog> mAllGroups;
 		private boolean[] inGroup;
 
@@ -6030,5 +6216,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		if (bgAlpha >= 255) {
 			mWorkspace.setVisibility(View.GONE);
 		}
+	}
+
+	// gives screen orientation wrt display dimensions
+	protected boolean isScreenLandscape() {
+		return mDisplay.getWidth() > mDisplay.getHeight();
 	}
 }

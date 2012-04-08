@@ -73,8 +73,13 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 	private boolean mUninstallTarget=false;
 	String UninstallPkg = null;
 
+	private static final int STATUS_BAR_HEIGHT = 25;	// pixels
+	private int mStatusBarHeight = STATUS_BAR_HEIGHT;
+
 	public DeleteZone(Context context) {
 		super(context);
+		final float scale = getResources().getDisplayMetrics().density;
+		mStatusBarHeight = Math.round(STATUS_BAR_HEIGHT * scale);
 	}
 
 	public DeleteZone(Context context, AttributeSet attrs) {
@@ -86,6 +91,8 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DeleteZone, defStyle, 0);
 		a.recycle();
+		final float scale = getResources().getDisplayMetrics().density;
+		mStatusBarHeight = Math.round(STATUS_BAR_HEIGHT * scale);
 	}
 
 	/*@Override
@@ -183,11 +190,17 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 			final int[] location = mLocation;
 			getLocationOnScreen(location);
 			if(mPosition==POSITION_BOTTOM_SHRINK){
-				mLauncher.getWorkspace().setPadding(0, 0, 0, getHeight());
-				mLauncher.setDockPadding(getHeight());
-			}else if(mPosition==POSITION_TOP_SHRINK){
-				mLauncher.getWorkspace().setPadding(0, getHeight(),0,0);
-				mLauncher.setDockPadding(0);
+				mLauncher.getWorkspace().setPadding(0, 0, 0, mStatusBarHeight);
+				mLauncher.setDockPadding(mStatusBarHeight);
+				mLauncher.fullScreenTemporary(true);
+			} else if(mPosition==POSITION_TOP_SHRINK){
+				mLauncher.getWorkspace().setPadding(0, mStatusBarHeight,0,0);
+				mLauncher.fullScreenTemporary(true);
+				if(mLauncher.isScreenLandscape()) {
+					mLauncher.setDockPadding(-mStatusBarHeight);
+				} else {
+					mLauncher.setDockPadding(0);
+				}
 			}
 			mLauncher.getWorkspace().requestLayout();
 			mRegion.set(location[0], location[1], location[0] + getRight() - getLeft(),
@@ -233,6 +246,9 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 			setVisibility(INVISIBLE);
 			mLauncher.getWorkspace().setPadding(0, 0, 0, 0);
 			mLauncher.setDockPadding(0);
+			if(mPosition==POSITION_BOTTOM_SHRINK || mPosition==POSITION_TOP_SHRINK){
+				mLauncher.fullScreenRestore();
+			}
 			mLauncher.getWorkspace().requestLayout();
 		}
 		if(shouldUninstall && UninstallPkg!=null){
@@ -247,7 +263,7 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 			final AnimationSet animationSet = mInAnimation;
 			animationSet.setInterpolator(new AccelerateInterpolator());
 			animationSet.addAnimation(new AlphaAnimation(0.0f, 1.0f));
-			if (mPosition == POSITION_TOP) {
+			if (mPosition == POSITION_TOP || mPosition == POSITION_TOP_SHRINK) {
 				animationSet.addAnimation(new TranslateAnimation(Animation.ABSOLUTE, 0.0f,
 						Animation.ABSOLUTE, 0.0f, Animation.RELATIVE_TO_SELF, -1.0f,
 						Animation.RELATIVE_TO_SELF, 0.0f));
@@ -263,7 +279,7 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 			final AnimationSet animationSet = mOutAnimation;
 			animationSet.setInterpolator(new AccelerateInterpolator());
 			animationSet.addAnimation(new AlphaAnimation(1.0f, 0.0f));
-			if (mPosition == POSITION_TOP) {
+			if (mPosition == POSITION_TOP || mPosition == POSITION_TOP_SHRINK) {
 				animationSet.addAnimation(new FastTranslateAnimation(Animation.ABSOLUTE, 0.0f,
 						Animation.ABSOLUTE, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
 						Animation.RELATIVE_TO_SELF, -1.0f));

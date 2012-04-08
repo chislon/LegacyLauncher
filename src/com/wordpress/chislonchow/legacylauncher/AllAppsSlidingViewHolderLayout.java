@@ -96,6 +96,10 @@ public class AllAppsSlidingViewHolderLayout extends ViewGroup {
             requestRectangleOnScreen(r);
         }
     }*/
+	
+	/* (non-Javadoc)
+	 * @see android.view.ViewGroup#setChildrenDrawingCacheEnabled(boolean)
+	 */
 	@Override
 	protected void setChildrenDrawingCacheEnabled(boolean enabled) {
 		final int count = getChildCount();
