@@ -18,25 +18,29 @@
 -->
 
 <com.wordpress.chislonchow.legacylauncher.LiveFolder xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical">
-    
+    android:orientation="vertical" >
+
     <Button
         android:id="@+id/folder_close"
-    	android:background="@drawable/box_launcher_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/box_launcher_top"
         android:gravity="left|center_vertical"
-        android:textSize="14sp"
         android:textColor="#404040"
-        android:textStyle="bold"
-        android:layout_width="fill_parent"
-    	android:layout_height="wrap_content" />
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
-    <ListView
-        android:id="@id/folder_content"
-        android:layout_width="fill_parent"
-    	android:layout_height="0dip"
-    	android:layout_weight="1"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:background="@drawable/box_launcher_bottom" >
 
-        android:cacheColorHint="#00000000"
-        android:background="@drawable/box_launcher_bottom" />
+        <ListView
+            android:id="@id/folder_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="#ff333333" />
+    </FrameLayout>
 
 </com.wordpress.chislonchow.legacylauncher.LiveFolder>
