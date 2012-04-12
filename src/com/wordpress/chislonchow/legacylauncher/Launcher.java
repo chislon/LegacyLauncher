@@ -2896,6 +2896,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							.getString("pw", null);
 					if (value.toString().equals(passSecure)) {
 						// password valid unlock
+						input.setText("");	// clear password field
 						Toast.makeText(Launcher.this,
 								R.string.toast_launcher_unlock,
 								Toast.LENGTH_SHORT).show();
@@ -3622,7 +3623,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				break;
 			}
 			case MESSAGE_BIND_APPWIDGETS: {
-				launcher.bindAppWidgets(this, mAppWidgets);
+				if (mAppWidgets != null)
+					launcher.bindAppWidgets(this, mAppWidgets);
 				break;
 			}
 			}

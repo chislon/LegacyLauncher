@@ -819,7 +819,6 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 		final int selectedPosition = (mSelectedPosition==INVALID_POSITION)?0:mSelectedPosition;
 		final int numColumns = mNumColumns;
-		final int numRows = mNumRows;
 		int rowPos;
 		int colPos;
 		boolean moved = false;

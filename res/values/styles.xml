@@ -18,6 +18,7 @@
 -->
 
 <resources>
+
     <style name="WorkspaceIcon">
         <item name="android:textSize">13dip</item>
         <item name="android:singleLine">true</item>
@@ -52,11 +53,12 @@
         <item name="android:windowBackground">@null</item>
         <item name="android:windowNoTitle">true</item>
     </style>
-    
+
     <style name="AnimationPreview">
         <item name="android:windowEnterAnimation">@anim/previews_fade_in</item>
         <item name="android:windowExitAnimation">@anim/fade_out_fast</item>
     </style>
+
     <style name="DockBarIcon">
         <item name="android:gravity">center_horizontal</item>
         <item name="android:layout_width">fill_parent</item>
@@ -66,4 +68,21 @@
         <item name="android:paddingRight">0dip</item>
         <item name="android:drawablePadding">3dip</item>
     </style>
+
+    <style name="PreferenceCategoryPartHolo">
+        <item name="android:background">@drawable/list_section_divider_holo_dark</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingRight">8dip</item>
+        <item name="android:paddingLeft">8dip</item>
+    </style>
+
+    <style name="Theme.PreferencesPartHolo" parent="@android:style/Theme">
+        <item name="android:listSeparatorTextViewStyle">@style/PreferenceCategoryPartHolo</item>
+    </style>
+
 </resources>

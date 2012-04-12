@@ -2,18 +2,12 @@
 <resources>
 
     <!-- Version Information -->
-    <string name="app_version" translatable="false">0.34</string>
+    <string name="app_version" translatable="false">0.38</string>
 
     <!-- Change Log -->
 
-    <string name="changelog" translatable="false">-&lt;b>NOTICE:&lt;/b>Look at the \'Guide\' if you are new! &lt;br>&lt;br>
---------------&lt;br>
--&lt;b>Recent changes&lt;/b>&lt;br>
-- Add configurable dock icon selector colors &lt;br>&lt;br>
-- Remove non-working transparency option from dock icon tint&lt;br>&lt;br>
-- Delete zone tweaks for shrink top, shrink bottom &lt;br>&lt;br>
-- Folder overscroll bounds (patch from AOSP) &lt;br>&lt;br>
-- Add partial support for Chinese locales&lt;br>&lt;br>
-April 2012, Chislon Chow</string>
+    <string name="changelog">&lt;b>Recent changes&lt;/b>&lt;br>
+- Chinese translation fix&lt;br>&lt;br>
+April 2012</string>
 
 </resources>

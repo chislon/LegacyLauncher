@@ -378,6 +378,7 @@ public class DragLayer extends FrameLayout implements DragController {
             mDragging = false;
             if (mDragBitmap != null) {
                 mDragBitmap.recycle();
+            	mDragBitmap = null;
             }
             if (mOriginator != null) {
                 mOriginator.setVisibility(VISIBLE);

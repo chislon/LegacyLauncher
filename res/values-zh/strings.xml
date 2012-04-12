@@ -1,0 +1,492 @@
+<!--
+/*
+* Copyright (C) 2008 The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- General -->
+    <string name="done">"完成"</string>
+    <!-- Application name -->
+    <string name="application_name">"Legacy啟動器"</string>
+
+    <!-- Default folder name -->
+    <string name="folder_name">"資料夾"</string>
+    <!-- Title of dialog that appears after user selects Wallpaper from menu -->
+    <string name="chooser_wallpaper">"從\u2026選取桌布"</string>
+
+    <!-- Displayed when user selects a shortcut for an app that was uninstalled -->
+    <string name="activity_not_found">"無法啟動應用程序。也許應用程式未安裝到手機。"</string>
+    <!-- Displayed when user selects a shortcut for an app that cannot be accessed -->
+    <string name="activity_security_exception">"無法啟動應用程序。啟動被拒絕。"</string>
+    <!-- List item for configuring the current wallpaper -->
+    <string name="configure_wallpaper">"設定\u2026"</string>
+
+    <!-- Folders -->
+    <skip />
+    <!-- Label of Folder name field in Rename folder dialog box -->
+    <string name="rename_folder_label">"資料夾名稱"</string>
+    <!-- Title of dialog box -->
+    <string name="rename_folder_title">"重新命名資料夾"</string>
+
+    <!-- Shortcuts -->
+    <skip />
+    <!-- Title of dialog box -->
+    <string name="menu_item_add_item">"新增至主屏幕"</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of all apps -->
+    <string name="group_applications">"應用"</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of all shortcuts -->
+    <string name="group_shortcuts">"捷徑"</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of all launcher actions -->
+    <string name="launcher_actions">"啟動器行動"</string>
+    <!-- Options in "Add to Home" dialog box; Title of the search gadget -->
+    <string name="group_search">"搜索"</string>
+    <!-- Options in "Add to Home" dialog box; Title of the folder gadget -->
+    <string name="group_folder">"新增資料夾"</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of all live folders -->
+    <string name="group_live_folders">"資料夾"</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of all widgets/gadgets -->
+    <string name="group_widgets">"小工具"</string>
+    <!-- Options in "Add to Home" dialog box; Title of the group containing the list of apps that can set the wallpaper -->
+    <string name="group_wallpapers">"桌布"</string>
+    <!-- Error message when user has filled a home screen, possibly not used -->
+    <string name="out_of_space">"主屏幕已無空間"</string>
+    <!-- Message displayed when a shortcut is created by an external application -->
+    <string name="shortcut_installed">""</string>
+    <!-- Message displayed when a shortcut is uninstalled by an external application -->
+    <string name="shortcut_uninstalled">""</string>
+    <!-- Message displayed when an external application attempts to create a shortcut that already exists -->
+    <string name="shortcut_duplicate">""</string>
+
+    <!-- Title of dialog when user is selecting shortcut to add to homescreen -->
+    <string name="title_select_shortcut">"選取捷徑"</string>
+    <!-- Title of dialog when user is selecting live folder to add to homescreen -->
+    <string name="title_select_live_folder">"選取資料夾"</string>
+
+    <!-- Permissions: -->
+    <string name="permlab_install_shortcut">"安裝捷徑"</string>
+    <string name="permdesc_install_shortcut">"允許應用程式自動新增快速鍵。"</string>
+    <string name="permlab_uninstall_shortcut">"解除安裝捷徑"</string>
+    <string name="permdesc_uninstall_shortcut">"允許應用程式自動移除捷徑。"</string>
+    <string name="permlab_read_settings">"讀取主屏幕設定和捷徑"</string>
+    <string name="permdesc_read_settings">"允許應用程式讀取主屏幕中的設定和捷徑。"</string>
+    <string name="permlab_write_settings">"寫入主屏幕設定和捷徑"</string>
+    <string name="permdesc_write_settings">"允許應用程式變更主屏幕中的設定和捷徑。"</string>
+
+    <!-- Widgets: -->
+    <skip />
+
+    <!-- Text to show user in place of a gadget when we can't display it properly -->
+    <string name="gadget_error_text">"沒有載入小工具"</string>
+
+    <!-- ADW Settings -->
+    <string name="launcher_label_settings">"Legacy啟動器設置"</string>
+    <string name="pref_category_launcher_components">啟動器組件</string>
+    
+    <!-- Desktop preferences -->
+    <string name="pref_title_desktop">"桌面"</string>
+    <string name="pref_title_desktop_config_preferences">"桌面配置"</string>
+    <string name="pref_summary_desktop_config_preferences">"布局，反應"</string>
+    <string name="pref_title_desktop_extended_preferences">"桌面擴展功能"</string>
+    <string name="pref_summary_desktop_extended_preferences">"桌面預覽，文件夾"</string>
+    <string name="pref_title_desktop_appearance_preferences">"桌面外觀"</string>
+    <string name="pref_summary_desktop__preferences">"轉換效果，桌面指標，桌面圖示"</string>
+    <string name="pref_title_desktop_icon_widget_preferences">"桌面圖示和小工具"</string>
+    <string name="pref_summary_desktop_icon_widget_preferences">"設置圖示，小工具，標簽"</string>
+    <string name="pref_title_wallpaper_hack">"壁紙調整"</string>
+    <string name="pref_summary_wallpaper_hack">"在使用較大桌布時若發生強制關閉，請停用此選項。啟用此選項後可提升屏幕卷動的表現"</string>
+    <string name="pref_title_orientation_sensor">"旋轉方向"</string>
+    <string name="pref_title_hide_statusbar">"隱藏狀態列"</string>
+    <string name="pref_summary_hide_statusbar">"隱藏屏幕上的狀態列"</string>
+    <string name="pref_title_looping">"循環桌面"</string>
+    <string name="pref_summary_looping">"讓桌面循環顯示（有可視副作用）"</string>
+    <string name="pref_title_default_screen">"預設桌面屏幕"</string>
+    <string name="pref_title_desktop_scrolling_speed">"卷動時間"</string>
+    <string name="pref_summary_desktop_scrolling_speed">"設置卷動時切換桌面屏幕的時間"</string>
+    <string name="pref_dialog_desktop_scrolling_speed">"數值越小，卷動速度越快"</string>
+    <string name="pref_title_desktop_overshoot">"彈性特效"</string>
+    <string name="pref_summary_desktop_overshoot">"桌面滑動時的彈性效果"</string>
+    <string name="pref_dialog_desktop_overshoot">"設置為0時停用桌面彈性效果"</string>
+    <string name="pref_title_desktop_snap">"卷動彈回時間"</string>
+    <string name="pref_summary_desktop_snap">"設置卷動彈回桌面屏幕的速度"</string>
+    <string name="pref_dialog_desktop_snap">"降低設定值，加快卷動彈回"</string>
+    <string name="pref_title_desktop_transition">"轉換效果動畫"</string>
+    <string name="pref_summary_desktop_transition">"改變屏幕轉換效果"</string>
+    <string name="pref_title_desktop_wallpaper">"桌布"</string>
+    <string name="pref_title_enable_previews">"桌面預覽"</string>
+    <string name="pref_summary_enable_previews">"啟用桌面預覽"</string>
+    <string name="pref_title_spread_previews">"散開風格預覽"</string>
+    <string name="pref_summary_spread_previews">"使用散開風格的縮略圖預覽"</string>
+
+    <!-- Desktop icons -->
+    <string name="pref_title_desktop_label_size">"文字大小"</string>
+    <string name="pref_summary_desktop_label_size">"選擇標簽的文字大小"</string>
+    <string name="pref_dialog_desktop_label_size">"選擇標簽的文字大小"</string>
+    <string name="pref_title_desktop_label_padding_override">"覆蓋填充設定值"</string>
+    <string name="pref_summary_desktop_label_padding_override">"選擇覆蓋標簽填充設定值"</string>
+    <string name="pref_title_desktop_label_padding_radius_size">"背景半徑"</string>
+    <string name="pref_summary_desktop_label_padding_radius_size">"標簽背景圓角半徑"</string>
+    <string name="pref_dialog_desktop_label_padding_radius_size">"標簽背景圓角半徑"</string>
+    <string name="pref_title_desktop_label_padding_horizontal">"橫填充"</string>
+    <string name="pref_summary_desktop_label_padding_horizontal">"標簽背景橫填充"</string>
+    <string name="pref_dialog_desktop_label_padding_horizontal">"標簽背景橫填充"</string>
+    <string name="pref_title_desktop_label_padding_vertical">"垂直填充"</string>
+    <string name="pref_summary_desktop_label_padding_vertical">"標簽背景垂直填充"</string>
+    <string name="pref_dialog_desktop_label_padding_vertical">"標簽背景垂直填充"</string>
+    <string name="pref_title_desktop_label_color_category">"圖示標簽顏色"</string>
+    <string name="pref_title_desktop_label_color_override">"覆蓋顏色設定值"</string>
+    <string name="pref_summary_desktop_label_color_override">"選擇覆蓋標簽顏色"</string>
+    <string name="pref_title_desktop_label_color_shadow">"文字陰影顏色"</string>
+    <string name="pref_summary_desktop_label_color_shadow">"標簽文字陰影顏色"</string>
+    <string name="pref_title_desktop_label_color_text">"文字顏色"</string>
+    <string name="pref_summary_desktop_label_color_text">"選擇標簽文字顏色"</string>
+    <string name="pref_title_desktop_label_bold_text">"文字加粗"</string>
+    <string name="pref_summary_desktop_label_bold_text">"選擇文字標簽加粗"</string>
+    <string name="pref_title_desktop_label_color_bg">"標簽背景色"</string>
+    <string name="pref_summary_desktop_label_color_bg">"選擇標簽背景顏色"</string>
+    <string name="pref_title_desktop_icon_label_category">"圖示標簽"</string>
+    <string name="pref_title_desktop_icon_label_padding_category">"圖示標簽背景填充"</string>
+
+    <!-- Folder preferences -->
+    <string name="pref_title_folder">"資料夾"</string>
+    <string name="pref_title_closing_folder">"自動關閉文件夾"</string>
+    <string name="pref_summary_closing_folder">"應用程序啟動後自動關閉打開的文件夾"</string>
+    <string name="pref_title_folder_text_size">"文件夾文字大小"</string>
+    <string name="pref_summary_folder_text_size">"設置文件夾內的文字大小"</string>
+    <string name="pref_dialog_folder_text_size">"設置文件夾內的文字大小"</string>
+    <string name="pref_title_folder_animate">"文件夾動畫"</string>
+    <string name="pref_summary_folder_animate">"設置文件夾打開/關閉動畫"</string>
+
+    <!-- Desktop action preferences -->
+    <string name="pref_title_desktop_actions">"桌面功能"</string>
+    <string name="pref_summary_desktop_actions">"主頁按鈕，手勢，和雙輕觸功能"</string>
+    <string name="pref_title_home_button_binding">"主頁按鈕"</string>
+    <string name="pref_title_swipedown_actions">"下滑手勢"</string>
+    <string name="pref_title_swipeup_actions">"上滑手勢"</string>
+    <string name="pref_title_doubletap_actions">"雙輕觸動作"</string>
+
+    <!-- Drawer preferences -->
+    <string name="pref_title_drawer">"應用託盤"</string>
+    <string name="pref_title_drawer_settings">"託盤配置"</string>
+    <string name="pref_summary_drawer_settings">"風格，布局，反應"</string>
+    <string name="pref_title_drawer_appearance">"託盤外觀"</string>
+    <string name="pref_summary_drawer_appearance">"可視化設置"</string>
+    <string name="pref_title_drawer_catalogs">"託盤應用程序目錄"</string>
+    <string name="pref_summary_drawer_catalogs">"目錄設定"</string>
+    <string name="pref_title_drawer_animation_speed">"動畫特效時間"</string>
+    <string name="pref_summary_drawer_animation_speed">"設置動畫特效時間，以毫秒為單位"</string>
+    <string name="pref_dialog_animation_speed">"設置動畫特效時間，以毫秒為單位"</string>
+    <string name="pref_title_page_horizontal_margin">"縱向平面邊距"</string>
+    <string name="pref_summary_page_horizontal_margin">"縱向平面邊距寬度"</string>
+    <string name="pref_dialog_page_horizontal_margin">"縱向平面邊距寬度"</string>
+    <string name="pref_title_animated_drawer">"託盤動畫"</string>
+    <string name="pref_summary_animated_drawer">"顯示動畫"</string>
+    <string name="pref_title_animated_zoom_drawer">"縮放特效"</string>
+    <string name="pref_summary_animated_zoom_drawer">"縮放特效動畫"</string>
+    <string name="pref_title_drawer_columns_portrait">"豎屏列數"</string>
+    <string name="pref_summary_drawer_columns_portrait">"選擇豎屏圖示列數"</string>
+    <string name="pref_dialog_drawer_columns_portrait">"選擇豎屏圖示列數"</string>
+    <string name="pref_title_drawer_rows_portrait">"豎屏行數"</string>
+    <string name="pref_summary_drawer_rows_portrait">"選擇豎屏圖示行數"</string>
+    <string name="pref_dialog_drawer_rows_portrait">"選擇豎屏圖示行數"</string>
+    <string name="pref_title_drawer_columns_landscape">"橫屏列數"</string>
+    <string name="pref_summary_drawer_columns_landscape">"選擇橫屏圖示列數"</string>
+    <string name="pref_dialog_drawer_columns_landscape">"選擇橫屏圖示列數"</string>
+    <string name="pref_title_drawer_rows_landscape">"橫屏行數"</string>
+    <string name="pref_summary_drawer_rows_landscape">"選擇橫屏圖示行數"</string>
+    <string name="pref_dialog_drawer_rows_landscape">"選擇橫屏圖示行數"</string>
+    <string name="pref_title_drawer_color">"背景顏色"</string>
+    <string name="pref_summary_drawer_color">"設置應用程序託盤背景顏色"</string>
+    <string name="pref_title_drawer_animation_category">"託盤動畫"</string>
+    <string name="pref_title_drawer_app_label_category">"應用標簽"</string>
+    <string name="pref_title_drawer_background_category">"託盤背景"</string>
+    <string name="pref_title_drawer_label_size">"文字大小"</string>
+    <string name="pref_summary_drawer_label_size">"標簽文字大小"</string>
+    <string name="pref_dialog_drawer_label_size">"標簽文字大小"</string>
+    <string name="pref_title_drawer_label_bold">"文字加粗"</string>
+    <string name="pref_summary_drawer_label_bold">"標簽文字加粗"</string>
+    <string name="pref_title_drawer_label_color_override">"覆蓋顏色設定值"</string>
+    <string name="pref_summary_drawer_label_color_override">"選擇覆蓋標簽顏色設定值"</string>
+    <string name="pref_title_drawer_label_color">"文字顏色"</string>
+    <string name="pref_summary_drawer_label_color">"標簽文字顏色"</string>
+    <string name="pref_title_drawer_navigate_catalogs">"目錄導航按鈕"</string>
+    <string name="pref_summary_drawer_navigate_catalogs">"顯示目錄導航按鈕"</string>
+    <string name="pref_title_drawer_catalog_fling_navigate">"手勢導航"</string>
+    <string name="pref_summary_drawer_catalog_fling_navigate">"使用垂直手勢導航目錄"</string>
+    <string name="pref_title_drawer_ungroup_catalog">"只顯示已分類目錄"</string>
+    <string name="pref_summary_drawer_ungroup_catalog">"不顯示所有程式，只顯示已分類目錄"</string>
+    <string name="pref_title_drawer_show_catalogs">"顯示目錄標題"</string>
+    <string name="pref_summary_drawer_show_catalogs">"在託盤顯示目錄標題"</string>
+    <string name="pref_title_drawer_style">"應用託盤風格"</string>
+    <string name="pref_title_drawer_layout_category">"託盤格子布局"</string>
+    <string name="pref_title_drawer_functionality_category">"託盤功能"</string>
+    <string name="pref_title_drawer_scrolling_speed">"卷動時間"</string>
+    <string name="pref_summary_drawer_scrolling_speed">"橫跨卷動時間"</string>
+    <string name="pref_dialog_drawer_scrolling_speed">"降低設定值，卷動加速"</string>
+    <string name="pref_title_drawer_snap">"卷動彈回時間"</string>
+    <string name="pref_summary_drawer_snap">"設置卷動彈回桌面屏幕的速度"</string>
+    <string name="pref_dialog_drawer_snap">"降低設定值，加快卷動彈回"</string>
+    <string name="pref_title_drawer_overshoot">"滾動過衝"</string>
+    <string name="pref_summary_drawer_overshoot">"橫向託盤滾動過衝效果"</string>
+
+    <!-- Dock Settings -->
+    <string name="pref_title_dock">"工具列"</string>
+    <string name="pref_title_dock_settings">"工具列配置"</string>
+    <string name="pref_summary_dock_settings">"工具列圖示數目，頁面指示點"</string>
+    <string name="pref_title_dock_appearance">"工具列外觀"</string>
+    <string name="pref_summary_dock_appearance">"圖示的大小，工具列背景"</string>
+    <string name="pref_title_desktop_dots">"工具列頁面指示點"</string>
+    <string name="pref_summary_desktop_dots">"顯示/隱藏工具列頁面指示點"</string>
+    <string name="pref_category_dock_icon">"工具列圖示外觀"</string>
+    <string name="pref_title_ab_scale_factor">"圖示大小"</string>
+    <string name="pref_summary_ab_scale_factor">"設置圖示縮放"</string>
+    <string name="pref_dialog_ab_scale_factor">"設置圖示大小縮放"</string>
+    <string name="pref_title_hide_ab_bg">"隱藏工具列背景"</string>
+    <string name="pref_summary_hide_ab_bg">"隱藏在工具列的背景"</string>
+    <string name="pref_title_hide_icon_labels">"隱藏圖示標簽"</string>
+    <string name="pref_summary_hide_icon_labels">"隱藏桌面圖示的標簽"</string>
+    <string name="pref_title_main_dock_style">"圖示數目"</string>
+    <string name="pref_title_main_dock_lock_mab">"鎖定工具列中間位置圖示"</string>
+    <string name="pref_summary_main_dock_lock_mab">"預防更改工具列中間位置圖示"</string>
+    <string name="pref_title_ab_tint">"工具列圖示著色"</string>
+    <string name="pref_summary_ab_tint">"啟用主工具列圖示著色"</string>
+    <string name="pref_title_ab_tint_color">"著色色調"</string>
+    <string name="pref_summary_ab_tint_color">"選擇著色圖示色調"</string>
+    <string name="pref_title_ab_selector_color">"圖示聚焦介面顏色"</string>
+    <string name="pref_summary_ab_selector_color">"選擇圖示聚焦介面顏色"</string>
+    <string name="pref_title_main_dock_drawer_hide">"隱藏託盤工具列"</string>
+    <string name="pref_summary_main_dock_drawer_hide">"託盤打開時隱藏工具列"</string>
+
+    <!-- Other preferences -->
+    <string name="pref_title_application_settings">"更多"</string>
+    <string name="pref_title_build_info">"啟動器資訊"</string>
+    <string name="pref_title_app_version">"版本"</string>
+    <string name="drop_to_uninstall">"卸載應用程式"</string>
+    <string name="toast_unknown_item">"未知的項目。無法加入未知類型的項目"</string>
+    <string name="title_dialog_xml">"啟動器設置"</string>
+    <string name="import_export_sdcard_unmounted">"未找到SD卡"</string>
+
+    <!-- XML Import/Export strings -->
+    <string name="message_dialog_export">"原有文件將被覆蓋！確認備份設置？"</string>
+    <string name="xml_export_dialog">"正在備份設置\u2026"</string>
+    <string name="xml_export_success">"設置備份成功！"</string>
+    <string name="xml_export_error">"備份設置時出現錯誤！"</string>
+    <string name="message_dialog_import">"將會重啟！確認恢復設置？"</string>
+    <string name="xml_import_dialog">"正在恢復設置\u2026"</string>
+    <string name="xml_file_not_found">"未找到設置備份檔案！"</string>
+    <string name="xml_not_readable">"設置備份檔案存在，但無法讀取！"</string>
+    <string name="xml_import_success">"設置恢復成功！"</string>
+    <string name="xml_import_error">"恢復設置時出現錯誤！"</string>
+
+    <!-- Config Import/Export strings -->
+    <string name="message_dialog_export_config">"原有文件將被覆蓋！確認備份桌面設置？"</string>
+    <string name="dbfile_export_dialog">"正在備份桌面設置\u2026"</string>
+    <string name="dbfile_export_success">"桌面設置備份成功！"</string>
+    <string name="dbfile_export_error">"備份桌面設置時出現錯誤！"</string>
+    <string name="message_dialog_import_config">"確認還原桌面配置？將重新啟動。"</string>
+    <string name="dbfile_import_dialog">"正在恢復桌面設置\u2026"</string>
+    <string name="dbfile_not_found">"未找到桌面設置備份檔案！"</string>
+    <string name="dbfile_not_readable">"桌面設置備份檔案存在，但無法讀取！"</string>
+    <string name="dbfile_import_success">"桌面設置恢復成功！"</string>
+    <string name="dbfile_import_error">"恢復桌面設置時出現錯誤！"</string>
+
+    <!-- Desktop columns/Rows -->
+    <string name="pref_title_desktop_layout_category">"桌面格子布局"</string>
+    <string name="pref_title_desktop_functionality_category">"桌面功能"</string>
+    <string name="pref_title_desktop_columns">"桌面列數"</string>
+    <string name="pref_summary_desktop_columns">"選擇要在桌面顯示的列數"</string>
+    <string name="pref_dialog_desktop_columns">"選擇要在桌面顯示的列數"</string>
+    <string name="pref_title_desktop_rows">"桌面行數"</string>
+    <string name="pref_summary_desktop_rows">"選擇要在桌面顯示的行數"</string>
+    <string name="pref_dialog_desktop_rows">"選擇要在桌面顯示的行數"</string>
+    <string name="pref_title_autosize_icons">"自動伸展"</string>
+    <string name="pref_summary_autosize_icons">"自動伸展圖示/小工具"</string>
+    <string name="pref_title_drawer_labels">"顯示應用程序標簽"</string>
+    <string name="pref_summary_drawer_labels">"顯示應用程序託盤上的標簽"</string>
+    <string name="widget_columns">"小工具列數"</string>
+    <string name="widget_rows">"小工具行數"</string>
+    <string name="pref_title_screen_cache">"卷動緩存"</string>
+    <string name="pref_summary_screen_cache">"提高渲染速度，但將使用更多內存"</string>
+    <string name="pref_title_desktop_indicator">"顯示屏幕頁面指示器"</string>
+    <string name="pref_summary_desktop_indicator">"滑動桌面時顯示視覺提示"</string>
+    <string name="pref_title_desktop_indicator_autohide">"自動隱藏頁面指示器"</string>
+    <string name="pref_summary_desktop_indicator_autohide">"經過一小段時間後隱藏頁面指示器"</string>
+    <string name="pref_title_desktop_indicator_type">"指示器風格"</string>
+    <string name="pref_title_desktop_indicator_color_allow">"自定義滑動指示器顏色"</string>
+    <string name="pref_summary_desktop_indicator_color_allow">"容許自定義滑動指示器顏色"</string>
+    <string name="pref_title_desktop_indicator_color">"滑動指示器顏色"</string>
+    <string name="pref_summary_desktop_indicator_color">"選擇滑動指示器顏色"</string>
+
+    <!-- Category titles -->
+    <string name="pref_title_system_preferences">"系統"</string>
+    <string name="pref_title_highlights_category">"圖示高亮"</string>
+    <string name="pref_title_indicators_category">"屏幕指示器"</string>
+    <!-- Theme preferences -->
+    <string name="pref_title_theme_settings">"布景主題"</string>
+    <string name="pref_summary_theme_settings">"選擇布景主題"</string>
+    <string name="pref_title_theme_package">"選擇布景主題"</string>
+    <string name="pref_summary_theme_package">"選擇ADW布景主題"</string>
+    <string name="pref_title_theme_preview">"默認主題"</string>
+    <string name="pref_summary_theme_preview">"選定主題預覽"</string>
+    <string name="pref_title_theme_icons">"使用主題圖示"</string>
+    <string name="pref_summary_theme_icons">"不選擇此項使用系統標準圖示"</string>
+    <string name="pref_themes_apply_theme">"應用主題"</string>
+    <string name="pref_themes_get_themes">"獲取更多主題"</string>
+    <string name="pref_title_wallpaper_scrolling">"壁紙卷動"</string>
+    <string name="pref_summary_wallpaper_scrolling">"允許桌布隨著屏幕移動"</string>
+    <string name="message_delete_desktop">"移除本屏幕及其所有內容？"</string>
+    <string name="message_cannot_delete_desktop">"無法刪除最後一個屏幕"</string>
+    <string name="message_end_edit_desktop">"編輯桌面完成？"</string>
+    <string name="message_cannot_add_desktop">"無法添加更多桌面屏幕"</string>
+    <string name="message_cannot_swap_desktop">"無法交換桌面屏幕"</string>
+    <string name="hint_delete_desktop">"刪除此屏幕和所有內容"</string>
+    <string name="hint_default_desktop">"設置默認屏幕"</string>
+    <string name="hint_add_left_desktop">"左側添加新屏幕"</string>
+    <string name="hint_add_right_desktop">"右側添加新屏幕"</string>
+    <string name="hint_swap_left_desktop">"互換當前屏幕，左側屏幕"</string>
+    <string name="hint_swap_right_desktop">"互換當前屏幕，右側屏幕"</string>
+    <string name="menu_edit">"編輯"</string>
+    <string name="menu_resize_widget">"調整大小"</string>
+    <string name="menu_edit_desktop">"編輯桌面"</string>
+    <string name="pref_label_shortcuts">"自訂捷徑"</string>
+    <string name="pref_label_activities">"活動清單"</string>
+    <string name="shortcut_header">"選擇您需要啟動的應用程式。\n您也可以同時選擇自訂圖示。"</string>
+    <string name="shortcut_pick_activity">"選擇您的應用程式"</string>
+    <string name="shortcut_label">"標簽"</string>
+    <string name="shortcuts_select_picture">"選擇圖片"</string>
+    <string name="shortcuts_crop_picture">"選擇並剪裁圖片"</string>
+    <string name="shortcuts_icon_packs">"ADWTheme主題圖示包"</string>
+    <string name="shortcuts_select_icon_type">"選擇圖示類型"</string>
+    <string name="shortcuts_select_icon_pack">"選擇圖示包"</string>
+    <string name="shortcuts_restore_original">"還原原來的圖示"</string>
+
+    <!-- Catalogs strings -->
+    <string name="selectAll">"全部選擇"</string>
+    <string name="selectNone">"取消所有選擇"</string>
+    <string name="sortType">"排序方式："</string>
+    <string name="app_group_prepend">"目錄"</string>
+    <string name="app_group_no_items_add">"沒有選擇任何項目，停止添加目錄？"</string>
+    <string name="app_group_no_items_modify">"沒有選擇任何項目，停止添加目錄？"</string>
+    <string name="app_group_all">"所有應用"</string>
+    <string name="app_group_un">"所有應用（未編目）"</string>
+    <string name="app_group_add">"新增目錄"</string>
+    <string name="app_group_add_abort">"中止新增目錄"</string>
+    <string name="app_group_delete">"刪除目錄"</string>
+    <string name="app_group_delete_long">"確認刪除當前目錄？"</string>
+    <string name="app_group_choose">"選擇目錄"</string>
+    <string name="app_group_config">"修改目錄"</string>
+    <string name="app_group_config_error">"不能修改當前目錄"</string>
+    <string name="app_group_remove_error">"無法刪除當前目錄"</string>
+    <string name="app_group_remove_success">"目錄刪除成功"</string>
+    <string name="rename_group_title">"新目錄"</string>
+    <string name="rename_group_label">"目錄名稱"</string>
+    <string name="create_group_success">"“新目錄： “"</string>
+    <string name="create_group_fail">"無法創建目錄，輸入名稱失敗。"</string>
+    <string name="show_catalog">"顯示目錄“%s\""</string>
+
+    <!-- Misc preferences strings -->
+    <string name="pref_title_launcher_restart">"重新啟動"</string>
+    <string name="pref_summary_launcher_restart">"關閉並重新啟動Legacy啟動器"</string>
+    <string name="pref_title_launcher_manage">"管理"</string>
+    <string name="pref_summary_launcher_manage">"由系統設置管理Legacy啟動器"</string>
+
+    <!-- Lock strings -->
+    <string name="pref_title_lock_screen">"啟動器鎖定"</string>
+    <string name="pref_title_lock">"啟用鎖定"</string>
+    <string name="pref_summary_lock">"鎖定啟動器"</string>
+    <string name="pref_title_lock_password">"設置鎖定密碼"</string>
+    <string name="pref_summary_lock_password">"設置啟動器鎖定新密碼"</string>
+    <string name="pref_title_lock_password_clear">"清除鎖定密碼"</string>
+    <string name="pref_summary_lock_password_clear">"清除啟動器鎖定密碼"</string>
+    <string name="dialog_lock_password_set">"設置密碼，最多32個字符"</string>
+    <string name="dialog_lock_password_get">"輸入鎖定密碼"</string>
+    <string name="toast_password_clear">"清除鎖密碼成功"</string>
+    <string name="toast_password_set">"密碼設置為："</string>
+    <string name="toast_launcher_lock">"鎖定啟動"</string>
+    <string name="toast_launcher_unlock">"鎖定停用"</string>
+    <string name="lock_password_invalid">"鎖定密碼無效"</string>
+    <string name="scrollable_api_required">"此小工具需要更新版本的啟動器\ n請及時更新或者聯系小工具開發者。"</string>
+
+    <!-- Backup and Restore -->
+    <string name="pref_title_import_export">"備份和復原"</string>
+    <string name="pref_title_xml">"啟動設置數據"</string>
+    <string name="pref_title_xml_import">"還原設定"</string>
+    <string name="pref_summary_xml_import">"從文件中恢復設置 /sdcard/legacy_launcher_settings.xml"</string>
+    <string name="pref_title_xml_export">"備份設置"</string>
+    <string name="pref_summary_xml_export">"將設置備份到檔 /sdcard/legacy_launcher_settings.xml"</string>
+    <string name="pref_summary_db_import">"從文件中恢復設置  /sdcard/legacy_launcher.db"</string>
+    <string name="pref_title_db_export">"備份桌面圖示"</string>
+    <string name="pref_summary_db_export">"將設置備份到檔 /sdcard/legacy_launcher.db"</string>
+    <string name="pref_title_db">"桌面圖示位置"</string>
+    <string name="pref_title_db_import">"還原桌面圖示"</string>
+
+    <!-- Other UI preferences -->
+    <string name="pref_title_ui_settings">"用戶界面組件"</string>
+    <string name="pref_title_notif_receiver">"顯示通知"</string>
+    <string name="pref_summary_notif_receiver">"啟用全域通知計數器"</string>
+    <string name="pref_title_notif_size">"氣泡的文字大小"</string>
+    <string name="pref_summary_notif_size">"選擇通知氣泡的文字大小"</string>
+    <string name="pref_dialog_notif_size">"選擇通知氣泡的文字大小"</string>
+    <string name="pref_title_deletezone_category">"垃圾桶"</string>
+    <string name="pref_title_deletezone_style">"垃圾桶位置"</string>
+    <string name="pref_title_icon_highlights">"點擊高亮顏色"</string>
+    <string name="pref_summary_icon_highlights">"選擇當圖示被點擊時的高亮顏色"</string>
+    <string name="pref_title_icon_highlights_focus">"焦點高亮顏色"</string>
+    <string name="pref_summary_icon_highlights_focus">"選擇圖示被聚焦時的高亮顏色"</string>
+    <string name="pref_title_new_selectors">"使用新的聚焦介面"</string>
+    <string name="pref_summary_new_selectors">"選擇是否使用新的聚焦介面"</string>
+
+    <!-- Menus items: -->
+    <skip />
+    <!-- Verb, menu item used to add an item on the desktop -->
+    <string name="menu_add">"新增"</string>
+    <string name="menu_delete">"移除"</string>
+    <!-- Noun, menu item used to set the desktop's wallpaper -->
+    <string name="menu_wallpaper">"桌布"</string>
+    <!-- Verb, menu item used to initiate global search -->
+    <string name="menu_search">"搜尋"</string>
+    <!-- Noun, menu item used to show the system settings -->
+    <string name="menu_settings">"設定"</string>
+    <string name="menu_launcher_settings">"啟動器設置"</string>
+    <string name="menu_lock">"啟動器鎖定"</string>
+    <string name="menu_unlock">"啟動器解鎖"</string>
+
+    <!-- Edit Text Hints -->
+    <string name="hint_name_category">"目錄名稱"</string>
+    <string name="hint_password_new">"新密碼"</string>
+    <string name="hint_password_old">"輸入密碼"</string>
+
+    <!-- Color Picker -->
+    <string name="press_color_to_apply">"請輕按顏色應用"</string>
+
+    <!-- Activity Reorder -->
+    <string name="activity_label_reorder_activity">"整理文件夾："</string>
+    <string name="toast_folder_icon_reorder_finished">"更改已被保存到文件夾"</string>
+    <string name="button_folder_icon_reorder_sort">"按名稱排序"</string>
+    <string name="dialog_folder_icon_reorder_sort">"按名稱排序的文件夾中的所有圖示？"</string>
+    <string name="menu_folder_icon_reorder">"重新排列"</string>
+
+    <!-- Progress dialog -->
+    <string name="dialog_please_wait">"請稍候\u2026"</string>
+
+    <!-- Guide activity -->
+    <string name="button_guide">"指南"</string>
+    <string name="pref_title_guide">"用戶指南"</string>
+    <string name="pref_summary_guide">"學習使用Legacy啟動器"</string>
+    <string name="button_continue">"繼續"</string>
+    <string name="button_back">"返回"</string>
+    <string name="button_finish">"結束"</string>
+
+</resources>

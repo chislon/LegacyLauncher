@@ -19,13 +19,13 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wordpress.chislonchow.legacylauncher"
-    android:versionCode="34"
+    android:versionCode="38"
     android:versionName="@string/app_version" >
 
     <uses-sdk
         android:maxSdkVersion="10"
         android:minSdkVersion="7"
-        android:targetSdkVersion="8" />
+        android:targetSdkVersion="10" />
 
     <permission
         android:name="com.android.launcher.permission.INSTALL_SHORTCUT"
@@ -89,7 +89,8 @@
         <activity
             android:name="MyLauncherSettings"
             android:configChanges="orientation|keyboardHidden|keyboard"
-            android:label="@string/launcher_label_settings" />
+            android:label="@string/launcher_label_settings"
+            android:theme="@style/Theme.PreferencesPartHolo" />
         <activity
             android:name="ActivityPickerActivity"
             android:label="@string/pref_label_activities" />

@@ -531,7 +531,7 @@ public final class MyLauncherSettingsHelper {
 	public static class ChangelogDialogBuilder {
 		public static AlertDialog create(final Context context, boolean shouldShow) throws NameNotFoundException {
 
-			String aboutTitle = String.format("%s Changelog", context.getString(R.string.app_version));
+			String aboutTitle = String.format(context.getString(R.string.application_name) + " %s", context.getString(R.string.app_version));
 			Spanned aboutText = Html.fromHtml(context.getString(R.string.changelog, TextView.BufferType.SPANNABLE));
 
 			// Set up the holder scrollview

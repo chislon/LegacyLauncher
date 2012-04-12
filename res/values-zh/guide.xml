@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Guide Text -->
+    <string name="title_guide_0">"Legacy啟動器入門指南"</string>
+    <string name="title_guide_1">"1) 用戶界面定義"</string>
+    <string name="title_guide_2">"2) 桌面圖示和小工具"</string>
+    <string name="title_guide_3">"3) 桌面屏幕數量"</string>
+    <string name="title_guide_4">"4) 設置和自定義"</string>
+    <string name="title_guide_5">"5) 用戶主題"</string>
+    <string name="title_guide_6">"6) 啟動器鎖定"</string>
+    <string name="title_guide_7">"7) 備份和恢復"</string>
+    <string name="title_guide_8">"8) 引用"</string>
+    <string name="text_guide_0">&lt;b>Legacy啟動器指南目錄&lt;/b>&lt;br>&lt;br>
+    &lt;b>1)&lt;/b> 用戶界面定義&lt;br>
+    &lt;b>2)&lt;/b> 桌面圖示和小工具&lt;br>
+    &lt;b>3)&lt;/b> 桌面屏幕數量s&lt;br>
+    &lt;b>4)&lt;/b> 設置和自定義&lt;br>
+    &lt;b>5)&lt;/b> 用戶主題&lt;br>
+    &lt;b>6)&lt;/b> 啟動器鎖定&lt;br>
+    &lt;b>7)&lt;/b> 備份和恢復&lt;br>
+    &lt;b>8)&lt;/b> 引用&lt;br>&lt;br>
+    &lt;i>繼續學習使用Legacy啟動器&lt;/i></string>
+    <string name="text_guide_1">Legacy啟動器定義的可視化界面元素:&lt;br>&lt;br>
+    &lt;b>A)&lt;/b> 桌面 &lt;br>包含共同項目的自定義工作區&lt;br>&lt;br>
+    &lt;b>B)&lt;/b> 圖示&lt;br>&lt;br>
+    &lt;b>C)&lt;/b> 小工具&lt;br>&lt;br>
+    &lt;b>D)&lt;/b> 工具列&lt;br>可以配置為顯示1/3/5圖示。中心工具列的內容默認被鎖定，可以到“Legacy啟動器設置”更改。&lt;br>&lt;br>  
+    &lt;b>E)&lt;/b> 應用托盤&lt;br>抽屜，格子排列的安裝的應用程序&lt;br>&lt;br></string>
+    <string name="text_guide_2">&lt;b>A)&lt;/b> 如要添加到桌面的圖示/小工具，長按在桌面上的空白區域。&lt;br>&lt;br>
+    &lt;b>B)&lt;/b> 也可以按“菜單”鍵→“新增”。&lt;br>&lt;br>
+    &lt;b>C)&lt;/b> 選擇新小工具尺寸。如果在桌面上沒有足夠的空間，新的小工具將不會出現在桌面上。&lt;br>&lt;br>
+    &lt;b>D)&lt;/b> 小工具被添加後，小工具本身上執行長按→選擇“調整大小”，拖動箭頭指標執行小工具大小調整，並按“返回”鍵退出小工具調整模式。&lt;br>&lt;br></string>
+    <string name="text_guide_3">添加或刪除桌面屏幕： “菜單”鍵→“編輯桌面”，可啟用的屏幕數量是1至7之間，並按“返回”鍵退出桌面編輯模式:&lt;br>&lt;br>
+    &lt;b>A)&lt;/b> 添加桌面屏幕&lt;br>&lt;br>
+    &lt;b>B)&lt;/b> 刪除桌面屏幕&lt;br>&lt;br>
+    &lt;b>C)&lt;/b> 交換左/右桌面屏幕&lt;br>&lt;br>
+    &lt;b>D)&lt;/b> 設置默認屏幕&lt;br>&lt;br></string>
+    <string name="text_guide_4">"“菜單”鍵→“Legacy啟動器設置”執行啟動器配置變更。"</string>
+    <string name="text_guide_5">"通過安裝和應用佈景主題包更換啟動器外觀和風格&lt;br>&lt;br>
+    &lt;b>A)&lt;/b> “Legacy啟動器設置”→“佈景主題”&lt;br>&lt;br>
+    &lt;b>B)&lt;/b> 從Google Play商店找到佈景主題包&lt;br>&lt;br>如要採用工具列背景，須停用隱藏工具列背景的選項"</string>
+    <string name="text_guide_6">&lt;b>A)&lt;/b> 設置完成後，“啟動器鎖定“能防止桌面上的更改。“菜單”鍵→“啟動器鎖定”&lt;br>&lt;br>&lt;b>B)&lt;/b> 解鎖操作為“啟動器解鎖“&lt;br>&lt;br>&lt;b>C)&lt;/b> 也可以從“Legacy啟動器設置”→“啟動器鎖定”執行設置&lt;br>&lt;br>&lt;br>&lt;b>D)&lt;/b>“Legacy啟動器設置”內可以設置鎖定密碼&lt;br>如果忘記了鎖定密碼，可以清除Legacy啟動器的所有數據來恢復功能。通過從桌面→“設置”→“應用程序”→“管理應用程序”→“Legacy啟動器”→“清除數據”。</string>
+    <string name="text_guide_7">訪問“備份和復原”，可以備份或恢復啟動器數據資料&lt;br>&lt;br>&lt;br>&lt;i>您已完成閱讀此指南。如要再次訪問請瀏覽至“Legacy啟動器設置”→“用戶指南“&lt;/i></string>
+    <string name="text_guide_8">Legacy啟動器開發基於以下的開源項目:&lt;br>&lt;br>
+&lt;a href=\'https://github.com/CyanogenMod/android_packages_apps_ADWLauncher\'>Cyanogenmod ADW啟動器&lt;&lt;/a>&lt;br>&lt;br>
+&lt;a href=\'https://github.com/attenzione/android-ColorPickerPreference/\'>ColorPickerPreference&lt;&lt;/a>&lt;br>&lt;br>
+&lt;a href=\'https://github.com/commonsguy/cwac-touchlist\'>CWAC Touchlist&lt;&lt;/a>&lt;br>&lt;br>
+&lt;a href=\'http://android.com\'>Android Open Source Project&lt;&lt;/a>&lt;br>&lt;br>
+ADW啟動器&lt;br>&lt;br>
+&lt;a href=\'https://play.google.com/store/apps/details?id=org.adw.launcher\'>ADW啟動器 免費版&lt;&lt;/a>&lt;br>&lt;br>
+&lt;a href=\'https://play.google.com/store/apps/details?id=org.adwfreak.launcher\'>ADW啟動器 EX&lt;&lt;/a>&lt;br>&lt;br>
+本指南引用的ADW主題:&lt;br>&lt;br>
+&lt;a href=\'https://play.google.com/store/apps/details?id=jp.hyoromo.adwtheme.miku\'>初音未來&lt;&lt;/a>&lt;br>&lt;br>
+&lt;a href=\'https://play.google.com/store/apps/details?id=com.gfxandroid.honeycomb\'>蜂窩&lt;&lt;/a>&lt;br>&lt;br>
+&lt;a href=\'https://play.google.com/store/apps/details?id=com.dtanquary.blackglassadwtheme\'>黑色玻璃&lt;&lt;/a>&lt;br>&lt;br></string>
+
+</resources>

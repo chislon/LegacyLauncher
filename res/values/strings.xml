@@ -99,6 +99,7 @@
 
     <!-- ADW Settings -->
     <string name="launcher_label_settings">Legacy Launcher Setup</string>
+    <string name="pref_category_launcher_components">LAUNCHER COMPONENTS</string>
 
     <!-- Desktop preferences -->
     <string name="pref_title_desktop">Desktop</string>
@@ -129,7 +130,7 @@
     <string name="pref_dialog_desktop_snap">Speed up snap time by decreasing value</string>
     <string name="pref_title_desktop_transition">Transition Animation</string>
     <string name="pref_summary_desktop_transition">Transition animation for changing screens</string>
-    <string name="pref_title_desktop_wallpaper">Wallpaper</string>
+    <string name="pref_title_desktop_wallpaper">WALLPAPER</string>
     <string name="pref_title_enable_previews">Desktop previews</string>
     <string name="pref_summary_enable_previews">Enable desktop previews</string>
     <string name="pref_title_spread_previews">Spread previews</string>
@@ -150,7 +151,7 @@
     <string name="pref_title_desktop_label_padding_vertical">Vertical padding</string>
     <string name="pref_summary_desktop_label_padding_vertical">Label background vertical padding</string>
     <string name="pref_dialog_desktop_label_padding_vertical">Label background vertical padding</string>
-    <string name="pref_title_desktop_label_color_category">Icon Label Colors</string>
+    <string name="pref_title_desktop_label_color_category">ICON LABEL COLORS</string>
     <string name="pref_title_desktop_label_color_override">Override colors</string>
     <string name="pref_summary_desktop_label_color_override">Select to override label colors</string>
     <string name="pref_title_desktop_label_color_shadow">Text shadow color</string>
@@ -161,11 +162,11 @@
     <string name="pref_summary_desktop_label_bold_text">Select text bold style of labels</string>
     <string name="pref_title_desktop_label_color_bg">Label background color</string>
     <string name="pref_summary_desktop_label_color_bg">Select background color of labels</string>
-    <string name="pref_title_desktop_icon_label_category">Icon Labels</string>
-    <string name="pref_title_desktop_icon_label_padding_category">Icon Label Background Padding</string>
+    <string name="pref_title_desktop_icon_label_category">ICON LABELS</string>
+    <string name="pref_title_desktop_icon_label_padding_category">ICON LABEL BACKGROUND PADDING</string>
 
     <!-- Folder preferences -->
-    <string name="pref_title_folder">Folders</string>
+    <string name="pref_title_folder">FOLDERS</string>
     <string name="pref_title_closing_folder">Auto-close folders</string>
     <string name="pref_summary_closing_folder">Auto-close folder after app launch</string>
     <string name="pref_title_folder_text_size">Folder text size</string>
@@ -214,9 +215,9 @@
     <string name="pref_dialog_drawer_rows_landscape">Number of rows in landscape</string>
     <string name="pref_title_drawer_color">Background color</string>
     <string name="pref_summary_drawer_color">Set the color for tray background</string>
-    <string name="pref_title_drawer_animation_category">Tray Animations</string>
-    <string name="pref_title_drawer_app_label_category">Application Labels</string>
-    <string name="pref_title_drawer_background_category">Tray Background</string>
+    <string name="pref_title_drawer_animation_category">TRAY ANIMATIONS</string>
+    <string name="pref_title_drawer_app_label_category">APPLICATION LABELS</string>
+    <string name="pref_title_drawer_background_category">TRAY BACKGROUND</string>
     <string name="pref_title_drawer_label_size">Text size</string>
     <string name="pref_summary_drawer_label_size">Label text size</string>
     <string name="pref_dialog_drawer_label_size">Label text size</string>
@@ -235,8 +236,8 @@
     <string name="pref_title_drawer_show_catalogs">Show titles</string>
     <string name="pref_summary_drawer_show_catalogs">Show the catalog titles in tray</string>
     <string name="pref_title_drawer_style">Applications tray style</string>
-    <string name="pref_title_drawer_layout_category">Tray Grid Layout</string>
-    <string name="pref_title_drawer_functionality_category">Tray Functionality</string>
+    <string name="pref_title_drawer_layout_category">TRAY GRID LAYOUT</string>
+    <string name="pref_title_drawer_functionality_category">TRAY FUNCTIONALITY</string>
     <string name="pref_title_drawer_scrolling_speed">Scrolling time</string>
     <string name="pref_summary_drawer_scrolling_speed">Time to scroll across</string>
     <string name="pref_dialog_drawer_scrolling_speed">Speed up flinging by decreasing value</string>
@@ -254,7 +255,7 @@
     <string name="pref_summary_dock_appearance">Icon size, dock background</string>
     <string name="pref_title_desktop_dots">Dock paging dots</string>
     <string name="pref_summary_desktop_dots">Show/hide dock paging dots</string>
-    <string name="pref_category_dock_icon">Dock Icon Appearance</string>
+    <string name="pref_category_dock_icon">DOCK ICON APPEARANCE</string>
     <string name="pref_title_ab_scale_factor">Icon size</string>
     <string name="pref_summary_ab_scale_factor">Set the scaling size for icons</string>
     <string name="pref_dialog_ab_scale_factor">Set the scaling size for icons</string>
@@ -275,8 +276,8 @@
     <string name="pref_summary_main_dock_drawer_hide">Hide from view with open application tray</string>
 
     <!-- Other preferences -->
-    <string name="pref_title_application_settings">More</string>
-    <string name="pref_title_build_info">Launcher Information</string>
+    <string name="pref_title_application_settings">MORE</string>
+    <string name="pref_title_build_info">LAUNCHER INFORMATION</string>
     <string name="pref_title_app_version">Version</string>
     <string name="drop_to_uninstall">Drop to Uninstall</string>
     <string name="toast_unknown_item">Unknown item. We can\'t add unknown item types!</string>
@@ -308,8 +309,8 @@
     <string name="dbfile_import_error">Error restoring configuration!</string>
 
     <!-- Desktop columns/Rows -->
-    <string name="pref_title_desktop_layout_category">Desktop Grid Layout</string>
-    <string name="pref_title_desktop_functionality_category">Desktop Functionality</string>
+    <string name="pref_title_desktop_layout_category">DESKTOP GRID LAYOUT</string>
+    <string name="pref_title_desktop_functionality_category">DESKTOP FUNCTIONALITY</string>
     <string name="pref_title_desktop_columns">Desktop Columns</string>
     <string name="pref_summary_desktop_columns">Number of columns in desktop</string>
     <string name="pref_dialog_desktop_columns">Number of columns in desktop</string>
@@ -336,8 +337,8 @@
 
     <!-- Category titles -->
     <string name="pref_title_system_preferences">System</string>
-    <string name="pref_title_highlights_category">Icon Highlights</string>
-    <string name="pref_title_indicators_category">Screen Indicator</string>
+    <string name="pref_title_highlights_category">ICON HIGHLIGHTS</string>
+    <string name="pref_title_indicators_category">SCREEN INDICATOR</string>
     <!-- Theme preferences -->
     <string name="pref_title_theme_settings">Themes</string>
     <string name="pref_summary_theme_settings">Select visual themes</string>
@@ -426,7 +427,7 @@
 
     <!-- Backup and Restore -->
     <string name="pref_title_import_export">Backup and Restore</string>
-    <string name="pref_title_xml">Launcher Setup Data</string>
+    <string name="pref_title_xml">LAUNCHER SETUP DATA</string>
     <string name="pref_title_xml_import">Restore settings</string>
     <string name="pref_summary_xml_import">Restore from /sdcard/legacy_launcher_settings.xml</string>
     <string name="pref_title_xml_export">Backup settings</string>
@@ -434,7 +435,7 @@
     <string name="pref_summary_db_import">Restore from /sdcard/legacy_launcher.db</string>
     <string name="pref_title_db_export">Backup desktop icons</string>
     <string name="pref_summary_db_export">Backup to /sdcard/legacy_launcher.db</string>
-    <string name="pref_title_db">Desktop Icon Placement</string>
+    <string name="pref_title_db">DESKTOP ICON PLACEMENT</string>
     <string name="pref_title_db_import">Restore desktop icons</string>
 
     <!-- Other UI preferences -->
@@ -444,7 +445,7 @@
     <string name="pref_title_notif_size">Bubble text size</string>
     <string name="pref_summary_notif_size">Select text size for notification bubbles</string>
     <string name="pref_dialog_notif_size">Select text size for notification bubbles</string>
-    <string name="pref_title_deletezone_category">Trash Can</string>
+    <string name="pref_title_deletezone_category">TRASH CAN</string>
     <string name="pref_title_deletezone_style">Trash can position</string>
     <string name="pref_title_icon_highlights">Highlights press color</string>
     <string name="pref_summary_icon_highlights">Set color for icon press</string>

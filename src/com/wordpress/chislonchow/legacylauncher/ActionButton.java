@@ -362,6 +362,12 @@ DragListener, OnLongClickListener, DragSource {
 			mIconNormal.setCallback(null);
 			mIconNormal = null;
 		}
+		
+		if (mStateListDrawable != null) {
+			mStateListDrawable.setCallback(null);
+			mStateListDrawable = null;
+		}
+		
 		mIconNormal = d;
 		if (!specialMode) {
 			if (mIconNormal != null) {
@@ -373,7 +379,6 @@ DragListener, OnLongClickListener, DragSource {
 				mStateListDrawable.addState(new int[] {}, mIconNormal);
 				setImageDrawable(mStateListDrawable);
 			} else {
-				mStateListDrawable = null;
 				setImageDrawable(null);
 			}
 		}

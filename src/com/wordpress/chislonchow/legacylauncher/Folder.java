@@ -16,6 +16,7 @@
 
 package com.wordpress.chislonchow.legacylauncher;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -187,6 +188,7 @@ OnLongClickListener {
 	 *
 	 * @param adapter The list of applications to mDisplay in the folder.
 	 */
+	@SuppressLint("NewApi")
 	void setContentAdapter(BaseAdapter adapter) {
 		mContent.setAdapter(adapter);
 	}

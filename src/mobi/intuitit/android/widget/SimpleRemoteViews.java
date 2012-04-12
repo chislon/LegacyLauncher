@@ -459,7 +459,6 @@ public class SimpleRemoteViews implements Parcelable {
            }
        }
 
-       @SuppressWarnings("unchecked")
        @Override
        public void apply(View root) {
            final View view = root.findViewById(viewId);
