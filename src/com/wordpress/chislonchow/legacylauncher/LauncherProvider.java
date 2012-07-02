@@ -735,6 +735,7 @@ public class LauncherProvider extends ContentProvider {
 			return true;
 		}
 
+		@SuppressLint("NewApi")
 		private ComponentName getSearchWidgetProvider() {
 			SearchManager searchManager =
 					(SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE);

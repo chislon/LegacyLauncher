@@ -2,12 +2,12 @@
 <resources>
 
     <!-- Version Information -->
-    <string name="app_version" translatable="false">0.38</string>
+    <string name="app_version" translatable="false">0.40</string>
 
     <!-- Change Log -->
 
     <string name="changelog">&lt;b>Recent changes&lt;/b>&lt;br>
-- Chinese translation fix&lt;br>&lt;br>
-April 2012</string>
+- Issue fixes&lt;br>&lt;br>
+July 2012</string>
 
 </resources>

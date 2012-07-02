@@ -1496,12 +1496,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					addItemCellInfo.spanX);
 			outState.putInt(RUNTIME_STATE_PENDING_ADD_SPAN_Y,
 					addItemCellInfo.spanY);
-			outState.putInt(RUNTIME_STATE_PENDING_ADD_COUNT_X,
-					layout.getCountX());
-			outState.putInt(RUNTIME_STATE_PENDING_ADD_COUNT_Y,
-					layout.getCountY());
-			outState.putBooleanArray(RUNTIME_STATE_PENDING_ADD_OCCUPIED_CELLS,
-					layout.getOccupiedCells());
+			
+			// check that the workspace screen is valid to avoid a NPE
+			if (layout != null) {
+				outState.putInt(RUNTIME_STATE_PENDING_ADD_COUNT_X,
+						layout.getCountX());
+				outState.putInt(RUNTIME_STATE_PENDING_ADD_COUNT_Y,
+						layout.getCountY());
+				outState.putBooleanArray(RUNTIME_STATE_PENDING_ADD_OCCUPIED_CELLS,
+						layout.getOccupiedCells());
+			}
 		}
 
 		if (mFolderInfo != null && mWaitingForResult) {
@@ -5822,12 +5826,15 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 								if (folder != null)
 									folder.notifyDataSetChanged();
 							} else {
-								if (view instanceof ActionButton)
-									((ActionButton) view)
-									.UpdateLaunchInfo(null);
-								else
-									((ViewGroup) view.getParent())
-									.removeView(view);
+								try {
+									if (view instanceof ActionButton)
+										((ActionButton) view)
+										.UpdateLaunchInfo(null);
+									else {
+										((ViewGroup) view.getParent())
+										.removeView(view);
+									}
+								} catch (NullPointerException e) {}
 							}
 							v.post(new Runnable() {
 								@Override

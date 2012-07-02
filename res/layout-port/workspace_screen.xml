@@ -24,7 +24,7 @@
     launcher:cellWidth="80dip"
     launcher:cellHeight="100dip"
     launcher:longAxisStartPadding="0dip"
-    launcher:longAxisEndPadding="55dip"
+    launcher:longAxisEndPadding="75dip"
     launcher:shortAxisStartPadding="0dip"
     launcher:shortAxisEndPadding="0dip"
     launcher:shortAxisCells="4"

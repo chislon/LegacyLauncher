@@ -59,8 +59,11 @@ OnPreferenceChangeListener {
 	private static final String PREF_BACKUP_FILENAME = "legacy_launcher_settings.xml";
 	private static final String CONFIG_BACKUP_FILENAME = "legacy_launcher.db";
 	private static final String NAMESPACE = "com.wordpress.chislonchow.legacylauncher";
-	private static final String LAUNCHER_DB_BASE = "/data/" + NAMESPACE
-			+ "/databases/launcher.db";
+
+	private static String sLauncherDBSubDirectory = "/data/";
+	private static final String LAUNCHER_DB = sLauncherDBSubDirectory + NAMESPACE + "/databases/launcher.db";
+	private static final String LAUNCHER_SHARED_PREFS_BASE = sLauncherDBSubDirectory + NAMESPACE + "/shared_prefs";
+	private static final String LAUNCHER_XML = LAUNCHER_SHARED_PREFS_BASE + "/launcher.preferences.almostnexus.xml";
 
 	// Request codes for onResultActivity. That way we know the request donw
 	// when startActivityForResult was fired
@@ -499,24 +502,32 @@ OnPreferenceChangeListener {
 		themeListPref.setEntryValues(values);
 		PreviewPreference themePreview = (PreviewPreference) findPreference("themePreview");
 		themePreview.setTheme(themePackage);
+
+		// check if launcher settings are where we expect them to be
+		File file = new File(LAUNCHER_XML);
+		if(!file.exists()) {
+			// setup path for Samsung workaround
+			sLauncherDBSubDirectory = "/databases/";
+		}
+
 	}
 
-	private ProgressDialog progressDialogTheme;
+	private ProgressDialog mProgressDialog;
 	@Override
 	protected void onStop() {
 		super.onStop();
 		// prevent memory leak and dismiss any progress dialogs
-		if (progressDialogTheme != null) {
-			if (progressDialogTheme.isShowing()) {
-				progressDialogTheme.dismiss();
+		if (mProgressDialog != null) {
+			if (mProgressDialog.isShowing()) {
+				mProgressDialog.dismiss();
 			}
 		}
 	}
 
 	public void applyTheme(View v) {
 		// we need to load the theme here
-		if (progressDialogTheme == null || !progressDialogTheme.isShowing()) {
-			progressDialogTheme = ProgressDialog.show(this, null, getString(R.string.dialog_please_wait), true, false);
+		if (mProgressDialog == null || !mProgressDialog.isShowing()) {
+			mProgressDialog = ProgressDialog.show(this, null, getString(R.string.dialog_please_wait), true, false);
 		}
 
 		PreviewPreference themePreview = (PreviewPreference) findPreference("themePreview");
@@ -886,14 +897,14 @@ OnPreferenceChangeListener {
 	// Wysie: Adapted from
 	// http://code.google.com/p/and-examples/source/browse/#svn/trunk/database/src/com/totsp/database
 	private class ExportPrefsTask extends AsyncTask<Void, Void, String> {
-		private final ProgressDialog dialog = new ProgressDialog(mContext);
 
 		// can use UI thread here
 		@Override
 		protected void onPreExecute() {
-			this.dialog.setMessage(getResources().getString(
+			mProgressDialog = new ProgressDialog(mContext);
+			mProgressDialog.setMessage(getResources().getString(
 					R.string.xml_export_dialog));
-			this.dialog.show();
+			mProgressDialog.show();
 		}
 
 		// automatically done on worker thread (separate from UI thread)
@@ -905,9 +916,7 @@ OnPreferenceChangeListener {
 						R.string.import_export_sdcard_unmounted);
 			}
 
-			File prefFile = new File(Environment.getDataDirectory() + "/data/"
-					+ NAMESPACE
-					+ "/shared_prefs/launcher.preferences.almostnexus.xml");
+			File prefFile = new File(Environment.getDataDirectory() + LAUNCHER_XML);
 			File file = new File(Environment.getExternalStorageDirectory(),
 					PREF_BACKUP_FILENAME);
 
@@ -917,14 +926,14 @@ OnPreferenceChangeListener {
 				return getResources().getString(R.string.xml_export_success);
 			} catch (IOException e) {
 				return getResources().getString(R.string.xml_export_error);
-			}
+			} 
 		}
 
 		// can use UI thread here
 		@Override
 		protected void onPostExecute(final String msg) {
-			if (this.dialog.isShowing()) {
-				this.dialog.dismiss();
+			if (mProgressDialog.isShowing()) {
+				mProgressDialog.dismiss();
 			}
 			Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
 		}
@@ -933,13 +942,13 @@ OnPreferenceChangeListener {
 	// Wysie: Adapted from
 	// http://code.google.com/p/and-examples/source/browse/#svn/trunk/database/src/com/totsp/database
 	private class ImportPrefsTask extends AsyncTask<Void, Void, String> {
-		private final ProgressDialog dialog = new ProgressDialog(mContext);
 
 		@Override
 		protected void onPreExecute() {
-			this.dialog.setMessage(getResources().getString(
+			mProgressDialog = new ProgressDialog(mContext);
+			mProgressDialog.setMessage(getResources().getString(
 					R.string.xml_import_dialog));
-			this.dialog.show();
+			mProgressDialog.show();
 		}
 
 		// could pass the params used here in AsyncTask<String, Void, String> -
@@ -962,9 +971,7 @@ OnPreferenceChangeListener {
 				return getResources().getString(R.string.xml_not_readable);
 			}
 
-			File prefFile = new File(Environment.getDataDirectory() + "/data/"
-					+ NAMESPACE
-					+ "/shared_prefs/launcher.preferences.almostnexus.xml");
+			File prefFile = new File(Environment.getDataDirectory() + LAUNCHER_XML);
 
 			if (prefFile.exists()) {
 				prefFile.delete();
@@ -982,8 +989,8 @@ OnPreferenceChangeListener {
 
 		@Override
 		protected void onPostExecute(final String msg) {
-			if (this.dialog.isShowing()) {
-				this.dialog.dismiss();
+			if (mProgressDialog.isShowing()) {
+				mProgressDialog.dismiss();
 			}
 
 			Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
@@ -993,14 +1000,14 @@ OnPreferenceChangeListener {
 	// Wysie: Adapted from
 	// http://code.google.com/p/and-examples/source/browse/#svn/trunk/database/src/com/totsp/database
 	private class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
-		private final ProgressDialog dialog = new ProgressDialog(mContext);
 
 		// can use UI thread here
 		@Override
 		protected void onPreExecute() {
-			this.dialog.setMessage(getResources().getString(
+			mProgressDialog = new ProgressDialog(mContext);
+			mProgressDialog.setMessage(getResources().getString(
 					R.string.dbfile_export_dialog));
-			this.dialog.show();
+			mProgressDialog.show();
 		}
 
 		// automatically done on worker thread (separate from UI thread)
@@ -1013,7 +1020,7 @@ OnPreferenceChangeListener {
 			}
 
 			File dbFile = new File(Environment.getDataDirectory()
-					+ LAUNCHER_DB_BASE);
+					+ LAUNCHER_DB);
 			File file = new File(Environment.getExternalStorageDirectory(),
 					CONFIG_BACKUP_FILENAME);
 
@@ -1024,18 +1031,18 @@ OnPreferenceChangeListener {
 				return getResources().getString(R.string.dbfile_export_success);
 			} catch (IOException e) {
 				return getResources().getString(R.string.dbfile_export_error);
+			} catch (NullPointerException e) {
+				return getResources().getString(R.string.dbfile_export_error);
 			}
 		}
 
-		private void exportCategories() throws IOException {
-			File prefFolder = new File(Environment.getDataDirectory()
-					+ "/data/" + NAMESPACE + "/shared_prefs");
+		private void exportCategories() throws IOException, NullPointerException {
+			File prefFolder = new File(Environment.getDataDirectory() + LAUNCHER_SHARED_PREFS_BASE);
 			String[] list = prefFolder.list();
 			for (String fileName : list) {
 				if (fileName.startsWith("APP_CATALOG_")) {
 					File prefFile = new File(Environment.getDataDirectory()
-							+ "/data/" + NAMESPACE + "/shared_prefs/"
-							+ fileName);
+							+ LAUNCHER_SHARED_PREFS_BASE + "/" + fileName);
 					File exportedFile = new File(
 							Environment.getExternalStorageDirectory(), fileName);
 					copyFile(prefFile, exportedFile);
@@ -1046,8 +1053,8 @@ OnPreferenceChangeListener {
 		// can use UI thread here
 		@Override
 		protected void onPostExecute(final String msg) {
-			if (this.dialog.isShowing()) {
-				this.dialog.dismiss();
+			if (mProgressDialog.isShowing()) {
+				mProgressDialog.dismiss();
 			}
 			Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
 		}
@@ -1089,11 +1096,11 @@ OnPreferenceChangeListener {
 			// the '.db' file
 			// doesn't work. The home screens will not be changed.
 			File dbFile = new File(Environment.getDataDirectory()
-					+ LAUNCHER_DB_BASE);
+					+ LAUNCHER_DB);
 			File dbFile_shm = new File(Environment.getDataDirectory()
-					+ LAUNCHER_DB_BASE + "-shm");
+					+ LAUNCHER_DB + "-shm");
 			File dbFile_wal = new File(Environment.getDataDirectory()
-					+ LAUNCHER_DB_BASE + "-wal");
+					+ LAUNCHER_DB + "-wal");
 
 			if (dbFile.exists()) {
 				dbFile.delete();
@@ -1113,10 +1120,12 @@ OnPreferenceChangeListener {
 				return getResources().getString(R.string.dbfile_import_success);
 			} catch (IOException e) {
 				return getResources().getString(R.string.dbfile_import_error);
+			} catch (NullPointerException e) {
+				return getResources().getString(R.string.dbfile_import_error);
 			}
 		}
 
-		private void importCategories() throws IOException {
+		private void importCategories() throws IOException, NullPointerException {
 			File prefFolder = Environment.getExternalStorageDirectory();
 			String[] list = prefFolder.list();
 			for (String fileName : list) {
@@ -1124,8 +1133,7 @@ OnPreferenceChangeListener {
 					File importFile = new File(
 							Environment.getExternalStorageDirectory(), fileName);
 					File prefFile = new File(Environment.getDataDirectory()
-							+ "/data/" + NAMESPACE + "/shared_prefs/"
-							+ fileName);
+							+ LAUNCHER_SHARED_PREFS_BASE + "/" + fileName);
 
 					if (!importFile.canRead()) {
 						throw new IOException();
