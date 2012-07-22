@@ -47,8 +47,8 @@ public class FolderIconReorderActivity extends ListActivity {
 
 	private static final Collator sCollator = Collator.getInstance();
 
-	UserFolderInfo mFolderInfo;
-	
+	UserFolderInfo mUserFolderInfo;
+
 	private AlertDialog mAlertDialog;
 
 	/** Called when the activity is first created. */
@@ -63,13 +63,14 @@ public class FolderIconReorderActivity extends ListActivity {
 		if (extras != null) {
 			final long id = extras.getLong(EXTRA_FOLDER_INFO_ID);
 			final LauncherModel launcherModel = Launcher.getLauncherModel();
+			// check for valid folder
 			if (launcherModel==null || id==0) {
 				finish();
 				return;
 			}
 
-			mFolderInfo = (UserFolderInfo) launcherModel.findFolderById(id);
-			this.setTitle(getString(R.string.activity_label_reorder_activity) + mFolderInfo.title);
+			mUserFolderInfo = (UserFolderInfo) launcherModel.findFolderById(id);
+			this.setTitle(getString(R.string.activity_label_reorder_activity) + mUserFolderInfo.title);
 		} else {
 			finish();
 			return;
@@ -117,14 +118,21 @@ public class FolderIconReorderActivity extends ListActivity {
 				mAlertDialog = null;
 			}
 		}
-		
+
+		if (mDirty) {
+			Toast.makeText(this, getString(R.string.toast_folder_icon_reorder_finished) + mUserFolderInfo.title, Toast.LENGTH_SHORT).show();
+			// Make the database adhere to the list
+			for (ApplicationInfo item : mUserFolderInfo.contents) {
+				LauncherModel.addItemToDatabase(this, item, mUserFolderInfo.id, 0, 0, 0, false);
+				LauncherModel.deleteItemFromDatabase(this, item);
+			}
+		}
+
 		DraggableListView dragList = (DraggableListView) mList;
 		dragList.setDropListener(null);
 
 		setListAdapter(null);
-		if (mDirty) {
-			Toast.makeText(this, getString(R.string.toast_folder_icon_reorder_finished) + mFolderInfo.title, Toast.LENGTH_SHORT).show();
-		}
+
 		super.onDestroy();
 	}
 
@@ -132,10 +140,10 @@ public class FolderIconReorderActivity extends ListActivity {
 		public void drop(int from, int to) {
 
 			// move the icon
-			if(from < mFolderInfo.contents.size()) {
-				ApplicationInfo icon = mFolderInfo.contents.remove(from);
-				if(to <= mFolderInfo.contents.size()) {
-					mFolderInfo.contents.add(to, icon);
+			if(from < mUserFolderInfo.contents.size()) {
+				ApplicationInfo icon = mUserFolderInfo.contents.remove(from);
+				if(to <= mUserFolderInfo.contents.size()) {
+					mUserFolderInfo.contents.add(to, icon);
 					mList.invalidateViews();
 					mDirty = true;
 				}
@@ -152,11 +160,11 @@ public class FolderIconReorderActivity extends ListActivity {
 		}
 
 		public int getCount() {
-			return mFolderInfo.contents.size();
+			return mUserFolderInfo.contents.size();
 		}
 
 		public Object getItem(int position) {
-			return mFolderInfo.contents.get(position);
+			return mUserFolderInfo.contents.get(position);
 		}
 
 		public long getItemId(int position) {
@@ -171,7 +179,7 @@ public class FolderIconReorderActivity extends ListActivity {
 				v = convertView;
 			}
 
-			ApplicationInfo appInfo = mFolderInfo.contents.get(position);
+			ApplicationInfo appInfo = mUserFolderInfo.contents.get(position);
 
 			final TextView name = (TextView)v.findViewById(R.id.name);
 			final ImageView icon = (ImageView)v.findViewById(R.id.icon);
@@ -195,9 +203,10 @@ public class FolderIconReorderActivity extends ListActivity {
 	}
 
 	private void sortFolderIcons() {
+		// it is possible to sort the list if there is more than one icon in it
 		if (mList.getChildCount() > 1) {
 			Comparator<ApplicationInfo> revert = Collections.reverseOrder(new FolderIconNameComparator());
-			Collections.sort(mFolderInfo.contents, revert);
+			Collections.sort(mUserFolderInfo.contents, revert);
 			mList.invalidateViews();
 			mDirty = true;
 		}
