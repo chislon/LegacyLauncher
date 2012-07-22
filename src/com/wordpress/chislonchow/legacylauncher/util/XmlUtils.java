@@ -87,7 +87,6 @@ public class XmlUtils
         // XXX This code is copied from Integer.decode() so we don't
         // have to instantiate an Integer!
 
-        int value;
         int sign = 1;
         int index = 0;
         int len = nm.length();
@@ -136,7 +135,6 @@ public class XmlUtils
     {
         String  value = charSeq.toString();
 
-        long    bits;
         int     index = 0;
         int     len = value.length();
         int     base = 10;

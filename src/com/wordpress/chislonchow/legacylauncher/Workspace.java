@@ -126,7 +126,6 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 	// ADW: port from donut wallpaper drawing
 	private Paint mPaint;
 	private int mWallpaperWidth;
-	private int mWallpaperHeight;
 	private float mWallpaperOffset;
 	private boolean mWallpaperLoaded;
 	private boolean lwpSupport = true;
@@ -736,9 +735,9 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 					float transformAmount = Math.abs(xOffset) / (float) width;
 					preTransitionDraw(canvas, mTransitionStyle, isMovingRight,
 							xOffset, transformAmount, width);
-					
+
 					drawChild(canvas, currentView, getDrawingTime());
-					
+
 					postTransitionDraw(canvas, mTransitionStyle, isMovingRight,
 							xOffset, transformAmount, width);
 				} else {
@@ -838,7 +837,6 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 		if (!lwpSupport && mWallpaperDrawable != null) {
 			if (mWallpaperLoaded) {
 				mWallpaperLoaded = false;
-				mWallpaperHeight = mWallpaperDrawable.getIntrinsicHeight();
 				mWallpaperWidth = mWallpaperDrawable.getIntrinsicWidth();
 			}
 
