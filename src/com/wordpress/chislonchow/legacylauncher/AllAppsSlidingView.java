@@ -99,7 +99,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	private GestureDetector gestureDetector;
 	private View.OnTouchListener gestureListener;
 
-	private long lastTouchTime = -1;
+	private long mLastTouchTime = -1;
+	private boolean mSelectorReposition = false;
 
 	/**
 	 * Should be used by subclasses to listen to changes in the dataset
@@ -548,8 +549,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 			final long thisTime = System.currentTimeMillis();
 			// Debounce this press with a tap duration
-			if (thisTime - lastTouchTime > ViewConfiguration.getTapTimeout()) {
-				lastTouchTime = thisTime;
+			if (thisTime - mLastTouchTime > ViewConfiguration.getTapTimeout()) {
+				mLastTouchTime = thisTime;
 				child = pointToView((int) x, (int) y);
 				if (child!=null) {
 					if (mPendingCheckForTap == null) {
@@ -753,16 +754,19 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			if (mSelectedPosition < 0) {
 				switch (keyCode) {
 				case KeyEvent.KEYCODE_DPAD_RIGHT:
-					resurrectSelectionAlternate();
+					//resurrectSelection();
+					return true;
+				case KeyEvent.KEYCODE_DPAD_LEFT:
+					//resurrectSelectionAlternate();
 					return true;
 				case KeyEvent.KEYCODE_DPAD_UP:
 				case KeyEvent.KEYCODE_DPAD_DOWN:
-				case KeyEvent.KEYCODE_DPAD_LEFT:
 				case KeyEvent.KEYCODE_DPAD_CENTER:
 				case KeyEvent.KEYCODE_SPACE:
 				case KeyEvent.KEYCODE_ENTER:
 					resurrectSelection();
 					return true;
+
 				}
 			}
 			switch (keyCode) {
@@ -812,10 +816,11 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 		final long thisTime = System.currentTimeMillis();
 
-		if (thisTime - lastTouchTime < 50) {	//50ms debounce
+		if (thisTime - mLastTouchTime < 50) {	//50ms debounce
 			return false;
 		}
-		lastTouchTime = thisTime;
+
+		mLastTouchTime = thisTime;
 
 		final int selectedPosition = (mSelectedPosition==INVALID_POSITION)?0:mSelectedPosition;
 		final int numColumns = mNumColumns;
@@ -867,10 +872,11 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 			if (colPos > 0) {
 				colPos--;
 				moved = true;
-			}else{
-				if(mCurrentScreen>0) {
+			}else {
+				if(mCurrentScreen > 0) {
 					setSelection(INVALID_POSITION);
 					snapToScreen(mCurrentScreen-1);
+					mSelectorReposition = true;
 					return true;
 				}
 			}
@@ -883,6 +889,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 				if (mCurrentScreen < mTotalScreens-1) {
 					setSelection(INVALID_POSITION);
 					snapToScreen(mCurrentScreen+1);
+					mSelectorReposition = true;
 					return true;
 				}
 			}
@@ -925,30 +932,6 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		return true;
 	}
 
-	/**
-	 * Attempt to bring the selection back if the user is switching from touch
-	 * to trackball mode
-	 * @return Whether selection was set to something.
-	 */
-	boolean resurrectSelectionAlternate() {
-		if(getChildCount()<=0){
-			return false;
-		}
-		final AllAppsSlidingViewHolderLayout h=(AllAppsSlidingViewHolderLayout) getChildAt(mCurrentHolder);
-		if(h!=null && h instanceof AllAppsSlidingViewHolderLayout){
-			final int childCount = h.getChildCount();
-
-			if (childCount <= 0) {
-				return false;
-			}
-			for(int i=0;i<childCount;i++){
-				h.getChildAt(i).setPressed(false);
-			}
-			positionSelector(h.getChildAt(Math.min(childCount - 1, mNumColumns - 1)));
-			setSelection(Math.min(childCount - 1, mNumColumns - 1));
-		}
-		return true;
-	}
 
 	public View getViewAtPosition(int pos){
 		View v = null;
@@ -1147,7 +1130,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		}
 	}
 
-	void positionSelector(View sel) {
+	private void positionSelector(View sel) {
 		final Rect selectorRect = mSelectorRect;
 		selectorRect.set(sel.getLeft(), sel.getTop()+paginatorSpace, sel.getRight(), sel.getBottom()+paginatorSpace);
 		positionSelector(selectorRect.left, selectorRect.top, selectorRect.right,
@@ -1174,6 +1157,12 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 		if (shouldShowSelector() && mSelectorRect != null && !mSelectorRect.isEmpty()) {
 			final Drawable selector = mSelector;
+
+			// reposition selector if we changed screens
+			if (mSelectorReposition) {
+				mSelectorReposition = false;
+				resurrectSelection();
+			}
 
 			selector.setBounds(mSelectorRect);
 			selector.setState(getDrawableState());
@@ -1854,7 +1843,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 	}
 
-	private void snapBackToOrigin() {
+	public void snapBackToOrigin() {
 		if (LOGD)
 			Log.d(LOG_TAG, "snapBackToOrigin");
 		if(mAdapter!=null){
@@ -1967,6 +1956,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 	 * @see com.wordpress.chislonchow.legacylauncher.Drawer#close(boolean)
 	 */
 	public void close(boolean animate) {
+		requestFocus();
 		mStatus=STATUS_CLOSE;
 		setPressed(false);
 
