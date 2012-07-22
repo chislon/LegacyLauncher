@@ -59,11 +59,8 @@ OnPreferenceChangeListener {
 	private static final String PREF_BACKUP_FILENAME = "legacy_launcher_settings.xml";
 	private static final String CONFIG_BACKUP_FILENAME = "legacy_launcher.db";
 	private static final String NAMESPACE = "com.wordpress.chislonchow.legacylauncher";
-
-	private static String sLauncherDBSubDirectory = "/data/";
-	private static final String LAUNCHER_DB = sLauncherDBSubDirectory + NAMESPACE + "/databases/launcher.db";
-	private static final String LAUNCHER_SHARED_PREFS_BASE = sLauncherDBSubDirectory + NAMESPACE + "/shared_prefs";
-	private static final String LAUNCHER_XML = LAUNCHER_SHARED_PREFS_BASE + "/launcher.preferences.almostnexus.xml";
+	private static final String LAUNCHER_DB_BASE = "/data/" + NAMESPACE
+			+ "/databases/launcher.db";
 
 	// Request codes for onResultActivity. That way we know the request donw
 	// when startActivityForResult was fired
@@ -502,14 +499,6 @@ OnPreferenceChangeListener {
 		themeListPref.setEntryValues(values);
 		PreviewPreference themePreview = (PreviewPreference) findPreference("themePreview");
 		themePreview.setTheme(themePackage);
-
-		// check if launcher settings are where we expect them to be
-		File file = new File(LAUNCHER_XML);
-		if(!file.exists()) {
-			// setup path for Samsung workaround
-			sLauncherDBSubDirectory = "/databases/";
-		}
-
 	}
 
 	private ProgressDialog mProgressDialog;
@@ -916,7 +905,9 @@ OnPreferenceChangeListener {
 						R.string.import_export_sdcard_unmounted);
 			}
 
-			File prefFile = new File(Environment.getDataDirectory() + LAUNCHER_XML);
+			File prefFile = new File(Environment.getDataDirectory() + "/data/"
+					+ NAMESPACE
+					+ "/shared_prefs/launcher.preferences.almostnexus.xml");
 			File file = new File(Environment.getExternalStorageDirectory(),
 					PREF_BACKUP_FILENAME);
 
@@ -971,7 +962,9 @@ OnPreferenceChangeListener {
 				return getResources().getString(R.string.xml_not_readable);
 			}
 
-			File prefFile = new File(Environment.getDataDirectory() + LAUNCHER_XML);
+			File prefFile = new File(Environment.getDataDirectory() + "/data/"
+					+ NAMESPACE
+					+ "/shared_prefs/launcher.preferences.almostnexus.xml");
 
 			if (prefFile.exists()) {
 				prefFile.delete();
@@ -1020,7 +1013,7 @@ OnPreferenceChangeListener {
 			}
 
 			File dbFile = new File(Environment.getDataDirectory()
-					+ LAUNCHER_DB);
+					+ LAUNCHER_DB_BASE);
 			File file = new File(Environment.getExternalStorageDirectory(),
 					CONFIG_BACKUP_FILENAME);
 
@@ -1037,12 +1030,14 @@ OnPreferenceChangeListener {
 		}
 
 		private void exportCategories() throws IOException, NullPointerException {
-			File prefFolder = new File(Environment.getDataDirectory() + LAUNCHER_SHARED_PREFS_BASE);
+			File prefFolder = new File(Environment.getDataDirectory()
+					+ "/data/" + NAMESPACE + "/shared_prefs");
 			String[] list = prefFolder.list();
 			for (String fileName : list) {
 				if (fileName.startsWith("APP_CATALOG_")) {
 					File prefFile = new File(Environment.getDataDirectory()
-							+ LAUNCHER_SHARED_PREFS_BASE + "/" + fileName);
+							+ "/data/" + NAMESPACE + "/shared_prefs/"
+							+ fileName);
 					File exportedFile = new File(
 							Environment.getExternalStorageDirectory(), fileName);
 					copyFile(prefFile, exportedFile);
@@ -1096,11 +1091,11 @@ OnPreferenceChangeListener {
 			// the '.db' file
 			// doesn't work. The home screens will not be changed.
 			File dbFile = new File(Environment.getDataDirectory()
-					+ LAUNCHER_DB);
+					+ LAUNCHER_DB_BASE);
 			File dbFile_shm = new File(Environment.getDataDirectory()
-					+ LAUNCHER_DB + "-shm");
+					+ LAUNCHER_DB_BASE + "-shm");
 			File dbFile_wal = new File(Environment.getDataDirectory()
-					+ LAUNCHER_DB + "-wal");
+					+ LAUNCHER_DB_BASE + "-wal");
 
 			if (dbFile.exists()) {
 				dbFile.delete();
@@ -1133,7 +1128,8 @@ OnPreferenceChangeListener {
 					File importFile = new File(
 							Environment.getExternalStorageDirectory(), fileName);
 					File prefFile = new File(Environment.getDataDirectory()
-							+ LAUNCHER_SHARED_PREFS_BASE + "/" + fileName);
+							+ "/data/" + NAMESPACE + "/shared_prefs/"
+							+ fileName);
 
 					if (!importFile.canRead()) {
 						throw new IOException();
