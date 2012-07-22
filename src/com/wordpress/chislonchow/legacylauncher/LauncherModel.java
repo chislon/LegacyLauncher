@@ -260,7 +260,7 @@ public class LauncherModel {
 	}
 
 	/**
-     * Add and remove icons for this package which has been updated.
+	 * Add and remove icons for this package which has been updated.
 	 * @param launcher
 	 * @param packageName
 	 */
@@ -1612,8 +1612,8 @@ public class LauncherModel {
 	 * Add an item to the database in a specified container. Sets the container, screen, cellX and
 	 * cellY fields of the item. Also assigns an ID to the item.
 	 */
-	static void addItemToDatabase(Context context, ItemInfo item, long container,
-			int screen, int cellX, int cellY, boolean notify) {
+	static void addItemToDatabase(Context context, final ItemInfo item, long container,
+			int screen, int cellX, int cellY, final boolean notify) {
 		item.container = container;
 		item.screen = screen;
 		item.cellX = cellX;
@@ -1624,24 +1624,32 @@ public class LauncherModel {
 
 		item.onAddToDatabase(values);
 
-		Uri result = cr.insert(notify ? LauncherSettings.Favorites.CONTENT_URI :
-			LauncherSettings.Favorites.CONTENT_URI_NO_NOTIFICATION, values);
+		sWorker.post(new Runnable() {
+			public void run() {
+				Uri result = cr.insert(notify ? LauncherSettings.Favorites.CONTENT_URI :
+					LauncherSettings.Favorites.CONTENT_URI_NO_NOTIFICATION, values);
 
-		if (result != null) {
-			item.id = Integer.parseInt(result.getPathSegments().get(1));
-		}
+				if (result != null) {
+					item.id = Integer.parseInt(result.getPathSegments().get(1));
+				}
+			}
+		});
 	}
 
 	/**
 	 * Update an item to the database in a specified container.
 	 */
-	static void updateItemInDatabase(Context context, ItemInfo item) {
+	static void updateItemInDatabase(Context context, final ItemInfo item) {
 		final ContentValues values = new ContentValues();
 		final ContentResolver cr = context.getContentResolver();
 
 		item.onAddToDatabase(values);
 
-		cr.update(LauncherSettings.Favorites.getContentUri(item.id, false), values, null, null);
+		sWorker.post(new Runnable() {
+			public void run() {
+				cr.update(LauncherSettings.Favorites.getContentUri(item.id, false), values, null, null);
+			}
+		});
 	}
 
 	/**
@@ -1660,14 +1668,28 @@ public class LauncherModel {
 		});
 	}
 
-
 	/**
 	 * Remove the contents of the specified folder from the database
 	 */
-	static void deleteUserFolderContentsFromDatabase(Context context, UserFolderInfo info) {
+	static void deleteUserFolderContentsFromDatabase(Context context, final UserFolderInfo info) {
 		final ContentResolver cr = context.getContentResolver();
 
-		cr.delete(LauncherSettings.Favorites.getContentUri(info.id, false), null, null);
+		sWorker.post(new Runnable() {
+			public void run() {
+				cr.delete(LauncherSettings.Favorites.getContentUri(info.id, false), null, null);
+				cr.delete(LauncherSettings.Favorites.CONTENT_URI,
+						LauncherSettings.Favorites.CONTAINER + "=" + info.id, null);
+			}
+		});
+	}
+
+	/**
+	 * Remove the inside contents of the specified folder from the database
+	 */
+	static void deleteUserFolderItemsFromDatabase(Context context, final UserFolderInfo info) {
+		final ContentResolver cr = context.getContentResolver();
+
+		// UGLY: cannot run this in a worker thread
 		cr.delete(LauncherSettings.Favorites.CONTENT_URI,
 				LauncherSettings.Favorites.CONTAINER + "=" + info.id, null);
 	}
