@@ -1624,16 +1624,12 @@ public class LauncherModel {
 
 		item.onAddToDatabase(values);
 
-		sWorker.post(new Runnable() {
-			public void run() {
-				Uri result = cr.insert(notify ? LauncherSettings.Favorites.CONTENT_URI :
-					LauncherSettings.Favorites.CONTENT_URI_NO_NOTIFICATION, values);
+		Uri result = cr.insert(notify ? LauncherSettings.Favorites.CONTENT_URI :
+			LauncherSettings.Favorites.CONTENT_URI_NO_NOTIFICATION, values);
 
-				if (result != null) {
-					item.id = Integer.parseInt(result.getPathSegments().get(1));
-				}
-			}
-		});
+		if (result != null) {
+			item.id = Integer.parseInt(result.getPathSegments().get(1));
+		}
 	}
 
 	/**
