@@ -1014,9 +1014,26 @@ OnPreferenceChangeListener {
 
 			File dbFile = new File(Environment.getDataDirectory()
 					+ LAUNCHER_DB_BASE);
+			File dbFile_shm = new File(Environment.getDataDirectory()
+					+ LAUNCHER_DB_BASE + "-shm");
+			File dbFile_wal = new File(Environment.getDataDirectory()
+					+ LAUNCHER_DB_BASE + "-wal");
 			File file = new File(Environment.getExternalStorageDirectory(),
 					CONFIG_BACKUP_FILENAME);
+			File file_shm = new File(Environment.getExternalStorageDirectory(),
+					CONFIG_BACKUP_FILENAME + "-shm");
+			File file_wal = new File(Environment.getExternalStorageDirectory(),
+					CONFIG_BACKUP_FILENAME + "-wal");
 
+			//workaround for SQLITE 3.7
+			if (dbFile_shm.exists() && dbFile_wal.exists()) {
+				try {
+					copyFile(dbFile_shm, file_shm);
+					copyFile(dbFile_wal, file_wal);
+				} catch (IOException e) {
+				} catch (NullPointerException e) {
+				}
+			}
 			try {
 				file.createNewFile();
 				copyFile(dbFile, file);
@@ -1096,6 +1113,12 @@ OnPreferenceChangeListener {
 					+ LAUNCHER_DB_BASE + "-shm");
 			File dbFile_wal = new File(Environment.getDataDirectory()
 					+ LAUNCHER_DB_BASE + "-wal");
+			File file = new File(Environment.getExternalStorageDirectory(),
+					CONFIG_BACKUP_FILENAME);
+			File file_shm = new File(Environment.getExternalStorageDirectory(),
+					CONFIG_BACKUP_FILENAME + "-shm");
+			File file_wal = new File(Environment.getExternalStorageDirectory(),
+					CONFIG_BACKUP_FILENAME + "-wal");
 
 			if (dbFile.exists()) {
 				dbFile.delete();
@@ -1105,6 +1128,18 @@ OnPreferenceChangeListener {
 			}
 			if (dbFile_wal.exists()) {
 				dbFile_wal.delete();
+			}
+
+			//workaround for SQLITE 3.7
+			if (file_shm.exists() && file_wal.exists()) {
+				try {
+					dbFile_shm.createNewFile();
+					dbFile_wal.createNewFile();
+					copyFile(file_shm, dbFile_shm);
+					copyFile(file_wal, dbFile_wal);
+				} catch (IOException e) {
+				} catch (NullPointerException e) {
+				}
 			}
 
 			try {
