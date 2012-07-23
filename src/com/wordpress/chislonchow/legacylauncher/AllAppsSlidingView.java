@@ -1843,7 +1843,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 
 	}
 
-	public void snapBackToOrigin() {
+	private void snapBackToOrigin() {
 		if (LOGD)
 			Log.d(LOG_TAG, "snapBackToOrigin");
 		if(mAdapter!=null){
