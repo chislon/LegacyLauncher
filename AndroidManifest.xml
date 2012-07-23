@@ -19,7 +19,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wordpress.chislonchow.legacylauncher"
-    android:versionCode="40"
+    android:versionCode="44"
     android:versionName="@string/app_version" >
 
     <uses-sdk
@@ -133,6 +133,18 @@
             android:name=".GuideActivity"
             android:configChanges="orientation|keyboardHidden|keyboard"
             android:noHistory="true" />
+        <activity
+            android:name=".IconPicker"
+            android:configChanges="orientation|keyboardHidden|keyboard"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            <intent-filter>
+                <action android:name="org.adw.launcher.icons.ACTION_PICK_ICON" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

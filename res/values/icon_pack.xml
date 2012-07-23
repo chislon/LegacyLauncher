@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="icon_pack" translatable="false">
+        <item>ic_transparent</item>
+        <item>ic_allappsadw</item>
+        <item>ic_allapps</item>
+    </string-array>
+
+</resources>
