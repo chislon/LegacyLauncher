@@ -69,12 +69,6 @@ public class LauncherModel {
 
 	private static final Collator sCollator = Collator.getInstance();
 
-	private static final HandlerThread sWorkerThread = new HandlerThread("launcher-loader");
-	static {
-		sWorkerThread.start();
-	}
-	private static final Handler sWorker = new Handler(sWorkerThread.getLooper());
-
 	private boolean mApplicationsLoaded;
 	private boolean mDesktopItemsLoaded;
 
@@ -1532,11 +1526,7 @@ public class LauncherModel {
 		values.put(LauncherSettings.Favorites.CELLX, item.cellX);
 		values.put(LauncherSettings.Favorites.CELLY, item.cellY);
 		values.put(LauncherSettings.Favorites.SCREEN, item.screen);
-		sWorker.post(new Runnable() {
-			public void run() {
-				cr.update(uri, values, null, null);			
-			}
-		});
+		cr.update(uri, values, null, null);
 	}
 
 	/**
@@ -1641,11 +1631,7 @@ public class LauncherModel {
 
 		item.onAddToDatabase(values);
 
-		sWorker.post(new Runnable() {
-			public void run() {
-				cr.update(LauncherSettings.Favorites.getContentUri(item.id, false), values, null, null);
-			}
-		});
+		cr.update(LauncherSettings.Favorites.getContentUri(item.id, false), values, null, null);
 	}
 
 	/**
@@ -1657,11 +1643,7 @@ public class LauncherModel {
 		final ContentResolver cr = context.getContentResolver();
 		final Uri uriToDelete = LauncherSettings.Favorites.getContentUri(item.id, false);
 
-		sWorker.post(new Runnable() {
-			public void run() {
-				cr.delete(uriToDelete, null, null);
-			}
-		});
+		cr.delete(uriToDelete, null, null);
 	}
 
 	/**
@@ -1670,13 +1652,9 @@ public class LauncherModel {
 	static void deleteUserFolderContentsFromDatabase(Context context, final UserFolderInfo info) {
 		final ContentResolver cr = context.getContentResolver();
 
-		sWorker.post(new Runnable() {
-			public void run() {
-				cr.delete(LauncherSettings.Favorites.getContentUri(info.id, false), null, null);
-				cr.delete(LauncherSettings.Favorites.CONTENT_URI,
-						LauncherSettings.Favorites.CONTAINER + "=" + info.id, null);
-			}
-		});
+		cr.delete(LauncherSettings.Favorites.getContentUri(info.id, false), null, null);
+		cr.delete(LauncherSettings.Favorites.CONTENT_URI,
+				LauncherSettings.Favorites.CONTAINER + "=" + info.id, null);
 	}
 
 	/**

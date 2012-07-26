@@ -4,7 +4,8 @@
     <!-- Change Log -->
 
     <string name="changelog">&lt;b>最近更改&lt;/b>&lt;br>
-- 問題修正&lt;br>&lt;br>
+- 移除雙輕擊桌面行動&lt;br>
+- 內置了幾個圖標&lt;br>&lt;br>
 七月2012</string>
 
 </resources>

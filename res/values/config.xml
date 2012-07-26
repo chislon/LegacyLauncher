@@ -55,7 +55,6 @@
     <string name="config_home_binding_actions" translatable="false">1</string>
     <string name="config_swipedown_actions" translatable="false">0</string>
     <string name="config_swipeup_actions" translatable="false">0</string>
-    <string name="config_doubletap_actions" translatable="false">0</string>
 
     <bool name="config_drawer_animated">true</bool>
     <!-- config_desktops min value is 1, so it will add 1 to whatever value you set here -->

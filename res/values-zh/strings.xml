@@ -171,11 +171,10 @@
 
     <!-- Desktop action preferences -->
     <string name="pref_title_desktop_actions">"桌面功能"</string>
-    <string name="pref_summary_desktop_actions">"主頁按鈕，手勢，和雙輕觸功能"</string>
+    <string name="pref_summary_desktop_actions">"主頁按鈕，手勢功能"</string>
     <string name="pref_title_home_button_binding">"主頁按鈕"</string>
     <string name="pref_title_swipedown_actions">"下滑手勢"</string>
     <string name="pref_title_swipeup_actions">"上滑手勢"</string>
-    <string name="pref_title_doubletap_actions">"雙輕觸動作"</string>
 
     <!-- Drawer preferences -->
     <string name="pref_title_drawer">"應用託盤"</string>

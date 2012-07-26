@@ -123,8 +123,8 @@ public class FolderIconReorderActivity extends ListActivity {
 			Toast.makeText(this, getString(R.string.toast_folder_icon_reorder_finished) + mUserFolderInfo.title, Toast.LENGTH_SHORT).show();
 			// Make the database adhere to the list
 			for (ApplicationInfo item : mUserFolderInfo.contents) {
-				LauncherModel.addItemToDatabase(this, item, mUserFolderInfo.id, 0, 0, 0, false);
 				LauncherModel.deleteItemFromDatabase(this, item);
+				LauncherModel.addItemToDatabase(this, item, mUserFolderInfo.id, 0, 0, 0, false);
 			}
 		}
 

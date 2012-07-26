@@ -93,7 +93,6 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 	private final static int TOUCH_STATE_SCROLLING = 1;
 	private final static int TOUCH_SWIPE_DOWN_GESTURE = 2;
 	private final static int TOUCH_SWIPE_UP_GESTURE = 3;
-	private final static int TOUCH_DOUBLE_TAP_GESTURE = 4;
 
 	private int mTouchState = TOUCH_STATE_REST;
 
@@ -148,7 +147,6 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 	private boolean mSensemode = false;
 	private boolean isAnimating = false;
 	private long startTime;
-	private long lastTouchTime;
 	private int mStatus = SENSE_CLOSED;
 	private final int mAnimationDuration = 400;
 	private final int[][] distro = { { 1 }, { 2 }, { 1, 2 }, { 2, 2 },
@@ -1065,16 +1063,6 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 			mLastMotionX = x;
 			mLastMotionY = y;
 			mAllowLongPress = true;
-
-			thisTime = System.currentTimeMillis();
-			if (thisTime - lastTouchTime < ViewConfiguration
-					.getDoubleTapTimeout()) {
-				mTouchState = TOUCH_DOUBLE_TAP_GESTURE;
-				lastTouchTime = -1;
-				return true;
-			} else {
-				lastTouchTime = thisTime;
-			}
 			/*
 			 * If being flinged and user touches the screen, initiate drag;
 			 * otherwise don't. mScroller.isFinished should be false when being
@@ -1089,8 +1077,7 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 
 			if (mTouchState != TOUCH_STATE_SCROLLING
 			&& mTouchState != TOUCH_SWIPE_DOWN_GESTURE
-			&& mTouchState != TOUCH_SWIPE_UP_GESTURE
-			&& mTouchState != TOUCH_DOUBLE_TAP_GESTURE) {
+			&& mTouchState != TOUCH_SWIPE_UP_GESTURE) {
 				final CellLayout currentScreen = (CellLayout) getChildAt(mCurrentScreen);
 				if (!currentScreen.lastDownOnOccupiedCell()) {
 					getLocationOnScreen(mTempCell);
@@ -1124,14 +1111,16 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 				fromScreen = toScreen;
 				toScreen = temp;
 			}
+
 			fromScreen = Math.max(fromScreen, 0);
 			toScreen = Math.min(toScreen, getChildCount() - 1);
+
+			final int targetCacheQuality = (mDesktopCacheType == MyLauncherSettingsHelper.CACHE_LOW ? View.DRAWING_CACHE_QUALITY_LOW : View.DRAWING_CACHE_QUALITY_AUTO);
+
 			for (int i = fromScreen; i <= toScreen; i++) {
 				CellLayout layout = (CellLayout) getChildAt(i);
-				if (mDesktopCacheType == MyLauncherSettingsHelper.CACHE_LOW)
-					layout.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
-				else
-					layout.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
+
+				layout.setDrawingCacheQuality(targetCacheQuality);
 
 				layout.setChildrenDrawnWithCacheEnabled(true);
 				layout.setChildrenDrawingCacheEnabled(true);
@@ -1166,6 +1155,7 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
+
 			/*
 			 * If being flinged and user touches, stop the fling. isFinished
 			 * will be false if being flinged.
@@ -1176,6 +1166,9 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 
 			// Remember where the motion event started
 			mLastMotionX = x;
+			if (mTouchState == TOUCH_STATE_SCROLLING) {
+				enableChildrenCache(mCurrentScreen - 1, mCurrentScreen + 1);
+			}
 			break;
 		case MotionEvent.ACTION_MOVE:
 			if (mTouchState == TOUCH_STATE_SCROLLING) {
@@ -1204,12 +1197,29 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 				mLauncher.fireSwipeDownAction();
 			} else if (mTouchState == TOUCH_SWIPE_UP_GESTURE) {
 				mLauncher.fireSwipeUpAction();
-			} else if (mTouchState == TOUCH_DOUBLE_TAP_GESTURE) {
-				mLauncher.fireDoubleTapAction();
 			}
 			mTouchState = TOUCH_STATE_REST;
 			break;
 		case MotionEvent.ACTION_CANCEL:
+			if (mTouchState == TOUCH_STATE_SCROLLING) {
+				final int screenWidth = getWidth();
+				int xPos = getScrollX();
+				// Setup the default nextScreen. This might change if
+				// mScrollingLoop is enabled.
+				int nextScreen = (xPos + (screenWidth / 2)) / screenWidth;
+
+				if (mScrollingLoop && (mCurrentScreen == 0)) {
+					if (xPos < -(screenWidth / 2)) {
+						nextScreen = getChildCount() - 1;
+					}
+				} else if (mScrollingLoop
+						&& (mCurrentScreen == (getChildCount() - 1))) {
+					if (xPos > (((getChildCount() - 1) * screenWidth) + (screenWidth / 2))) {
+						nextScreen = 0;
+					}
+				}
+				snapToScreen(nextScreen);
+			}
 			mTouchState = TOUCH_STATE_REST;
 		}
 
@@ -1272,10 +1282,11 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 		int maxScreenIndex = getChildCount() - 1;
 
 		// if (!mScroller.isFinished()) return;
+		whichScreen = Math.max(0, Math.min(whichScreen, maxScreenIndex));
+
 		clearVacantCache();
 		enableChildrenCache(mCurrentScreen, whichScreen);
 
-		whichScreen = Math.max(0, Math.min(whichScreen, maxScreenIndex));
 		boolean changingScreens = whichScreen != mCurrentScreen;
 
 		mNextScreen = whichScreen;

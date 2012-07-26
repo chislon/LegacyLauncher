@@ -359,10 +359,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 * wjax: Swipe UP binding enum
 	 */
 	private int mSwipeupAction = BIND_NONE;
-	/**
-	 * wjax: Double Tap binding enum
-	 */
-	private int mDoubletapAction = BIND_NONE;
 
 	/**
 	 * ADW:Wallpaper intent receiver
@@ -3658,7 +3654,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mHomeBinding = MyLauncherSettingsHelper.getHomeBinding(this);
 		mSwipedownAction = MyLauncherSettingsHelper.getSwipeDownActions(this);
 		mSwipeupAction = MyLauncherSettingsHelper.getSwipeUpActions(this);
-		mDoubletapAction = MyLauncherSettingsHelper.getDoubleTapActions(this);
 		mHideStatusBar = MyLauncherSettingsHelper.getHideStatusbar(this);
 		mShowDots = MyLauncherSettingsHelper.getUIDots(this);
 		mFolderAnimate = MyLauncherSettingsHelper.getFolderAnimate(this);
@@ -4675,12 +4670,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				name = MyLauncherSettingsHelper
 						.getSwipeDownAppToLaunchName(this);
 				break;
-			case 4:
-				package_name = MyLauncherSettingsHelper
-				.getDoubleTapAppToLaunchPackageName(this);
-				name = MyLauncherSettingsHelper
-						.getDoubleTapAppToLaunchName(this);
-				break;
 			default:
 				break;
 			}
@@ -4717,14 +4706,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	public void fireSwipeUpAction() {
 		// wjax: switch SwipeUpAction button binding user selection
 		fireHomeBinding(mSwipeupAction, 2);
-	}
-
-	/**
-	 * wjax: Double tap binding action
-	 */
-	public void fireDoubleTapAction() {
-		// wjax: switch DoubleTapAction button binding user selection
-		fireHomeBinding(mDoubletapAction, 4);
 	}
 
 	private void realAddWidget(AppWidgetProviderInfo appWidgetInfo,

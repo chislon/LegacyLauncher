@@ -280,12 +280,6 @@
                     android:entryValues="@array/menu_binding_values"
                     android:key="swipeupActions"
                     android:title="@string/pref_title_swipeup_actions" />
-                <ListPreference
-                    android:defaultValue="@string/config_doubletap_actions"
-                    android:entries="@array/menu_binding_entries"
-                    android:entryValues="@array/menu_binding_values"
-                    android:key="doubletapActions"
-                    android:title="@string/pref_title_doubletap_actions" />
             </PreferenceScreen>
         </PreferenceScreen>
         <PreferenceScreen

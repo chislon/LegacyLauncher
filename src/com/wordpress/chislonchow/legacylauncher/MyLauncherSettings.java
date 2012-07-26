@@ -67,7 +67,6 @@ OnPreferenceChangeListener {
 	private static final int REQUEST_SWIPE_DOWN_APP_CHOOSER = 0;
 	private static final int REQUEST_HOME_BINDING_APP_CHOOSER = 1;
 	private static final int REQUEST_SWIPE_UP_APP_CHOOSER = 2;
-	private static final int REQUEST_DOUBLE_TAP_APP_CHOOSER = 3;
 
 	private AlertDialog mAlertDialog;
 
@@ -153,9 +152,6 @@ OnPreferenceChangeListener {
 		listPref.setOnPreferenceChangeListener(this);
 		listPref.setSummary(listPref.getEntry());
 		listPref = (ListPreference) findPreference("swipeupActions");
-		listPref.setOnPreferenceChangeListener(this);
-		listPref.setSummary(listPref.getEntry());
-		listPref = (ListPreference) findPreference("doubletapActions");
 		listPref.setOnPreferenceChangeListener(this);
 		listPref.setSummary(listPref.getEntry());
 		listPref = (ListPreference) findPreference("homeBinding");
@@ -742,20 +738,6 @@ OnPreferenceChangeListener {
 				pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
 				startActivityForResult(pickIntent, REQUEST_SWIPE_UP_APP_CHOOSER);
 			}
-		} else if (key.equals("doubletapActions")) {
-			CharSequence[] entries = ((ListPreference)preference).getEntries();
-			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
-			// lets launch app picker if the user selected to launch an app on
-			// gesture
-			if (newValue.equals(String.valueOf(Launcher.BIND_APP_LAUNCHER))) {
-				Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-				mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-				Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
-				pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
-				startActivityForResult(pickIntent,
-						REQUEST_DOUBLE_TAP_APP_CHOOSER);
-			}
 		} else if (key.equals("main_dock_style")) {
 			CheckBoxPreference dots = (CheckBoxPreference) findPreference("uiDots");
 			CheckBoxPreference lockMAB = (CheckBoxPreference) findPreference("mainDockLockMAB");
@@ -841,10 +823,6 @@ OnPreferenceChangeListener {
 				break;
 			case REQUEST_SWIPE_UP_APP_CHOOSER:
 				MyLauncherSettingsHelper.setSwipeUpAppToLaunch(this,
-						infoFromApplicationIntent(this, data));
-				break;
-			case REQUEST_DOUBLE_TAP_APP_CHOOSER:
-				MyLauncherSettingsHelper.setDoubleTapAppToLaunch(this,
 						infoFromApplicationIntent(this, data));
 				break;
 			}
