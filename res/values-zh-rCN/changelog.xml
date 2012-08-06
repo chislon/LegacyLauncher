@@ -4,8 +4,8 @@
     <!-- Change Log -->
 
     <string name="changelog">&lt;b>最近更改&lt;/b>&lt;br>
-- 移除双轻击桌面行动&lt;br>
-- 内置了几个图标&lt;br>&lt;br>
-七月2012</string>
+- Android 2.1下添加小工具功能修復&lt;br>
+- 調整托盤動畫&lt;br>&lt;br>
+8月2012</string>
 
 </resources>

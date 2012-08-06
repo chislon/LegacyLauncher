@@ -2,13 +2,13 @@
 <resources>
 
     <!-- Version Information -->
-    <string name="app_version" translatable="false">0.39.4</string>
+    <string name="app_version" translatable="false">0.39.5</string>
 
     <!-- Change Log -->
 
     <string name="changelog">&lt;b>Recent changes&lt;/b>&lt;br>
-- Remove double-tap desktop action&lt;br>
-- Built in several icons&lt;br>&lt;br>
-July 2012</string>
+- Fixes for Android 2.1 when adding widgets&lt;br>
+- Tweak tray animation&lt;br>&lt;br>
+Aug 2012</string>
 
 </resources>

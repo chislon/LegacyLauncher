@@ -176,7 +176,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	static final String EXTRA_SHORTCUT_DUPLICATE = "duplicate";
 
 	static final String EXTRA_CUSTOM_WIDGET = "custom_widget";
-	// static final String SEARCH_WIDGET = "search_widget";
+	static final String SEARCH_WIDGET = "search_widget";
 
 	static final int WALLPAPER_SCREENS_SPAN = 2;
 	static final int SCREEN_COUNT = 5;
@@ -1492,7 +1492,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					addItemCellInfo.spanX);
 			outState.putInt(RUNTIME_STATE_PENDING_ADD_SPAN_Y,
 					addItemCellInfo.spanY);
-			
+
 			// check that the workspace screen is valid to avoid a NPE
 			if (layout != null) {
 				outState.putInt(RUNTIME_STATE_PENDING_ADD_COUNT_X,
@@ -1900,48 +1900,48 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	void addAppWidget(final Intent data) {
 		// TODO: catch bad widget exception when sent
-		int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-				-1);
+		int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+		if (Build.VERSION.SDK_INT < 8) {
 
-		// String customWidget = data.getStringExtra(EXTRA_CUSTOM_WIDGET);
+		}
 
-		/*
-		 * if (SEARCH_WIDGET.equals(customWidget)) { // We don't need this any
-		 * more, since this isn't a real app widget.
-		 * mAppWidgetHost.deleteAppWidgetId(appWidgetId); // add the search
-		 * widget addSearch(); } else {
-		 */
-		AppWidgetProviderInfo appWidget = mAppWidgetManager
-				.getAppWidgetInfo(appWidgetId);
+		if (Build.VERSION.SDK_INT < 8 && SEARCH_WIDGET.equals(data.getStringExtra(EXTRA_CUSTOM_WIDGET))) {
+			// We don't need this any more, since this isn't a real app widget.
+			mAppWidgetHost.deleteAppWidgetId(appWidgetId); 
+			// add the search widget 
+			// addSearch();
+		} else {
 
-		try {
-			Bundle metadata = getPackageManager().getReceiverInfo(
-					appWidget.provider, PackageManager.GET_META_DATA).metaData;
-			if (metadata != null) {
-				if (metadata
-						.containsKey(LauncherMetadata.Requirements.APIVersion)) {
-					int requiredApiVersion = metadata
-							.getInt(LauncherMetadata.Requirements.APIVersion);
-					if (requiredApiVersion > LauncherMetadata.CurrentAPIVersion) {
-						onActivityResult(REQUEST_CREATE_APPWIDGET,
-								Activity.RESULT_CANCELED, data);
-						// Show some information here to tell the user why the
-						// widget is rejected.
-						showDialog(DIALOG_ADD_WIDGET_FAILURE);
-						return;
+			AppWidgetProviderInfo appWidget = mAppWidgetManager
+					.getAppWidgetInfo(appWidgetId);
+
+			try {
+				Bundle metadata = getPackageManager().getReceiverInfo(
+						appWidget.provider, PackageManager.GET_META_DATA).metaData;
+				if (metadata != null) {
+					if (metadata
+							.containsKey(LauncherMetadata.Requirements.APIVersion)) {
+						int requiredApiVersion = metadata
+								.getInt(LauncherMetadata.Requirements.APIVersion);
+						if (requiredApiVersion > LauncherMetadata.CurrentAPIVersion) {
+							onActivityResult(REQUEST_CREATE_APPWIDGET,
+									Activity.RESULT_CANCELED, data);
+							// Show some information here to tell the user why the
+							// widget is rejected.
+							showDialog(DIALOG_ADD_WIDGET_FAILURE);
+							return;
+						}
 					}
 				}
+			} catch (PackageManager.NameNotFoundException expt) {
+				// No Metadata available... then it is all OK...
 			}
-		} catch (PackageManager.NameNotFoundException expt) {
-			// No Metadata available... then it is all OK...
+			configureOrAddAppWidget(data);
 		}
-		configureOrAddAppWidget(data);
-		// }
 	}
 
 	private void configureOrAddAppWidget(Intent data) {
-		int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-				-1);
+		int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
 		AppWidgetProviderInfo appWidget = mAppWidgetManager
 				.getAppWidgetInfo(appWidgetId);
 		if (appWidget.configure != null) {
@@ -1958,36 +1958,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 	}
 
-	/*
-	 * void addSearch() { final Widget info = Widget.makeSearch(); final
-	 * CellLayout.CellInfo cellInfo = mAddItemCellInfo;
-	 * 
-	 * final int[] xy = mCellCoordinates; final int spanX = info.spanX; final
-	 * int spanY = info.spanY;
-	 * 
-	 * AlertDialog.Builder builder; AlertDialog mAlertDialog;
-	 * 
-	 * final View dlg_layout = View.inflate(Launcher.this,
-	 * R.layout.widget_span_setup, null); final NumberPicker
-	 * ncols=(NumberPicker)dlg_layout.findViewById(R.id.widget_columns_span);
-	 * ncols.setRange(1, mWorkspace.currentDesktopColumns());
-	 * ncols.setCurrent(spanX); final NumberPicker
-	 * nrows=(NumberPicker)dlg_layout.findViewById(R.id.widget_rows_span);
-	 * nrows.setRange(1, mWorkspace.currentDesktopRows());
-	 * nrows.setCurrent(spanY); builder = new
-	 * AlertDialog.Builder(Launcher.this); builder.setView(dlg_layout);
-	 * mAlertDialog = builder.create();
-	 * mAlertDialog.setTitle(getResources().getString
-	 * (R.string.widget_config_dialog_title));
-	 * mAlertDialog.setMessage(getResources
-	 * ().getString(R.string.widget_config_dialog_summary));
-	 * mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-	 * getResources().getString(android.R.string.ok), new
-	 * DialogInterface.OnClickListener() { public void onClick(DialogInterface
-	 * dialog, int which) { int spanX=ncols.getCurrent(); int
-	 * spanY=nrows.getCurrent(); realAddSearch(info,cellInfo,xy,spanX,spanY); }
-	 * }); mAlertDialog.show(); }
-	 */
 
 	void processShortcut(Intent intent, int requestCodeApplication,
 			int requestCodeShortcut) {
@@ -3299,22 +3269,31 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						AppWidgetManager.ACTION_APPWIDGET_PICK);
 				pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 						appWidgetId);
-				// add the search widget
+
+				// CCHOW CHANGE START
+				// Workaround for crash in Android 2.1. ADW removed the search widget 
+				// from the launcher code, which broke things.
 				ArrayList<AppWidgetProviderInfo> customInfo = new ArrayList<AppWidgetProviderInfo>();
-				AppWidgetProviderInfo info = new AppWidgetProviderInfo();
-				info.provider = new ComponentName(getPackageName(), "XXX.YYY");
-				info.label = getString(R.string.group_search);
-				info.icon = R.drawable.ic_search_widget;
-				customInfo.add(info);
-				pickIntent.putParcelableArrayListExtra(
-						AppWidgetManager.EXTRA_CUSTOM_INFO, customInfo);
-				/*
-				 * ArrayList<Bundle> customExtras = new ArrayList<Bundle>();
-				 * Bundle b = new Bundle(); b.putString(EXTRA_CUSTOM_WIDGET,
-				 * SEARCH_WIDGET); customExtras.add(b);
-				 * pickIntent.putParcelableArrayListExtra(
-				 * AppWidgetManager.EXTRA_CUSTOM_EXTRAS, customExtras);
-				 */
+				final boolean SDK_LESS_THAN_FROYO = Build.VERSION.SDK_INT < 8;
+
+				if (!SDK_LESS_THAN_FROYO) {
+					// add the search widget
+					AppWidgetProviderInfo info = new AppWidgetProviderInfo();
+					info.provider = new ComponentName(getPackageName(), "XXX.YYY");
+					info.label = getString(R.string.group_search);
+					info.icon = R.drawable.ic_search_widget;
+					customInfo.add(info);
+				}
+				pickIntent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, customInfo);
+
+				if (SDK_LESS_THAN_FROYO) {
+					// Android 2.1 crashes if this isn't there, but this is useless if SDK > 7
+					ArrayList<Bundle> customExtras = new ArrayList<Bundle>();
+					Bundle b = new Bundle(); b.putString(EXTRA_CUSTOM_WIDGET, SEARCH_WIDGET); customExtras.add(b);
+					pickIntent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, customExtras);
+				}
+				// CCHOW CHANGE END
+
 				// start the pick activity
 				startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
 				break;
@@ -4749,21 +4728,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			appwidgetReadyBroadcast(appWidgetId, appWidgetInfo.provider, spans);
 	}
 
-	/*
-	 * private void realAddSearch(Widget info,final CellLayout.CellInfo
-	 * cellInfo,final int[] xy,int spanX,int spanY){ if (!findSlot(cellInfo, xy,
-	 * spanX, spanY)) return; info.spanX=spanX; info.spanY=spanY;
-	 * sLauncherModel.addDesktopItem(info);
-	 * LauncherModel.addItemToDatabase(this, info,
-	 * LauncherSettings.Favorites.CONTAINER_DESKTOP,
-	 * mWorkspace.getCurrentScreen(), xy[0], xy[1], false);
-	 * 
-	 * final View view = mInflater.inflate(info.layoutResource, null);
-	 * view.setTag(info); Search search = (Search)
-	 * view.findViewById(R.id.widget_search); search.setLauncher(this);
-	 * 
-	 * mWorkspace.addInCurrentScreen(view, xy[0], xy[1], spanX, spanY); }
-	 */
 	public static int getScreenCount(Context context) {
 		return MyLauncherSettingsHelper.getDesktopScreens(context);
 	}
