@@ -320,8 +320,8 @@
     <string name="pref_summary_autosize_icons">Stretch icons/widgets</string>
     <string name="pref_title_drawer_labels">Show app labels</string>
     <string name="pref_summary_drawer_labels">Show the labels on app tray</string>
-    <string name="widget_columns">Widget Columns</string>
-    <string name="widget_rows">Widget Rows</string>
+    <string name="widget_columns">Columns</string>
+    <string name="widget_rows">Rows</string>
     <string name="pref_title_screen_cache">Scrolling Cache</string>
     <string name="pref_summary_screen_cache">Improves rendering speed but uses more memory</string>
     <string name="pref_title_desktop_indicator">Show screen indicator</string>
