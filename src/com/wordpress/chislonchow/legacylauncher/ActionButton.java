@@ -1,6 +1,5 @@
 package com.wordpress.chislonchow.legacylauncher;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +8,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
-import android.view.Display;
 import android.view.View;
 import android.view.View.OnLongClickListener;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -35,25 +32,12 @@ DragListener, OnLongClickListener, DragSource {
 	public boolean mInterceptClicks = false;
 	private DragController mDragger;
 
-	private Display mDisplay;
-	private LinearLayout.LayoutParams mLpWide, mLpNarrow;
-
 	private StateListDrawable mStateListDrawable;
-
-	private static final int STATUS_BAR_HEIGHT = 25;	// pixels
-	private static final int ACTION_BUTTON_COUNT = 5;
 
 	private int mSelectorColor = 0xFF82B600;
 
 	public ActionButton(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
-		final float scale = getResources().getDisplayMetrics().density;
-		mDisplay = ((Activity) context).getWindowManager().getDefaultDisplay();
-		final int dimMax = Math.min(mDisplay.getWidth(), mDisplay.getHeight()) / 5;
-		final int dimMin = (int) (dimMax - STATUS_BAR_HEIGHT * scale / 5);
-		mLpWide = new LinearLayout.LayoutParams(dimMin, dimMin);
-		mLpNarrow = new LinearLayout.LayoutParams(dimMax, dimMax);
 	}
 
 	public ActionButton(Context context, AttributeSet attrs) {
@@ -70,26 +54,6 @@ DragListener, OnLongClickListener, DragSource {
 				R.drawable.lab_rab_empty_bg);
 		a.recycle();
 		this.setOnLongClickListener(this);
-
-		final float scale = getResources().getDisplayMetrics().density;
-		mDisplay = ((Activity) context).getWindowManager().getDefaultDisplay();
-
-		final int dimMax = Math.min(mDisplay.getWidth(), mDisplay.getHeight()) / ACTION_BUTTON_COUNT;
-		final int dimMin = (int) (dimMax - STATUS_BAR_HEIGHT * scale / ACTION_BUTTON_COUNT);
-		mLpWide = new LinearLayout.LayoutParams(dimMin, dimMin);
-		mLpNarrow = new LinearLayout.LayoutParams(dimMax, dimMax);
-	}
-
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {		
-		if (mDisplay.getWidth() > mDisplay.getHeight()) {
-			this.setLayoutParams(mLpWide);
-			this.setMeasuredDimension(mLpWide.height, mLpWide.height);
-		} else {
-			this.setLayoutParams(mLpNarrow);
-			this.setMeasuredDimension(mLpNarrow.width, mLpNarrow.width);
-		}
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 
 	/* (non-Javadoc)
@@ -362,12 +326,12 @@ DragListener, OnLongClickListener, DragSource {
 			mIconNormal.setCallback(null);
 			mIconNormal = null;
 		}
-		
+
 		if (mStateListDrawable != null) {
 			mStateListDrawable.setCallback(null);
 			mStateListDrawable = null;
 		}
-		
+
 		mIconNormal = d;
 		if (!specialMode) {
 			if (mIconNormal != null) {

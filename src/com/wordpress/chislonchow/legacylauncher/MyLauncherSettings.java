@@ -62,11 +62,12 @@ OnPreferenceChangeListener {
 	private static final String LAUNCHER_DB_BASE = "/data/" + NAMESPACE
 			+ "/databases/launcher.db";
 
-	// Request codes for onResultActivity. That way we know the request donw
+	// Request codes for onResultActivity. That way we know the request done
 	// when startActivityForResult was fired
 	private static final int REQUEST_SWIPE_DOWN_APP_CHOOSER = 0;
 	private static final int REQUEST_HOME_BINDING_APP_CHOOSER = 1;
 	private static final int REQUEST_SWIPE_UP_APP_CHOOSER = 2;
+	private static final int REQUEST_PINCH_IN_APP_CHOOSER = 3;
 
 	private AlertDialog mAlertDialog;
 
@@ -155,6 +156,9 @@ OnPreferenceChangeListener {
 		listPref.setOnPreferenceChangeListener(this);
 		listPref.setSummary(listPref.getEntry());
 		listPref = (ListPreference) findPreference("homeBinding");
+		listPref.setOnPreferenceChangeListener(this);
+		listPref.setSummary(listPref.getEntry());
+		listPref = (ListPreference) findPreference("pinchinActions");
 		listPref.setOnPreferenceChangeListener(this);
 		listPref.setSummary(listPref.getEntry());
 
@@ -738,6 +742,19 @@ OnPreferenceChangeListener {
 				pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
 				startActivityForResult(pickIntent, REQUEST_SWIPE_UP_APP_CHOOSER);
 			}
+		} else if (key.equals("pinchinActions")) {
+			CharSequence[] entries = ((ListPreference)preference).getEntries();
+			preference.setSummary(entries[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
+			// lets launch app picker if the user selected to launch an app on
+			// gesture
+			if (newValue.equals(String.valueOf(Launcher.BIND_APP_LAUNCHER))) {
+				Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+				mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+				Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+				pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+				startActivityForResult(pickIntent, REQUEST_PINCH_IN_APP_CHOOSER);
+			}
 		} else if (key.equals("main_dock_style")) {
 			CheckBoxPreference dots = (CheckBoxPreference) findPreference("uiDots");
 			CheckBoxPreference lockMAB = (CheckBoxPreference) findPreference("mainDockLockMAB");
@@ -823,6 +840,10 @@ OnPreferenceChangeListener {
 				break;
 			case REQUEST_SWIPE_UP_APP_CHOOSER:
 				MyLauncherSettingsHelper.setSwipeUpAppToLaunch(this,
+						infoFromApplicationIntent(this, data));
+				break;
+			case REQUEST_PINCH_IN_APP_CHOOSER:
+				MyLauncherSettingsHelper.setPinchInAppToLaunch(this,
 						infoFromApplicationIntent(this, data));
 				break;
 			}

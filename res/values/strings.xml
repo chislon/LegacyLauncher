@@ -131,8 +131,6 @@
     <string name="pref_title_desktop_transition">Transition Animation</string>
     <string name="pref_summary_desktop_transition">Transition animation for changing screens</string>
     <string name="pref_title_desktop_wallpaper">WALLPAPER</string>
-    <string name="pref_title_enable_previews">Desktop previews</string>
-    <string name="pref_summary_enable_previews">Enable desktop previews</string>
     <string name="pref_title_spread_previews">Spread previews</string>
     <string name="pref_summary_spread_previews">Apply the spread style desktop preview style</string>
 
@@ -181,6 +179,7 @@
     <string name="pref_title_home_button_binding">Home button</string>
     <string name="pref_title_swipedown_actions">Swipe down</string>
     <string name="pref_title_swipeup_actions">Swipe up</string>
+    <string name="pref_title_pinchin_actions">Pinch in</string>
 
     <!-- Drawer preferences -->
     <string name="pref_title_drawer">Applications Tray</string>

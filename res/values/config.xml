@@ -55,6 +55,7 @@
     <string name="config_home_binding_actions" translatable="false">1</string>
     <string name="config_swipedown_actions" translatable="false">0</string>
     <string name="config_swipeup_actions" translatable="false">0</string>
+    <string name="config_pinchin_actions" translatable="false">3</string>
 
     <bool name="config_drawer_animated">true</bool>
     <!-- config_desktops min value is 1, so it will add 1 to whatever value you set here -->
@@ -62,7 +63,6 @@
     <integer name="config_default_screen">2</integer>
 
     <bool name="config_hide_statusbar">false</bool>
-    <bool name="config_previews_enable">true</bool>
     <bool name="config_previews_spread">true</bool>
     <bool name="config_ui_dots">false</bool>
     <bool name="config_folder_animate">true</bool>
@@ -112,7 +112,7 @@
     <string name="config_desktop_indicator_type" translatable="false">3</string>
     <string name="config_desktop_transition" translatable="false">1</string>
 
-    <!-- 1=sensor, 2=portrait, 3=landscape -->
+    <!-- 1=sensor, 2=no sensor, 3=landscape, 4=portrait -->
     <string name="config_orientation_default" translatable="false">2</string>
     <!-- 1=low quality,2=auto, 3=disabled -->
     <string name="config_screen_cache" translatable="false">2</string>

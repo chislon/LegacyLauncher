@@ -85,7 +85,7 @@ public class ActivityPickerActivity extends ExpandableListActivity {
 		} catch (NameNotFoundException e) {
 		} catch (Resources.NotFoundException e) {
 		}
-		setResult(RESULT_OK,mReturnData);
+		setResult(RESULT_OK, mReturnData);
 		finish();
         return true;
 	}

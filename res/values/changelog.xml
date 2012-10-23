@@ -2,13 +2,14 @@
 <resources>
 
     <!-- Version Information -->
-    <string name="app_version" translatable="false">0.39.5</string>
+    <string name="app_version" translatable="false">0.39.6</string>
 
     <!-- Change Log -->
 
     <string name="changelog">&lt;b>Recent changes&lt;/b>&lt;br>
-- Fixes for Android 2.1 when adding widgets&lt;br>
-- Tweak tray animation&lt;br>&lt;br>
-Aug 2012</string>
+- Fix in dock icon sizing&lt;br>
+- Actually implement portrait configuration&lt;br>
+- Add pinch in gesture customizations&lt;br>
+&lt;br>Oct 2012</string>
 
 </resources>

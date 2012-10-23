@@ -94,7 +94,7 @@
     <!-- ADW Settings -->
     <string name="launcher_label_settings">"Legacy啟動器設置"</string>
     <string name="pref_category_launcher_components">啟動器組件</string>
-    
+
     <!-- Desktop preferences -->
     <string name="pref_title_desktop">"桌面"</string>
     <string name="pref_title_desktop_config_preferences">"桌面配置"</string>
@@ -125,8 +125,6 @@
     <string name="pref_title_desktop_transition">"轉換效果動畫"</string>
     <string name="pref_summary_desktop_transition">"改變屏幕轉換效果"</string>
     <string name="pref_title_desktop_wallpaper">"桌布"</string>
-    <string name="pref_title_enable_previews">"桌面預覽"</string>
-    <string name="pref_summary_enable_previews">"啟用桌面預覽"</string>
     <string name="pref_title_spread_previews">"散開風格預覽"</string>
     <string name="pref_summary_spread_previews">"使用散開風格的縮略圖預覽"</string>
 
@@ -175,6 +173,7 @@
     <string name="pref_title_home_button_binding">"主頁按鈕"</string>
     <string name="pref_title_swipedown_actions">"下滑手勢"</string>
     <string name="pref_title_swipeup_actions">"上滑手勢"</string>
+    <string name="pref_title_pinchin_actions">"縮小手勢"</string>
 
     <!-- Drawer preferences -->
     <string name="pref_title_drawer">"應用託盤"</string>

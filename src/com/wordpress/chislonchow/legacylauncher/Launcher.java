@@ -300,7 +300,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 * ADW: A lot of properties to store the custom settings
 	 */
 	private boolean mDrawerAnimate = true;
-	private boolean mPreviewsEnable = true;
 	private boolean mPreviewsNew = true;
 	private boolean mHideStatusBar = false;
 	private boolean mShowDots = false;
@@ -327,10 +326,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	private AlertDialog mAlertDialog;
 
-	public boolean getPreviewsEnable() {
-		return mPreviewsEnable;
-	}
-
 	// lockdown entire launcher from layout changes
 	public boolean isLauncherLocked() {
 		return mLauncherLocked;
@@ -348,6 +343,12 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	protected static final int BIND_NOTIFICATIONS = 6;
 	protected static final int BIND_HOME_NOTIFICATIONS = 7;
 	protected static final int BIND_APP_LAUNCHER = 8;
+	protected static final int BIND_ACTIVITY = 9;
+
+	private static final int BIND_TYPE_HOME = 1;
+	private static final int BIND_TYPE_SWIPEUP = 2;
+	private static final int BIND_TYPE_SWIPEDOWN = 3;
+	private static final int BIND_TYPE_PINCHIN = 4;
 
 	private int mHomeBinding = BIND_DEFAULT;
 
@@ -359,6 +360,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 * wjax: Swipe UP binding enum
 	 */
 	private int mSwipeupAction = BIND_NONE;
+	/**
+	 * cchow: Pinch in binding enum
+	 */
+	private int mPinchInAction = BIND_PREVIEWS;
 
 	/**
 	 * ADW:Wallpaper intent receiver
@@ -979,6 +984,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 		if (themeResources != null) {
 			// Action Buttons
+
 			loadThemeResource(themeResources, themePackage, "lab_bg", mLAB,
 					THEME_ITEM_BACKGROUND);
 			loadThemeResource(themeResources, themePackage, "rab_bg", mRAB,
@@ -989,6 +995,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					THEME_ITEM_BACKGROUND);
 			loadThemeResource(themeResources, themePackage, "mab_bg", mMAB,
 					THEME_ITEM_BACKGROUND);
+
 			// App drawer button
 			// loadThemeResource(themeResources,themePackage,"handle_icon",mMAB,THEME_ITEM_FOREGROUND);
 			// View appsBg=findViewById(R.id.appsBg);
@@ -1355,7 +1362,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 			if ((intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) {
 				if (!isAllAppsVisible() || mHomeBinding == BIND_APPS)
-					fireHomeBinding(mHomeBinding, 1);
+					fireActionBinding(mHomeBinding, BIND_TYPE_HOME);
 				if (mHomeBinding != BIND_APPS) {
 					closeDrawer(true);
 				}
@@ -2725,15 +2732,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mWorkspace.performHapticFeedback(
 					HapticFeedbackConstants.LONG_PRESS,
 					HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
-			if (mPreviewsEnable)
-				showPreviewPrevious(v);
+			showPreviewPrevious(v);
 			return true;
 		case R.id.btn_scroll_right:
 			mWorkspace.performHapticFeedback(
 					HapticFeedbackConstants.LONG_PRESS,
 					HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
-			if (mPreviewsEnable)
-				showPreviewNext(v);
+			showPreviewNext(v);
 			return true;
 		}
 
@@ -3629,10 +3634,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private void updateAlmostNexusVars() {
 		mDrawerAnimate = MyLauncherSettingsHelper.getDrawerAnimated(Launcher.this);
 		mPreviewsNew = MyLauncherSettingsHelper.getPreviewsNew(this);
-		mPreviewsEnable = MyLauncherSettingsHelper.getPreviewsEnable(this);
 		mHomeBinding = MyLauncherSettingsHelper.getHomeBinding(this);
 		mSwipedownAction = MyLauncherSettingsHelper.getSwipeDownActions(this);
 		mSwipeupAction = MyLauncherSettingsHelper.getSwipeUpActions(this);
+		mPinchInAction = MyLauncherSettingsHelper.getPinchInActions(this);
 		mHideStatusBar = MyLauncherSettingsHelper.getHideStatusbar(this);
 		mShowDots = MyLauncherSettingsHelper.getUIDots(this);
 		mFolderAnimate = MyLauncherSettingsHelper.getFolderAnimate(this);
@@ -4563,9 +4568,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	/**
-	 * ADW: Home binding actions
+	 * ADW: Action binding actions
 	 */
-	public void fireHomeBinding(int bindingValue, int type) {
+	public void fireActionBinding(int bindingValue, int type) {
 		// ADW: switch home button binding user selection
 		if (mIsEditMode || mIsWidgetEditMode)
 			return;
@@ -4581,7 +4586,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				dismissPreviews();
 				mWorkspace.moveToDefaultScreen();
 			} else {
-				if (!showingPreviews && mPreviewsEnable) {
+				if (!showingPreviews) {
 					showPreviews(mMAB, 0, mWorkspace.mHomeScreens);
 				} else {
 					dismissPreviews();
@@ -4589,7 +4594,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			}
 			break;
 		case BIND_PREVIEWS:
-			if (!showingPreviews && mPreviewsEnable) {
+			if (!showingPreviews) {
 				showPreviews(mMAB, 0, mWorkspace.mHomeScreens);
 			} else {
 				dismissPreviews();
@@ -4632,22 +4637,28 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			String package_name = "";
 			String name = "";
 			switch (type) {
-			case 1:
+			case BIND_TYPE_HOME:
 				package_name = MyLauncherSettingsHelper
 				.getHomeBindingAppToLaunchPackageName(this);
 				name = MyLauncherSettingsHelper
 						.getHomeBindingAppToLaunchName(this);
 				break;
-			case 2:
+			case BIND_TYPE_SWIPEUP:
 				package_name = MyLauncherSettingsHelper
 				.getSwipeUpAppToLaunchPackageName(this);
 				name = MyLauncherSettingsHelper.getSwipeUpAppToLaunchName(this);
 				break;
-			case 3:
+			case BIND_TYPE_SWIPEDOWN:
 				package_name = MyLauncherSettingsHelper
 				.getSwipeDownAppToLaunchPackageName(this);
 				name = MyLauncherSettingsHelper
 						.getSwipeDownAppToLaunchName(this);
+				break;
+			case BIND_TYPE_PINCHIN:
+				package_name = MyLauncherSettingsHelper
+				.getPinchInAppToLaunchPackageName(this);
+				name = MyLauncherSettingsHelper
+						.getPinchInAppToLaunchName(this);
 				break;
 			default:
 				break;
@@ -4676,7 +4687,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 */
 	public void fireSwipeDownAction() {
 		// wjax: switch SwipeDownAction button binding user selection
-		fireHomeBinding(mSwipedownAction, 3);
+		fireActionBinding(mSwipedownAction, BIND_TYPE_SWIPEDOWN);
 	}
 
 	/**
@@ -4684,7 +4695,15 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	 */
 	public void fireSwipeUpAction() {
 		// wjax: switch SwipeUpAction button binding user selection
-		fireHomeBinding(mSwipeupAction, 2);
+		fireActionBinding(mSwipeupAction, BIND_TYPE_SWIPEUP);
+	}
+
+	/**
+	 * wjax: Pinch in binding action
+	 */
+	public void firePinchInAction() {
+		// wjax: switch SwipeUpAction button binding user selection
+		fireActionBinding(mPinchInAction, BIND_TYPE_PINCHIN);
 	}
 
 	private void realAddWidget(AppWidgetProviderInfo appWidgetInfo,
@@ -4816,11 +4835,14 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		case MyLauncherSettingsHelper.ORIENTATION_SENSOR:
 			this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
 			break;
-		case MyLauncherSettingsHelper.ORIENTATION_PORTRAIT:
+		case MyLauncherSettingsHelper.ORIENTATION_NOSENSOR:
 			this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 			break;
 		case MyLauncherSettingsHelper.ORIENTATION_LANDSCAPE:
 			this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			break;
+		case MyLauncherSettingsHelper.ORIENTATION_PORTRAIT:
+			this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 			break;
 		default:
 			break;

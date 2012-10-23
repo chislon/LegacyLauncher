@@ -2299,19 +2299,25 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.metalev.multitouch.controller.MultiTouchController.MultiTouchObjectCanvas#setPositionAndScale(java.lang.Object, org.metalev.multitouch.controller.MultiTouchController.PositionAndScale, org.metalev.multitouch.controller.MultiTouchController.PointInfo)
+	 */
 	public boolean setPositionAndScale(Object obj, PositionAndScale update,
 			PointInfo touchPoint) {
 		float newRelativeScale = update.getScale();
 		int targetZoom = (int) Math.round(Math.log(newRelativeScale)
 				* ZOOM_LOG_BASE_INV);
 		// Only works for pinch in
-		if (targetZoom < 0 && mStatus == SENSE_CLOSED
-				&& mLauncher.getPreviewsEnable()) { // Change to > 0 for pinch
-			// out, != 0 for both pinch
-			// in and out.
-			mLauncher.showPreviews(mLauncher.getDrawerHandle(), 0,
-					getChildCount());
-			invalidate();
+		if (targetZoom < 0) {
+			if (mStatus == SENSE_CLOSED && !isAnimating && !mLauncher.isAllAppsVisible()) { // Change to > 0 for pinch
+				// out, != 0 for both pinch
+				// in and out.
+				mLauncher.firePinchInAction();
+				/*
+				mLauncher.showPreviews(mLauncher.getDrawerHandle(), 0, getChildCount());
+				invalidate();
+				 */
+			}
 			return true;
 		}
 		return false;

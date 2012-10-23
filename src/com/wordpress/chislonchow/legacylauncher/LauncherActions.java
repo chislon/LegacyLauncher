@@ -190,7 +190,7 @@ public class LauncherActions {
 			{
 				int val = intent.getIntExtra(EXTRA_BINDINGVALUE, 0);
 				if (val == mBindingValue) {
-					mLauncher.fireHomeBinding(mBindingValue, 0);
+					mLauncher.fireActionBinding(mBindingValue, 0);
 					return true;
 				}
 

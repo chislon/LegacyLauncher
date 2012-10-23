@@ -225,12 +225,6 @@
                 android:title="@string/pref_title_desktop_extended_preferences" >
                 <CheckBoxPreference
                     android:defaultValue="true"
-                    android:key="previewsEnable"
-                    android:summary="@string/pref_summary_enable_previews"
-                    android:title="@string/pref_title_enable_previews" />
-                <CheckBoxPreference
-                    android:defaultValue="true"
-                    android:dependency="previewsEnable"
                     android:key="previewsNew"
                     android:summary="@string/pref_summary_spread_previews"
                     android:title="@string/pref_title_spread_previews" />
@@ -280,6 +274,12 @@
                     android:entryValues="@array/menu_binding_values"
                     android:key="swipeupActions"
                     android:title="@string/pref_title_swipeup_actions" />
+                <ListPreference
+                    android:defaultValue="@string/config_pinchin_actions"
+                    android:entries="@array/menu_binding_entries"
+                    android:entryValues="@array/menu_binding_values"
+                    android:key="pinchinActions"
+                    android:title="@string/pref_title_pinchin_actions" />
             </PreferenceScreen>
         </PreferenceScreen>
         <PreferenceScreen

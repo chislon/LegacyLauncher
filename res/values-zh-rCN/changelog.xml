@@ -4,8 +4,9 @@
     <!-- Change Log -->
 
     <string name="changelog">&lt;b>最近更改&lt;/b>&lt;br>
-- Android 2.1下添加小工具功能修復&lt;br>
-- 調整托盤動畫&lt;br>&lt;br>
-8月2012</string>
+- 修正停靠栏图标的大小&lt;br>
+- 修复竖屏设置&lt;br>
+- 桌面缩小手势功能&lt;br>
+10月2012</string>
 
 </resources>

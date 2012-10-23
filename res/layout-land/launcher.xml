@@ -47,52 +47,57 @@
         <com.wordpress.chislonchow.legacylauncher.ActionButton
             android:id="@+id/btn_rab"
             android:layout_width="wrap_content"
-            android:layout_height="60dip"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:background="@drawable/rab_bg"
-            launcher:direction="vertical"
-            launcher:ident="RAB"
             android:scaleType="center"
-            android:src="@drawable/ab_empty" />
+            android:src="@drawable/ab_empty"
+            launcher:direction="vertical"
+            launcher:ident="RAB" />
 
         <com.wordpress.chislonchow.legacylauncher.ActionButton
             android:id="@+id/btn_rab2"
             android:layout_width="wrap_content"
-            android:layout_height="60dip"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:background="@drawable/rab2_bg"
-            launcher:direction="vertical"
-            launcher:ident="RAB2"
             android:scaleType="center"
-            android:src="@drawable/ab_empty" />
+            android:src="@drawable/ab_empty"
+            launcher:direction="vertical"
+            launcher:ident="RAB2" />
 
         <com.wordpress.chislonchow.legacylauncher.ActionButton
             android:id="@+id/btn_mab"
             android:layout_width="wrap_content"
-            android:layout_height="60dip"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:background="@drawable/mab_bg"
-            launcher:direction="vertical"
-            launcher:ident="MAB"
             android:scaleType="center"
-            android:src="@drawable/ab_empty" />
+            android:src="@drawable/ab_empty"
+            launcher:direction="vertical"
+            launcher:ident="MAB" />
 
         <com.wordpress.chislonchow.legacylauncher.ActionButton
             android:id="@+id/btn_lab2"
             android:layout_width="wrap_content"
-            android:layout_height="60dip"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:background="@drawable/lab2_bg"
-            launcher:direction="vertical"
-            launcher:ident="LAB2"
             android:scaleType="center"
-            android:src="@drawable/ab_empty" />
+            android:src="@drawable/ab_empty"
+            launcher:direction="vertical"
+            launcher:ident="LAB2" />
 
         <com.wordpress.chislonchow.legacylauncher.ActionButton
             android:id="@+id/btn_lab"
             android:layout_width="wrap_content"
-            android:layout_height="60dip"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:background="@drawable/lab_bg"
-            launcher:direction="vertical"
-            launcher:ident="LAB"
             android:scaleType="center"
-            android:src="@drawable/ab_empty" />
+            android:src="@drawable/ab_empty"
+            launcher:direction="vertical"
+            launcher:ident="LAB" />
     </LinearLayout>
 
     <ImageView
@@ -123,9 +128,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
         android:background="@drawable/delete_zone_selector"
-        launcher:direction="horizontal"
         android:scaleType="center"
         android:src="@drawable/ic_delete"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        launcher:direction="horizontal" />
 
 </com.wordpress.chislonchow.legacylauncher.DragLayer>

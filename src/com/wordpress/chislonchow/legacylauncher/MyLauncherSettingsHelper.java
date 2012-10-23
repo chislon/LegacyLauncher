@@ -15,8 +15,9 @@ import android.widget.TextView;
 
 public final class MyLauncherSettingsHelper {
 	public static final int ORIENTATION_SENSOR=1;
-	public static final int ORIENTATION_PORTRAIT=2;
+	public static final int ORIENTATION_NOSENSOR=2;
 	public static final int ORIENTATION_LANDSCAPE=3;
+	public static final int ORIENTATION_PORTRAIT=4;
 
 	public static final int CACHE_LOW=1;
 	public static final int CACHE_AUTO=2;
@@ -113,11 +114,6 @@ public final class MyLauncherSettingsHelper {
 	public static boolean getHideStatusbar(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("hideStatusbar", context.getResources().getBoolean(R.bool.config_hide_statusbar));
-		return newD;
-	}
-	public static boolean getPreviewsEnable(Context context) {
-		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
-		boolean newD = sp.getBoolean("previewsEnable", context.getResources().getBoolean(R.bool.config_previews_enable));
 		return newD;
 	}
 	public static boolean getPreviewsNew(Context context) {
@@ -372,6 +368,11 @@ public final class MyLauncherSettingsHelper {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		return sp.getString("swipeUpAppToLaunchPackageName", "");
 	}
+	public static String getPinchInAppToLaunchPackageName(Context context)
+	{
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		return sp.getString("pinchInAppToLaunchPackageName", "");
+	}
 	public static String getHomeBindingAppToLaunchPackageName(Context context)
 	{
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
@@ -386,6 +387,11 @@ public final class MyLauncherSettingsHelper {
 	{
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		return sp.getString("swipeUpAppToLaunchName", "");
+	}
+	public static String getPinchInAppToLaunchName(Context context)
+	{
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		return sp.getString("pinchInAppToLaunchName", "");
 	}
 	public static String getHomeBindingAppToLaunchName(Context context)
 	{
@@ -408,6 +414,14 @@ public final class MyLauncherSettingsHelper {
 		editor.putString("swipeUpAppToLaunchName", info.intent.getComponent().getClassName());
 		editor.commit();
 	}
+	public static void setPinchInAppToLaunch(Context context, ApplicationInfo info)
+	{
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sp.edit();
+		editor.putString("pinchInAppToLaunchPackageName", info.intent.getComponent().getPackageName());
+		editor.putString("pinchInAppToLaunchName", info.intent.getComponent().getClassName());
+		editor.commit();
+	}
 	public static void setHomeBindingAppToLaunch(Context context, ApplicationInfo info)
 	{
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
@@ -424,6 +438,11 @@ public final class MyLauncherSettingsHelper {
 	public static int getSwipeUpActions(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("swipeupActions", context.getResources().getString(R.string.config_swipeup_actions)));
+		return newD;
+	}
+	public static int getPinchInActions(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = Integer.valueOf(sp.getString("pinchinActions", context.getResources().getString(R.string.config_pinchin_actions)));
 		return newD;
 	}
 	public static String getThemePackageName(Context context, String default_theme)
@@ -529,7 +548,7 @@ public final class MyLauncherSettingsHelper {
 			.setTitle(aboutTitle).setCancelable(true)
 			.setIcon(R.drawable.ic_launcher_home)
 			.setPositiveButton(context.getString(android.R.string.ok), null);
-			
+
 			if (shouldShow) {
 				alertBuilder.setNegativeButton(context.getString(R.string.button_guide), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {

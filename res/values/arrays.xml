@@ -2,7 +2,7 @@
 <resources>
 
     <string-array name="menu_binding_entries">
-        <item>No action</item>
+        <item>Do nothing</item>
         <item>Move to default desktop</item>
         <item>Move to default desktop/show previews</item>
         <item>Show previews</item>
@@ -10,7 +10,7 @@
         <item>Show/hide statusbar</item>
         <item>Open/close notifications</item>
         <item>Move to default desktop/Open notifications</item>
-        <item>Open App</item>
+        <item>Open application</item>
     </string-array>
     <string-array name="desktop_indicator_entries">
         <item>Dot pager at top</item>
@@ -26,8 +26,9 @@
     </string-array>
     <string-array name="home_orientation_entries">
         <item>Sensor</item>
-        <item>Portrait</item>
+        <item>Default (no sensor)</item>
         <item>Landscape</item>
+        <item>Portrait</item>
     </string-array>
     <string-array name="screen_cache_entries">
         <item>Low Quality</item>
@@ -88,6 +89,7 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
     </string-array>
     <string-array name="screen_cache_values" translatable="false">
         <item>1</item>

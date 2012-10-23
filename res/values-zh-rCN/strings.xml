@@ -125,8 +125,6 @@
     <string name="pref_title_desktop_transition">"转换效果动画"</string>
     <string name="pref_summary_desktop_transition">"改变屏幕转换效果"</string>
     <string name="pref_title_desktop_wallpaper">"桌布"</string>
-    <string name="pref_title_enable_previews">"桌面预览"</string>
-    <string name="pref_summary_enable_previews">"启用桌面预览"</string>
     <string name="pref_title_spread_previews">"散开风格预览"</string>
     <string name="pref_summary_spread_previews">"使用散开风格的缩略图预览"</string>
 
@@ -175,6 +173,7 @@
     <string name="pref_title_home_button_binding">"主页按钮"</string>
     <string name="pref_title_swipedown_actions">"下滑手势"</string>
     <string name="pref_title_swipeup_actions">"上滑手势"</string>
+    <string name="pref_title_pinchin_actions">"缩小手势"</string>
 
     <!-- Drawer preferences -->
     <string name="pref_title_drawer">"应用托盘"</string>

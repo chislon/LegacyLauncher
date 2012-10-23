@@ -26,8 +26,9 @@
     </string-array>
     <string-array name="home_orientation_entries">
         <item>自动</item>
-        <item>竖屏</item>
+        <item>默认 (忽略方向感应)</item>
         <item>横屏</item>
+        <item>竖屏</item>
     </string-array>
     <string-array name="screen_cache_entries">
         <item>低品质</item>
