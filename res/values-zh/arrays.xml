@@ -11,6 +11,7 @@
         <item>顯示/隱藏通知欄</item>
         <item>顯示預設桌面/顯示通知欄</item>
         <item>打開程式</item>
+        <item>活動清單</item>
     </string-array>
     <string-array name="desktop_indicator_entries">
         <item>頂部點狀指示器</item>

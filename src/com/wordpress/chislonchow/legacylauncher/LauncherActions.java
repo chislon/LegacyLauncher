@@ -53,7 +53,8 @@ public class LauncherActions {
 			int value = Integer.parseInt(menuBindingsValues[i]);
 			String name = menuBindingsNames[i];
 			if (value != Launcher.BIND_NONE && value != Launcher.BIND_APP_LAUNCHER &&
-				value != Launcher.BIND_HOME_PREVIEWS && value != Launcher.BIND_HOME_NOTIFICATIONS) {
+				value != Launcher.BIND_HOME_PREVIEWS && value != Launcher.BIND_HOME_NOTIFICATIONS && 
+				value != Launcher.BIND_ACTIVITY) {
 				DefaultLauncherAction lact = new DefaultLauncherAction(value, name);
 				result.add(lact);
 			}

@@ -712,8 +712,13 @@ OnPreferenceChangeListener {
 
 				Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
 				pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
-				startActivityForResult(pickIntent,
+
+				startActivityForResult(pickIntent, 
 						REQUEST_SWIPE_DOWN_APP_CHOOSER);
+			} else if (newValue.equals(String.valueOf(Launcher.BIND_ACTIVITY))) {
+				Intent pickIntent=new Intent();
+				pickIntent.setClass(this, ActivityPickerActivity.class);
+				startActivityForResult(pickIntent, REQUEST_SWIPE_DOWN_APP_CHOOSER);
 			}
 		} else if (key.equals("homeBinding")) {
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
@@ -728,6 +733,10 @@ OnPreferenceChangeListener {
 				pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
 				startActivityForResult(pickIntent,
 						REQUEST_HOME_BINDING_APP_CHOOSER);
+			} else if (newValue.equals(String.valueOf(Launcher.BIND_ACTIVITY))) {
+				Intent pickIntent=new Intent();
+				pickIntent.setClass(this, ActivityPickerActivity.class);
+				startActivityForResult(pickIntent, REQUEST_HOME_BINDING_APP_CHOOSER);
 			}
 		} else if (key.equals("swipeupActions")) {
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
@@ -741,6 +750,10 @@ OnPreferenceChangeListener {
 				Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
 				pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
 				startActivityForResult(pickIntent, REQUEST_SWIPE_UP_APP_CHOOSER);
+			} else if (newValue.equals(String.valueOf(Launcher.BIND_ACTIVITY))) {
+				Intent pickIntent=new Intent();
+				pickIntent.setClass(this, ActivityPickerActivity.class);
+				startActivityForResult(pickIntent, REQUEST_SWIPE_UP_APP_CHOOSER);
 			}
 		} else if (key.equals("pinchinActions")) {
 			CharSequence[] entries = ((ListPreference)preference).getEntries();
@@ -753,6 +766,10 @@ OnPreferenceChangeListener {
 
 				Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
 				pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+				startActivityForResult(pickIntent, REQUEST_PINCH_IN_APP_CHOOSER);
+			} else if (newValue.equals(String.valueOf(Launcher.BIND_ACTIVITY))) {
+				Intent pickIntent=new Intent();
+				pickIntent.setClass(this, ActivityPickerActivity.class);
 				startActivityForResult(pickIntent, REQUEST_PINCH_IN_APP_CHOOSER);
 			}
 		} else if (key.equals("main_dock_style")) {
@@ -829,6 +846,11 @@ OnPreferenceChangeListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
+
+			Intent customActivityIntent = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
+			if (customActivityIntent != null) {
+				data = customActivityIntent;
+			}
 			switch (requestCode) {
 			case REQUEST_SWIPE_DOWN_APP_CHOOSER:
 				MyLauncherSettingsHelper.setSwipeDownAppToLaunch(this,
@@ -1112,8 +1134,7 @@ OnPreferenceChangeListener {
 					+ LAUNCHER_DB_BASE + "-shm");
 			File dbFile_wal = new File(Environment.getDataDirectory()
 					+ LAUNCHER_DB_BASE + "-wal");
-			File file = new File(Environment.getExternalStorageDirectory(),
-					CONFIG_BACKUP_FILENAME);
+
 			File file_shm = new File(Environment.getExternalStorageDirectory(),
 					CONFIG_BACKUP_FILENAME + "-shm");
 			File file_wal = new File(Environment.getExternalStorageDirectory(),

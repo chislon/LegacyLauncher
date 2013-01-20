@@ -22,11 +22,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import com.wordpress.chislonchow.legacylauncher.R;
-
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.TextView;
 
 public final class AppCatalogueFilters {
 
@@ -39,11 +36,10 @@ public final class AppCatalogueFilters {
 		return sInstance;
 	}
 
-
 	public class Catalog {
 		private final int mIndex;
 		private final SharedPreferences mPreferences;
-		private final String mTitle;
+		private String mTitle;
 
 		public Catalog(String title, int index) {
 			mIndex = index;
@@ -62,13 +58,9 @@ public final class AppCatalogueFilters {
 		public int getIndex() {
 			return mIndex;
 		}
-
-		public void setTitleView(TextView v) {
-			if (mTitle != null) {
-				v.setText(mContext.getResources().getString(R.string.app_group_prepend) + mTitle);
-			} else {
-				v.setText(R.string.app_group_add);
-			}
+		
+		public void setTitle(String title) {
+			mTitle = title;
 		}
 	}
 
@@ -119,6 +111,12 @@ public final class AppCatalogueFilters {
 		mAllAppGroups.put(grp, cat);
 
 		return grp;
+	}
+	
+	public synchronized final void renameGroupAtIndex(int index, String name) {
+		SharedPreferences.Editor editor = mAllGroupsIndex.edit();
+		editor.putString("GrpName"+index, name);
+		editor.commit();
 	}
 
 	private int getFirstFreeGroupIndex() {

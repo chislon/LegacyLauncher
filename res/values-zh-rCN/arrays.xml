@@ -11,6 +11,7 @@
         <item>显示/隐藏通知栏</item>
         <item>显示预设桌面/显示通知栏</item>
         <item>打开程式</item>
+        <item>活动清单</item>
     </string-array>
     <string-array name="desktop_indicator_entries">
         <item>顶部点状指示器</item>

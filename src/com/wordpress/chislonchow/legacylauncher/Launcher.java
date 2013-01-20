@@ -20,14 +20,6 @@ import static android.util.Log.d;
 import static android.util.Log.e;
 import static android.util.Log.w;
 
-import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
-import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilter;
-import com.wordpress.chislonchow.legacylauncher.catalogue.AppGroupAdapter;
-import com.wordpress.chislonchow.legacylauncher.catalogue.AppInfoListActivity;
-import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters.Catalog;
-import com.wordpress.chislonchow.legacylauncher.ui.NumberPicker;
-import com.wordpress.chislonchow.legacylauncher.R;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
@@ -40,7 +32,6 @@ import java.util.List;
 
 import mobi.intuitit.android.content.LauncherIntent;
 import mobi.intuitit.android.content.LauncherMetadata;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
@@ -58,16 +49,16 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Intent.ShortcutIconResource;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.Intent.ShortcutIconResource;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ActivityInfo;
 import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
-import android.content.pm.ProviderInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ProviderInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -108,17 +99,20 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageView;
@@ -127,9 +121,14 @@ import android.widget.ListAdapter;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.devoteam.quickaction.QuickActionWindow;
+import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilter;
+import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters;
+import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters.Catalog;
+import com.wordpress.chislonchow.legacylauncher.catalogue.AppGroupAdapter;
+import com.wordpress.chislonchow.legacylauncher.catalogue.AppInfoListActivity;
+import com.wordpress.chislonchow.legacylauncher.ui.NumberPicker;
 
 /**
  * Default launcher application.
@@ -318,7 +317,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	public boolean mUseDrawerUngroupCatalog = false;
 	protected boolean mUseDrawerTitleCatalog = false;
 	protected int mTransitionStyle = 1;
-	private int mAppDrawerPadding = -1;
+
+	private static int mAppDrawerPadding = 0;
+	private int mAppDrawerPaddingLast = -1;
 
 	private boolean mFolderAnimate = true;
 
@@ -414,14 +415,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	static final String ANDROID_MARKET_PACKAGE = "com.android.vending";
 	private Drawable mMarketIcon;
 	private CharSequence mMarketLabel;
-	static final String ANDROID_SETTINGS_PACKAGE = "com.android.settings";
+	public static final String ANDROID_SETTINGS_PACKAGE = "com.android.settings";
 	private String mAppInfoLabel;
 
 	// Manage applications on launcher menu
 	static final ComponentName ANDROID_MANAGE_COMPONENT = new ComponentName(
 			ANDROID_SETTINGS_PACKAGE, ANDROID_SETTINGS_PACKAGE
 			+ ".ManageApplications");
-	private String mAppManageLabel;
 
 	// password prefs
 	ObscuredSharedPreferences mObscurePrefs;
@@ -548,6 +548,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			out.writeInt(configuration.mcc);
 			out.writeInt(configuration.mnc);
 			out.flush();
+		} catch (NullPointerException e) {
+			// Something is wrong, but we'll ignore this. 
 		} catch (FileNotFoundException e) {
 			// Ignore
 		} catch (IOException e) {
@@ -745,7 +747,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
 		dismissQuickActionWindow();
 	}
@@ -945,6 +946,23 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 		// ADW linearlayout with apptray, lab and rab
 		mDrawerToolbar = findViewById(R.id.drawer_toolbar);
+
+		// wait till dock is finished drawing to get the padding dimension
+		ViewTreeObserver vto = mDrawerToolbar.getViewTreeObserver(); 
+		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() { 
+			@Override 
+			public void onGlobalLayout() { 
+				mDrawerToolbar.getViewTreeObserver().removeGlobalOnLayoutListener(this); 
+				int width  = mDrawerToolbar.getMeasuredWidth();
+				int height = mDrawerToolbar.getMeasuredHeight();
+				if (width > height) {
+					mAppDrawerPadding = height;
+				} else {
+					mAppDrawerPadding = width;
+				}
+			} 
+		});
+
 		mMAB.setNextFocusUpId(R.id.drag_layer);
 		mMAB.setNextFocusLeftId(R.id.drag_layer);
 		mLAB.setNextFocusUpId(R.id.drag_layer);
@@ -1600,6 +1618,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 	}
 
+	// CCHOW: global search is disabled for non-system app Launchers <Android 2.2
 	/*
 	 * @Override public void startSearch(String initialQuery, boolean
 	 * selectInitialQuery, Bundle appSearchData, boolean globalSearch) {
@@ -1692,7 +1711,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				.setAlphabeticShortcut('X');
 
 		menu.add(MENU_GROUP_NORMAL, MENU_LOCK_DESKTOP, 0, R.string.menu_lock)
-		.setIcon(R.drawable.ic_menu_block).setAlphabeticShortcut('X');
+		.setIcon(R.drawable.ic_menu_block)
+		.setAlphabeticShortcut('L');
 
 		menu.add(MENU_GROUP_NORMAL, MENU_SEARCH, 0, R.string.menu_search)
 		.setIcon(android.R.drawable.ic_search_category_default)
@@ -1714,9 +1734,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		menu.add(MENU_GROUP_CATALOGUE, MENU_APP_GRP_CONFIG, 0,
 				R.string.app_group_config).setIcon(
 						android.R.drawable.ic_menu_manage);
-		// menu.add(MENU_GROUP_CATALOGUE, MENU_APP_GRP_RENAME, 0,
-		// R.string.app_group_rename)
-		// .setIcon(R.drawable.ic_menu_notifications);
 
 		menu.add(MENU_GROUP_CATALOGUE, MENU_APP_DELETE_GRP, 0,
 				R.string.app_group_delete).setIcon(
@@ -1908,9 +1925,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	void addAppWidget(final Intent data) {
 		// TODO: catch bad widget exception when sent
 		int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-		if (Build.VERSION.SDK_INT < 8) {
-
-		}
 
 		if (Build.VERSION.SDK_INT < 8 && SEARCH_WIDGET.equals(data.getStringExtra(EXTRA_CUSTOM_WIDGET))) {
 			// We don't need this any more, since this isn't a real app widget.
@@ -3130,7 +3144,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(Launcher.this);
 			builder.setIcon(0);
-			builder.setTitle(getString(R.string.rename_group_title));
+			builder.setTitle(getString(R.string.new_group_title));
 			builder.setCancelable(true);
 			builder.setOnCancelListener(new Dialog.OnCancelListener() {
 				public void onCancel(DialogInterface dialog) {
@@ -3768,23 +3782,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mDrawerToolbar.setVisibility(View.VISIBLE);
 		}
 
-		// init the padding for the dock
-		final boolean hideDock = (mDockStyle == DOCK_STYLE_NONE) || mDockHide;
-
-		if (isScreenLandscape()) {
-			final int dockSize = (hideDock ? 0 : mDrawerToolbar.getMeasuredWidth());
-			if (dockSize != mAppDrawerPadding) {
-				mAppDrawerPadding = dockSize;
-				mAllAppsGrid.setPadding(0, 0, mAppDrawerPadding, 0);
-			}
-		} else {
-			final int dockSize = (hideDock ? 0 : mDrawerToolbar.getMeasuredHeight());
-			if (dockSize != mAppDrawerPadding) {
-				mAppDrawerPadding = dockSize;
-				mAllAppsGrid.setPadding(0, 0, 0, mAppDrawerPadding);
-			}
-		}
-
 		// wallpaper setup
 		if (mWorkspace != null) {
 			mWorkspace.setWallpaperHack(mWallpaperHack);
@@ -4085,23 +4082,24 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	private void dismissPreview(final View v) {
-		final PopupWindow window = (PopupWindow) v.getTag(R.id.TAG_PREVIEW);
+		final PopupWindow window = (PopupWindow) ViewTagger.getTag(v, R.id.TAG_PREVIEW);
 		if (window != null) {
 			hideDesktop(false);
 			window.setOnDismissListener(new PopupWindow.OnDismissListener() {
 				public void onDismiss() {
-					ViewGroup group = (ViewGroup) v.getTag(R.id.workspace);
+					ViewGroup group = (ViewGroup) ViewTagger.getTag(v, R.id.workspace);
 					int count = group.getChildCount();
 					for (int i = 0; i < count; i++) {
 						((ImageView) group.getChildAt(i))
 						.setImageDrawable(null);
 					}
+					@SuppressWarnings("unchecked")
 					ArrayList<Bitmap> bitmaps = ((ArrayList<Bitmap>) v
 							.getTag(R.id.icon));
 					for (Bitmap bitmap : bitmaps)
 						bitmap.recycle();
 
-					v.setTag(R.id.workspace, null);
+					ViewTagger.setTag(v, R.id.workspace, null);
 					v.setTag(R.id.icon, null);
 					window.setOnDismissListener(null);
 				}
@@ -4112,7 +4110,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mWorkspace.invalidate();
 			mDesktopLocked = false;
 		}
-		v.setTag(R.id.TAG_PREVIEW, null);
+		ViewTagger.setTag(v, R.id.TAG_PREVIEW, null);
 	}
 
 	private void showPreviewPrevious(View anchor) {
@@ -4151,8 +4149,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mWorkspace.openSense(true);
 			} else {
 				// check first if it's already open
-				final PopupWindow window = (PopupWindow) anchor
-						.getTag(R.id.TAG_PREVIEW);
+				final PopupWindow window = (PopupWindow) ViewTagger.getTag(anchor, R.id.TAG_PREVIEW);
 				if (window != null)
 					return;
 				Resources resources = getResources();
@@ -4238,8 +4235,9 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 							dismissPreview(anchor);
 						}
 					});
-					anchor.setTag(R.id.TAG_PREVIEW, p);
-					anchor.setTag(R.id.workspace, preview);
+
+					ViewTagger.setTag(anchor, R.id.TAG_PREVIEW, p);
+					ViewTagger.setTag(anchor, R.id.workspace, preview);
 					anchor.setTag(R.id.icon, bitmaps);
 				}
 			}
@@ -4324,12 +4322,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					mRAB2.setNextFocusLeftId(R.id.all_apps_view);
 				}
 
-				final int dockSize = (hideDock ? 0 : mDrawerToolbar
-						.getMeasuredWidth());
+				final int dockSize = (hideDock ? 0 : mAppDrawerPadding);
 
-				if (dockSize != mAppDrawerPadding) {
-					mAppDrawerPadding = dockSize;
-					mAllAppsGrid.setPadding(0, 0, mAppDrawerPadding, 0);
+				if (dockSize != mAppDrawerPaddingLast) {
+					mAppDrawerPaddingLast = dockSize;
+					mAllAppsGrid.setPadding(0, 0, mAppDrawerPaddingLast, 0);
 				}
 			} else {
 				// portrait
@@ -4351,12 +4348,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					mRAB2.setNextFocusUpId(R.id.all_apps_view);
 					mRAB2.setNextFocusLeftId(R.id.drag_layer);
 				}
-				final int dockSize = (hideDock ? 0 : mDrawerToolbar
-						.getMeasuredHeight());
+				final int dockSize = (hideDock ? 0 : mAppDrawerPadding);
 
-				if (dockSize != mAppDrawerPadding) {
-					mAppDrawerPadding = dockSize;
-					mAllAppsGrid.setPadding(0, 0, 0, mAppDrawerPadding);
+				if (dockSize != mAppDrawerPaddingLast) {
+					mAppDrawerPaddingLast = dockSize;
+					mAllAppsGrid.setPadding(0, 0, 0, mAppDrawerPaddingLast);
 				}
 			}
 
@@ -4632,6 +4628,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			}
 			break;
 		case BIND_APP_LAUNCHER:
+		case BIND_ACTIVITY:
 			// Launch or bring to front selected app
 			// Get PackageName and ClassName of selected App
 			String package_name = "";
@@ -5711,8 +5708,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	void showQuickActionWindow(final ItemInfo info, final View view,
 			PopupWindow.OnDismissListener onDismissListener) {
-		QuickActionWindow existingQA = (QuickActionWindow) view
-				.getTag(R.id.TAG_PREVIEW);
+		QuickActionWindow existingQA = (QuickActionWindow) view.getTag(R.id.TAG_PREVIEW);
 		if (existingQA != null && existingQA.isShowing()) {
 			return;
 		}
@@ -6063,6 +6059,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		}
 	}
 
+	// CCHOW CHANGE START
+	/*
 	public void createManageApplications(Menu menu, int menuGroupAlmostnexus) {
 		// get the application info label and if found show the option
 		if (mAppManageLabel == null) {
@@ -6091,6 +6089,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			.setAlphabeticShortcut('M').setIntent(settings);
 		}
 	}
+	 */
+	// CCHOW CHANGE END
 
 	protected class PickGrpDialog implements
 	DialogInterface.OnMultiChoiceClickListener,

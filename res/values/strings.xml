@@ -277,7 +277,7 @@
     <string name="pref_title_application_settings">MORE</string>
     <string name="pref_title_build_info">LAUNCHER INFORMATION</string>
     <string name="pref_title_app_version">Version</string>
-    <string name="drop_to_uninstall">Drop to Uninstall</string>
+    <string name="drop_to_uninstall">Drop to Manage or Uninstall</string>
     <string name="toast_unknown_item">Unknown item. We can\'t add unknown item types!</string>
     <string name="title_dialog_xml">Launcher Setup</string>
     <string name="import_export_sdcard_unmounted">SD card not mounted!</string>
@@ -381,7 +381,7 @@
     <string name="selectNone">Select none</string>
     <string name="sortType">Sort by:</string>
     <string name="app_group_prepend">"Catalog: "</string>
-    <string name="app_group_no_items_add">"No items selected, stop adding catalog?"</string>
+    <string name="app_group_no_items_add">"No items selected, abort adding new catalog?"</string>
     <string name="app_group_no_items_modify">"No items selected, remove current catalog?"</string>
     <string name="app_group_all">"All"</string>
     <string name="app_group_un">"All (Uncataloged)"</string>
@@ -394,11 +394,14 @@
     <string name="app_group_config_error">"Cannot modify this catalog"</string>
     <string name="app_group_remove_error">"Cannot remove this catalog"</string>
     <string name="app_group_remove_success">"Catalog removed"</string>
-    <string name="rename_group_title">New Catalog</string>
+    <string name="new_group_title">New Catalog</string>
     <string name="rename_group_label">Catalog Name</string>
     <string name="create_group_success">"New catalog: "</string>
     <string name="create_group_fail">Failed to create catalog, name not accepted.</string>
     <string name="show_catalog">Show Catalog \"%s\"</string>
+    <string name="app_group_rename">Rename catalog</string>
+    <string name="rename_group_fail">Failed to rename catalog, name not accepted.</string>
+    <string name="rename_group_title">Rename Catalog</string>
 
     <!-- Misc preferences strings -->
     <string name="pref_title_launcher_restart">Restart</string>
@@ -464,8 +467,8 @@
     <!-- Noun, menu item used to show the system settings -->
     <string name="menu_settings">Settings</string>
     <string name="menu_launcher_settings">Setup Launcher</string>
-    <string name="menu_lock">Lock Launcher</string>
-    <string name="menu_unlock">Unlock Launcher</string>
+    <string name="menu_lock">Lock Desktop</string>
+    <string name="menu_unlock">Unlock Desktop</string>
 
     <!-- Edit Text Hints -->
     <string name="hint_name_category">Group name</string>

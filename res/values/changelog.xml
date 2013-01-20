@@ -2,14 +2,14 @@
 <resources>
 
     <!-- Version Information -->
-    <string name="app_version" translatable="false">0.39.6</string>
+    <string name="app_version" translatable="false">0.39.7</string>
 
     <!-- Change Log -->
 
     <string name="changelog">&lt;b>Recent changes&lt;/b>&lt;br>
-- Fix in dock icon sizing&lt;br>
-- Actually implement portrait configuration&lt;br>
-- Add pinch in gesture customizations&lt;br>
-&lt;br>Oct 2012</string>
+- Fix in app catalog&lt;br>
+- Fix for app drawer on devices with hardware keyboards&lt;br>
+- Launch activity from desktop action&lt;br>
+&lt;br>Jan 2013</string>
 
 </resources>

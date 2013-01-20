@@ -271,7 +271,7 @@
     <string name="pref_title_application_settings">"更多"</string>
     <string name="pref_title_build_info">"启动器资讯"</string>
     <string name="pref_title_app_version">"版本"</string>
-    <string name="drop_to_uninstall">"卸载应用程式"</string>
+    <string name="drop_to_uninstall">"管理或卸载应用程式"</string>
     <string name="toast_unknown_item">"未知的项目。无法加入未知类型的项目"</string>
     <string name="title_dialog_xml">"启动器设置"</string>
     <string name="import_export_sdcard_unmounted">"未找到SD卡"</string>
@@ -388,11 +388,14 @@
     <string name="app_group_config_error">"不能修改当前目录"</string>
     <string name="app_group_remove_error">"无法删除当前目录"</string>
     <string name="app_group_remove_success">"目录删除成功"</string>
-    <string name="rename_group_title">"新目录"</string>
+    <string name="new_group_title">"新目录"</string>
     <string name="rename_group_label">"目录名称"</string>
     <string name="create_group_success">"“新目录： “"</string>
     <string name="create_group_fail">"无法创建目录，输入名称失败。"</string>
     <string name="show_catalog">"显示目录“%s\""</string>
+    <string name="app_group_rename">重命名目录</string>
+    <string name="rename_group_fail">无法重命名目录，输入名称失败。</string>
+    <string name="rename_group_title">重命名目录</string>
 
     <!-- Misc preferences strings -->
     <string name="pref_title_launcher_restart">"重新启动"</string>

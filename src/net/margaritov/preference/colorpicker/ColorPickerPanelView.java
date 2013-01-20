@@ -43,7 +43,6 @@ public class ColorPickerPanelView extends View {
 	private int 		mBorderColor = 0xff6E6E6E;
 	private int 		mColor = 0xff000000;
 
-	private Paint		mBorderPaint;
 	private Paint		mColorPaint;
 
 	private RectF		mDrawingRect;
@@ -66,7 +65,6 @@ public class ColorPickerPanelView extends View {
 	}
 
 	private void init(){
-		mBorderPaint = new Paint();
 		mColorPaint = new Paint();
 		mDensity = getContext().getResources().getDisplayMetrics().density;
 	}
@@ -76,11 +74,6 @@ public class ColorPickerPanelView extends View {
 	protected void onDraw(Canvas canvas) {
 
 		final RectF	rect = mColorRect;
-
-		if(BORDER_WIDTH_PX > 0){
-			mBorderPaint.setColor(mBorderColor);
-			canvas.drawRect(mDrawingRect, mBorderPaint);
-		}
 
 		if(mAlphaPattern != null){
 			mAlphaPattern.draw(canvas);

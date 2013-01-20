@@ -30,6 +30,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -68,10 +69,10 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 
 	private final RectF mRegion = new RectF();
 	private TransitionDrawable mTransition;
-	private boolean shouldUninstall=false;
+	private boolean mShouldUninstall=false;
 	private final Handler mHandler = new Handler();
 	private boolean mUninstallTarget=false;
-	String UninstallPkg = null;
+	private String mUninstallPkg = null;
 
 	private static final int STATUS_BAR_HEIGHT = 25;	// pixels
 	private int mStatusBarHeight = STATUS_BAR_HEIGHT;
@@ -169,8 +170,9 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 		//ADW: not show uninstall message
 		//ADW We need to call this delayed cause onDragExit is always called just before onDragEnd :(
 		mHandler.removeCallbacks(mShowUninstaller);
-		if(shouldUninstall){
+		if(mShouldUninstall) {
 			mUninstallTarget = false;
+			DeleteZone.this.setImageResource(R.drawable.ic_delete);
 			mHandler.postDelayed(mShowUninstaller, 100);
 		}
 	}
@@ -182,7 +184,7 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 		}
 		if(mPosition==POSITION_NONE)return;
 		final ItemInfo item = (ItemInfo) info;
-		UninstallPkg=null;
+		mUninstallPkg=null;
 		if (item != null) {
 			mTrashMode = true;
 			createAnimations();
@@ -212,29 +214,29 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 			setVisibility(VISIBLE);
 			//ADW Store app data for uninstall if its an Application
 			//ADW Thanks to irrenhaus@xda & Rogro82@xda :)
-			if(item instanceof ApplicationInfo){
+			if(item instanceof ApplicationInfo) {
 				try{
 					final ApplicationInfo appInfo=(ApplicationInfo) item;
 					if(appInfo.iconResource != null)
-						UninstallPkg = appInfo.iconResource.packageName;
+						mUninstallPkg = appInfo.iconResource.packageName;
 					else
 					{
 						PackageManager mgr = DeleteZone.this.getContext().getPackageManager();
 						ResolveInfo res = mgr.resolveActivity(appInfo.intent, 0);
-						UninstallPkg = res.activityInfo.packageName;
+						mUninstallPkg = res.activityInfo.packageName;
 					}
 					// Dont uninstall ADW ;-)
-					if (this.getClass().getPackage().getName().equals(UninstallPkg))
-						UninstallPkg = null;
+					if (this.getClass().getPackage().getName().equals(mUninstallPkg))
+						mUninstallPkg = null;
 
 				}catch (Exception e) {
 					Log.w(LOG_TAG, "Could not load shortcut icon: " + item);
-					UninstallPkg=null;
+					mUninstallPkg = null;
 				}
-			}else if(item instanceof LauncherAppWidgetInfo){
+			} else if(item instanceof LauncherAppWidgetInfo){
 				LauncherAppWidgetInfo appwidget=(LauncherAppWidgetInfo) item;
 				final AppWidgetProviderInfo aw=AppWidgetManager.getInstance(mLauncher).getAppWidgetInfo(appwidget.appWidgetId);
-				if(aw!=null)UninstallPkg=aw.provider.getPackageName();
+				if(aw!=null)mUninstallPkg=aw.provider.getPackageName();
 			}
 		}
 	}
@@ -252,9 +254,34 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 			}
 			mLauncher.getWorkspace().requestLayout();
 		}
-		if(shouldUninstall && UninstallPkg!=null){
-			Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, Uri.parse("package:"+UninstallPkg));
+		if (mShouldUninstall && mUninstallPkg != null) {
+			try {
+				Intent intent = new Intent();
+				final int apiLevel = Build.VERSION.SDK_INT;
+				if (apiLevel >= 9) { // above 2.3
+					intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+					Uri uri = Uri.fromParts("package",
+							mUninstallPkg, null);
+					intent.setData(uri);
+				} else { // below 2.3
+					final String appPkgName = (apiLevel == 8 ? "pkg"
+							: "com.android.settings.ApplicationPkgName");
+					intent.setAction(Intent.ACTION_VIEW);
+					intent.setClassName(
+							Launcher.ANDROID_SETTINGS_PACKAGE,
+							"com.android.settings.InstalledAppDetails");
+					intent.putExtra(appPkgName, mUninstallPkg);
+				}
+				DeleteZone.this.getContext().startActivity(intent);
+			} catch (Exception e) {
+				// failed to start app info
+			}
+			
+			// actually uninstall
+			/*
+			Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, Uri.parse("package:"+mUninstallPkg));
 			DeleteZone.this.getContext().startActivity(uninstallIntent);
+			*/
 		}
 	}
 
@@ -337,8 +364,9 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 	//ADW Runnable to show the uninstall message (or reset the uninstall status)
 	private final Runnable mShowUninstaller = new Runnable() {
 		public void run() {
-			shouldUninstall=mUninstallTarget;
-			if(shouldUninstall){
+			mShouldUninstall = mUninstallTarget;
+			if(mShouldUninstall && mUninstallPkg != null) {
+				DeleteZone.this.setImageResource(R.drawable.ic_details);
 				Toast.makeText(mContext, R.string.drop_to_uninstall, Toast.LENGTH_SHORT).show();
 			}
 		}

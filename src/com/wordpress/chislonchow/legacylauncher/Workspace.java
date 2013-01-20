@@ -991,7 +991,6 @@ DragScroller, MultiTouchObjectCanvas<Object>, FlingListener {
 
 		final float x = ev.getX();
 		final float y = ev.getY();
-		long thisTime = 0;
 
 		switch (action) {
 		case MotionEvent.ACTION_MOVE:

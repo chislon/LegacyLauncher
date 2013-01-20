@@ -21,6 +21,7 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,7 +30,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -37,9 +43,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -69,8 +73,10 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 	// list of task info
 	private ListView mAppInfoList;
 
-	private Button mOkButton, mCancelButton;
+	private Button mOkButton, mCancelButton, mMenuButton;
 	private Catalog mCatalogue;
+	private ToggleButton mSortDirection;
+	private TextView mTextTitle;
 
 	private ApplicationListAdapter.SortType mSortType = ApplicationListAdapter.SortType.NAME;
 	private boolean mSortAscending = DEFAULT_SORT_ASCENDING;
@@ -84,9 +90,12 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 
 	// take care of catalog deletion 
 	public static final int RESULT_NO_REFRESH_LAUNCHER_TRAY = 20;	// sent back to launcher so it doesn't update the interface
-	private boolean mCatalogPrepareDelete;							// if set to true, this deletes the selected catalog onPause
+	private boolean mCatalogPrepareDelete;							// if set to true, this deletes the selected catalog onStop
 
 	private int mGroupSelectedIndex;
+
+	// saves name of catalog
+	private String mTitle;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -105,12 +114,19 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 		}
 
 		mCatalogueNew = intent.getBooleanExtra(EXTRA_CATALOGUE_NEW, false);
-		mCatalogPrepareDelete = mCatalogueNew;	//default state of prepare delete depends on if catalog is new or existing
 
+		// default state of prepare delete depends on if catalog is new or existing, defaults to true if new.
+		mCatalogPrepareDelete = mCatalogueNew;	
+
+		// get catalog title
+		mTitle = mCatalogue.getTitle();
+
+		// make changes to title bar
 		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.app_group_conf_list);
-		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-				R.layout.custom_title1);
+		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title1);
+		mTextTitle = (TextView) findViewById(R.id.left_title_text);
+		mTextTitle.setText(getString(R.string.app_group_prepend) + mTitle);
 
 		final int sortType = DEFAULT_SORTING.ordinal();
 		mSortType = ApplicationListAdapter.SortType.values()[sortType];
@@ -130,14 +146,14 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 		spinner.setSelection(sortType);
 		spinner.setOnItemSelectedListener(new OnSortTypeItemSelectedListener());
 
-		/* sort direction */
-		final ToggleButton direction = (ToggleButton) findViewById(R.id.sortDirection);
-		direction.setChecked(mSortAscending);
-		direction.setOnClickListener(new OnClickListener() {
+		/* sort mSortDirection */
+		mSortDirection = (ToggleButton) findViewById(R.id.sortDirection);
+		mSortDirection.setChecked(mSortAscending);
+		mSortDirection.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mSortAscending = direction.isChecked();
-				// set sort direction preference
+				mSortAscending = mSortDirection.isChecked();
+				// set sort mSortDirection preference
 				mAppInfoAdapter.sortBy(mSortType, mSortAscending);
 			}
 		});
@@ -151,25 +167,23 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 		mAppInfoList.setOnCreateContextMenuListener(this);
 		mAppInfoList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-		/* select all text field */
-		final TextView tv = (TextView) findViewById(R.id.text_select_all);
-
 		/* button info */
 		mOkButton = ((Button) findViewById(R.id.button_ok_app_list));
 		mOkButton.setOnClickListener(this);
 		mCancelButton = ((Button) findViewById(R.id.button_cancel_app_list));
 		mCancelButton.setOnClickListener(this);
 
-		CheckBox cb = (CheckBox) findViewById(R.id.checkAll);
-		cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				updateAppList(isChecked);
-				tv.setText(isChecked ? R.string.selectNone : R.string.selectAll);
+		updateAppList();
+
+		// options
+		mMenuButton = (Button) findViewById(R.id.button_appinfo_menu);
+		registerForContextMenu(mMenuButton);
+		mMenuButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				openContextMenu(v);
 			}
 		});
-
-		updateAppList();
 	}
 
 	/*
@@ -186,7 +200,7 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 	}
 
 	@Override
-	public void onPause() {
+	public void onStop() {
 		// handle catalog deletion if the flag was set
 		if (mCatalogPrepareDelete) {
 			LauncherModel sModel = Launcher.getLauncherModel();
@@ -194,7 +208,7 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 			sModel.getApplicationsAdapter().getCatalogueFilter().setCurrentGroupIndex(-1);
 			MyLauncherSettingsHelper.setCurrentAppCatalog(this, -1);
 		}
-		super.onPause();
+		super.onStop();
 	}
 
 	// back key handling
@@ -218,50 +232,63 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 			int checkedCount = 0;
 
 			SharedPreferences.Editor editor = curAppGrp.edit();
-			//editor.clear();
+			editor.clear();
 			ApplicationListAdapter adapter = (ApplicationListAdapter) mAppInfoList.getAdapter();
 			for (int i = 0; i < adapter.getCount(); i++) {
 				AppListInfo tempAppListInfo = (AppListInfo) adapter.getItem(i);
 				boolean checked = tempAppListInfo.checked;
-				//ADW TODO: Change to only store hidden apps
+
 				if (checked) {
 					editor.putBoolean(tempAppListInfo.className, true);
 					checkedCount ++;
-				} else {
+				} 
+				/*
+				 * 
+				//ADW TODO: Change to only store hidden apps
+				else {
 					editor.remove(tempAppListInfo.className);
 				}
+				 */
 				/*
 				if (DBG && checked)
 					Log.v("-----", tempAppListInfo.className);
 				 */
 			}
-			editor.commit();
+
 			if (checkedCount == 0) {
 				AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 				if (mCatalogueNew) {
-					alertBuilder.setTitle(R.string.app_group_no_items_add);
+					alertBuilder.setMessage(R.string.app_group_no_items_add);
 				} else {
-					alertBuilder.setTitle(R.string.app_group_no_items_modify);
+					alertBuilder.setMessage(R.string.app_group_no_items_modify);
 				}
 				mAlertDialog = alertBuilder.setPositiveButton(android.R.string.ok,
 						new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						/* User clicked OK so do some stuff */
 						if (mCatalogueNew) {
 							Toast.makeText(AppInfoListActivity.this, R.string.app_group_add_abort, Toast.LENGTH_SHORT).show();
+							// mCatalogPrepareDelete is already true for new catalogs by default
 						} else {
 							Toast.makeText(AppInfoListActivity.this, R.string.app_group_remove_success, Toast.LENGTH_SHORT).show();
 							mCatalogPrepareDelete = true;
 						}
 						finish();
-						/* User clicked OK so do some stuff */
 					}
 				})
 				.setNegativeButton(android.R.string.cancel, null).create();
 				mAlertDialog.show();
 			} else {
+				// only commit when writing items
+				editor.commit();
 				setResult(RESULT_OK);
 				mCatalogPrepareDelete = false;
+
+				// write new title
+				if (!mCatalogue.getTitle().equals(mTitle)) {
+					mCatalogue.setTitle(mTitle);
+					AppCatalogueFilters.getInstance().renameGroupAtIndex(mCatalogue.getIndex(), mTitle);
+				}
 				finish();
 			}
 		} else if (v == mCancelButton) {
@@ -287,10 +314,6 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 		ArrayList<ApplicationInfo> appInfos = ApplicationsAdapter.allItems;
 		/* app info */
 		final List<AppListInfo> savedAppInfos = new ArrayList<AppListInfo>();
-
-		TextView t = (TextView) findViewById(R.id.left_title_text);
-
-		mCatalogue.setTitleView(t);
 
 		SharedPreferences curAppGrp = mCatalogue.getPreferences();
 		final PackageManager pm = getPackageManager();
@@ -336,11 +359,11 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 	}
 
 	/* update app into */
-	private void updateAppList(boolean bool) {
+	private void updateAppList(boolean value) {
 		ApplicationListAdapter adapter = (ApplicationListAdapter) mAppInfoList.getAdapter();
 		for (int i = 0; i < adapter.getCount(); i++) {
 			AppListInfo tempAppListInfo = (AppListInfo) adapter.getItem(i);
-			tempAppListInfo.checked=bool;
+			tempAppListInfo.checked=value;
 		}
 		mAppInfoAdapter.updateList();
 	}
@@ -369,5 +392,67 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 			}
 		}
 		super.onDestroy();
+	}
+
+	@Override  
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {  
+		super.onCreateContextMenu(menu, v, menuInfo);
+		getMenuInflater().inflate(R.menu.appinfo_menu, menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menuitem_appinfo_rename:
+			showDialog(0);
+			break;
+		case R.id.menuitem_appinfo_selectall:
+			updateAppList(true);
+			break;
+		case R.id.menuitem_appinfo_selectnone:
+			updateAppList(false);
+			break;
+		}
+		return super.onContextItemSelected(item);
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			openContextMenu(mMenuButton);
+			return true;
+		}
+		return super.onKeyUp(keyCode, event);
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		final View layout = View.inflate(this, R.layout.rename_grp, null);
+		final EditText mInput = (EditText) layout.findViewById(R.id.group_name);
+		mInput.setText(mCatalogue.getTitle());
+		
+		return new AlertDialog.Builder(this)
+		.setIcon(0)
+		.setCancelable(true)
+		.setTitle(R.string.rename_group_title)
+		.setNegativeButton(android.R.string.cancel, null)
+		.setPositiveButton(getString(android.R.string.ok),
+				new Dialog.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				final String name = mInput.getText().toString()
+						.trim();
+				if (!TextUtils.isEmpty(name)) {
+					// Make sure we have the right folder info
+					mTitle = name;
+					mTextTitle.setText(getString(R.string.app_group_prepend) + name);
+				} else {
+					Toast.makeText(AppInfoListActivity.this,
+							R.string.rename_group_fail,
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+		})
+		.setView(layout)
+		.create();
 	}
 }

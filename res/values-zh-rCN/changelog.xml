@@ -4,9 +4,9 @@
     <!-- Change Log -->
 
     <string name="changelog">&lt;b>最近更改&lt;/b>&lt;br>
-- 修正停靠栏图标的大小&lt;br>
-- 修复竖屏设置&lt;br>
-- 桌面缩小手势功能&lt;br>
-10月2012</string>
+- 修补应用程序目录问题&lt;br>
+- 修补硬件键盘应用程序托盘顯示问题&lt;br>
+- 从桌面功能，启动应用程式活动&lt;br>
+1月2013</string>
 
 </resources>

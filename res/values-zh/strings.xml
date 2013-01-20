@@ -271,7 +271,7 @@
     <string name="pref_title_application_settings">"更多"</string>
     <string name="pref_title_build_info">"啟動器資訊"</string>
     <string name="pref_title_app_version">"版本"</string>
-    <string name="drop_to_uninstall">"卸載應用程式"</string>
+    <string name="drop_to_uninstall">"管理或卸載應用程式"</string>
     <string name="toast_unknown_item">"未知的項目。無法加入未知類型的項目"</string>
     <string name="title_dialog_xml">"啟動器設置"</string>
     <string name="import_export_sdcard_unmounted">"未找到SD卡"</string>
@@ -388,11 +388,14 @@
     <string name="app_group_config_error">"不能修改當前目錄"</string>
     <string name="app_group_remove_error">"無法刪除當前目錄"</string>
     <string name="app_group_remove_success">"目錄刪除成功"</string>
-    <string name="rename_group_title">"新目錄"</string>
+    <string name="new_group_title">"新目錄"</string>
     <string name="rename_group_label">"目錄名稱"</string>
     <string name="create_group_success">"“新目錄： “"</string>
     <string name="create_group_fail">"無法創建目錄，輸入名稱失敗。"</string>
     <string name="show_catalog">"顯示目錄“%s\""</string>
+    <string name="app_group_rename">重命名目錄</string>
+    <string name="rename_group_fail">無法重命名目錄，輸入名稱失敗。</string>
+    <string name="rename_group_title">重命名目錄</string>
 
     <!-- Misc preferences strings -->
     <string name="pref_title_launcher_restart">"重新啟動"</string>

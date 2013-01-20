@@ -33,28 +33,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="12dp"
             android:layout_toRightOf="@+id/sortType"
             android:background="@drawable/togglebutton_arrows_up_down"
             android:textOff=""
             android:textOn="" />
 
-        <TextView
-            android:id="@+id/text_select_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/checkAll"
-            android:text="@string/selectAll"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <CheckBox
-            android:id="@+id/checkAll"
+        <Button
+            android:id="@+id/button_appinfo_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" >
-        </CheckBox>
+            android:drawableLeft="@android:drawable/ic_menu_more"
+            android:padding="2.0dp" >
+        </Button>
     </RelativeLayout>
 
     <ListView

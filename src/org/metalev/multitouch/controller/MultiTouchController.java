@@ -83,7 +83,7 @@ public class MultiTouchController<T> {
 	private static final float MIN_MULTITOUCH_SEPARATION = 30.0f;
 
 	/** The max number of touch points that can be present on the screen at once */
-	public static final int MAX_TOUCH_POINTS = 20;
+	public static final int MAX_TOUCH_POINTS = 10;
 
 	/** Generate tons of log entries for debugging */
 	public static final boolean DEBUG = false;

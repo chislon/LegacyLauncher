@@ -30,6 +30,7 @@ import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.wordpress.chislonchow.legacylauncher.R;
+import com.wordpress.chislonchow.legacylauncher.ViewTagger;
 
 /** which is used to show list item */
 class ApplicationListAdapter extends BaseAdapter {
@@ -73,9 +74,9 @@ class ApplicationListAdapter extends BaseAdapter {
 			holder.icon = (ImageView) convertView.findViewById(R.id.icon);
 			holder.checkbox = (CheckedTextView) convertView
 					.findViewById(R.id.multi_picker_list_item_name);
-			convertView.setTag(holder);
+			ViewTagger.setTag(convertView, holder);
 		} else {
-			holder = (ViewHolder) convertView.getTag();
+			holder = (ViewHolder) ViewTagger.getTag(convertView);
 		} 
 		holder.checkbox.setVisibility(View.VISIBLE);
 		/* set check box attribute */
@@ -141,7 +142,7 @@ class ApplicationListAdapter extends BaseAdapter {
 			return result;
 		}
 	}
-	
+
 	private static class AppListInfoNameSelectedDscComparator implements Comparator<AppListInfo> {
 		public final int compare(AppListInfo a, AppListInfo b) {
 			int result = (a.checked == b.checked ? 0 : (a.checked ? 1 : -1));
