@@ -313,7 +313,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 	private boolean mWallpaperHack = true;
 	private DesktopIndicator mDesktopIndicator;
-	private boolean mUseDrawerCatalogNavigation = true;
+	private boolean mUseDrawerCatalogNavigation = false;
 	public boolean mUseDrawerUngroupCatalog = false;
 	protected boolean mUseDrawerTitleCatalog = false;
 	protected int mTransitionStyle = 1;
@@ -390,12 +390,14 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	// ADW: Custom counter receiver
 	private CounterReceiver mCounterReceiver;
 	/**
-	 * ADW: Different main dock styles/configurations
+	 * ADW: Different main dock styles/configurations, default is 4
 	 */
 	protected static final int DOCK_STYLE_NONE = 0;
 	protected static final int DOCK_STYLE_3 = 1;
 	protected static final int DOCK_STYLE_5 = 2;
 	protected static final int DOCK_STYLE_1 = 3;
+	protected static final int DOCK_STYLE_4 = 4;
+
 	private int mDockStyle = DOCK_STYLE_5;
 
 	/*
@@ -3750,20 +3752,42 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		case DOCK_STYLE_1:
 			mRAB.setVisibility(View.GONE);
 			mLAB.setVisibility(View.GONE);
+			if (mUseDrawerCatalogNavigation && allAppsOpen) {
+				mLAB.setVisibility(View.VISIBLE);
+				mRAB.setVisibility(View.VISIBLE);
+			} else {
+				mRAB.setVisibility(View.GONE);
+				mLAB.setVisibility(View.GONE);
+			}
 			mRAB2.setVisibility(View.GONE);
 			mLAB2.setVisibility(View.GONE);
+			mMAB.setVisibility(View.VISIBLE);
 			break;
 		case DOCK_STYLE_3:
-			mRAB.setVisibility(View.VISIBLE);
-			mLAB.setVisibility(View.VISIBLE);
-			mRAB2.setVisibility(View.GONE);
-			mLAB2.setVisibility(View.GONE);
+			if (mUseDrawerCatalogNavigation && allAppsOpen) {
+				mLAB.setVisibility(View.VISIBLE);
+				mRAB.setVisibility(View.VISIBLE);
+			} else {
+				mLAB.setVisibility(View.INVISIBLE);
+				mRAB.setVisibility(View.INVISIBLE);
+			}
+			mRAB2.setVisibility(View.VISIBLE);
+			mLAB2.setVisibility(View.VISIBLE);
+			mMAB.setVisibility(View.VISIBLE);
 			break;
 		case DOCK_STYLE_5:
 			mRAB.setVisibility(View.VISIBLE);
 			mLAB.setVisibility(View.VISIBLE);
 			mRAB2.setVisibility(View.VISIBLE);
 			mLAB2.setVisibility(View.VISIBLE);
+			mMAB.setVisibility(View.VISIBLE);
+			break;
+		case DOCK_STYLE_4:
+			mRAB.setVisibility(View.VISIBLE);
+			mLAB.setVisibility(View.VISIBLE);
+			mLAB2.setVisibility(View.VISIBLE);
+			mRAB2.setVisibility(View.VISIBLE);
+			mMAB.setVisibility(View.GONE);
 			break;
 		case DOCK_STYLE_NONE:
 		default:
@@ -3775,8 +3799,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		mRAB2.hideBg(mHideABBg);
 		mLAB2.hideBg(mHideABBg);
 
-		if (mDockStyle == DOCK_STYLE_NONE || showingPreviews
-				|| (mDockHide && allAppsOpen)) {
+		if (mDockStyle == DOCK_STYLE_NONE || showingPreviews || (mDockHide && allAppsOpen)) {
 			mDrawerToolbar.setVisibility(View.GONE);
 		} else {
 			mDrawerToolbar.setVisibility(View.VISIBLE);
@@ -4306,7 +4329,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				} else {
 					mDrawerToolbar.setVisibility(View.VISIBLE);
 					mMAB.setNextFocusUpId(R.id.drag_layer);
-
 					mMAB.setNextFocusLeftId(R.id.drag_layer);
 
 					mLAB.setNextFocusUpId(R.id.drag_layer);
@@ -4320,6 +4342,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 					mRAB2.setNextFocusUpId(R.id.drag_layer);
 					mRAB2.setNextFocusLeftId(R.id.all_apps_view);
+
+					if (mUseDrawerCatalogNavigation && (mDockStyle == DOCK_STYLE_1 || mDockStyle == DOCK_STYLE_3)) {
+						mRAB.setVisibility(View.VISIBLE);
+						mLAB.setVisibility(View.VISIBLE);
+					}
 				}
 
 				final int dockSize = (hideDock ? 0 : mAppDrawerPadding);
@@ -4347,6 +4374,11 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 
 					mRAB2.setNextFocusUpId(R.id.all_apps_view);
 					mRAB2.setNextFocusLeftId(R.id.drag_layer);
+
+					if (mUseDrawerCatalogNavigation && (mDockStyle == DOCK_STYLE_1 || mDockStyle == DOCK_STYLE_3)) {
+						mRAB.setVisibility(View.VISIBLE);
+						mLAB.setVisibility(View.VISIBLE);
+					}
 				}
 				final int dockSize = (hideDock ? 0 : mAppDrawerPadding);
 
@@ -4389,6 +4421,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mDrawerToolbar.setVisibility(View.GONE);
 			} else {
 				mDrawerToolbar.setVisibility(View.VISIBLE);
+				if (mUseDrawerCatalogNavigation && (mDockStyle == DOCK_STYLE_1 || mDockStyle == DOCK_STYLE_3)) {
+					mRAB.setVisibility(View.INVISIBLE);
+					mLAB.setVisibility(View.INVISIBLE);
+				}
 			}
 
 			mMAB.setNextFocusUpId(R.id.drag_layer);

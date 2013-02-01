@@ -180,6 +180,14 @@ OnPreferenceChangeListener {
 
 			findPreference("mainDockDrawerHide").setEnabled(false);
 			break;
+		case Launcher.DOCK_STYLE_4:
+			checkPref.setChecked(false);
+			checkPref.setEnabled(false);
+
+			findPreference("mainDockLockMAB").setEnabled(false);
+
+			findPreference("mainDockDrawerHide").setEnabled(true);
+			break;
 		case Launcher.DOCK_STYLE_5:
 			checkPref.setChecked(false);
 			checkPref.setEnabled(false);
@@ -628,9 +636,13 @@ OnPreferenceChangeListener {
 						if (dock_styleId != 0) {
 							String dock_style = themeResources.getString(dock_styleId);
 							editor.putString("main_dock_style", dock_style);
-							if (Integer.valueOf(dock_style) == Launcher.DOCK_STYLE_5
-									|| Integer.valueOf(dock_style) == Launcher.DOCK_STYLE_NONE)
+
+							switch(Integer.valueOf(dock_style)) {
+							case Launcher.DOCK_STYLE_NONE:
+							case Launcher.DOCK_STYLE_4:
+							case Launcher.DOCK_STYLE_5:
 								editor.putBoolean("uiDots", false);
+							}
 						}
 						// TODO:ADW We set the theme wallpaper. We should add this as
 						// optional...
@@ -787,6 +799,14 @@ OnPreferenceChangeListener {
 				lockMAB.setEnabled(false);
 
 				hide.setEnabled(false);
+				break;
+			case Launcher.DOCK_STYLE_4:
+				dots.setChecked(false);
+				dots.setEnabled(false);
+
+				lockMAB.setEnabled(false);
+
+				hide.setEnabled(true);
 				break;
 			case Launcher.DOCK_STYLE_5:
 				dots.setChecked(false);
