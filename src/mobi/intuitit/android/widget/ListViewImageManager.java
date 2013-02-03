@@ -12,6 +12,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
+import android.util.SparseArray;
 
 public class ListViewImageManager {
 
@@ -28,10 +29,12 @@ public class ListViewImageManager {
 	}
 
 	private final HashMap<String, SoftReference<Drawable>> mCacheForImageByUri = new HashMap<String, SoftReference<Drawable>>();
-	private final HashMap<Integer, ArrayList<String>> mWidgetCacheUsageByUri = new HashMap<Integer, ArrayList<String>>();
-
-	private final HashMap<Integer, SoftReference<Drawable>> mCacheForImageById = new HashMap<Integer, SoftReference<Drawable>>();
-	private final HashMap<Integer, ArrayList<Integer>> mWidgetCacheUsageById = new HashMap<Integer, ArrayList<Integer>>();
+	private final SparseArray<ArrayList<String>> mWidgetCacheUsageByUri = new SparseArray<ArrayList<String>>();
+	//private final HashMap<Integer, ArrayList<String>> mWidgetCacheUsageByUri = new HashMap<Integer, ArrayList<String>>();
+	private final SparseArray<SoftReference<Drawable>> mCacheForImageById = new SparseArray<SoftReference<Drawable>>();
+	//private final HashMap<Integer, SoftReference<Drawable>> mCacheForImageById = new HashMap<Integer, SoftReference<Drawable>>();
+	private final SparseArray<ArrayList<Integer>> mWidgetCacheUsageById = new SparseArray<ArrayList<Integer>>();
+	//private final HashMap<Integer, ArrayList<Integer>> mWidgetCacheUsageById = new HashMap<Integer, ArrayList<Integer>>();
 
 	public Drawable getImageFromUri(Context mContext, int widgetId, String imgUri) {
 		Drawable d = null;
@@ -89,7 +92,7 @@ public class ListViewImageManager {
 
 	public Drawable getImageFromId(Context ctx, int widgetId, int imgId) {
 		Drawable drawable = null;
-		if (mCacheForImageById.containsKey(imgId) && mCacheForImageById.get(imgId) != null) {
+		if (mCacheForImageById.get(imgId) != null) {
 			SoftReference<Drawable> ref = mCacheForImageById.get(imgId);
 			if (ref != null) {
 				drawable = ref.get();
@@ -136,16 +139,27 @@ public class ListViewImageManager {
 
 	public void unbindDrawables() {
 
+		SoftReference<Drawable> obj;
+		for(int i = 0; i < mCacheForImageById.size(); i++) {
+			obj = mCacheForImageById.valueAt(i);
+			if (obj != null && obj.get() != null) {
+				obj.get().setCallback(null);
+			}
+		}
+		/*
 		for (Entry<Integer, SoftReference<Drawable>> drawableEntry : mCacheForImageById.entrySet()) {
 			if ((drawableEntry != null) && (drawableEntry.getValue() != null)
-					&& (drawableEntry.getValue().get() != null))
+					&& (drawableEntry.getValue().get() != null)) {
 				drawableEntry.getValue().get().setCallback(null);
+			}
 		}
+		 */
 
 		for (Entry<String, SoftReference<Drawable>> drawableEntry : mCacheForImageByUri.entrySet()) {
 			if ((drawableEntry != null) && (drawableEntry.getValue() != null)
-					&& (drawableEntry.getValue().get() != null))
+					&& (drawableEntry.getValue().get() != null)) {
 				drawableEntry.getValue().get().setCallback(null);
+			}
 		}
 	}
 
@@ -176,7 +190,7 @@ public class ListViewImageManager {
 		ArrayList<Integer> listById = mWidgetCacheUsageById.get(widgetId);
 		if (listById != null) {
 			for (Integer imgId : listById) {
-				if (mCacheForImageById.containsKey(imgId) && mCacheForImageById.get(imgId) != null) {
+				if (mCacheForImageById.get(imgId) != null) {
 					SoftReference<Drawable> ref = mCacheForImageById.get(imgId);
 					if (ref != null) {
 						drawable = ref.get();

@@ -17,9 +17,7 @@
     <!-- Change Log -->
 
     <string name="changelog">&lt;b>最近更改&lt;/b>&lt;br>
-- 新功能:工具列支持4個圖示(請自行添加打開應用程式託盤的捷徑)&lt;br>
-- 修復工具列顯示3個圖示時的佈局問題&lt;br>
-- 修復工具列顯示1個或3個圖示時的目錄導航按鈕&lt;br>
+- 修復非擴展樣式預覽導致程序崩潰&lt;br>
 2月2013</string>
 
 </resources>

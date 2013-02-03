@@ -4105,24 +4105,23 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	private void dismissPreview(final View v) {
-		final PopupWindow window = (PopupWindow) ViewTagger.getTag(v, R.id.TAG_PREVIEW);
+		final PopupWindow window = (PopupWindow) v.getTag(R.id.TAG_PREVIEW);
 		if (window != null) {
 			hideDesktop(false);
 			window.setOnDismissListener(new PopupWindow.OnDismissListener() {
 				public void onDismiss() {
-					ViewGroup group = (ViewGroup) ViewTagger.getTag(v, R.id.workspace);
+					ViewGroup group = (ViewGroup) v.getTag(R.id.workspace);
 					int count = group.getChildCount();
 					for (int i = 0; i < count; i++) {
 						((ImageView) group.getChildAt(i))
 						.setImageDrawable(null);
 					}
 					@SuppressWarnings("unchecked")
-					ArrayList<Bitmap> bitmaps = ((ArrayList<Bitmap>) v
-							.getTag(R.id.icon));
+					ArrayList<Bitmap> bitmaps = ((ArrayList<Bitmap>) v.getTag(R.id.icon));
 					for (Bitmap bitmap : bitmaps)
 						bitmap.recycle();
 
-					ViewTagger.setTag(v, R.id.workspace, null);
+					v.setTag(R.id.workspace, null);
 					v.setTag(R.id.icon, null);
 					window.setOnDismissListener(null);
 				}
@@ -4133,7 +4132,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mWorkspace.invalidate();
 			mDesktopLocked = false;
 		}
-		ViewTagger.setTag(v, R.id.TAG_PREVIEW, null);
+		v.setTag(R.id.TAG_PREVIEW, null);
 	}
 
 	private void showPreviewPrevious(View anchor) {
@@ -4172,7 +4171,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mWorkspace.openSense(true);
 			} else {
 				// check first if it's already open
-				final PopupWindow window = (PopupWindow) ViewTagger.getTag(anchor, R.id.TAG_PREVIEW);
+				final PopupWindow window = (PopupWindow) anchor.getTag(R.id.TAG_PREVIEW);
 				if (window != null)
 					return;
 				Resources resources = getResources();
@@ -4259,8 +4258,8 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 						}
 					});
 
-					ViewTagger.setTag(anchor, R.id.TAG_PREVIEW, p);
-					ViewTagger.setTag(anchor, R.id.workspace, preview);
+					anchor.setTag(R.id.TAG_PREVIEW, p);
+					anchor.setTag(R.id.workspace, preview);
 					anchor.setTag(R.id.icon, bitmaps);
 				}
 			}

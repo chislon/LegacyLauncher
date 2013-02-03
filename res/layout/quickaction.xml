@@ -43,7 +43,7 @@
                 android:focusableInTouchMode="true"
                 android:singleLine="true"
                 android:textColor="@android:color/primary_text_light"
-                android:textSize="18dip"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-3dip"
                 android:textColor="@android:color/secondary_text_light"
-                android:textSize="15dip"
+                android:textSize="15sp"
                 android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>

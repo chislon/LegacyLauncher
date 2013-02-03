@@ -45,7 +45,54 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 	/**
 	 * Creates a new Instance of the QuickActionWindow
 	 * 
-	 * @param context Context to use, usually your Appication or your Activity
+	 * @param context Context to use
+	 * 
+	 */
+	public QuickActionWindow(Context context) {
+		super(context);
+		mContext = context;
+		mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+		mInflater = ((Activity)mContext).getLayoutInflater();
+		contentView = mInflater.inflate(R.layout.quickaction, null);
+		super.setContentView(contentView);
+
+		mScreenWidth = mWindowManager.getDefaultDisplay().getWidth();
+
+		setWindowLayoutMode(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+	}
+
+	/**
+	 * @return the mPView
+	 */
+	public View getmPView() {
+		return mPView;
+	}
+
+	/**
+	 * @param mPView the mPView to set
+	 */
+	public void setmPView(View mPView) {
+		this.mPView = mPView;
+	}
+
+	/**
+	 * @return the mAnchor
+	 */
+	public Rect getmAnchor() {
+		return mAnchor;
+	}
+
+	/**
+	 * @param mAnchor the mAnchor to set
+	 */
+	public void setmAnchor(Rect mAnchor) {
+		this.mAnchor = mAnchor;
+	}
+
+	/**
+	 * Creates a new Instance of the QuickActionWindow
+	 * 
+	 * @param context Context to use
 	 * @param pView The view you want to anchor the window on (the parent)
 	 * @param rect Rectangle defining the view area
 	 */
@@ -167,7 +214,7 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 			final int blockHeight = this.getContentView().getMeasuredHeight();
 
 			x = -mShadowHoriz;
-			
+
 			if (mAnchor.top > (blockHeight * 1.1)) {	// fudge this number a bit
 				// Show downwards callout when enough room, aligning bottom block
 				// edge with top of anchor area, and adjusting to inset arrow.
@@ -205,7 +252,7 @@ public class QuickActionWindow extends PopupWindow implements KeyEvent.Callback 
 
 		return false;
 	}
-	
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		return false;

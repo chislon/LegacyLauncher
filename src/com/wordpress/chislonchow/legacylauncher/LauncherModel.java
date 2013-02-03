@@ -1679,7 +1679,7 @@ public class LauncherModel {
 			// get from theme
 			Resources themeResources = null;
 			if(MyLauncherSettingsHelper.getThemeIcons(context)){
-				activityInfo.name=activityInfo.name.toLowerCase().replace(".", "_");
+				activityInfo.name=activityInfo.name.toLowerCase(java.util.Locale.US).replace(".", "_");	// assume Locale.US, or lint complains
 				try {
 					themeResources = manager.getResourcesForApplication(themePackage);
 				} catch (NameNotFoundException e) {

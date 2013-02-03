@@ -44,6 +44,6 @@
         android:layout_gravity="top|center"
         android:layout_marginTop="-8dp"
         android:textColor="#ff333333"
-        android:textSize="12dp" />
+        android:textSize="12sp" />
 
 </com.devoteam.quickaction.QuickActionItem>

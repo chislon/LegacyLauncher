@@ -25,7 +25,7 @@
     android:paddingBottom="0dip"
     android:drawablePadding="0dip"
         
-    android:textSize="13dip"
+    android:textSize="13sp"
     android:maxLines="2"
     android:ellipsize="marquee"
     android:fadingEdge="horizontal"
