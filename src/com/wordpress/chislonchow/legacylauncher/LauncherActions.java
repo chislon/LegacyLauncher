@@ -52,9 +52,9 @@ public class LauncherActions {
 		for (int i = 0; i < menuBindingsValues.length; i++) {
 			int value = Integer.parseInt(menuBindingsValues[i]);
 			String name = menuBindingsNames[i];
-			if (value != Launcher.BIND_NONE && value != Launcher.BIND_APP_LAUNCHER &&
-				value != Launcher.BIND_HOME_PREVIEWS && value != Launcher.BIND_HOME_NOTIFICATIONS && 
-				value != Launcher.BIND_ACTIVITY) {
+			if (value != Launcher.BIND_APP_LAUNCHER &&
+					value != Launcher.BIND_HOME_PREVIEWS && value != Launcher.BIND_HOME_NOTIFICATIONS && 
+					value != Launcher.BIND_ACTIVITY) {
 				DefaultLauncherAction lact = new DefaultLauncherAction(value, name);
 				result.add(lact);
 			}
@@ -125,9 +125,9 @@ public class LauncherActions {
 				Action act = mActions.get(position);
 
 				TextView textView = (TextView) convertView;
-		        textView.setText(act.getName());
-		        textView.setCompoundDrawablesWithIntrinsicBounds(
-		        		mLauncher.getResources().getDrawable(act.getIconResourceId()), null, null, null);
+				textView.setText(act.getName());
+				textView.setCompoundDrawablesWithIntrinsicBounds(
+						mLauncher.getResources().getDrawable(act.getIconResourceId()), null, null, null);
 				return convertView;
 			}
 
@@ -203,18 +203,20 @@ public class LauncherActions {
 		@Override
 		public int getIconResourceId() {
 			switch(mBindingValue) {
-				case Launcher.BIND_DEFAULT:
-					return R.drawable.movetodefault_button;
-				case Launcher.BIND_PREVIEWS:
-					return R.drawable.showpreviews_button;
-				case Launcher.BIND_APPS:
-					return R.drawable.all_apps_button;
-				case Launcher.BIND_STATUSBAR:
-					return R.drawable.showhidestatusbar_button;
-				case Launcher.BIND_NOTIFICATIONS:
-					return R.drawable.openclosenotifications_button;
-				default:
-					return R.drawable.ic_launcher_home;
+			case Launcher.BIND_NONE:
+				return R.drawable.ic_transparent;
+			case Launcher.BIND_DEFAULT:
+				return R.drawable.movetodefault_button;
+			case Launcher.BIND_PREVIEWS:
+				return R.drawable.showpreviews_button;
+			case Launcher.BIND_APPS:
+				return R.drawable.all_apps_button;
+			case Launcher.BIND_STATUSBAR:
+				return R.drawable.showhidestatusbar_button;
+			case Launcher.BIND_NOTIFICATIONS:
+				return R.drawable.openclosenotifications_button;
+			default:
+				return R.drawable.ic_launcher_home;
 			}
 		}
 	}
@@ -225,7 +227,7 @@ public class LauncherActions {
 
 		private static final String EXTRA_CATALOG_INDEX = "EXTRA_CATALOG_INDEX";
 
- 		public ShowGroupAction(AppCatalogueFilters.Catalog catalogue) {
+		public ShowGroupAction(AppCatalogueFilters.Catalog catalogue) {
 			mCatalogue = catalogue;
 		}
 

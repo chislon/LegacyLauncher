@@ -90,7 +90,7 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 
 	// take care of catalog deletion 
 	public static final int RESULT_NO_REFRESH_LAUNCHER_TRAY = 20;	// sent back to launcher so it doesn't update the interface
-	private boolean mCatalogPrepareDelete;							// if set to true, this deletes the selected catalog onStop
+	private boolean mCatalogPrepareDelete;							// if set to true, this deletes the selected catalog onPause
 
 	private int mGroupSelectedIndex;
 
@@ -200,15 +200,17 @@ View.OnCreateContextMenuListener, View.OnClickListener {
 	}
 
 	@Override
-	public void onStop() {
+	public void onPause() {
+		super.onPause();
 		// handle catalog deletion if the flag was set
 		if (mCatalogPrepareDelete) {
-			LauncherModel sModel = Launcher.getLauncherModel();
-			AppCatalogueFilters.getInstance().dropGroup(mGroupSelectedIndex);
-			sModel.getApplicationsAdapter().getCatalogueFilter().setCurrentGroupIndex(-1);
 			MyLauncherSettingsHelper.setCurrentAppCatalog(this, -1);
+			LauncherModel sModel = Launcher.getLauncherModel();
+			sModel.getApplicationsAdapter().getCatalogueFilter().setCurrentGroupIndex(-1);
+			AppCatalogueFilters.getInstance().dropGroup(mGroupSelectedIndex);
+			setResult(Launcher.RESULT_CANCELED);
 		}
-		super.onStop();
+		finish();	// if this activity is about to hidden, we are never coming back
 	}
 
 	// back key handling

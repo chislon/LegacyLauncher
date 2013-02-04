@@ -159,7 +159,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private static final int MENU_APP_SWITCH_GRP = MENU_SETTINGS + 4;
 	private static final int MENU_APP_DELETE_GRP = MENU_SETTINGS + 5;
 	private static final int MENU_LOCK_DESKTOP = MENU_SETTINGS + 6;
-	private static final int MENU_MANAGE_APPS = MENU_SETTINGS + 7;
+	//private static final int MENU_MANAGE_APPS = MENU_SETTINGS + 7;
 
 	private static final int REQUEST_CREATE_SHORTCUT = 1;
 	private static final int REQUEST_CREATE_LIVE_FOLDER = 4;
@@ -345,6 +345,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	protected static final int BIND_HOME_NOTIFICATIONS = 7;
 	protected static final int BIND_APP_LAUNCHER = 8;
 	protected static final int BIND_ACTIVITY = 9;
+	protected static final int BIND_HOME_APPS = 10;
 
 	private static final int BIND_TYPE_HOME = 1;
 	private static final int BIND_TYPE_SWIPEUP = 2;
@@ -615,7 +616,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// For example, the user would PICK_SHORTCUT for "Music playlist", and
 		// we
 		// launch over to the Music app to actually CREATE_SHORTCUT.
-
 		if (resultCode == RESULT_OK && mAddItemCellInfo != null) {
 			switch (requestCode) {
 			case REQUEST_PICK_APPLICATION:
@@ -662,7 +662,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				&& (requestCode == REQUEST_SHOW_APP_LIST)) {
 			checkActionButtonsSpecialMode();
 			mAllAppsGrid.updateAppGrp();
-			showAllApps(true, null);
+			closeAllApps(true);
 		} else if ((requestCode == REQUEST_PICK_APPWIDGET || requestCode == REQUEST_CREATE_APPWIDGET)
 				&& resultCode == RESULT_CANCELED && data != null) {
 			// Clean up the appWidgetId if we canceled
@@ -1386,9 +1386,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mIsNewIntent = true;
 
 			if ((intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) {
-				if (!isAllAppsVisible() || mHomeBinding == BIND_APPS)
+				if (!isAllAppsVisible() || mHomeBinding == BIND_APPS || mHomeBinding == BIND_HOME_APPS) {
 					fireActionBinding(mHomeBinding, BIND_TYPE_HOME);
-				if (mHomeBinding != BIND_APPS) {
+				}
+				if (mHomeBinding != BIND_APPS && mHomeBinding != BIND_HOME_APPS) {
 					closeDrawer(true);
 				}
 				final View v = getWindow().peekDecorView();
@@ -3755,32 +3756,41 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		// dock setup
 		switch (mDockStyle) {
 		case DOCK_STYLE_1:
+			mDrawerToolbar.setPadding(0, 0, 0 ,0);
 			mRAB.setVisibility(View.GONE);
 			mLAB.setVisibility(View.GONE);
-			if (mUseDrawerCatalogNavigation && allAppsOpen) {
+			if (mUseDrawerCatalogNavigation
+					&& allAppsOpen
+					&& AppCatalogueFilters.getInstance().getUserCatalogueCount() > 0) {
 				mLAB.setVisibility(View.VISIBLE);
 				mRAB.setVisibility(View.VISIBLE);
 			} else {
-				mRAB.setVisibility(View.GONE);
-				mLAB.setVisibility(View.GONE);
+				mRAB.setVisibility(View.INVISIBLE);
+				mLAB.setVisibility(View.INVISIBLE);
 			}
-			mRAB2.setVisibility(View.GONE);
+			mRAB2.setVisibility(View.GONE);	
 			mLAB2.setVisibility(View.GONE);
 			mMAB.setVisibility(View.VISIBLE);
 			break;
 		case DOCK_STYLE_3:
-			if (mUseDrawerCatalogNavigation && allAppsOpen) {
-				mLAB.setVisibility(View.VISIBLE);
-				mRAB.setVisibility(View.VISIBLE);
+			final int displayWidth = mDisplay.getWidth();
+			final int displayHeight = mDisplay.getHeight();
+			// use approximately 1/5 of the available dock width for dock side padding
+			if (displayWidth > displayHeight) {
+				// landscape padding
+				mDrawerToolbar.setPadding(0, (int) (displayHeight / 5), 0, (int) (displayHeight / 5));
 			} else {
-				mLAB.setVisibility(View.INVISIBLE);
-				mRAB.setVisibility(View.INVISIBLE);
+				// portrait
+				mDrawerToolbar.setPadding((int) (displayWidth / 5), 0, (int) (displayWidth / 5), 0);
 			}
-			mRAB2.setVisibility(View.VISIBLE);
-			mLAB2.setVisibility(View.VISIBLE);
+			mLAB2.setVisibility(View.GONE);
+			mRAB2.setVisibility(View.GONE);
+			mRAB.setVisibility(View.VISIBLE);
+			mLAB.setVisibility(View.VISIBLE);
 			mMAB.setVisibility(View.VISIBLE);
 			break;
 		case DOCK_STYLE_5:
+			mDrawerToolbar.setPadding(0, 0, 0 ,0);
 			mRAB.setVisibility(View.VISIBLE);
 			mLAB.setVisibility(View.VISIBLE);
 			mRAB2.setVisibility(View.VISIBLE);
@@ -3788,6 +3798,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			mMAB.setVisibility(View.VISIBLE);
 			break;
 		case DOCK_STYLE_4:
+			mDrawerToolbar.setPadding(0, 0, 0 ,0);
 			mRAB.setVisibility(View.VISIBLE);
 			mLAB.setVisibility(View.VISIBLE);
 			mLAB2.setVisibility(View.VISIBLE);
@@ -3798,6 +3809,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		default:
 			break;
 		}
+
 		mMAB.hideBg(mHideABBg);
 		mRAB.hideBg(mHideABBg);
 		mLAB.hideBg(mHideABBg);
@@ -4347,9 +4359,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					mRAB2.setNextFocusUpId(R.id.drag_layer);
 					mRAB2.setNextFocusLeftId(R.id.all_apps_view);
 
-					if (mUseDrawerCatalogNavigation && (mDockStyle == DOCK_STYLE_1 || mDockStyle == DOCK_STYLE_3)) {
-						mRAB.setVisibility(View.VISIBLE);
-						mLAB.setVisibility(View.VISIBLE);
+					// toggle visibility of RAB and LAB for DOCK_STYLE_1
+					if (mDockStyle == DOCK_STYLE_1) {
+						if (mUseDrawerCatalogNavigation
+								&& AppCatalogueFilters.getInstance().getUserCatalogueCount() > 0) {
+							mRAB.setVisibility(View.VISIBLE);
+							mLAB.setVisibility(View.VISIBLE);
+						} else {
+							mRAB.setVisibility(View.INVISIBLE);
+							mLAB.setVisibility(View.INVISIBLE);
+						}
 					}
 				}
 
@@ -4379,9 +4398,16 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					mRAB2.setNextFocusUpId(R.id.all_apps_view);
 					mRAB2.setNextFocusLeftId(R.id.drag_layer);
 
-					if (mUseDrawerCatalogNavigation && (mDockStyle == DOCK_STYLE_1 || mDockStyle == DOCK_STYLE_3)) {
-						mRAB.setVisibility(View.VISIBLE);
-						mLAB.setVisibility(View.VISIBLE);
+					// toggle visibility of RAB and LAB for DOCK_STYLE_1
+					if (mDockStyle == DOCK_STYLE_1) {
+						if (mUseDrawerCatalogNavigation
+								&& AppCatalogueFilters.getInstance().getUserCatalogueCount() > 0) {
+							mRAB.setVisibility(View.VISIBLE);
+							mLAB.setVisibility(View.VISIBLE);
+						} else {
+							mRAB.setVisibility(View.INVISIBLE);
+							mLAB.setVisibility(View.INVISIBLE);
+						}
 					}
 				}
 				final int dockSize = (hideDock ? 0 : mAppDrawerPadding);
@@ -4425,7 +4451,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				mDrawerToolbar.setVisibility(View.GONE);
 			} else {
 				mDrawerToolbar.setVisibility(View.VISIBLE);
-				if (mUseDrawerCatalogNavigation && (mDockStyle == DOCK_STYLE_1 || mDockStyle == DOCK_STYLE_3)) {
+				if (mDockStyle == DOCK_STYLE_1) {
 					mRAB.setVisibility(View.INVISIBLE);
 					mLAB.setVisibility(View.INVISIBLE);
 				}
@@ -4644,6 +4670,18 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 				showAllApps(true, null);
 			}
 			break;
+		case BIND_HOME_APPS:
+			dismissPreviews();
+			if (!mWorkspace.isDefaultScreenShowing()) {
+				mWorkspace.moveToDefaultScreen();
+			} else {
+				if (isAllAppsVisible()) {
+					closeDrawer();
+				} else {
+					showAllApps(true, null);
+				}
+			}
+			break;
 		case BIND_STATUSBAR:
 			WindowManager.LayoutParams attrs = getWindow().getAttributes();
 			if ((attrs.flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) == WindowManager.LayoutParams.FLAG_FULLSCREEN) {
@@ -4659,11 +4697,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			showNotifications();
 			break;
 		case BIND_HOME_NOTIFICATIONS:
+			dismissPreviews();
 			if (!mWorkspace.isDefaultScreenShowing()) {
-				dismissPreviews();
 				mWorkspace.moveToDefaultScreen();
 			} else {
-				dismissPreviews();
 				showNotifications();
 			}
 			break;

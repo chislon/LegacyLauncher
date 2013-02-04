@@ -15,12 +15,13 @@
 <resources>
 
     <!-- Version Information -->
-    <string name="app_version" translatable="false">0.39.9</string>
+    <string name="app_version" translatable="false">0.39.10</string>
 
     <!-- Change Log -->
 
     <string name="changelog">&lt;b>Recent changes&lt;/b>&lt;br>
 - Crash fix in non-spread style previews&lt;br>
+- Minor tweaks to dock and app catalog&lt;br>
 &lt;br>Feb 2013</string>
 
 </resources>

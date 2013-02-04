@@ -16,13 +16,14 @@
 
     <string-array name="menu_binding_entries">
         <item>Do nothing</item>
-        <item>Move to default desktop</item>
-        <item>Move to default desktop/show previews</item>
+        <item>Go to default page</item>
+        <item>Go to default page, show previews</item>
         <item>Show previews</item>
-        <item>Open/close applications drawer</item>
+        <item>Open/close app drawer</item>
+        <item>Go to default page, open/close drawer</item>
         <item>Show/hide statusbar</item>
         <item>Open/close notifications</item>
-        <item>Move to default desktop/Open notifications</item>
+        <item>Go to default page, open notifications</item>
         <item>Open application</item>
         <item>Launch activity</item>
     </string-array>
@@ -83,6 +84,7 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
+        <item>10</item>
         <item>5</item>
         <item>6</item>
         <item>7</item>

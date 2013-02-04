@@ -26,7 +26,7 @@ DragListener, OnLongClickListener, DragSource {
 
 	private int mIconSpecial_id;
 	private Drawable mIconSpecial;
-	private boolean specialMode = false;
+	private boolean mSpecialMode = false;
 	private boolean hiddenBg = false;
 	private int specialAction = 0;
 	public boolean mInterceptClicks = false;
@@ -50,8 +50,7 @@ DragListener, OnLongClickListener, DragSource {
 		TypedArray a = context.obtainStyledAttributes(attrs,
 				R.styleable.ActionButton, defStyle, 0);
 		mIdent = a.getInt(R.styleable.ActionButton_ident, mIdent);
-		bgEmpty = context.getResources().getDrawable(
-				R.drawable.lab_rab_empty_bg);
+		bgEmpty = context.getResources().getDrawable(R.drawable.lab_rab_empty_bg);
 		a.recycle();
 		this.setOnLongClickListener(this);
 	}
@@ -76,7 +75,7 @@ DragListener, OnLongClickListener, DragSource {
 			return false;
 		}
 
-		return !specialMode;
+		return !mSpecialMode;
 	}
 
 	public Rect estimateDropLocation(DragSource source, int x, int y,
@@ -213,7 +212,7 @@ DragListener, OnLongClickListener, DragSource {
 	@Override
 	public Object getTag() {
 		// TODO Auto-generated method stub
-		if (!specialMode) {
+		if (!mSpecialMode) {
 			return mCurrentInfo;
 		} else {
 			return specialAction;
@@ -333,7 +332,7 @@ DragListener, OnLongClickListener, DragSource {
 		}
 
 		mIconNormal = d;
-		if (!specialMode) {
+		if (!mSpecialMode) {
 			if (mIconNormal != null) {
 				final Drawable iconSelected =  Utilities.selectorDrawable(mIconNormal, mIconNormal.getIntrinsicWidth(), mIconNormal.getIntrinsicHeight(), mSelectorColor);
 				mStateListDrawable = new StateListDrawable();
@@ -358,7 +357,7 @@ DragListener, OnLongClickListener, DragSource {
 			}
 			mIconSpecial_id = res_id;
 			mIconSpecial = mLauncher.createSmallActionButtonDrawable(d);
-			if (specialMode) {
+			if (mSpecialMode) {
 				setImageDrawable(mIconSpecial);
 			}
 		} catch (Exception e) {
@@ -366,13 +365,17 @@ DragListener, OnLongClickListener, DragSource {
 	}
 
 	public void setSpecialMode(boolean special) {
-		if (special != specialMode) {
-			specialMode = special;
-			if (specialMode)
+		if (special != mSpecialMode) {
+			mSpecialMode = special;
+			if (mSpecialMode)
 				setImageDrawable(mIconSpecial);
 			else
 				setImageDrawable(mIconNormal);
 		}
+	}
+	
+	public boolean getSpecialMode() {
+		return mSpecialMode;
 	}
 
 	public void setSpecialAction(int action) {
@@ -382,7 +385,7 @@ DragListener, OnLongClickListener, DragSource {
 	@Override
 	public boolean onLongClick(View v) {
 		if (mDragger == null || !v.isInTouchMode() || mCurrentInfo == null
-				|| specialMode || mLauncher.isLauncherLocked()) {
+				|| mSpecialMode || mLauncher.isLauncherLocked()) {
 			return false;
 		} else if (MyLauncherSettingsHelper.getDockLockMAB(mLauncher)
 				&& LauncherSettings.Favorites.CONTAINER_MAB == mCurrentInfo.container) {

@@ -6,6 +6,7 @@ import com.wordpress.chislonchow.legacylauncher.Launcher;
 import com.wordpress.chislonchow.legacylauncher.catalogue.AppCatalogueFilters.Catalog;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class AppCatalogueFilter {
 

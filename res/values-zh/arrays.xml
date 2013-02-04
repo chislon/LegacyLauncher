@@ -17,12 +17,13 @@
     <string-array name="menu_binding_entries">
         <item>停用</item>
         <item>顯示預設桌面</item>
-        <item>顯示預設桌面/顯示預覽</item>
+        <item>顯示預設桌面，顯示預覽</item>
         <item>顯示預覽</item>
-        <item>打開/關閉應用程式託盤</item>
+        <item>開/關程式託盤</item>
+        <item>顯示預設桌面，開/關程式託盤</item>
         <item>顯示/隱藏狀態列</item>
         <item>顯示/隱藏通知欄</item>
-        <item>顯示預設桌面/顯示通知欄</item>
+        <item>顯示預設桌面，顯示通知欄</item>
         <item>打開程式</item>
         <item>活動清單</item>
     </string-array>
