@@ -6127,12 +6127,35 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		qa.show();
 	}
 
+	/**
+	 * Set dock padding (from DeleteZone.java)
+	 * @param pad
+	 */
 	public void setDockPadding(int pad) {
-		if (pad < 0) {
-			mDrawerToolbar.setPadding(0, -pad, 0, 0);
+		if (mDockStyle == DOCK_STYLE_3) {
+			final int displayWidth = mDisplay.getWidth();
+			final int displayHeight = mDisplay.getHeight();
+			if (displayWidth > displayHeight) {
+				// landscape padding
+				if (pad < 0) {
+					mDrawerToolbar.setPadding(0, (int) (displayHeight / 5) - pad, 0, (int) (displayHeight / 5));
+				} else {
+					mDrawerToolbar.setPadding(0, (int) (displayHeight / 5), 0, (int) (displayHeight / 5) + pad);
+				}
+			} else {
+				// portrait	
+				if (pad < 0) {
+					mDrawerToolbar.setPadding((int) (displayWidth / 5), -pad, (int) (displayWidth / 5), 0);
+				} else {
+					mDrawerToolbar.setPadding((int) (displayWidth / 5), 0, (int) (displayWidth / 5), pad);
+				}
+			}
 		} else {
-			mDrawerToolbar.setPadding(0, 0, 0, pad);
-
+			if (pad < 0) {
+				mDrawerToolbar.setPadding(0, -pad, 0, 0);
+			} else {
+				mDrawerToolbar.setPadding(0, 0, 0, pad);
+			}
 		}
 	}
 

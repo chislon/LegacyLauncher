@@ -15,7 +15,7 @@
 <resources>
 
     <!-- Version Information -->
-    <string name="app_version" translatable="false">0.39.10</string>
+    <string name="app_version" translatable="false">0.39.11</string>
 
     <!-- Change Log -->
 
