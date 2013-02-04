@@ -756,6 +756,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
+
 		// ADW: removed cause it was closing app-drawer every time Home button
 		// is triggered
 		// ADW: it should be done only on certain circumstances
@@ -773,6 +774,10 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 					.getExternalStorageDirectory().getPath()
 					+ "/launcher-rotate");
 		}
+		// CCHOW CHANGE START
+		// 2013-02-03: dismiss previews, fixes memory leak on rotate
+		dismissPreviews();
+		// CCHOW CHANGE END
 		return null;
 	}
 
