@@ -73,7 +73,8 @@
     <!-- config_animation_speed min is 300, so it will add 300 to whatever value you set here -->
 
     <integer name="config_animation_speed">250</integer>
-    <!-- config_ui_ab_scale is a float value between 0.1 and 1.0. Set here the default .X -->
+    <!-- config_ui_ab_scale is a value between representing a float from 0.1f to 1.0f. -->
+    <!-- Where default scale = (config_ui_ab_scale + 1) * 10 -->
     <integer name="config_ui_ab_scale">7</integer>
 
     <bool name="config_ui_hide_labels">false</bool>

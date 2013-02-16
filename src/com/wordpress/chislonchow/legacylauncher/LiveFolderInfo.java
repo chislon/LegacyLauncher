@@ -39,16 +39,6 @@ class LiveFolderInfo extends FolderInfo {
     int displayMode;
 
     /**
-     * The live folder icon.
-     */
-    Drawable icon;
-
-    /**
-     * When set to true, indicates that the icon has been resized.
-     */
-    boolean filtered;
-
-    /**
      * Reference to the live folder icon as an application's resource.
      */
     Intent.ShortcutIconResource iconResource;

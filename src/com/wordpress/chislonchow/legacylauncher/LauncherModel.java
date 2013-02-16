@@ -1134,6 +1134,7 @@ public class LauncherModel {
 		}
 	}
 
+	// FIXME
 	static private void loadFolderIcon(Context context, Cursor c, int iconTypeIndex, int iconIndex,
 			FolderInfo folderInfo)
 	{
@@ -1161,30 +1162,32 @@ public class LauncherModel {
 		}
 	}
 
-	private static void loadLiveFolderIcon(Launcher launcher, Cursor c, int iconTypeIndex,
-			int iconPackageIndex, int iconResourceIndex, LiveFolderInfo liveFolderInfo) {
+	// FIXME
+	private static void loadLiveFolderIcon(Context context, Cursor c, int iconTypeIndex,
+			int iconPackageIndex, int iconResourceIndex, LiveFolderInfo info) {
 
 		int iconType = c.getInt(iconTypeIndex);
 		switch (iconType) {
 		case LauncherSettings.Favorites.ICON_TYPE_RESOURCE:
 			String packageName = c.getString(iconPackageIndex);
 			String resourceName = c.getString(iconResourceIndex);
-			PackageManager packageManager = launcher.getPackageManager();
+			PackageManager packageManager = context.getPackageManager();
 			try {
 				Resources resources = packageManager.getResourcesForApplication(packageName);
 				final int id = resources.getIdentifier(resourceName, null, null);
-				liveFolderInfo.icon = resources.getDrawable(id);
+				info.icon = resources.getDrawable(id);
+				info.filtered = false;
 			} catch (Exception e) {
-				liveFolderInfo.icon =
-						launcher.getResources().getDrawable(R.drawable.ic_launcher_folder);
+				info.icon = context.getResources().getDrawable(R.drawable.ic_launcher_folder);
+				info.filtered = false;
 			}
-			liveFolderInfo.iconResource = new Intent.ShortcutIconResource();
-			liveFolderInfo.iconResource.packageName = packageName;
-			liveFolderInfo.iconResource.resourceName = resourceName;
+			info.iconResource = new Intent.ShortcutIconResource();
+			info.iconResource.packageName = packageName;
+			info.iconResource.resourceName = resourceName;
 			break;
 		default:
-			liveFolderInfo.icon =
-			launcher.getResources().getDrawable(R.drawable.ic_launcher_folder);
+			info.icon = context.getResources().getDrawable(R.drawable.ic_launcher_folder);
+			info.filtered = false;
 		}
 	}
 
@@ -1458,14 +1461,15 @@ public class LauncherModel {
 			byte[] data = c.getBlob(iconIndex);
 			try {
 				Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-				info.icon = new FastBitmapDrawable(
-						Utilities.createBitmapThumbnail(bitmap, context));
+				info.icon = new FastBitmapDrawable(Utilities.createBitmapThumbnail(bitmap, context));
+				info.filtered = true;
+				info.customIcon = true;
 			} catch (Exception e) {
 				packageManager = context.getPackageManager();
 				info.icon = packageManager.getDefaultActivityIcon();
+				info.filtered = false;
+				info.customIcon = false;
 			}
-			info.filtered = true;
-			info.customIcon = true;
 			break;
 		default:
 			info.icon = context.getPackageManager().getDefaultActivityIcon();

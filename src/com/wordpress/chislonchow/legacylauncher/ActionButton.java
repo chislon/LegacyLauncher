@@ -334,7 +334,7 @@ DragListener, OnLongClickListener, DragSource {
 		mIconNormal = d;
 		if (!mSpecialMode) {
 			if (mIconNormal != null) {
-				final Drawable iconSelected =  Utilities.selectorDrawable(mIconNormal, mIconNormal.getIntrinsicWidth(), mIconNormal.getIntrinsicHeight(), mSelectorColor);
+				final Drawable iconSelected =  Utilities.createSelectorDrawable(mIconNormal, mSelectorColor);
 				mStateListDrawable = new StateListDrawable();
 				mStateListDrawable.addState(new int[] {android.R.attr.state_pressed}, iconSelected);
 				mStateListDrawable.addState(new int[] {android.R.attr.state_selected}, iconSelected);
@@ -356,7 +356,7 @@ DragListener, OnLongClickListener, DragSource {
 				mIconSpecial = null;
 			}
 			mIconSpecial_id = res_id;
-			mIconSpecial = mLauncher.createSmallActionButtonDrawable(d);
+			mIconSpecial = mLauncher.createActionButtonDrawable(d);
 			if (mSpecialMode) {
 				setImageDrawable(mIconSpecial);
 			}

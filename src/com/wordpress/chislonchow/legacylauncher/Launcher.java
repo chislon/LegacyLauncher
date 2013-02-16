@@ -304,7 +304,7 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	private boolean mShowDots = false;
 	protected boolean mAutoCloseFolder;
 	private boolean mHideABBg = true;
-	private float mUiScaleAB = 0.5f;
+	private float mUiScaleAB = .8f;
 	private boolean mUiABTint = false;
 	private int mUiABTintColor = 0xffffffff;
 	private int mUiABSelectorColor = 0xff82b600;
@@ -3844,113 +3844,6 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 	}
 
 	/**
-	 * ADW: Create a copy of an application icon/shortcut with a reflection
-	 * 
-	 * @param layoutResId
-	 * @param parent
-	 * @param info
-	 * @return
-	 */
-	View createSmallShortcut(int layoutResId, ViewGroup parent,
-			ApplicationInfo info) {
-		CounterImageView favorite = (CounterImageView) mInflater.inflate(
-				layoutResId, parent, false);
-
-		if (!info.filtered) {
-			info.icon = Utilities.createIconThumbnail(info.icon, this);
-			info.filtered = true;
-		}
-		favorite.setImageDrawable(Utilities.drawReflection(info.icon, this));
-		favorite.setTag(info);
-		favorite.setOnClickListener(this);
-		// ADW: Counters stuff
-		favorite.setCounter(info.counter, info.counterColor);
-		return favorite;
-	}
-
-	/**
-	 * ADW: Create a copy of an folder icon with a reflection
-	 * 
-	 * @param layoutResId
-	 * @param parent
-	 * @param info
-	 * @return
-	 */
-	View createSmallFolder(int layoutResId, ViewGroup parent,
-			UserFolderInfo info) {
-		ImageView favorite = (ImageView) mInflater.inflate(layoutResId, parent,
-				false);
-
-		final Resources resources = getResources();
-		// Drawable d = resources.getDrawable(R.drawable.ic_launcher_folder);
-		Drawable d = null;
-		if (MyLauncherSettingsHelper.getThemeIcons(this)) {
-			String packageName = MyLauncherSettingsHelper.getThemePackageName(
-					this, THEME_DEFAULT);
-			if (packageName.equals(THEME_DEFAULT)) {
-				d = resources.getDrawable(R.drawable.ic_launcher_folder);
-			} else {
-				d = FolderIcon.loadFolderFromTheme(this, getPackageManager(),
-						packageName, "ic_launcher_folder");
-				if (d == null) {
-					d = resources.getDrawable(R.drawable.ic_launcher_folder);
-				}
-			}
-		} else {
-			d = resources.getDrawable(R.drawable.ic_launcher_folder);
-		}
-		d = Utilities.drawReflection(d, this);
-		favorite.setImageDrawable(d);
-		favorite.setTag(info);
-		favorite.setOnClickListener(this);
-		return favorite;
-	}
-
-	/**
-	 * ADW: Create a copy of an LiveFolder icon with a reflection
-	 * 
-	 * @param layoutResId
-	 * @param parent
-	 * @param info
-	 * @return
-	 */
-	View createSmallLiveFolder(int layoutResId, ViewGroup parent,
-			LiveFolderInfo info) {
-		ImageView favorite = (ImageView) mInflater.inflate(layoutResId, parent,
-				false);
-
-		final Resources resources = getResources();
-		Drawable d = info.icon;
-		if (d == null) {
-			if (MyLauncherSettingsHelper.getThemeIcons(this)) {
-				// Drawable d =
-				// resources.getDrawable(R.drawable.ic_launcher_folder);
-				String packageName = MyLauncherSettingsHelper
-						.getThemePackageName(this, THEME_DEFAULT);
-				if (packageName.equals(THEME_DEFAULT)) {
-					d = resources.getDrawable(R.drawable.ic_launcher_folder);
-				} else {
-					d = FolderIcon.loadFolderFromTheme(this,
-							getPackageManager(), packageName,
-							"ic_launcher_folder");
-					if (d == null) {
-						d = resources
-								.getDrawable(R.drawable.ic_launcher_folder);
-					}
-				}
-			} else {
-				d = resources.getDrawable(R.drawable.ic_launcher_folder);
-			}
-			info.filtered = true;
-		}
-		d = Utilities.drawReflection(d, this);
-		favorite.setImageDrawable(d);
-		favorite.setTag(info);
-		favorite.setOnClickListener(this);
-		return favorite;
-	}
-
-	/**
 	 * ADW:Create a smaller copy of an icon for use inside Action Buttons
 	 * 
 	 * @param info
@@ -3961,55 +3854,49 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 		final Resources resources = getResources();
 		if (info != null) {
 			if (info instanceof ApplicationInfo) {
-				if (!((ApplicationInfo) info).filtered) {
-					((ApplicationInfo) info).icon = Utilities
-							.createIconThumbnail(((ApplicationInfo) info).icon,
-									this);
-					((ApplicationInfo) info).filtered = true;
+				d = info.icon;
+				if (!info.filtered) {
+					d = Utilities.createIconThumbnail(d, this);
+					info.filtered = true;
 				}
-				d = ((ApplicationInfo) info).icon;
 			} else if (info instanceof LiveFolderInfo) {
-				d = ((LiveFolderInfo) info).icon;
-				if (d == null) {
+				// FIXME
+				d = info.icon;
+				if (d == null || !info.filtered) {
 					if (MyLauncherSettingsHelper.getThemeIcons(this)) {
-						// d =
-						// Utilities.createIconThumbnail(resources.getDrawable(R.drawable.ic_launcher_folder),
-						// this);
 						String packageName = MyLauncherSettingsHelper
 								.getThemePackageName(this, THEME_DEFAULT);
 						if (!packageName.equals(THEME_DEFAULT)) {
 							d = FolderIcon.loadFolderFromTheme(this,
 									getPackageManager(), packageName,
 									"ic_launcher_folder");
+							d = Utilities.createIconThumbnail(d, this);
 						} else {
-							d = Utilities
-									.createIconThumbnail(
-											resources
-											.getDrawable(R.drawable.ic_launcher_folder),
-											this);
+							d = Utilities.createIconThumbnail(resources.getDrawable(R.drawable.ic_launcher_folder), this);
 						}
 					} else {
-						d = Utilities.createIconThumbnail(resources
-								.getDrawable(R.drawable.ic_launcher_folder),
-								this);
+						d = Utilities.createIconThumbnail(resources.getDrawable(R.drawable.ic_launcher_folder), this);
 					}
-					((LiveFolderInfo) info).filtered = true;
+					info.filtered = true;
 				}
 			} else if (info instanceof UserFolderInfo) {
-				if (MyLauncherSettingsHelper.getThemeIcons(this)) {
-					// d = resources.getDrawable(R.drawable.ic_launcher_folder);
-					String packageName = MyLauncherSettingsHelper
-							.getThemePackageName(this, THEME_DEFAULT);
-					if (!packageName.equals(THEME_DEFAULT)) {
-						d = FolderIcon.loadFolderFromTheme(this,
-								getPackageManager(), packageName,
-								"ic_launcher_folder");
+				d = info.icon;
+				if (d == null || !info.filtered) {				
+					if (MyLauncherSettingsHelper.getThemeIcons(this)) {
+						String packageName = MyLauncherSettingsHelper
+								.getThemePackageName(this, THEME_DEFAULT);
+						if (!packageName.equals(THEME_DEFAULT)) {
+							d = FolderIcon.loadFolderFromTheme(this,
+									getPackageManager(), packageName,
+									"ic_launcher_folder");
+							d = Utilities.createIconThumbnail(d, this);
+						} else {
+							d = Utilities.createIconThumbnail(resources.getDrawable(R.drawable.ic_launcher_folder), this);
+						}
 					} else {
-						d = resources
-								.getDrawable(R.drawable.ic_launcher_folder);
+						d = Utilities.createIconThumbnail(resources.getDrawable(R.drawable.ic_launcher_folder), this);
 					}
-				} else {
-					d = resources.getDrawable(R.drawable.ic_launcher_folder);
+					info.filtered = true;
 				}
 			}
 		}
@@ -4017,13 +3904,13 @@ OnLongClickListener, OnSharedPreferenceChangeListener {
 			d = Utilities.createIconThumbnail(
 					resources.getDrawable(R.drawable.ab_empty), this);
 		}
-		d = Utilities.scaledDrawable(d, this, mUiABTint, mUiScaleAB, mUiABTintColor);
+		d = Utilities.createScaledTintedDrawable(d, this, mUiABTint, mUiABTintColor, mUiScaleAB);
 
 		return d;
 	}
 
-	Drawable createSmallActionButtonDrawable(Drawable d) {
-		d = Utilities.scaledDrawable(d, this, mUiABTint, mUiScaleAB, mUiABTintColor);
+	Drawable createActionButtonDrawable(Drawable d) {
+		d = Utilities.createScaledTintedDrawable(d, this, mUiABTint, mUiABTintColor, mUiScaleAB);
 		return d;
 	}
 
