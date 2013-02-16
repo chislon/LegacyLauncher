@@ -58,7 +58,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:gravity="center"
-            android:text="→"
+            android:text="@string/nexts"
             android:textSize="20sp" />
 
         <net.margaritov.preference.colorpicker.ColorPickerPanelView

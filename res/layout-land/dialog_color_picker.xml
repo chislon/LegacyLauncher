@@ -59,7 +59,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="↓"
+            android:text="@string/downs"
             android:textSize="20sp" />
 
         <net.margaritov.preference.colorpicker.ColorPickerPanelView

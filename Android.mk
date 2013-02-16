@@ -21,7 +21,7 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_SRC_FILES := $(call all-subdir-java-files)
 
-LOCAL_PACKAGE_NAME := ADWLauncher
+LOCAL_PACKAGE_NAME := LegacyLauncher
 LOCAL_CERTIFICATE := shared
 
 LOCAL_OVERRIDES_PACKAGES := Home Launcher Launcher2

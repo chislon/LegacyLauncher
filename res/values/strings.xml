@@ -495,5 +495,6 @@
     <string name="button_continue">"Continue"</string>
     <string name="button_back">"Back"</string>
     <string name="button_finish">"Finish"</string>
-
+    <string name="nexts">"→"</string>
+    <string name="downs">"↓"</string>
 </resources>
